@@ -11,4 +11,4 @@ Team Name: Terminal 6
 ## Business Rules
 
 ## Code Repository URL
-[put your GitHub repository URL here]
+[https://github.com/migueltann/Terminal-6.git]
