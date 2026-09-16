@@ -10,13 +10,18 @@ The application is intended for individual travellers, students, families and sm
 Objectives: Generate personalised recommendations, keep the itinerary within budget, fit activities within available time, consider dietary requirements, reduce unnecessary travelling and produce a practical day-to-day itinerary.
 
 
+
 ## User Inputs
 2. User Inputs
 Users will provide the following information through the terminal:
 Trip details: Destination, trip start and end dates, number of travellers, travel budget, accommodation area, preferred start and end times.
+
 Travel preferences: Interests, preferred activities, must-visit spots, locations or activities to avoid, travelling pace, maximum acceptable travel time, and preferred transportation method.
-Personal requirements: Dietary requirements, accessibility requirements, age group (whether children or elderly travellers are included), and required rest periods.
+
+Personal requirements: Dietary requirements, accessibility requirements, medical conditions, age group (whether children or elderly travellers are included), and required rest periods.
+
 The application will validate the user's inputs before processing them. Invalid inputs will be rejected and the user will be asked to enter them again.
+
 
 
 ## Use of AI
