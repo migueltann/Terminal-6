@@ -253,6 +253,15 @@ def rank_recommendations(items, user_inputs):
         for term in user_inputs["must_visit"]:
             if _contains_term(item, term):
                 points += 100
-                
-                
+        
+        # Interests and preferred activities also improve the score        
+        for term in user_inputs["interests"]:
+            if _contains_term(item, term):
+                points += 10
+
+        # If two places are similar, the cheaper one comes slightly earlier
+        for term in user_inputs["preferred_activities"]:
+            if _contains_term(item, term):
+                points += 15
+                        
         return points
