@@ -183,6 +183,25 @@ def evaluate_recommendation(item, user_inputs):
         )
         keep = keep and passed
         
+    # Dietary checks only make sense for food recommendations
+    dietary = _normalise(user_inputs["dietary"])
+
+    if item["type"] == "food" and dietary not in {"", "none", "any"}:
+        passed = dietary in item.get("dietary_tags", [])
+        checks.append(
+            {
+                "label": "Dietary requirement",
+                "passed": passed,
+                "detail": (
+                    f"{dietary} supported"
+                    if passed
+                    else f"{dietary} not listed"
+                ),
+            }
+        )
+        keep = keep and passed
+        
+        
     return {
         "item": item,
         "keep": keep,
