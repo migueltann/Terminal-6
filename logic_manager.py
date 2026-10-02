@@ -158,9 +158,35 @@ def evaluate_recommendation(item, user_inputs):
         for term in user_inputs["must_visit"]
     )
 
+    if preferences:
+        matched_preferences = [
+            term
+            for term in preferences
+            if _contains_term(item, term)
+        ]
+
+        passed = bool(matched_preferences) or must_visit_match
+
+        if matched_preferences:
+            detail = "Matched: " + ", ".join(matched_preferences)
+        elif must_visit_match:
+            detail = "Must-visit match"
+        else:
+            detail = "No preference match"
+
+        checks.append(
+            {
+                "label": "Interests / preferred activities",
+                "passed": passed,
+                "detail": detail,
+            }
+        )
+        keep = keep and passed
+        
     return {
         "item": item,
         "keep": keep,
         "must_visit_match": must_visit_match,
         "checks": checks,
     }
+
