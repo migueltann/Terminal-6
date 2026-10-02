@@ -71,4 +71,13 @@ def validate_ai_response(raw_items):
         if not isinstance(item["dietary_tags"], list):
             continue
 
+         # Clean the values before using them in the rest of the program
+        cleaned = dict(item)
+        cleaned["name"] = str(item["name"]).strip()
+        cleaned["type"] = item_type
+        cleaned["category"] = str(item["category"]).strip()
+        cleaned["estimated_cost_sgd"] = cost
+        cleaned["location"] = str(item["location"]).strip()
+        cleaned["description"] = str(item["description"]).strip()
+
     return valid_items
