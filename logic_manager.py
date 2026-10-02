@@ -248,5 +248,11 @@ def rank_recommendations(items, user_inputs):
 
     def score(item):
         points = 0
-
+        
+        # Must-visits get the biggest boost
+        for term in user_inputs["must_visit"]:
+            if _contains_term(item, term):
+                points += 100
+                
+                
         return points
