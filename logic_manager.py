@@ -157,6 +157,12 @@ def evaluate_recommendation(item, user_inputs):
         _contains_term(item, term)
         for term in user_inputs["must_visit"]
     )
+    
+    # Check whether the recommendation matches the user's interests
+    preferences = (
+        user_inputs["interests"]
+        + user_inputs["preferred_activities"]
+    )
 
     if preferences:
         matched_preferences = [
