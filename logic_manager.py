@@ -37,4 +37,19 @@ def validate_ai_response(raw_items):
         if not isinstance(item, dict):
             continue
 
+        required = [
+            "name",
+            "type",
+            "category",
+            "estimated_cost_sgd",
+            "location",
+            "description",
+            "tags",
+            "transport_options",
+            "dietary_tags",
+        ]
+
+        if not all(key in item for key in required):
+            continue
+
     return valid_items
