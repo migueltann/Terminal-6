@@ -24,3 +24,17 @@ def _contains_term(item, term):
     ).lower()
 
     return term in searchable
+
+def validate_ai_response(raw_items):
+    """Keep only AI recommendations that have the fields we need."""
+
+    if not isinstance(raw_items, list):
+        return []
+
+    valid_items = []
+
+    for item in raw_items:
+        if not isinstance(item, dict):
+            continue
+
+    return valid_items
