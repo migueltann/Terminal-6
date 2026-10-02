@@ -52,4 +52,16 @@ def validate_ai_response(raw_items):
         if not all(key in item for key in required):
             continue
 
+        item_type = _normalise(item["type"])
+        if item_type not in {"activity", "food"}:
+            continue
+
+        try:
+            cost = float(item["estimated_cost_sgd"])
+        except (TypeError, ValueError):
+            continue
+
+        if cost < 0:
+            continue
+
     return valid_items
