@@ -80,4 +80,22 @@ def validate_ai_response(raw_items):
         cleaned["location"] = str(item["location"]).strip()
         cleaned["description"] = str(item["description"]).strip()
 
+        cleaned["tags"] = [
+            str(value).strip()
+            for value in item["tags"]
+            if str(value).strip()
+        ]
+        cleaned["transport_options"] = [
+            _normalise(value)
+            for value in item["transport_options"]
+            if str(value).strip()
+        ]
+        cleaned["dietary_tags"] = [
+            _normalise(value)
+            for value in item["dietary_tags"]
+            if str(value).strip()
+        ]
+
+        valid_items.append(cleaned)
+
     return valid_items
