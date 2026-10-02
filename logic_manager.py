@@ -64,4 +64,11 @@ def validate_ai_response(raw_items):
         if cost < 0:
             continue
 
+        if not isinstance(item["tags"], list):
+            continue
+        if not isinstance(item["transport_options"], list):
+            continue
+        if not isinstance(item["dietary_tags"], list):
+            continue
+
     return valid_items
