@@ -152,10 +152,15 @@ def evaluate_recommendation(item, user_inputs):
 
     keep = keep and passed
 
-
+    # A must-visit can count as a strong preference match
+    must_visit_match = any(
+        _contains_term(item, term)
+        for term in user_inputs["must_visit"]
+    )
 
     return {
         "item": item,
         "keep": keep,
+        "must_visit_match": must_visit_match,
         "checks": checks,
     }
