@@ -99,3 +99,39 @@ def validate_ai_response(raw_items):
         valid_items.append(cleaned)
 
     return valid_items
+
+def evaluate_recommendation(item, user_inputs):
+    """Check one recommendation and record why it is kept or removed."""
+
+    checks = []
+    keep = True
+    cost = item["estimated_cost_sgd"]
+
+    if item["type"] == "activity":
+        limit = user_inputs["max_activity_spend"]
+        passed = cost <= limit
+        label = "Activity budget"
+    else:
+        limit = user_inputs["max_meal_spend"]
+        passed = cost <= limit
+        label = "Meal budget"
+
+    checks.append(
+        {
+            "label": label,
+            "passed": passed,
+            "detail": (
+                f"${cost:.2f} <= ${limit:.2f}"
+                if passed
+                else f"${cost:.2f} > ${limit:.2f}"
+            ),
+        }
+    )
+
+    keep = keep and passed
+
+    return {
+        "item": item,
+        "keep": keep,
+        "checks": checks,
+    }
