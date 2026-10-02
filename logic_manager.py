@@ -130,6 +130,30 @@ def evaluate_recommendation(item, user_inputs):
 
     keep = keep and passed
 
+    avoided_terms = [
+        term
+        for term in user_inputs["avoid_list"]
+        if _contains_term(item, term)
+    ]
+
+    passed = not avoided_terms
+
+    checks.append(
+        {
+            "label": "Avoid list",
+            "passed": passed,
+            "detail": (
+                "No avoided match"
+                if passed
+                else "Matched: " + ", ".join(avoided_terms)
+            ),
+        }
+    )
+
+    keep = keep and passed
+
+
+
     return {
         "item": item,
         "keep": keep,
