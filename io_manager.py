@@ -11,3 +11,9 @@ def display_welcome_banner():
         "Type 'exit' at an input prompt to return to "
         "the main menu.\n"
     )
+
+def display_menu():
+    print("\nMAIN MENU")
+    print("1. Generate Recommendations")
+    print("2. View / Delete Saved Recommendation Sets")
+    print("3. Exit")
