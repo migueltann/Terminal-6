@@ -201,7 +201,26 @@ def evaluate_recommendation(item, user_inputs):
         )
         keep = keep and passed
         
-        
+     # Check whether the user's preferred transport is listed
+    preferred_transport = _normalise(
+        user_inputs["preferred_transport"]
+    )
+
+    if preferred_transport not in {"", "any"}:
+        passed = preferred_transport in item.get("transport_options", [])
+        checks.append(
+            {
+                "label": "Transport preference",
+                "passed": passed,
+                "detail": (
+                    f"{preferred_transport} available"
+                    if passed
+                    else f"{preferred_transport} not listed"
+                ),
+            }
+        )
+        keep = keep and passed
+
     return {
         "item": item,
         "keep": keep,
