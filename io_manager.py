@@ -105,3 +105,14 @@ def _split_csv(value):
         for part in value.split(",")
         if part.strip()
     ]
+
+def collect_user_requirements():
+    """Collect the requirements that Python will use for filtering."""
+
+    print("\n" + "=" * 70)
+    print("USER INPUTS")
+    print("=" * 70)
+
+    destination = get_required_text("Destination: ")
+    if destination is None:
+        return None
