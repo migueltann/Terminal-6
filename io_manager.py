@@ -187,3 +187,13 @@ def collect_user_requirements():
 
     display_input_summary(data)
     return data
+
+def display_input_summary(data):
+    """Show the requirements back to the user before filtering."""
+
+    print("\n" + "=" * 70)
+    print("USER REQUIREMENTS")
+    print("=" * 70)
+    print(f"Destination:          {data['destination']}")
+    print(f"Max per activity:     SGD ${data['max_activity_spend']:.2f}")
+    print(f"Max per meal:         SGD ${data['max_meal_spend']:.2f}")
