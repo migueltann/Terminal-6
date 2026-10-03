@@ -1,3 +1,5 @@
+EXIT_COMMANDS = {"exit"}
+
 def display_welcome_banner():
     print("=" * 70)
     print("              TRAVEL RECOMMENDATION ASSISTANT")
