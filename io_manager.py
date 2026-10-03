@@ -197,3 +197,13 @@ def display_input_summary(data):
     print(f"Destination:          {data['destination']}")
     print(f"Max per activity:     SGD ${data['max_activity_spend']:.2f}")
     print(f"Max per meal:         SGD ${data['max_meal_spend']:.2f}")
+    print(f"Interests:            {', '.join(data['interests']) or 'Any'}")
+    print(
+        "Preferred activities: "
+        f"{', '.join(data['preferred_activities']) or 'Any'}"
+    )
+    print(f"Must-visits:          {', '.join(data['must_visit']) or 'None'}")
+    print(f"Avoid:                {', '.join(data['avoid_list']) or 'None'}")
+    print(f"Dietary:              {data['dietary']}")
+    print(f"Transport:            {data['preferred_transport']}")
+    print("=" * 70)
