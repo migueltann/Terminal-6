@@ -32,3 +32,28 @@ def is_exit(value):
     """Check whether the user typed an exit command."""
 
     return value.strip().lower() in EXIT_COMMANDS
+
+def get_required_text(prompt):
+    """Ask for text that cannot be left blank."""
+
+    while True:
+        value = input(prompt).strip()
+
+        if is_exit(value):
+            return None
+
+        if value:
+            return value
+
+        print("This field cannot be empty.")
+
+
+def get_optional_text(prompt, default=""):
+    """Ask for optional text and use a default if it is blank."""
+
+    value = input(prompt).strip()
+
+    if is_exit(value):
+        return None
+
+    return value if value else default
