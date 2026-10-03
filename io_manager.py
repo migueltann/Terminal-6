@@ -171,3 +171,19 @@ def collect_user_requirements():
     )
     if transport is None:
         return None
+
+    # Keep all user inputs together so the logic manager can use them
+    data = {
+        "destination": destination,
+        "max_activity_spend": max_activity_spend,
+        "max_meal_spend": max_meal_spend,
+        "interests": _split_csv(interests_text),
+        "preferred_activities": _split_csv(preferred_text),
+        "must_visit": _split_csv(must_visit_text),
+        "avoid_list": _split_csv(avoid_text),
+        "dietary": dietary,
+        "preferred_transport": transport,
+    }
+
+    display_input_summary(data)
+    return data
