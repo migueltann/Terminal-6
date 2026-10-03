@@ -1,4 +1,4 @@
-EXIT_COMMANDS = {"exit"}
+EXIT_COMMANDS = {"exit", "quit", "q"}
 
 def display_welcome_banner():
     print("=" * 70)
