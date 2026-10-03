@@ -142,3 +142,17 @@ def collect_user_requirements():
     )
     if preferred_text is None:
         return None  
+
+    must_visit_text = get_optional_text(
+        "Must-visits (comma-separated) [None]: ",
+        "",
+    )
+    if must_visit_text is None:
+        return None
+
+    avoid_text = get_optional_text(
+        "Avoid list (comma-separated) [None]: ",
+        "",
+    )
+    if avoid_text is None:
+        return None
