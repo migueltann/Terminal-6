@@ -129,4 +129,16 @@ def collect_user_requirements():
     if max_meal_spend is None:
         return None
 
-    
+    interests_text = get_optional_text(
+        "Interests (comma-separated) [Any]: ",
+        "",
+    )
+    if interests_text is None:
+        return None
+
+    preferred_text = get_optional_text(
+        "Preferred activities (comma-separated) [Any]: ",
+        "",
+    )
+    if preferred_text is None:
+        return None  
