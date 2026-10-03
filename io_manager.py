@@ -116,3 +116,17 @@ def collect_user_requirements():
     destination = get_required_text("Destination: ")
     if destination is None:
         return None
+
+    max_activity_spend = get_positive_float(
+        "Max spend per activity (SGD): "
+    )
+    if max_activity_spend is None:
+        return None
+
+    max_meal_spend = get_positive_float(
+        "Max spend per meal (SGD): "
+    )
+    if max_meal_spend is None:
+        return None
+
+    
