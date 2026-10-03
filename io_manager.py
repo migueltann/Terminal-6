@@ -95,3 +95,13 @@ def get_choice(prompt, choices, default):
             return choices[choices_lower.index(value.lower())]
 
         print("Invalid choice. Options: " + ", ".join(choices))
+
+
+def _split_csv(value):
+    """Turn comma-separated text into a clean Python list."""
+
+    return [
+        part.strip()
+        for part in value.split(",")
+        if part.strip()
+    ]
