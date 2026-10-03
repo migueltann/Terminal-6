@@ -156,3 +156,18 @@ def collect_user_requirements():
     )
     if avoid_text is None:
         return None
+
+    dietary = get_optional_text(
+        "Dietary requirement [None]: ",
+        "None",
+    )
+    if dietary is None:
+        return None
+
+    transport = get_choice(
+        "Preferred transport [Any] (Walk/Transit/Taxi/Any): ",
+        ["Walk", "Transit", "Taxi", "Any"],
+        "Any",
+    )
+    if transport is None:
+        return None
