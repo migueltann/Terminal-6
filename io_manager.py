@@ -57,3 +57,41 @@ def get_optional_text(prompt, default=""):
         return None
 
     return value if value else default
+
+def get_positive_float(prompt, allow_zero=False):
+    """Ask for a valid positive number."""
+
+    while True:
+        value = input(prompt).strip()
+
+        if is_exit(value):
+            return None
+
+        try:
+            number = float(value)
+            if number > 0 or (allow_zero and number >= 0):
+                return number
+        except ValueError:
+            pass
+
+        print("Please enter a valid positive amount.")
+
+
+def get_choice(prompt, choices, default):
+    """Ask the user to choose from a fixed list of options."""
+
+    choices_lower = [choice.lower() for choice in choices]
+
+    while True:
+        value = input(prompt).strip()
+
+        if is_exit(value):
+            return None
+
+        if not value:
+            return default
+
+        if value.lower() in choices_lower:
+            return choices[choices_lower.index(value.lower())]
+
+        print("Invalid choice. Options: " + ", ".join(choices))
