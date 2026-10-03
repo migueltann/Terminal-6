@@ -27,3 +27,8 @@ def get_user_choice():
             return choice
 
         print("Invalid choice. Please enter 1, 2, or 3.")
+
+def is_exit(value):
+    """Check whether the user typed an exit command."""
+
+    return value.strip().lower() in EXIT_COMMANDS
