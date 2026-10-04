@@ -12,7 +12,16 @@ def run_application():
         io_manager.display_menu()
         choice = io_manager.get_user_choice()
 
-        if choice == "3":
+        if choice == "1":
+            # Collect the user's requirements
+            user_inputs = io_manager.collect_user_requirements()
+
+            if user_inputs is None:
+                continue
+
+            destination = user_inputs["destination"]
+
+        elif choice == "3":
             io_manager.display_message("Goodbye!")
             break
 
