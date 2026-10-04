@@ -114,29 +114,23 @@ def save_processed_recommendations(result):
                     }
                 )
 
-        # Load the existing index
+        # Add this saved result to the small index used by the menu/front end
         saved = load_all_sets()
-
-        # Add information about the newly saved result
         saved.append(
             {
                 "destination": result["destination"],
-                "approved_count": result["summary"][
-                    "approved_count"
-                ],
+                "approved_count": result["summary"]["approved_count"],
                 "json_path": json_path,
                 "csv_path": csv_path,
                 "saved_at": timestamp,
             }
         )
 
-        # Save the updated index
         with open(INDEX_FILE, "w", encoding="utf-8") as file:
             json.dump(saved, file, indent=4)
 
-        # Return the paths when successful
         return json_path, csv_path
 
-    except (IOError, OSError, KeyError, TypeError):
-        # Return None if saving fails
+    except (IOError, OSError):
         return None
+        
