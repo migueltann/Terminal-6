@@ -184,5 +184,3 @@ Rules:
 6. Do not filter the recommendations.
 """.strip()
 
-
-print(generate_recommendations("Singapore"))
