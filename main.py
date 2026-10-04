@@ -54,6 +54,17 @@ def run_application():
             # Show the KEEP / FILTER OUT checks
             io_manager.display_filter_audit(audit, user_inputs)
 
+            # Organise the approved results into activities and food
+            result = logic_manager.build_processed_result(
+                destination,
+                user_inputs,
+                approved,
+                rejected,
+            )
+
+            # Show the final approved recommendations
+            io_manager.display_approved_recommendations(result)
+
         elif choice == "3":
             io_manager.display_message("Goodbye!")
             break
