@@ -21,6 +21,19 @@ def run_application():
 
             destination = user_inputs["destination"]
 
+            # Only the destination is sent to Gemini
+            io_manager.display_message(
+                "AI is generating generic destination recommendations..."
+            )
+
+            try:
+                raw_items = ai_manager.generate_recommendations(destination)
+            except Exception as err:
+                io_manager.display_error(
+                    f"AI generation failed: {err}"
+                )
+                continue
+
         elif choice == "3":
             io_manager.display_message("Goodbye!")
             break
