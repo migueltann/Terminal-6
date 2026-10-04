@@ -145,4 +145,12 @@ def load_all_sets():
             return data if isinstance(data, list) else []
     except (IOError, json.JSONDecodeError):
         return []
-        
+
+"""Load one saved JSON result."""
+def load_result(json_path):
+
+    try:
+        with open(json_path, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except (IOError, json.JSONDecodeError):
+        return None
