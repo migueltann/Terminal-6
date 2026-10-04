@@ -216,3 +216,19 @@ def display_filter_audit(audit, user_inputs):
     print("=" * 70)
     print(f"Max per activity: SGD {user_inputs['max_activity_spend']:.2f}")
     print(f"Max per meal:     SGD {user_inputs['max_meal_spend']:.2f}")
+
+    for decision in audit:
+        item = decision["item"]
+        print("\n" + "-" * 70)
+        print(item["name"])
+        print(f"Type: {item['type']}")
+        print(f"Category: {item['category']}")
+        print(f"Cost: SGD ${item['estimated_cost_sgd']:.2f}")
+
+        for check in decision["checks"]:
+            status = "PASS" if check["passed"] else "FAIL"
+            print(f"[{status}] {check['label']}: {check['detail']}")
+
+        print("KEEP" if decision["keep"] else "FILTER OUT")
+
+    print("=" * 70)
