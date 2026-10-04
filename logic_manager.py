@@ -243,6 +243,25 @@ def evaluate_recommendation(item, user_inputs):
         "checks": checks,
     }
 
+
+def filter_recommendations(items, user_inputs):
+    """Split the recommendations into approved and filtered-out lists."""
+
+    approved = []
+    rejected = []
+    audit = []
+
+    for item in items:
+        decision = evaluate_recommendation(item, user_inputs)
+        audit.append(decision)
+
+        if decision["keep"]:
+            approved.append(item)
+        else:
+            rejected.append(item)
+
+    return approved, rejected, audit
+
 def rank_recommendations(items, user_inputs):
     """Put stronger matches near the top of the final result."""
 
