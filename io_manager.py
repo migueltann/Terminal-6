@@ -265,3 +265,31 @@ def _display_section(title, items):
 
         if item.get("tags"):
             print("   Tags: " + ", ".join(item["tags"]))
+
+def get_yes_no(prompt):
+    """Ask a simple yes/no question."""
+
+    while True:
+        value = input(prompt).strip().lower()
+
+        if is_exit(value):
+            return None
+
+        if value in {"y", "yes"}:
+            return True
+
+        if value in {"n", "no"}:
+            return False
+
+        print("Please enter y or n.")
+
+
+def display_message(message):
+    """Show a normal information message."""
+    print(f"\n[INFO] {message}")
+
+
+def display_error(error):
+    """Show an error message."""
+    print(f"\n[ERROR] {error}")
+        
