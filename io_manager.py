@@ -232,3 +232,17 @@ def display_filter_audit(audit, user_inputs):
         print("KEEP" if decision["keep"] else "FILTER OUT")
 
     print("=" * 70)
+
+def display_approved_recommendations(result):
+    """Show the final approved activities and food recommendations."""
+
+    print("\n" + "=" * 70)
+    print(f"APPROVED RECOMMENDATIONS: {result['destination'].upper()}")
+    print("=" * 70)
+    print(
+        f"Approved: {result['summary']['approved_count']} | "
+        f"Filtered out: {result['summary']['filtered_out_count']}"
+    )
+    
+    _display_section("ACTIVITIES", result.get("activities", []))
+    _display_section("FOOD", result.get("food", []))
