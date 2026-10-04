@@ -1,3 +1,12 @@
+
+def rank_recommendations(items, user_inputs):
+    """Put stronger matches near the top of the final result."""
+
+    def score(item):
+        points = 0
+
+        return points
+
 """Checks the AI recommendations against the user's requirements."""
 
 def _normalise(value):
@@ -234,3 +243,81 @@ def evaluate_recommendation(item, user_inputs):
         "checks": checks,
     }
 
+
+def filter_recommendations(items, user_inputs):
+    """Split the recommendations into approved and filtered-out lists."""
+
+    approved = []
+    rejected = []
+    audit = []
+
+    for item in items:
+        decision = evaluate_recommendation(item, user_inputs)
+        audit.append(decision)
+
+        if decision["keep"]:
+            approved.append(item)
+        else:
+            rejected.append(item)
+
+    return approved, rejected, audit
+
+def rank_recommendations(items, user_inputs):
+    """Put stronger matches near the top of the final result."""
+
+    def score(item):
+        points = 0
+        
+        # Must-visits get the biggest boost
+        for term in user_inputs["must_visit"]:
+            if _contains_term(item, term):
+                points += 100
+        
+        # Interests and preferred activities also improve the score        
+        for term in user_inputs["interests"]:
+            if _contains_term(item, term):
+                points += 10
+
+        for term in user_inputs["preferred_activities"]:
+            if _contains_term(item, term):
+                points += 15
+                
+        # If two places are similar, the cheaper one comes slightly earlier
+        points -= item["estimated_cost_sgd"] / 1000
+        return points
+                    
+    return sorted(items, key=score, reverse=True) 
+
+def categorise_recommendations(items):
+    """Separate the approved results into activities and food."""
+
+    return {
+        "activities": [
+            item for item in items if item["type"] == "activity"
+        ],
+        "food": [
+            item for item in items if item["type"] == "food"
+        ],
+    }
+
+def build_processed_result(
+    destination,
+    user_inputs,
+    approved_items,
+    rejected_items,
+):
+    """Build the final result used by the terminal and web front end."""
+
+    ranked = rank_recommendations(approved_items, user_inputs)
+    categorised = categorise_recommendations(ranked)
+
+    return {
+        "destination": destination,
+        "requirements": user_inputs,
+        "summary": {
+            "approved_count": len(approved_items),
+            "filtered_out_count": len(rejected_items),
+        },
+        "activities": categorised["activities"],
+        "food": categorised["food"],
+    }
