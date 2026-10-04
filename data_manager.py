@@ -154,3 +154,81 @@ def load_result(json_path):
             return json.load(file)
     except (IOError, json.JSONDecodeError):
         return None
+
+"""Delete one saved result and its JSON/CSV files."""
+def delete_set(index):
+
+    saved = load_all_sets()
+
+    if index < 1 or index > len(saved):
+        return False
+
+    entry = saved.pop(index - 1)
+
+    # Remove both saved files if they still exist
+    for path_key in ("json_path", "csv_path"):
+        path = entry.get(path_key)
+        if path and os.path.exists(path):
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+
+    try:
+        with open(INDEX_FILE, "w", encoding="utf-8") as file:
+            json.dump(saved, file, indent=4)
+        return True
+    except IOError:
+        return False
+
+"""Simple terminal menu for viewing or deleting saved results."""
+def manage_saved_recommendations():
+
+    import ui_manager
+
+    while True:
+        saved = load_all_sets()
+
+        if not saved:
+            ui_manager.display_message(
+                "No saved recommendation sets found."
+            )
+            return
+
+        print("\n" + "=" * 70)
+        print("SAVED RECOMMENDATION SETS")
+        print("=" * 70)
+
+        for index, entry in enumerate(saved, start=1):
+            print(
+                f"{index}. {entry.get('destination', 'Unknown')} | "
+                f"Approved: {entry.get('approved_count', 0)} | "
+                f"{entry.get('saved_at', '')}"
+            )
+
+        print("\nEnter a number to view, D to delete, or B to go back.")
+        choice = input("Choice: ").strip().lower()
+
+        if choice == "b":
+            return
+
+        if choice == "d":
+            delete_choice = input("Number to delete: ").strip()
+
+            if delete_choice.isdigit() and delete_set(int(delete_choice)):
+                print("Saved recommendation set deleted.")
+            else:
+                print("Invalid selection.")
+            continue
+
+        if choice.isdigit() and 1 <= int(choice) <= len(saved):
+            result = load_result(saved[int(choice) - 1]["json_path"])
+
+            if result:
+                ui_manager.display_approved_recommendations(result)
+            else:
+                ui_manager.display_error(
+                    "Saved JSON file could not be read."
+                )
+        else:
+            print("Invalid choice.")
