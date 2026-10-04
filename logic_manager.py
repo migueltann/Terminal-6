@@ -288,6 +288,18 @@ def rank_recommendations(items, user_inputs):
                     
     return sorted(items, key=score, reverse=True) 
 
+def categorise_recommendations(items):
+    """Separate the approved results into activities and food."""
+
+    return {
+        "activities": [
+            item for item in items if item["type"] == "activity"
+        ],
+        "food": [
+            item for item in items if item["type"] == "food"
+        ],
+    }
+
 def build_processed_result(
     destination,
     user_inputs,
