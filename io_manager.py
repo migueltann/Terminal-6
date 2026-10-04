@@ -207,3 +207,12 @@ def display_input_summary(data):
     print(f"Dietary:              {data['dietary']}")
     print(f"Transport:            {data['preferred_transport']}")
     print("=" * 70)
+
+def display_filter_audit(audit, user_inputs):
+    """Show why each recommendation was kept or filtered out."""
+
+    print("\n" + "=" * 70)
+    print("AI RECOMMENDATIONS -> PYTHON LOGIC CHECK")
+    print("=" * 70)
+    print(f"Max per activity: SGD {user_inputs['max_activity_spend']:.2f}")
+    print(f"Max per meal:     SGD {user_inputs['max_meal_spend']:.2f}")
