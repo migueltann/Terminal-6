@@ -34,6 +34,15 @@ def run_application():
                 )
                 continue
 
+            # Make sure the AI returned data that the program can use
+            valid_items = logic_manager.validate_ai_response(raw_items)
+
+            if not valid_items:
+                io_manager.display_error(
+                    "AI returned no valid recommendations."
+                )
+                continue
+
         elif choice == "3":
             io_manager.display_message("Goodbye!")
             break
