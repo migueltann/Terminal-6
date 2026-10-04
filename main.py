@@ -3,11 +3,13 @@ import logic_manager
 import data_manager
 import io_manager
 
+
 def run_application():
     """Run the terminal menu until the user exits."""
 
     # Show the welcome screen when the program starts
     io_manager.display_welcome_banner()
+
     while True:
         io_manager.display_menu()
         choice = io_manager.get_user_choice()
@@ -28,6 +30,7 @@ def run_application():
 
             try:
                 raw_items = ai_manager.generate_recommendations(destination)
+
             except Exception as err:
                 io_manager.display_error(
                     f"AI generation failed: {err}"
@@ -43,7 +46,7 @@ def run_application():
                 )
                 continue
 
-            #Python now compares the generic AI results with the user inputs
+            # Python now compares the generic AI results with the user inputs
             approved, rejected, audit = (
                 logic_manager.filter_recommendations(
                     valid_items,
@@ -65,7 +68,7 @@ def run_application():
             # Show the final approved recommendations
             io_manager.display_approved_recommendations(result)
 
-                        # Let the user save the processed result if they want to
+            # Let the user save the processed result if they want to
             save_choice = io_manager.get_yes_no(
                 "\nSave approved recommendations to JSON and CSV? (y/n): "
             )
@@ -91,9 +94,15 @@ def run_application():
                         "Could not save recommendation files."
                     )
 
-        elif choice == "3":
+        elif choice == "2":
+            # Open the saved recommendations menu
+            data_manager.manage_saved_recommendations()
+
+        else:
+            # End the program
             io_manager.display_message("Goodbye!")
             break
+
 
 if __name__ == "__main__":
     run_application()
