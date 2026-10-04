@@ -268,3 +268,11 @@ def rank_recommendations(items, user_inputs):
         return points
                     
     return sorted(items, key=score, reverse=True) 
+
+def build_processed_result(
+    destination,
+    user_inputs,
+    approved_items,
+    rejected_items,
+):
+    """Build the final result used by the terminal and web front end."""
