@@ -133,4 +133,16 @@ def save_processed_recommendations(result):
 
     except (IOError, OSError):
         return None
+
+"""Load the list of previously saved recommendation sets."""
+def load_all_sets():
+
+    ensure_storage_directory()
+
+    try:
+        with open(INDEX_FILE, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            return data if isinstance(data, list) else []
+    except (IOError, json.JSONDecodeError):
+        return []
         
