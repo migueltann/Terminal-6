@@ -65,6 +65,32 @@ def run_application():
             # Show the final approved recommendations
             io_manager.display_approved_recommendations(result)
 
+                        # Let the user save the processed result if they want to
+            save_choice = io_manager.get_yes_no(
+                "\nSave approved recommendations to JSON and CSV? (y/n): "
+            )
+
+            if save_choice:
+                saved_paths = (
+                    data_manager.save_processed_recommendations(result)
+                )
+
+                if saved_paths:
+                    json_path, csv_path = saved_paths
+
+                    io_manager.display_message(
+                        f"Saved JSON: {json_path}"
+                    )
+
+                    io_manager.display_message(
+                        f"Saved CSV:  {csv_path}"
+                    )
+
+                else:
+                    io_manager.display_error(
+                        "Could not save recommendation files."
+                    )
+
         elif choice == "3":
             io_manager.display_message("Goodbye!")
             break
