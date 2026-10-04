@@ -55,7 +55,7 @@ def generate_recommendations(destination):
             # Return the recommendations when the API call works
             if response.status_code == 200:
                 print(f"[INFO] Gemini succeeded using {model_name}.")
-                return parse_gemini_response(response)
+                return prompt
 
             # 429 and 5xx errors are usually temporary, so try again
             if response.status_code in {429, 500, 502, 503, 504}:
@@ -136,3 +136,6 @@ Rules:
 5. Do not include timing-related fields.
 6. Do not filter the recommendations.
 """.strip()
+
+
+print(generate_recommendations("Singapore"))
