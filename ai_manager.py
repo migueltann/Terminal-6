@@ -129,6 +129,20 @@ def parse_gemini_response(response):
     raise RuntimeError("Gemini returned an unexpected JSON structure.")
 
 
+def clean_json_response(content):
+    """Remove ```json fences if Gemini adds them around the JSON."""
+
+    content = content.strip()
+
+    if content.startswith("```"):
+        lines = content.splitlines()[1:]
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        content = "\n".join(lines).strip()
+
+    return content
+
+
 def build_ai_prompt(destination):
     """Create the prompt. Only the destination is sent to Gemini."""
 
