@@ -246,3 +246,22 @@ def display_approved_recommendations(result):
     
     _display_section("ACTIVITIES", result.get("activities", []))
     _display_section("FOOD", result.get("food", []))
+
+def _display_section(title, items):
+    """Show one group of approved recommendations."""
+
+    print("\n" + title)
+    print("-" * 70)
+
+    if not items:
+        print("No approved recommendations in this category.")
+        return
+
+    for index, item in enumerate(items, start=1):
+        print(f"\n{index}. {item['name']}")
+        print(f"   {item['category']} · {item['location']}")
+        print(f"   From SGD ${item['estimated_cost_sgd']:.2f} per person")
+        print(f"   {item['description']}")
+
+        if item.get("tags"):
+            print("   Tags: " + ", ".join(item["tags"]))
