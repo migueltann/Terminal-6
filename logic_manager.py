@@ -276,3 +276,5 @@ def build_processed_result(
     rejected_items,
 ):
     """Build the final result used by the terminal and web front end."""
+        ranked = rank_recommendations(approved_items, user_inputs)
+        categorised = categorise_recommendations(ranked)
