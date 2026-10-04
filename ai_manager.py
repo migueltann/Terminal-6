@@ -11,6 +11,88 @@ def generate_recommendations(destination):
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("GEMINI_API_KEY environment variable is missing.")
+    
+    prompt = build_ai_prompt(destination)
+
+    # Try another model if the first model is busy or unavailable
+    models_to_try = [
+        "gemini-3.8-flash",
+        "gemini-3.6-flash",
+        "gemini-3.5-flash-lite",
+    ]
+
+    last_error = None
+
+    for model_name in models_to_try:
+        print(f"[INFO] Trying Gemini model: {model_name}")
+
+        # Retry temporary errors before moving to the next model
+        for attempt in range(3):
+            url = (
+                "https://generativelanguage.googleapis.com/"
+                f"v1beta/models/{model_name}:generateContent"
+            )
+
+            try:
+                response = requests.post(
+                    url,
+                    headers={
+                        "Content-Type": "application/json",
+                        "x-goog-api-key": api_key,
+                    },
+                    json={
+                        "contents": [{"parts": [{"text": prompt}]}],
+                        "generationConfig": {
+                            "response_mime_type": "application/json"
+                        },
+                    },
+                    timeout=45,
+                )
+            except requests.RequestException as err:
+                last_error = err
+                break
+
+            # Return the recommendations when the API call works
+            if response.status_code == 200:
+                print(f"[INFO] Gemini succeeded using {model_name}.")
+                return parse_gemini_response(response)
+
+            # 429 and 5xx errors are usually temporary, so try again
+            if response.status_code in {429, 500, 502, 503, 504}:
+                last_error = RuntimeError(
+                    f"HTTP {response.status_code}: {response.text[:300]}"
+                )
+
+                if attempt < 2:
+                    wait_time = 2 ** (attempt + 1)
+                    print(
+                        f"[WARNING] {model_name} is busy. "
+                        f"Retrying in {wait_time} seconds..."
+                    )
+                    time.sleep(wait_time)
+                    continue
+
+                print(f"[WARNING] {model_name} is still unavailable.")
+                break
+
+            # If a model is not available, move to the next one
+            if response.status_code == 404:
+                last_error = RuntimeError(
+                    f"HTTP 404: {response.text[:300]}"
+                )
+                print(f"[WARNING] {model_name} is not available.")
+                break
+
+            last_error = RuntimeError(
+                f"Gemini API returned HTTP {response.status_code}: "
+                f"{response.text[:300]}"
+            )
+            break
+
+    raise RuntimeError(
+        "All Gemini models failed. "
+        f"Last error: {last_error}"
+    )
 
 
 
