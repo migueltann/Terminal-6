@@ -184,13 +184,13 @@ def delete_set(index):
 """Simple terminal menu for viewing or deleting saved results."""
 def manage_saved_recommendations():
 
-    import ui_manager
+    import io_manager
 
     while True:
         saved = load_all_sets()
 
         if not saved:
-            ui_manager.display_message(
+            io_manager.display_message(
                 "No saved recommendation sets found."
             )
             return
@@ -225,9 +225,9 @@ def manage_saved_recommendations():
             result = load_result(saved[int(choice) - 1]["json_path"])
 
             if result:
-                ui_manager.display_approved_recommendations(result)
+                io_manager.display_approved_recommendations(result)
             else:
-                ui_manager.display_error(
+                io_manager.display_error(
                     "Saved JSON file could not be read."
                 )
         else:
