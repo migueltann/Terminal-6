@@ -43,6 +43,17 @@ def run_application():
                 )
                 continue
 
+            #Python now compares the generic AI results with the user inputs
+            approved, rejected, audit = (
+                logic_manager.filter_recommendations(
+                    valid_items,
+                    user_inputs,
+                )
+            )
+
+            # Show the KEEP / FILTER OUT checks
+            io_manager.display_filter_audit(audit, user_inputs)
+
         elif choice == "3":
             io_manager.display_message("Goodbye!")
             break
