@@ -4,6 +4,9 @@ import time
 
 import requests
 
+from dotenv import load_dotenv
+load_dotenv()
+
 def generate_recommendations(destination):
     """Ask Gemini for a generic list of activities and food places."""
 
@@ -94,6 +97,36 @@ def generate_recommendations(destination):
         f"Last error: {last_error}"
     )
 
+def parse_gemini_response(response):
+    """Turn Gemini's JSON response into a Python list."""
+
+    response_data = response.json()
+    candidates = response_data.get("candidates", [])
+
+    if not candidates:
+        raise RuntimeError("Gemini returned no candidates.")
+
+    try:
+        content = candidates[0]["content"]["parts"][0]["text"]
+    except (KeyError, IndexError, TypeError):
+        raise RuntimeError("Gemini response format was unexpected.")
+
+    try:
+        parsed = json.loads(clean_json_response(content))
+    except json.JSONDecodeError as err:
+        raise RuntimeError(f"Gemini returned invalid JSON: {err}")
+
+    # Gemini normally returns the list directly
+    if isinstance(parsed, list):
+        return parsed
+
+    # Accept these wrapper names too in case Gemini adds one
+    if isinstance(parsed, dict):
+        for key in ("recommendations", "items"):
+            if isinstance(parsed.get(key), list):
+                return parsed[key]
+
+    raise RuntimeError("Gemini returned an unexpected JSON structure.")
 
 
 def build_ai_prompt(destination):
