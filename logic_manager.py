@@ -62,7 +62,7 @@ def validate_ai_response(raw_items):
             continue
 
         item_type = _normalise(item["type"])
-        if item_type not in {"activity", "food"}:
+        if item_type not in {"activity", "food", "accommodation"}:
             continue
 
         try:
@@ -118,12 +118,17 @@ def evaluate_recommendation(item, user_inputs):
 
     if item["type"] == "activity":
         limit = user_inputs["max_activity_spend"]
-        passed = cost <= limit
         label = "Activity budget"
-    else:
+
+    elif item["type"] == "food":
         limit = user_inputs["max_meal_spend"]
-        passed = cost <= limit
         label = "Meal budget"
+
+    else:
+        limit = user_inputs["max_accommodation_spend"]
+        label = "Accommodation budget"
+
+    passed = cost <= limit
 
     checks.append(
         {
@@ -167,11 +172,16 @@ def evaluate_recommendation(item, user_inputs):
         for term in user_inputs["must_visit"]
     )
     
-    # Check whether the recommendation matches the user's interests
-    preferences = (
-        user_inputs["interests"]
-        + user_inputs["preferred_activities"]
-    )
+    # Check preferences based on the type of recommendation
+    if item["type"] == "accommodation":
+        preferences = user_inputs.get(
+            "accommodation_preferences", []
+        )
+    else:
+        preferences = (
+            user_inputs["interests"]
+            + user_inputs["preferred_activities"]
+        )
 
     if preferences:
         matched_preferences = [
@@ -191,11 +201,16 @@ def evaluate_recommendation(item, user_inputs):
 
         checks.append(
             {
-                "label": "Interests / preferred activities",
+                "label": (
+                    "Accommodation preference"
+                    if item["type"] == "accommodation"
+                    else "Interests / preferred activities"
+                ),
                 "passed": passed,
                 "detail": detail,
             }
         )
+
         keep = keep and passed
         
     # Dietary checks only make sense for food recommendations
@@ -298,6 +313,10 @@ def categorise_recommendations(items):
         "food": [
             item for item in items if item["type"] == "food"
         ],
+        "accommodation": [
+            item for item in items
+            if item["type"] == "accommodation"
+        ],
     }
 
 def build_processed_result(
@@ -320,4 +339,5 @@ def build_processed_result(
         },
         "activities": categorised["activities"],
         "food": categorised["food"],
+        "accommodation": categorised["accommodation"],
     }

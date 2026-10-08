@@ -128,6 +128,12 @@ def collect_user_requirements():
     )
     if max_meal_spend is None:
         return None
+    
+    max_accommodation_spend = get_positive_float(
+        "Max accommodation spend per night (SGD): "
+    )
+    if max_accommodation_spend is None:
+        return None   
 
     interests_text = get_optional_text(
         "Interests (comma-separated) [Any]: ",
@@ -142,6 +148,13 @@ def collect_user_requirements():
     )
     if preferred_text is None:
         return None  
+    
+    accommodation_text = get_optional_text(
+        "Accommodation preferences (comma-separated) [Any]: ",
+        "",
+    )
+    if accommodation_text is None:
+        return None
 
     must_visit_text = get_optional_text(
         "Must-visits (comma-separated) [None]: ",
@@ -177,12 +190,14 @@ def collect_user_requirements():
         "destination": destination,
         "max_activity_spend": max_activity_spend,
         "max_meal_spend": max_meal_spend,
+         "max_accommodation_spend": max_accommodation_spend,
         "interests": _split_csv(interests_text),
         "preferred_activities": _split_csv(preferred_text),
         "must_visit": _split_csv(must_visit_text),
         "avoid_list": _split_csv(avoid_text),
         "dietary": dietary,
         "preferred_transport": transport,
+        "accommodation_preferences": _split_csv(accommodation_text),
     }
 
     display_input_summary(data)
@@ -197,6 +212,13 @@ def display_input_summary(data):
     print(f"Destination:          {data['destination']}")
     print(f"Max per activity:     SGD ${data['max_activity_spend']:.2f}")
     print(f"Max per meal:         SGD ${data['max_meal_spend']:.2f}")
+    print(
+        f"Max accommodation:    SGD ${data['max_accommodation_spend']:.2f}"
+    )
+    print(
+        "Accommodation:        "
+        f"{', '.join(data['accommodation_preferences']) or 'Any'}"
+    )
     print(f"Interests:            {', '.join(data['interests']) or 'Any'}")
     print(
         "Preferred activities: "
@@ -246,7 +268,11 @@ def display_approved_recommendations(result):
     
     _display_section("ACTIVITIES", result.get("activities", []))
     _display_section("FOOD", result.get("food", []))
-
+    _display_section(
+        "ACCOMMODATION",
+        result.get("accommodation", []),
+    )
+    
 def _display_section(title, items):
     """Show one group of approved recommendations."""
 
