@@ -282,26 +282,34 @@ def rank_recommendations(items, user_inputs):
 
     def score(item):
         points = 0
-        
+
         # Must-visits get the biggest boost
         for term in user_inputs["must_visit"]:
             if _contains_term(item, term):
                 points += 100
-        
-        # Interests and preferred activities also improve the score        
-        for term in user_inputs["interests"]:
-            if _contains_term(item, term):
-                points += 10
 
-        for term in user_inputs["preferred_activities"]:
-            if _contains_term(item, term):
-                points += 15
-                
-        # If two places are similar, the cheaper one comes slightly earlier
+        # Accommodation has its own preferences
+        if item["type"] == "accommodation":
+            for term in user_inputs.get("accommodation_preferences", []):
+                if _contains_term(item, term):
+                    points += 20
+        else:
+            # Interests and preferred activities are for
+            # activities and food
+            for term in user_inputs["interests"]:
+                if _contains_term(item, term):
+                    points += 10
+
+            for term in user_inputs["preferred_activities"]:
+                if _contains_term(item, term):
+                    points += 15
+
+        # Slightly prefer cheaper options when matches are similar
         points -= item["estimated_cost_sgd"] / 1000
+
         return points
-                    
-    return sorted(items, key=score, reverse=True) 
+
+    return sorted(items, key=score, reverse=True)
 
 def categorise_recommendations(items):
     """Separate the approved results into activities and food."""

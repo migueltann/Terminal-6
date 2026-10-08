@@ -286,12 +286,21 @@ def _display_section(title, items):
     for index, item in enumerate(items, start=1):
         print(f"\n{index}. {item['name']}")
         print(f"   {item['category']} · {item['location']}")
-        print(f"   From SGD ${item['estimated_cost_sgd']:.2f} per person")
+
+        if item["type"] == "accommodation":
+            print(
+                f"   From SGD ${item['estimated_cost_sgd']:.2f} per night"
+            )
+        else:
+            print(
+                f"   From SGD ${item['estimated_cost_sgd']:.2f} per person"
+            )
+
         print(f"   {item['description']}")
 
         if item.get("tags"):
             print("   Tags: " + ", ".join(item["tags"]))
-
+            
 def get_yes_no(prompt):
     """Ask a simple yes/no question."""
 
