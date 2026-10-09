@@ -151,7 +151,7 @@ You are a travel discovery engine.
 
 Destination: {destination}
 
-Generate 24 to 30 GENERIC recommendations for this destination.
+Generate 36 to 44 GENERIC recommendations for this destination.
 Do not create an itinerary or schedule.
 
 Do not use user budgets, interests, preferred activities, dietary needs,
