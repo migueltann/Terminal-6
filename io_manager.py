@@ -165,6 +165,13 @@ def collect_user_requirements():
     if accommodation_text is None:
         return None
 
+    shopping_text = get_optional_text(
+    "Shopping preferences (comma-separated) [Any]: ",
+    ""
+    )
+    if shopping_text is None:
+    return None
+
     must_visit_text = get_optional_text(
         "Must-visits (comma-separated) [None]: ",
         "",
@@ -200,6 +207,7 @@ def collect_user_requirements():
         "max_activity_spend": max_activity_spend,
         "max_meal_spend": max_meal_spend,
          "max_accommodation_spend": max_accommodation_spend,
+         "max_shopping_spend": max_shopping_spend,
         "interests": _split_csv(interests_text),
         "preferred_activities": _split_csv(preferred_text),
         "must_visit": _split_csv(must_visit_text),
@@ -207,7 +215,7 @@ def collect_user_requirements():
         "dietary": dietary,
         "preferred_transport": transport,
         "accommodation_preferences": _split_csv(accommodation_text),
-        "max_shopping_spend": max_shopping_spend,
+        "shopping_preferences": _split_csv(shopping_text),
     }
 
     display_input_summary(data)
