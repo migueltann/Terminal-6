@@ -154,9 +154,11 @@ Destination: {destination}
 Generate 36 to 44 GENERIC recommendations for this destination.
 Do not create an itinerary or schedule.
 
-Do not use user budgets, interests, preferred activities, dietary needs,
-must-visits, avoid lists, transport preferences, travel dates, start times,
-end times, duration, pace, or any other personal requirement.
+Do not use user budgets, interests, preferred activities, 
+accommodation preferences, shopping preferences, dietary needs,
+must-visits, avoid lists, transport preferences, travel dates, 
+start times, end times, duration, pace, or any other personal 
+requirement.
 
 The Python program will apply all user-specific rules later.
 
@@ -164,6 +166,7 @@ Include a balanced mix of:
 - activities
 - food
 - accommodation
+- shopping
 
 Generate at least 5 accommodation recommendations.
 
