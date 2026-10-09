@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def generate_recommendations(destination):
-    """Ask Gemini for a generic list of activities and food places."""
+    """Ask Gemini for generic travel recommendations."""
 
     # Read the Gemini API key from the .env file
     api_key = os.getenv("GEMINI_API_KEY")
