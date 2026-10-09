@@ -185,7 +185,16 @@ Every object must contain these fields:
   Cafe, Hotel, Hostel, Serviced Apartment, Shopping Mall,
   Market, or Shopping Street
   
-- "estimated_cost_sgd": number
+- "estimated_cost_sgd": non-negative number in SGD.
+
+  For activities and food, use the estimated cost for ONE person.
+
+  For accommodation, use the estimated price for ONE room
+  for ONE night.
+
+  For shopping, use a reasonable typical spend for ONE person.
+
+  Free activities and free-to-enter shopping places may use 0.
 
 - "location": string
 
