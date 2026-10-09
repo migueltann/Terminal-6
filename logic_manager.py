@@ -1,12 +1,3 @@
-
-def rank_recommendations(items, user_inputs):
-    """Put stronger matches near the top of the final result."""
-
-    def score(item):
-        points = 0
-
-        return points
-
 """Checks the AI recommendations against the user's requirements."""
 
 def _normalise(value):
@@ -62,7 +53,7 @@ def validate_ai_response(raw_items):
             continue
 
         item_type = _normalise(item["type"])
-        if item_type not in {"activity", "food"}:
+        if item_type not in {"activity", "food", "accommodation"}:
             continue
 
         try:
@@ -118,12 +109,17 @@ def evaluate_recommendation(item, user_inputs):
 
     if item["type"] == "activity":
         limit = user_inputs["max_activity_spend"]
-        passed = cost <= limit
         label = "Activity budget"
-    else:
+
+    elif item["type"] == "food":
         limit = user_inputs["max_meal_spend"]
-        passed = cost <= limit
         label = "Meal budget"
+
+    else:
+        limit = user_inputs["max_accommodation_spend"]
+        label = "Accommodation budget"
+
+    passed = cost <= limit
 
     checks.append(
         {
@@ -167,11 +163,16 @@ def evaluate_recommendation(item, user_inputs):
         for term in user_inputs["must_visit"]
     )
     
-    # Check whether the recommendation matches the user's interests
-    preferences = (
-        user_inputs["interests"]
-        + user_inputs["preferred_activities"]
-    )
+    # Check preferences based on the type of recommendation
+    if item["type"] == "accommodation":
+        preferences = user_inputs.get(
+            "accommodation_preferences", []
+        )
+    else:
+        preferences = (
+            user_inputs["interests"]
+            + user_inputs["preferred_activities"]
+        )
 
     if preferences:
         matched_preferences = [
@@ -191,11 +192,16 @@ def evaluate_recommendation(item, user_inputs):
 
         checks.append(
             {
-                "label": "Interests / preferred activities",
+                "label": (
+                    "Accommodation preference"
+                    if item["type"] == "accommodation"
+                    else "Interests / preferred activities"
+                ),
                 "passed": passed,
                 "detail": detail,
             }
         )
+
         keep = keep and passed
         
     # Dietary checks only make sense for food recommendations
@@ -267,26 +273,34 @@ def rank_recommendations(items, user_inputs):
 
     def score(item):
         points = 0
-        
+
         # Must-visits get the biggest boost
         for term in user_inputs["must_visit"]:
             if _contains_term(item, term):
                 points += 100
-        
-        # Interests and preferred activities also improve the score        
-        for term in user_inputs["interests"]:
-            if _contains_term(item, term):
-                points += 10
 
-        for term in user_inputs["preferred_activities"]:
-            if _contains_term(item, term):
-                points += 15
-                
-        # If two places are similar, the cheaper one comes slightly earlier
+        # Accommodation has its own preferences
+        if item["type"] == "accommodation":
+            for term in user_inputs.get("accommodation_preferences", []):
+                if _contains_term(item, term):
+                    points += 20
+        else:
+            # Interests and preferred activities are for
+            # activities and food
+            for term in user_inputs["interests"]:
+                if _contains_term(item, term):
+                    points += 10
+
+            for term in user_inputs["preferred_activities"]:
+                if _contains_term(item, term):
+                    points += 15
+
+        # Slightly prefer cheaper options when matches are similar
         points -= item["estimated_cost_sgd"] / 1000
+
         return points
-                    
-    return sorted(items, key=score, reverse=True) 
+
+    return sorted(items, key=score, reverse=True)
 
 def categorise_recommendations(items):
     """Separate the approved results into activities and food."""
@@ -297,6 +311,10 @@ def categorise_recommendations(items):
         ],
         "food": [
             item for item in items if item["type"] == "food"
+        ],
+        "accommodation": [
+            item for item in items
+            if item["type"] == "accommodation"
         ],
     }
 
@@ -320,4 +338,5 @@ def build_processed_result(
         },
         "activities": categorised["activities"],
         "food": categorised["food"],
+        "accommodation": categorised["accommodation"],
     }
