@@ -1,4 +1,4 @@
-#I/O Manager - Handles the terminal inputs and outputs shown to the user
+"""Handles the terminal inputs and outputs shown to the user."""
 
 EXIT_COMMANDS = {"exit", "quit", "q"}
 
@@ -131,9 +131,18 @@ def collect_user_requirements():
     
     max_accommodation_spend = get_positive_float(
         "Max accommodation spend per night (SGD): "
+        
     )
+
     if max_accommodation_spend is None:
-        return None   
+        return None  
+
+    max_shopping_spend = get_positive_float(
+    "Max shopping spend (SGD): "
+    )
+
+    if max_shopping_spend is None:
+    return None 
 
     interests_text = get_optional_text(
         "Interests (comma-separated) [Any]: ",
@@ -198,6 +207,7 @@ def collect_user_requirements():
         "dietary": dietary,
         "preferred_transport": transport,
         "accommodation_preferences": _split_csv(accommodation_text),
+        "max_shopping_spend": max_shopping_spend,
     }
 
     display_input_summary(data)
