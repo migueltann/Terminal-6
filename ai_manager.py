@@ -171,15 +171,28 @@ Return ONLY valid JSON as one array.
 
 Every object must contain these fields:
 - "name": string
-- "type": either "activity", "food", or "accommodation"
-- "category": short category such as Theme Park, Museum, Shopping, Nature,
-  Observation Deck, Local Food, Cafe, Restaurant, Hotel, Hostel, Resort
+
+- "type": one of:
+  "activity",
+  "food",
+  "accommodation",
+  "shopping"
+
+"category": short category such as Museum, Nature, Restaurant,
+  Cafe, Hotel, Hostel, Serviced Apartment, Shopping Mall,
+  Market, or Shopping Street
+  
 - "estimated_cost_sgd": number
+
 - "location": string
+
 - "description": one short generic description
+
 - "tags": array of general keywords such as culture, shopping, nature,
   family, theme park, museum, views, adventure, food, hotel, hostel, resort
+
 - "transport_options": array using only walk, transit, taxi
+
 - "dietary_tags": array of general labels such as halal, vegetarian, vegan,
   no-pork, or none
 
