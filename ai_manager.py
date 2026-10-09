@@ -197,15 +197,24 @@ Every object must contain these fields:
   no-pork, or none
 
 Rules:
-1. Include a useful mix of activities, food, and accommodation.
-2. Include at least 5 accommodation recommendations.
-3. For accommodation, estimated_cost_sgd means the price for ONE night.
-4. For activities and food, estimated_cost_sgd means the price for ONE person.
-5. Use realistic places in {destination}.
-6. estimated_cost_sgd must be a non-negative number in SGD.
-7. Do not decide whether a place suits this specific user.
-8. Do not include timing-related fields.
-9. Do not filter the recommendations.
+
+1. Include a useful mix of all four types.
+
+2. Aim for at least 7 recommendations of each type.
+
+3. Use realistic places in {destination}.
+
+4. Do not decide whether a place suits this specific user.
+
+5. Do not include timing-related fields.
+
+6. Do not filter the recommendations.
+
+7. Accommodation recommendations can include hotels, hostels,
+   serviced apartments and similar places.
+
+8. Shopping recommendations can include malls, shopping streets,
+   markets, souvenir areas, fashion areas and electronics areas.
 """.strip()
 
 #test
