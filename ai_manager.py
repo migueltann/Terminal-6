@@ -205,8 +205,15 @@ Every object must contain these fields:
 
 - "transport_options": array using only walk, transit, taxi
 
-- "dietary_tags": array of general labels such as halal, vegetarian, vegan,
-  no-pork, or none
+- "dietary_tags":
+  For food recommendations, use labels such as:
+  halal,
+  vegetarian,
+  vegan,
+  no-pork,
+  none
+
+  For non-food recommendations, use ["none"].
 
 Rules:
 
