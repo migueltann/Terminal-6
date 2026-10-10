@@ -184,29 +184,25 @@ def is_back(value):
     """Check whether the user typed a back command."""
     return value.strip().lower() in BACK_COMMANDS
 
-def get_required_text(prompt):
+def get_required_text(prompt, allow_back=False):
     """Ask for text that cannot be left blank."""
-
     while True:
         value = input(prompt).strip()
-
         if is_exit(value):
             return None
-
+        if allow_back and is_back(value):
+            return BACK
         if value:
             return value
-
         print("This field cannot be empty.")
 
-
-def get_optional_text(prompt, default=""):
+def get_optional_text(prompt, default="", allow_back=False):
     """Ask for optional text and use a default if it is blank."""
-
     value = input(prompt).strip()
-
     if is_exit(value):
         return None
-
+    if allow_back and is_back(value):
+        return BACK
     return value if value else default
 
 def get_positive_float(prompt, allow_zero=False):
