@@ -539,6 +539,59 @@ def _format_value(key, value):
         return f"SGD ${value:.2f}"
     return str(value)
 
+def edit_one_requirement(data):
+    """Edit only the input selected by the user."""
+    # menu number -> (label, data key, function that asks for the new value)
+    fields = {
+        "1": ("Destination", "destination", ask_destination),
+        "2": ("Activity budget", "max_activity_spend", ask_activity_budget),
+        "3": ("Meal budget", "max_meal_spend", ask_meal_budget),
+        "4": ("Accommodation budget", "max_accommodation_spend",
+              ask_accommodation_budget),
+        "5": ("Shopping budget", "max_shopping_spend", ask_shopping_budget),
+        "6": ("Interests", "interests", ask_interests),
+        "7": ("Preferred activities", "preferred_activities",
+              ask_preferred_activities),
+        "8": ("Accommodation preferences", "accommodation_preferences",
+              ask_accommodation_preferences),
+        "9": ("Shopping preferences", "shopping_preferences",
+              ask_shopping_preferences),
+        "10": ("Must-visits", "must_visits", ask_must_visits),
+        "11": ("Avoid list", "avoid_list", ask_avoid_list),
+        "12": ("Dietary requirement", "dietary_requirement",
+               get_dietary_requirement),
+        "13": ("Transport preference", "transport_preference", ask_transport),
+    }
+    back_choice = str(len(fields) + 1)
+
+    while True:
+        print("\n" + LINE)
+        print("EDIT INPUT")
+        print(LINE)
+        for number, (label, _, _) in fields.items():
+            print(f"{number}. {label}")
+        print(f"{back_choice}. Back")
+
+        choice = input("Choose what to edit: ").strip().lower()
+
+        if is_exit(choice):
+            return None
+        if choice == back_choice:
+            return data
+
+        if choice in fields:
+            label, key, ask = fields[choice]
+            print(f"\nCurrent {label}: {_format_value(key, data[key])}")
+            print("Enter the new value below (type 'exit' to cancel this edit).")
+            value = ask()
+            if value is not None:
+                data[key] = value
+            return data
+
+        print("Invalid choice.")
+
+
+# Showing results
 
 def display_filter_audit(audit, user_inputs): 
     """Show why each recommendation was kept or filtered out."""
