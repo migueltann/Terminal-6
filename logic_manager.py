@@ -1,12 +1,12 @@
-"""Checks the AI recommendations against the user's requirements."""
+"""Filters generic AI recommendations using the user's requirements."""
 
 def _normalise(value):
-    """Make text easier to compare."""
+    """Convert text to lowercase so comparisons are easier."""
     return str(value).strip().lower()
 
 
 def _contains_term(item, term):
-    """Check whether a user keyword appears in the recommendation."""
+    """Check whether a keyword appears inside a recommendation."""
 
     term = _normalise(term)
 
