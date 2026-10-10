@@ -296,7 +296,23 @@ def filter_recommendations(items, user_inputs):
         audit.append(decision)
 
         if decision["keep"]:
-            approved.append(item)
+            approved_item = dict(item)
+
+            if decision["must_visit_match"]:
+                approved_item["tags"] = list(
+                    approved_item.get("tags", [])
+                )
+
+                existing_tags = [
+                    _normalise(tag)
+                    for tag in approved_item["tags"]
+                ]
+
+                if "must visit" not in existing_tags:
+                    approved_item["tags"].append("must visit")
+                    
+            approved.append(approved_item)
+
         else:
             rejected.append(item)
 
