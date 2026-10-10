@@ -215,6 +215,23 @@ Every object must contain these fields:
 
   For non-food recommendations, use ["none"].
 
+For shopping recommendations, include two additional fields:
+
+"shopping_types": array containing values from:
+["mall", "street_market", "department_store",
+ "specialty_store", "shopping_street", "outlet"]
+
+"shopping_interests": array containing values from:
+["fashion", "electronics", "souvenirs", "local_crafts"]
+
+A shopping recommendation may have multiple shopping interests.
+
+Only assign shopping types and interests that accurately
+describe the recommendation.
+
+For non-shopping recommendations, return empty arrays for
+shopping_types and shopping_interests.
+
 Rules:
 
 1. Include a useful mix of all four types.
