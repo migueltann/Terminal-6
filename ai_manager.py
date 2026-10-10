@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def generate_recommendations(destination):
-    """Ask Gemini for a generic list of activities and food places."""
+    """Ask Gemini for generic travel recommendations."""
 
     # Read the Gemini API key from the .env file
     api_key = os.getenv("GEMINI_API_KEY")
@@ -151,12 +151,14 @@ You are a travel discovery engine.
 
 Destination: {destination}
 
-Generate 24 to 30 GENERIC recommendations for this destination.
+Generate 36 to 44 GENERIC recommendations for this destination.
 Do not create an itinerary or schedule.
 
-Do not use user budgets, interests, preferred activities, dietary needs,
-must-visits, avoid lists, transport preferences, travel dates, start times,
-end times, duration, pace, or any other personal requirement.
+Do not use user budgets, interests, preferred activities, 
+accommodation preferences, shopping preferences, dietary needs,
+must-visits, avoid lists, transport preferences, travel dates, 
+start times, end times, duration, pace, or any other personal 
+requirement.
 
 The Python program will apply all user-specific rules later.
 
@@ -164,6 +166,7 @@ Include a balanced mix of:
 - activities
 - food
 - accommodation
+- shopping
 
 Generate at least 5 accommodation recommendations.
 
@@ -171,28 +174,66 @@ Return ONLY valid JSON as one array.
 
 Every object must contain these fields:
 - "name": string
-- "type": either "activity", "food", or "accommodation"
-- "category": short category such as Theme Park, Museum, Shopping, Nature,
-  Observation Deck, Local Food, Cafe, Restaurant, Hotel, Hostel, Resort
-- "estimated_cost_sgd": number
+
+- "type": one of:
+  "activity",
+  "food",
+  "accommodation",
+  "shopping"
+
+"category": short category such as Museum, Nature, Restaurant,
+  Cafe, Hotel, Hostel, Serviced Apartment, Shopping Mall,
+  Market, or Shopping Street
+  
+- "estimated_cost_sgd": non-negative number in SGD.
+
+  For activities and food, use the estimated cost for ONE person.
+
+  For accommodation, use the estimated price for ONE room
+  for ONE night.
+
+  For shopping, use a reasonable typical spend for ONE person.
+
+  Free activities and free-to-enter shopping places may use 0.
+
 - "location": string
+
 - "description": one short generic description
+
 - "tags": array of general keywords such as culture, shopping, nature,
   family, theme park, museum, views, adventure, food, hotel, hostel, resort
+
 - "transport_options": array using only walk, transit, taxi
-- "dietary_tags": array of general labels such as halal, vegetarian, vegan,
-  no-pork, or none
+
+- "dietary_tags":
+  For food recommendations, use labels such as:
+  halal,
+  vegetarian,
+  vegan,
+  no-pork,
+  none
+
+  For non-food recommendations, use ["none"].
 
 Rules:
-1. Include a useful mix of activities, food, and accommodation.
-2. Include at least 5 accommodation recommendations.
-3. For accommodation, estimated_cost_sgd means the price for ONE night.
-4. For activities and food, estimated_cost_sgd means the price for ONE person.
-5. Use realistic places in {destination}.
-6. estimated_cost_sgd must be a non-negative number in SGD.
-7. Do not decide whether a place suits this specific user.
-8. Do not include timing-related fields.
-9. Do not filter the recommendations.
+
+1. Include a useful mix of all four types.
+
+2. Aim for at least 7 recommendations of each type.
+
+3. Use realistic places in {destination}.
+
+4. Do not decide whether a place suits this specific user.
+
+5. Do not include timing-related fields.
+
+6. Do not filter the recommendations.
+
+7. Accommodation recommendations can include hotels, hostels,
+   serviced apartments and similar places.
+
+8. Shopping recommendations can include malls, shopping streets,
+   markets, souvenir areas, fashion areas and electronics areas.
 """.strip()
 
 #test

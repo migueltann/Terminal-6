@@ -13,7 +13,6 @@ def ensure_storage_directory():
     """Create the data folder and index file if they do not exist yet."""
 
     os.makedirs(DATA_DIR, exist_ok=True)
-
     if not os.path.exists(INDEX_FILE):
         with open(INDEX_FILE, "w", encoding="utf-8") as file:
             json.dump([], file, indent=4)
@@ -27,8 +26,8 @@ def _safe_name(value):
         for character in value
     ).strip("_")
 
-"""Save approved recommendations in both JSON and CSV format."""
 def save_processed_recommendations(result):
+    """Save approved recommendations in both JSON and CSV format."""
 
     ensure_storage_directory()
 
@@ -84,24 +83,27 @@ def save_processed_recommendations(result):
             # Write the column headings
             writer.writeheader()
 
-            # Combine activities and food into one list
+            # Combine activities, food, accommodation and shopping into one list
             all_approved = (
                 result.get("activities", [])
                 + result.get("food", [])
+                + result.get("accommodation", [])
+                + result.get("shopping", [])
             )
 
             # Write each approved recommendation
             for item in all_approved:
                 writer.writerow(
                     {
-                        "type": item["type"],
-                        "name": item["name"],
-                        "category": item["category"],
-                        "estimated_cost_sgd": item[
-                            "estimated_cost_sgd"
-                        ],
-                        "location": item["location"],
-                        "description": item["description"],
+                        "type": item.get("type", ""),
+                        "name": item.get("name", ""),
+                        "category": item.get("category", ""),
+                        "estimated_cost_sgd": item.get(
+                            "estimated_cost_sgd",
+                            "",
+                        ),
+                        "location": item.get("location", ""),
+                        "description": item.get("description", ""),
                         "tags": ", ".join(
                             item.get("tags", [])
                         ),
@@ -116,10 +118,18 @@ def save_processed_recommendations(result):
 
         # Add this saved result to the small index used by the menu/front end
         saved = load_all_sets()
+
+        summary = result.get("summary", {})
+
+        approved_count = summary.get(
+            "approved_count",
+            len(all_approved),
+        )
+
         saved.append(
             {
-                "destination": result["destination"],
-                "approved_count": result["summary"]["approved_count"],
+                "destination": result.get("destination", "Unknown"),
+                "approved_count": approved_count,
                 "json_path": json_path,
                 "csv_path": csv_path,
                 "saved_at": timestamp,
@@ -134,8 +144,8 @@ def save_processed_recommendations(result):
     except (IOError, OSError):
         return None
 
-"""Load the list of previously saved recommendation sets."""
 def load_all_sets():
+    """Load the list of previously saved recommendation sets."""
 
     ensure_storage_directory()
 
@@ -155,8 +165,8 @@ def load_result(json_path):
     except (IOError, json.JSONDecodeError):
         return None
 
-"""Delete one saved result and its JSON/CSV files."""
 def delete_set(index):
+    """Delete one saved result and its JSON/CSV files."""
 
     saved = load_all_sets()
 
@@ -181,8 +191,118 @@ def delete_set(index):
     except IOError:
         return False
 
-"""Simple terminal menu for viewing or deleting saved results."""
+def save_recommendations(
+    destination,
+    recommendations_json,
+    user_inputs_json="{}",
+):
+    """Save recommendations received from the Flask website."""
+
+    # Convert JSON text into Python data
+    if isinstance(recommendations_json, str):
+        recommendations = json.loads(recommendations_json)
+    else:
+        recommendations = recommendations_json
+
+    if isinstance(user_inputs_json, str):
+        user_inputs = json.loads(user_inputs_json)
+    else:
+        user_inputs = user_inputs_json
+
+    # Separate recommendations according to type
+    activities = []
+    food = []
+    accommodation = []
+    shopping = []
+
+    for item in recommendations:
+        item_type = item.get("type", "")
+
+        if item_type == "activity":
+            activities.append(item)
+
+        elif item_type == "food":
+            food.append(item)
+
+        elif item_type == "accommodation":
+            accommodation.append(item)
+
+        elif item_type == "shopping":
+            shopping.append(item)
+
+    # Build the same structure used by the other managers
+    result = {
+        "destination": destination,
+        "requirements": user_inputs,
+        "activities": activities,
+        "food": food,
+        "accommodation": accommodation,
+        "shopping": shopping,
+        "summary": {
+            "approved_count": len(recommendations),
+        },
+    }
+
+    saved_paths = save_processed_recommendations(result)
+
+    if saved_paths is None:
+        raise RuntimeError(
+            "Recommendations could not be saved."
+        )
+
+    json_path, csv_path = saved_paths
+    return json_path
+
+def get_saved_recommendations():
+    """Return saved recommendations in the format used by Flask."""
+
+    saved = load_all_sets()
+    result = []
+
+    for entry in saved:
+        json_path = entry.get("json_path", "")
+        filename = os.path.basename(json_path)
+
+        result.append(
+            {
+                "filename": filename,
+                "destination": entry.get(
+                    "destination",
+                    "Unknown",
+                ),
+                "approved_count": entry.get(
+                    "approved_count",
+                    0,
+                ),
+                "saved_at": entry.get(
+                    "saved_at",
+                    "",
+                ),
+                "json_path": json_path,
+                "csv_path": entry.get(
+                    "csv_path",
+                    "",
+                ),
+            }
+        )
+
+    return result
+
+def delete_saved_recommendation(filename):
+    """Delete a saved recommendation using its JSON filename."""
+
+    saved = load_all_sets()
+
+    for index, entry in enumerate(saved, start=1):
+        json_path = entry.get("json_path", "")
+
+        if os.path.basename(json_path) == filename:
+            return delete_set(index)
+
+    return False
+
 def manage_saved_recommendations():
+    """Simple terminal menu for viewing or deleting saved results."""
 
     import io_manager
 

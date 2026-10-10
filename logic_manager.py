@@ -1,12 +1,12 @@
-"""Checks the AI recommendations against the user's requirements."""
+"""Filters generic AI recommendations using the user's requirements."""
 
 def _normalise(value):
-    """Make text easier to compare."""
+    """Convert text to lowercase so comparisons are easier."""
     return str(value).strip().lower()
 
 
 def _contains_term(item, term):
-    """Check whether a user keyword appears in the recommendation."""
+    """Check whether a keyword appears inside a recommendation."""
 
     term = _normalise(term)
 
@@ -33,6 +33,13 @@ def validate_ai_response(raw_items):
 
     valid_items = []
 
+    allowed_types = {
+    "activity",
+    "food",
+    "accommodation",
+    "shopping",
+    }
+
     for item in raw_items:
         if not isinstance(item, dict):
             continue
@@ -53,7 +60,7 @@ def validate_ai_response(raw_items):
             continue
 
         item_type = _normalise(item["type"])
-        if item_type not in {"activity", "food", "accommodation"}:
+        if item_type not in allowed_types:
             continue
 
         try:
@@ -100,6 +107,33 @@ def validate_ai_response(raw_items):
 
     return valid_items
 
+def _budget_for_item(item, user_inputs):
+    """Select the correct budget for a recommendation type."""
+
+    mapping = {
+        "activity": (
+            "max_activity_spend",
+            "Activity budget",
+        ),
+        "food": (
+            "max_meal_spend",
+            "Meal budget",
+        ),
+        "accommodation": (
+            "max_accommodation_spend",
+            "Accommodation budget",
+        ),
+        "shopping": (
+            "max_shopping_spend",
+            "Shopping budget",
+        ),
+    }
+
+    key, label = mapping[item["type"]]
+    limit = float(user_inputs[key])
+
+    return limit, label
+
 def evaluate_recommendation(item, user_inputs):
     """Check one recommendation and record why it is kept or removed."""
 
@@ -107,17 +141,10 @@ def evaluate_recommendation(item, user_inputs):
     keep = True
     cost = item["estimated_cost_sgd"]
 
-    if item["type"] == "activity":
-        limit = user_inputs["max_activity_spend"]
-        label = "Activity budget"
-
-    elif item["type"] == "food":
-        limit = user_inputs["max_meal_spend"]
-        label = "Meal budget"
-
-    else:
-        limit = user_inputs["max_accommodation_spend"]
-        label = "Accommodation budget"
+    limit, label = _budget_for_item(
+        item,
+        user_inputs,
+    )   
 
     passed = cost <= limit
 
@@ -137,7 +164,7 @@ def evaluate_recommendation(item, user_inputs):
 
     avoided_terms = [
         term
-        for term in user_inputs["avoid_list"]
+        for term in user_inputs.get("avoid_list", [])
         if _contains_term(item, term)
     ]
 
@@ -160,19 +187,30 @@ def evaluate_recommendation(item, user_inputs):
     # A must-visit can count as a strong preference match
     must_visit_match = any(
         _contains_term(item, term)
-        for term in user_inputs["must_visit"]
+        for term in user_inputs.get("must_visit", [])
     )
     
     # Check preferences based on the type of recommendation
     if item["type"] == "accommodation":
         preferences = user_inputs.get(
-            "accommodation_preferences", []
+            "accommodation_preferences",
+            [],
         )
+        preference_label = "Accommodation preference"
+
+    elif item["type"] == "shopping":
+        preferences = user_inputs.get(
+            "shopping_preferences",
+            [],
+        )
+        preference_label = "Shopping preference"
+
     else:
         preferences = (
-            user_inputs["interests"]
-            + user_inputs["preferred_activities"]
+            user_inputs.get("interests", [])
+            + user_inputs.get("preferred_activities", [])
         )
+        preference_label = "Interests / preferred activities"
 
     if preferences:
         matched_preferences = [
@@ -192,11 +230,7 @@ def evaluate_recommendation(item, user_inputs):
 
         checks.append(
             {
-                "label": (
-                    "Accommodation preference"
-                    if item["type"] == "accommodation"
-                    else "Interests / preferred activities"
-                ),
+                "label": preference_label,
                 "passed": passed,
                 "detail": detail,
             }
@@ -205,7 +239,9 @@ def evaluate_recommendation(item, user_inputs):
         keep = keep and passed
         
     # Dietary checks only make sense for food recommendations
-    dietary = _normalise(user_inputs["dietary"])
+    dietary = _normalise(
+        user_inputs.get("dietary", "any")
+    )
 
     if item["type"] == "food" and dietary not in {"", "none", "any"}:
         passed = dietary in item.get("dietary_tags", [])
@@ -224,7 +260,7 @@ def evaluate_recommendation(item, user_inputs):
         
      # Check whether the user's preferred transport is listed
     preferred_transport = _normalise(
-        user_inputs["preferred_transport"]
+        user_inputs.get("preferred_transport", "any")
     )
 
     if preferred_transport not in {"", "any"}:
@@ -241,7 +277,7 @@ def evaluate_recommendation(item, user_inputs):
             }
         )
         keep = keep and passed
-
+        
     return {
         "item": item,
         "keep": keep,
@@ -262,7 +298,23 @@ def filter_recommendations(items, user_inputs):
         audit.append(decision)
 
         if decision["keep"]:
-            approved.append(item)
+            approved_item = dict(item)
+
+            if decision["must_visit_match"]:
+                approved_item["tags"] = list(
+                    approved_item.get("tags", [])
+                )
+
+                existing_tags = [
+                    _normalise(tag)
+                    for tag in approved_item["tags"]
+                ]
+
+                if "must visit" not in existing_tags:
+                    approved_item["tags"].append("must visit")
+                    
+            approved.append(approved_item)
+
         else:
             rejected.append(item)
 
@@ -275,23 +327,35 @@ def rank_recommendations(items, user_inputs):
         points = 0
 
         # Must-visits get the biggest boost
-        for term in user_inputs["must_visit"]:
+        for term in user_inputs.get("must_visit", []):
             if _contains_term(item, term):
                 points += 100
 
         # Accommodation has its own preferences
         if item["type"] == "accommodation":
-            for term in user_inputs.get("accommodation_preferences", []):
+            for term in user_inputs.get(
+                "accommodation_preferences",
+                [],
+            ):
                 if _contains_term(item, term):
                     points += 20
+
+        elif item["type"] == "shopping":
+            for term in user_inputs.get(
+                "shopping_preferences",
+                [],
+            ):
+                if _contains_term(item, term):
+                    points += 20
+
         else:
             # Interests and preferred activities are for
             # activities and food
-            for term in user_inputs["interests"]:
+            for term in user_inputs.get("interests", []):
                 if _contains_term(item, term):
                     points += 10
 
-            for term in user_inputs["preferred_activities"]:
+            for term in user_inputs.get("preferred_activities", []):
                 if _contains_term(item, term):
                     points += 15
 
@@ -316,6 +380,11 @@ def categorise_recommendations(items):
             item for item in items
             if item["type"] == "accommodation"
         ],
+        "shopping": [
+            item
+            for item in items
+            if item["type"] == "shopping"
+        ],
     }
 
 def build_processed_result(
@@ -339,4 +408,5 @@ def build_processed_result(
         "activities": categorised["activities"],
         "food": categorised["food"],
         "accommodation": categorised["accommodation"],
+        "shopping": categorised["shopping"],
     }

@@ -1,4 +1,4 @@
-#I/O Manager - Handles the terminal inputs and outputs shown to the user
+"""Handles the terminal inputs and outputs shown to the user."""
 
 EXIT_COMMANDS = {"exit", "quit", "q"}
 
@@ -131,9 +131,18 @@ def collect_user_requirements():
     
     max_accommodation_spend = get_positive_float(
         "Max accommodation spend per night (SGD): "
+        
     )
+
     if max_accommodation_spend is None:
-        return None   
+        return None  
+
+    max_shopping_spend = get_positive_float(
+    "Max shopping spend (SGD): "
+    )
+
+    if max_shopping_spend is None:
+        return None 
 
     interests_text = get_optional_text(
         "Interests (comma-separated) [Any]: ",
@@ -154,6 +163,13 @@ def collect_user_requirements():
         "",
     )
     if accommodation_text is None:
+        return None
+
+    shopping_text = get_optional_text(
+    "Shopping preferences (comma-separated) [Any]: ",
+    ""
+    )
+    if shopping_text is None:
         return None
 
     must_visit_text = get_optional_text(
@@ -190,14 +206,16 @@ def collect_user_requirements():
         "destination": destination,
         "max_activity_spend": max_activity_spend,
         "max_meal_spend": max_meal_spend,
-         "max_accommodation_spend": max_accommodation_spend,
+        "max_accommodation_spend": max_accommodation_spend,
+        "max_shopping_spend": max_shopping_spend,
         "interests": _split_csv(interests_text),
         "preferred_activities": _split_csv(preferred_text),
         "must_visit": _split_csv(must_visit_text),
         "avoid_list": _split_csv(avoid_text),
-        "dietary": dietary,
-        "preferred_transport": transport,
+        "dietary_requirement": dietary,
+        "preferred_preference": transport,
         "accommodation_preferences": _split_csv(accommodation_text),
+        "shopping_preferences": _split_csv(shopping_text),
     }
 
     display_input_summary(data)
@@ -216,8 +234,16 @@ def display_input_summary(data):
         f"Max accommodation:    SGD ${data['max_accommodation_spend']:.2f}"
     )
     print(
+        f"Max shopping spend:   "
+        f"SGD ${data['max_shopping_spend']:.2f}"
+    )
+    print(
         "Accommodation:        "
         f"{', '.join(data['accommodation_preferences']) or 'Any'}"
+    )
+    print(
+        "Shopping:             "
+        f"{', '.join(data['shopping_preferences']) or 'Any'}"
     )
     print(f"Interests:            {', '.join(data['interests']) or 'Any'}")
     print(
@@ -230,7 +256,7 @@ def display_input_summary(data):
     print(f"Transport:            {data['preferred_transport']}")
     print("=" * 70)
 
-def display_filter_audit(audit, user_inputs):
+def display_filter_audit(audit, user_inputs): 
     """Show why each recommendation was kept or filtered out."""
 
     print("\n" + "=" * 70)
@@ -265,19 +291,46 @@ def display_approved_recommendations(result):
     print("\n" + "=" * 70)
     print(f"APPROVED RECOMMENDATIONS: {result['destination'].upper()}")
     print("=" * 70)
+   
     print(
         f"Approved: {result['summary']['approved_count']} | "
         f"Filtered out: {result['summary']['filtered_out_count']}"
     )
-    
-    _display_section("ACTIVITIES", result.get("activities", []))
+
+    must_visit = [
+        item
+        for item in result.get("activities", [])
+        if item.get("category", "").strip().lower() == "must visit"
+        or "must visit" in [
+            str(tag).strip().lower()
+            for tag in item.get("tags", [])
+        ]
+    ]
+
+    other_activities = [
+        item
+        for item in result.get("activities", [])
+        if item not in must_visit
+    ]
+
+    _display_section("MUST-VISIT PLACES", must_visit)
+    _display_section("ACTIVITIES", other_activities)
+
     _display_section("FOOD", result.get("food", []))
+
     _display_section(
-        "ACCOMMODATION",
-        result.get("accommodation", []),
-    )
+            "ACCOMMODATION",
+            result.get("accommodation", []),
+            cost_note="per night",
+        )
+
+    _display_section(
+        "SHOPPING",
+        result.get("shopping", []),
+        cost_note="typical spend",
+        )
     
-def _display_section(title, items):
+def _display_section(title, items, cost_note="per person"):
     """Show one group of approved recommendations."""
 
     print("\n" + title)
@@ -291,19 +344,21 @@ def _display_section(title, items):
         print(f"\n{index}. {item['name']}")
         print(f"   {item['category']} · {item['location']}")
 
-        if item["type"] == "accommodation":
-            print(
-                f"   From SGD ${item['estimated_cost_sgd']:.2f} per night"
-            )
-        else:
-            print(
-                f"   From SGD ${item['estimated_cost_sgd']:.2f} per person"
-            )
+    print(
+        f"   Estimated: SGD ${item['estimated_cost_sgd']:.2f} "
+        f"{cost_note}"
+    )
 
-        print(f"   {item['description']}")
+    print(f"   {item['description']}")
 
-        if item.get("tags"):
+    if item.get("tags"):
             print("   Tags: " + ", ".join(item["tags"]))
+
+    if item.get("transport_options"):
+            print(
+                "   Transport: "
+                + ", ".join(item["transport_options"])
+            )
             
 def get_yes_no(prompt):
     """Ask a simple yes/no question."""
