@@ -356,7 +356,7 @@ def _display_section(title, items, cost_note="per person"):
 
         if item.get("transport_options"):
             print(
-                "   Transport: " + ",".join(item["transport_options"])
+                "   Transport: " + ", ".join(item["transport_options"])
             )
             
 def get_yes_no(prompt):
