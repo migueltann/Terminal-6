@@ -1,5 +1,14 @@
 """Handles the terminal inputs and outputs shown to the user."""
 
+import difflib
+import re
+import unicodedata
+
+try:
+    import geonamescache
+except ImportError:  # keeps the program running if the library is missing
+    geonamescache = None
+
 EXIT_COMMANDS = {"exit", "quit", "q"}
 
 def display_welcome_banner():
