@@ -27,8 +27,8 @@ def _safe_name(value):
         for character in value
     ).strip("_")
 
-"""Save approved recommendations in both JSON and CSV format."""
 def save_processed_recommendations(result):
+    """Save approved recommendations in both JSON and CSV format."""
 
     ensure_storage_directory()
 
@@ -145,8 +145,8 @@ def save_processed_recommendations(result):
     except (IOError, OSError):
         return None
 
-"""Load the list of previously saved recommendation sets."""
 def load_all_sets():
+    """Load the list of previously saved recommendation sets."""
 
     ensure_storage_directory()
 
@@ -166,8 +166,8 @@ def load_result(json_path):
     except (IOError, json.JSONDecodeError):
         return None
 
-"""Delete one saved result and its JSON/CSV files."""
 def delete_set(index):
+    """Delete one saved result and its JSON/CSV files."""
 
     saved = load_all_sets()
 
@@ -289,8 +289,21 @@ def get_saved_recommendations():
 
     return result
 
-"""Simple terminal menu for viewing or deleting saved results."""
+def delete_saved_recommendation(filename):
+    """Delete a saved recommendation using its JSON filename."""
+
+    saved = load_all_sets()
+
+    for index, entry in enumerate(saved, start=1):
+        json_path = entry.get("json_path", "")
+
+        if os.path.basename(json_path) == filename:
+            return delete_set(index)
+
+    return False
+
 def manage_saved_recommendations():
+    """Simple terminal menu for viewing or deleting saved results."""
 
     import io_manager
 
