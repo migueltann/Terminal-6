@@ -221,10 +221,7 @@ Rules:
 
 2. Aim for at least 7 recommendations of each type.
 
-3. Only recommend real, established places in {destination}.
-   Do not invent place names, addresses, prices, or other details.
-   If you are uncertain whether a place exists, do not include it.
-   Treat all prices as estimates and do not claim that they are current.
+3. Use realistic places in {destination}.
 
 4. Do not decide whether a place suits this specific user.
 

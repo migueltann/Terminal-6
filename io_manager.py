@@ -206,14 +206,14 @@ def collect_user_requirements():
         "destination": destination,
         "max_activity_spend": max_activity_spend,
         "max_meal_spend": max_meal_spend,
-         "max_accommodation_spend": max_accommodation_spend,
-         "max_shopping_spend": max_shopping_spend,
+        "max_accommodation_spend": max_accommodation_spend,
+        "max_shopping_spend": max_shopping_spend,
         "interests": _split_csv(interests_text),
         "preferred_activities": _split_csv(preferred_text),
         "must_visit": _split_csv(must_visit_text),
         "avoid_list": _split_csv(avoid_text),
-        "dietary": dietary,
-        "preferred_transport": transport,
+        "dietary_requirement": dietary,
+        "preferred_preference": transport,
         "accommodation_preferences": _split_csv(accommodation_text),
         "shopping_preferences": _split_csv(shopping_text),
     }
@@ -297,7 +297,7 @@ def display_approved_recommendations(result):
         f"Filtered out: {result['summary']['filtered_out_count']}"
     )
 
-    must_visits = [
+    must_visit = [
         item
         for item in result.get("activities", [])
         if item.get("category", "").strip().lower() == "must visit"
@@ -310,10 +310,10 @@ def display_approved_recommendations(result):
     other_activities = [
         item
         for item in result.get("activities", [])
-        if item not in must_visits
+        if item not in must_visit
     ]
 
-    _display_section("MUST-VISIT PLACES", must_visits)
+    _display_section("MUST-VISIT PLACES", must_visit)
     _display_section("ACTIVITIES", other_activities)
 
     _display_section("FOOD", result.get("food", []))

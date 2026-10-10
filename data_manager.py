@@ -13,7 +13,6 @@ def ensure_storage_directory():
     """Create the data folder and index file if they do not exist yet."""
 
     os.makedirs(DATA_DIR, exist_ok=True)
-
     if not os.path.exists(INDEX_FILE):
         with open(INDEX_FILE, "w", encoding="utf-8") as file:
             json.dump([], file, indent=4)
