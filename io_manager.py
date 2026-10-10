@@ -142,7 +142,7 @@ def collect_user_requirements():
     )
 
     if max_shopping_spend is None:
-    return None 
+        return None 
 
     interests_text = get_optional_text(
         "Interests (comma-separated) [Any]: ",
@@ -170,7 +170,7 @@ def collect_user_requirements():
     ""
     )
     if shopping_text is None:
-    return None
+        return None
 
     must_visit_text = get_optional_text(
         "Must-visits (comma-separated) [None]: ",
@@ -234,8 +234,16 @@ def display_input_summary(data):
         f"Max accommodation:    SGD ${data['max_accommodation_spend']:.2f}"
     )
     print(
+        f"Max shopping spend:   "
+        f"SGD ${data['max_shopping_spend']:.2f}"
+    )
+    print(
         "Accommodation:        "
         f"{', '.join(data['accommodation_preferences']) or 'Any'}"
+    )
+    print(
+        "Shopping:             "
+        f"{', '.join(data['shopping_preferences']) or 'Any'}"
     )
     print(f"Interests:            {', '.join(data['interests']) or 'Any'}")
     print(
@@ -248,7 +256,7 @@ def display_input_summary(data):
     print(f"Transport:            {data['preferred_transport']}")
     print("=" * 70)
 
-def display_filter_audit(audit, user_inputs):
+def display_filter_audit(audit, user_inputs): 
     """Show why each recommendation was kept or filtered out."""
 
     print("\n" + "=" * 70)
