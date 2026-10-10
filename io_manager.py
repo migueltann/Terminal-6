@@ -301,9 +301,10 @@ def display_approved_recommendations(result):
     _display_section(
         "ACCOMMODATION",
         result.get("accommodation", []),
+        cost_note="per night",
     )
     
-def _display_section(title, items):
+def _display_section(title, items, cost_note="per person"):
     """Show one group of approved recommendations."""
 
     print("\n" + title)
@@ -317,14 +318,10 @@ def _display_section(title, items):
         print(f"\n{index}. {item['name']}")
         print(f"   {item['category']} · {item['location']}")
 
-        if item["type"] == "accommodation":
-            print(
-                f"   From SGD ${item['estimated_cost_sgd']:.2f} per night"
-            )
-        else:
-            print(
-                f"   From SGD ${item['estimated_cost_sgd']:.2f} per person"
-            )
+        print(
+    f"   Estimated: SGD ${item['estimated_cost_sgd']:.2f} "
+    f"{cost_note}"
+    )
 
         print(f"   {item['description']}")
 
