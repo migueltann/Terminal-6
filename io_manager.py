@@ -9,7 +9,14 @@ try:
 except ImportError:  # keeps the program running if the library is missing
     geonamescache = None
 
-EXIT_COMMANDS = {"exit", "quit", "q"}
+EXIT_COMMANDS = {"exit", "e"}
+BACK_COMMANDS = {"back", "b"}
+LINE = "=" * 70
+DIVIDER = "-" * 70
+
+# Returned by the ask functions when the user wants the previous input.
+# (Only returned when allow_back=True, so other files never see it.)
+BACK = object()
 
 def display_welcome_banner():
     """Show the title when the program starts."""
