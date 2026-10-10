@@ -459,38 +459,86 @@ def collect_user_requirements():
 
 def display_input_summary(data):
     """Show the requirements back to the user before filtering."""
-
-    print("\n" + "=" * 70)
-    print("USER REQUIREMENTS")
-    print("=" * 70)
-    print(f"Destination:          {data['destination']}")
-    print(f"Max per activity:     SGD ${data['max_activity_spend']:.2f}")
-    print(f"Max per meal:         SGD ${data['max_meal_spend']:.2f}")
+    print("\n" + LINE)
+    print("FINAL USER REQUIREMENTS")
+    print(LINE)
+    print(f"Destination:             {data['destination']}")
+    print(f"Max per activity:        SGD ${data['max_activity_spend']:.2f}")
+    print(f"Max per meal:            SGD ${data['max_meal_spend']:.2f}")
     print(
-        f"Max accommodation:    SGD ${data['max_accommodation_spend']:.2f}"
+        f"Max accommodation/night: SGD ${data['max_accommodation_spend']:.2f}"
+    )
+    print(f"Max shopping spend:      SGD ${data['max_shopping_spend']:.2f}")
+    print(f"Interests:               {', '.join(data['interests']) or 'Any'}")
+    print(
+        "Preferred activities:    "
+        f"{', '.join(data['preferred_activities']) or 'Any'}"
     )
     print(
-        f"Max shopping spend:   "
-        f"SGD ${data['max_shopping_spend']:.2f}"
-    )
-    print(
-        "Accommodation:        "
+        "Accommodation:           "
         f"{', '.join(data['accommodation_preferences']) or 'Any'}"
     )
     print(
-        "Shopping:             "
+        "Shopping:                "
         f"{', '.join(data['shopping_preferences']) or 'Any'}"
     )
-    print(f"Interests:            {', '.join(data['interests']) or 'Any'}")
-    print(
-        "Preferred activities: "
-        f"{', '.join(data['preferred_activities']) or 'Any'}"
-    )
-    print(f"Must-visits:          {', '.join(data['must_visit']) or 'None'}")
-    print(f"Avoid:                {', '.join(data['avoid_list']) or 'None'}")
-    print(f"Dietary:              {data['dietary']}")
-    print(f"Transport:            {data['preferred_transport']}")
-    print("=" * 70)
+    print(f"Must-visits:             {', '.join(data['must_visits']) or 'None'}")
+    print(f"Avoid:                   {', '.join(data['avoid_list']) or 'None'}")
+    print(f"Dietary:                 {data['dietary_requirement']}")
+    print(f"Transport:               {data['transport_preference']}")
+    print(LINE)
+
+
+def confirm_or_edit_requirements(data):
+    """Let the user confirm, edit one input, or start again."""
+    while True:
+        display_input_summary(data)
+
+        print("\nIs this correct?")
+        print("1. Yes, continue")
+        print("2. Edit one input")
+        print("3. Start the inputs again")
+
+        choice = input("Choose [1]: ").strip()
+
+        if is_exit(choice):
+            return None
+        if not choice or choice == "1":
+            return data
+
+        if choice == "2":
+            edited = edit_one_requirement(data)
+            if edited is None:
+                return None
+            data = edited
+            continue
+
+        if choice == "3":
+            print("\nRestarting the user inputs...")
+            return collect_user_requirements()
+
+        print("Please choose 1, 2, or 3.")
+
+
+# Shown as the "current value" when the list is empty.
+_LIST_DEFAULTS = {
+    "interests": "Any",
+    "preferred_activities": "Any",
+    "accommodation_preferences": "Any",
+    "shopping_preferences": "Any",
+    "must_visits": "None",
+    "avoid_list": "None",
+}
+
+
+def _format_value(key, value):
+    """Turn a stored input into text for the 'current value' line."""
+    if key in _LIST_DEFAULTS:
+        return ", ".join(value) or _LIST_DEFAULTS[key]
+    if key.startswith("max_"):
+        return f"SGD ${value:.2f}"
+    return str(value)
+
 
 def display_filter_audit(audit, user_inputs): 
     """Show why each recommendation was kept or filtered out."""
