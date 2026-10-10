@@ -362,6 +362,11 @@ def categorise_recommendations(items):
             item for item in items
             if item["type"] == "accommodation"
         ],
+        "shopping": [
+            item
+            for item in items
+            if item["type"] == "shopping"
+        ],
     }
 
 def build_processed_result(
