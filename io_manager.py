@@ -212,7 +212,7 @@ def collect_user_requirements():
         "preferred_activities": _split_csv(preferred_text),
         "must_visit": _split_csv(must_visit_text),
         "avoid_list": _split_csv(avoid_text),
-        "dietary_requirement": dietary,
+        "dietary": dietary,
         "preferred_preference": transport,
         "accommodation_preferences": _split_csv(accommodation_text),
         "shopping_preferences": _split_csv(shopping_text),
