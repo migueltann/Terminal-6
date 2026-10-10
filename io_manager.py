@@ -439,10 +439,10 @@ _STEPS = [
     ("preferred_activities", ask_preferred_activities),
     ("accommodation_preferences", ask_accommodation_preferences),
     ("shopping_preferences", ask_shopping_preferences),
-    ("must_visits", ask_must_visits),
+    ("must_visit", ask_must_visits),
     ("avoid_list", ask_avoid_list),
-    ("dietary_requirement", get_dietary_requirement),
-    ("transport_preference", ask_transport),
+    ("dietary", get_dietary_requirement),
+    ("preferred_transport", ask_transport),
 ]
 
 
@@ -506,10 +506,10 @@ def display_input_summary(data):
         "Shopping:                "
         f"{', '.join(data['shopping_preferences']) or 'Any'}"
     )
-    print(f"Must-visits:             {', '.join(data['must_visits']) or 'None'}")
+    print(f"Must-visits:             {', '.join(data['must_visit']) or 'None'}")
     print(f"Avoid:                   {', '.join(data['avoid_list']) or 'None'}")
-    print(f"Dietary:                 {data['dietary_requirement']}")
-    print(f"Transport:               {data['transport_preference']}")
+    print(f"Dietary:                 {data['dietary']}")
+    print(f"Transport:               {data['preferred_transport']}")
     print(LINE)
 
 
@@ -550,7 +550,7 @@ _LIST_DEFAULTS = {
     "preferred_activities": "Any",
     "accommodation_preferences": "Any",
     "shopping_preferences": "Any",
-    "must_visits": "None",
+    "must_visit": "None",
     "avoid_list": "None",
 }
 
@@ -581,11 +581,11 @@ def edit_one_requirement(data):
               ask_accommodation_preferences),
         "9": ("Shopping preferences", "shopping_preferences",
               ask_shopping_preferences),
-        "10": ("Must-visits", "must_visits", ask_must_visits),
+        "10": ("Must-visits", "must_visit", ask_must_visits),
         "11": ("Avoid list", "avoid_list", ask_avoid_list),
-        "12": ("Dietary requirement", "dietary_requirement",
+        "12": ("Dietary requirement", "dietary",
                get_dietary_requirement),
-        "13": ("Transport preference", "transport_preference", ask_transport),
+        "13": ("Transport preference", "preferred_transport", ask_transport),
     }
     back_choice = str(len(fields) + 1)
 
@@ -652,7 +652,7 @@ def display_approved_recommendations(result):
     )
 
     # Must-visits are displayed separately so they are easy to identify.
-    must_visits = [
+    must_visit = [
         item for item in result.get("activities", [])
         if item.get("category", "").strip().lower() == "must visit"
         or "must visit" in [
@@ -661,10 +661,10 @@ def display_approved_recommendations(result):
     ]
     other_activities = [
         item for item in result.get("activities", [])
-        if item not in must_visits
+        if item not in must_visit
     ]
 
-    _display_section("MUST-VISIT PLACES", must_visits)
+    _display_section("MUST-VISIT PLACES", must_visit)
     _display_section("ACTIVITIES", other_activities)
     _display_section("FOOD", result.get("food", []))
     _display_section(
