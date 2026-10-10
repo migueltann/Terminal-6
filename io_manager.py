@@ -171,11 +171,18 @@ def get_user_choice():
             return "3"
         print("Invalid choice. Please enter 1, 2, or 3.")
 
+# Input helpers
+# Each returns None if the user types an exit command. When allow_back=True
+# they return BACK if the user types 'back'. allow_back defaults to False,
+# so any other file calling these helpers behaves exactly as before.
 
 def is_exit(value):
     """Check whether the user typed an exit command."""
-
     return value.strip().lower() in EXIT_COMMANDS
+
+def is_back(value):
+    """Check whether the user typed a back command."""
+    return value.strip().lower() in BACK_COMMANDS
 
 def get_required_text(prompt):
     """Ask for text that cannot be left blank."""
