@@ -183,12 +183,6 @@ def evaluate_recommendation(item, user_inputs):
     )
 
     keep = keep and passed
-
-    # A must-visit can count as a strong preference match
-    must_visit_match = any(
-        _contains_term(item, term)
-        for term in user_inputs.get("must_visit", [])
-    )
     
     # Check preferences based on the type of recommendation
     if item["type"] == "accommodation":
@@ -219,12 +213,10 @@ def evaluate_recommendation(item, user_inputs):
             if _contains_term(item, term)
         ]
 
-        passed = bool(matched_preferences) or must_visit_match
+        passed = bool(matched_preferences)
 
         if matched_preferences:
             detail = "Matched: " + ", ".join(matched_preferences)
-        elif must_visit_match:
-            detail = "Must-visit match"
         else:
             detail = "No preference match"
 
@@ -281,7 +273,6 @@ def evaluate_recommendation(item, user_inputs):
     return {
         "item": item,
         "keep": keep,
-        "must_visit_match": must_visit_match,
         "checks": checks,
     }
 
@@ -298,23 +289,7 @@ def filter_recommendations(items, user_inputs):
         audit.append(decision)
 
         if decision["keep"]:
-            approved_item = dict(item)
-
-            if decision["must_visit_match"]:
-                approved_item["tags"] = list(
-                    approved_item.get("tags", [])
-                )
-
-                existing_tags = [
-                    _normalise(tag)
-                    for tag in approved_item["tags"]
-                ]
-
-                if "must visit" not in existing_tags:
-                    approved_item["tags"].append("must visit")
-                    
-            approved.append(approved_item)
-
+            approved.append(dict(item))
         else:
             rejected.append(item)
 
@@ -325,11 +300,6 @@ def rank_recommendations(items, user_inputs):
 
     def score(item):
         points = 0
-
-        # Must-visits get the biggest boost
-        for term in user_inputs.get("must_visit", []):
-            if _contains_term(item, term):
-                points += 100
 
         # Accommodation has its own preferences
         if item["type"] == "accommodation":
