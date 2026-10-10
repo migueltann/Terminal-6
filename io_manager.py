@@ -18,9 +18,8 @@ DIVIDER = "-" * 70
 # (Only returned when allow_back=True, so other files never see it.)
 BACK = object()
 
-# Destination validation (uses the geonamescache dataset)
+# Destination validation (uses the geonamescache)
 _GEO = {}
-
 
 def _normalise(text):
     """Lowercase and remove accents and punctuation from names."""
@@ -31,6 +30,35 @@ def _normalise(text):
         if not unicodedata.combining(char)
     )
     return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+
+
+def _load_geo_data():
+    """Build lookup tables from geonamescache (runs once)."""
+    if _GEO or geonamescache is None:
+        return
+
+    gc = geonamescache.GeonamesCache()
+
+    country_names = {}   # country code -> display name
+    country_lookup = {}  # normalised name / ISO code -> country code
+    for code, country in gc.get_countries().items():
+        country_names[code] = country["name"]
+        for key in (country["name"], country["iso"], country["iso3"]):
+            country_lookup[_normalise(key)] = code
+
+    city_lookup = {}  # normalised city -> {country code: (population, name)}
+    for city in gc.get_cities().values():
+        key = _normalise(city["name"])
+        if not key:
+            continue
+        by_country = city_lookup.setdefault(key, {})
+        code = city["countrycode"]
+        if code not in by_country or city["population"] > by_country[code][0]:
+            by_country[code] = (city["population"], city["name"])
+
+    _GEO["country_names"] = country_names
+    _GEO["country_lookup"] = country_lookup
+    _GEO["city_lookup"] = city_lookup
 
 
 def display_welcome_banner():
