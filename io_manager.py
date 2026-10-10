@@ -593,34 +593,28 @@ def edit_one_requirement(data):
 
 # Showing results
 
-def display_filter_audit(audit, user_inputs): 
+def display_filter_audit(audit, user_inputs):
     """Show why each recommendation was kept or filtered out."""
-
-    print("\n" + "=" * 70)
+    print("\n" + LINE)
     print("AI RECOMMENDATIONS -> PYTHON LOGIC CHECK")
-    print("=" * 70)
-    print(f"Max per activity: SGD {user_inputs['max_activity_spend']:.2f}")
-    print(f"Max per meal:     SGD {user_inputs['max_meal_spend']:.2f}")
-    print(
-        f"Max accommodation: SGD "
-        f"{user_inputs['max_accommodation_spend']:.2f}"
-    )
+    print(LINE)
 
     for decision in audit:
-        item = decision["item"]
-        print("\n" + "-" * 70)
-        print(item["name"])
-        print(f"Type: {item['type']}")
-        print(f"Category: {item['category']}")
-        print(f"Cost: SGD ${item['estimated_cost_sgd']:.2f}")
+        print("\n" + DIVIDER)
+        print(decision["name"])
+        print(f"Type: {decision['type']}")
 
         for check in decision["checks"]:
             status = "PASS" if check["passed"] else "FAIL"
             print(f"[{status}] {check['label']}: {check['detail']}")
 
-        print("KEEP" if decision["keep"] else "FILTER OUT")
+        if "score" in decision:
+            print(f"Logic score: {decision['score']}")
 
-    print("=" * 70)
+        print("KEEP" if decision["kept"] else "FILTER OUT")
+
+    print(LINE)
+
 
 def display_approved_recommendations(result):
     """Show the final approved activities and food recommendations."""
