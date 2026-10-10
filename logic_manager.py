@@ -193,13 +193,24 @@ def evaluate_recommendation(item, user_inputs):
     # Check preferences based on the type of recommendation
     if item["type"] == "accommodation":
         preferences = user_inputs.get(
-            "accommodation_preferences", []
+            "accommodation_preferences",
+            [],
         )
+        preference_label = "Accommodation preference"
+
+    elif item["type"] == "shopping":
+        preferences = user_inputs.get(
+            "shopping_preferences",
+            [],
+        )
+        preference_label = "Shopping preference"
+
     else:
         preferences = (
-            user_inputs["interests"]
-            + user_inputs["preferred_activities"]
+            user_inputs.get("interests", [])
+            + user_inputs.get("preferred_activities", [])
         )
+        preference_label = "Interests / preferred activities"
 
     if preferences:
         matched_preferences = [
@@ -219,11 +230,7 @@ def evaluate_recommendation(item, user_inputs):
 
         checks.append(
             {
-                "label": (
-                    "Accommodation preference"
-                    if item["type"] == "accommodation"
-                    else "Interests / preferred activities"
-                ),
+                "label": preference_label,
                 "passed": passed,
                 "detail": detail,
             }
@@ -268,7 +275,7 @@ def evaluate_recommendation(item, user_inputs):
             }
         )
         keep = keep and passed
-
+        
     return {
         "item": item,
         "keep": keep,
