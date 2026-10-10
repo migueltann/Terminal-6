@@ -239,7 +239,7 @@ def evaluate_recommendation(item, user_inputs):
         keep = keep and passed
         
     # Dietary checks only make sense for food recommendations
-    dietary = _normalise(user_inputs["dietary"])
+    dietary = _normalise(user_inputs.get("dietary_requirement", "none"))
 
     if item["type"] == "food" and dietary not in {"", "none", "any"}:
         passed = dietary in item.get("dietary_tags", [])
@@ -258,7 +258,7 @@ def evaluate_recommendation(item, user_inputs):
         
      # Check whether the user's preferred transport is listed
     preferred_transport = _normalise(
-        user_inputs["preferred_transport"]
+        user_inputs.get("transport_preference", "")
     )
 
     if preferred_transport not in {"", "any"}:
@@ -325,7 +325,7 @@ def rank_recommendations(items, user_inputs):
         points = 0
 
         # Must-visits get the biggest boost
-        for term in user_inputs.gets["must_visit",[]]:
+        for term in user_inputs.get("must_visits", []):
             if _contains_term(item, term):
                 points += 100
 
