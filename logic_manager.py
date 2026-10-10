@@ -390,4 +390,5 @@ def build_processed_result(
         "activities": categorised["activities"],
         "food": categorised["food"],
         "accommodation": categorised["accommodation"],
+        "shopping": categorised["shopping"],
     }
