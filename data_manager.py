@@ -119,10 +119,18 @@ def save_processed_recommendations(result):
 
         # Add this saved result to the small index used by the menu/front end
         saved = load_all_sets()
+
+        summary = result.get("summary", {})
+
+        approved_count = summary.get(
+            "approved_count",
+            len(all_approved),
+        )
+
         saved.append(
             {
-                "destination": result["destination"],
-                "approved_count": result["summary"]["approved_count"],
+                "destination": result.get("destination", "Unknown"),
+                "approved_count": approved_count,
                 "json_path": json_path,
                 "csv_path": csv_path,
                 "saved_at": timestamp,
