@@ -60,6 +60,10 @@ def _load_geo_data():
     _GEO["country_lookup"] = country_lookup
     _GEO["city_lookup"] = city_lookup
 
+def _suggest(key, pool):
+    """Return the closest known name to a mistyped one, or None."""
+    matches = difflib.get_close_matches(key, pool, n=1, cutoff=0.75)
+    return matches[0] if matches else None
 
 def display_welcome_banner():
     """Show the title when the program starts."""
