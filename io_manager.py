@@ -295,7 +295,7 @@ def display_approved_recommendations(result):
         f"Approved: {result['summary']['approved_count']} | "
         f"Filtered out: {result['summary']['filtered_out_count']}"
     )
-    
+
 must_visits = [
     item
     for item in result.get("activities", [])
