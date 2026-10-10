@@ -84,10 +84,12 @@ def save_processed_recommendations(result):
             # Write the column headings
             writer.writeheader()
 
-            # Combine activities and food into one list
+            # Combine activities, food, accommodation and shopping into one list
             all_approved = (
                 result.get("activities", [])
                 + result.get("food", [])
+                + result.get("accommodation", [])
+                + result.get("shopping", [])
             )
 
             # Write each approved recommendation
