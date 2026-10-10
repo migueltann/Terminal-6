@@ -291,43 +291,44 @@ def display_approved_recommendations(result):
     print("\n" + "=" * 70)
     print(f"APPROVED RECOMMENDATIONS: {result['destination'].upper()}")
     print("=" * 70)
+   
     print(
         f"Approved: {result['summary']['approved_count']} | "
         f"Filtered out: {result['summary']['filtered_out_count']}"
     )
 
-must_visits = [
-    item
-    for item in result.get("activities", [])
-    if item.get("category", "").strip().lower() == "must visit"
-    or "must visit" in [
-        str(tag).strip().lower()
-        for tag in item.get("tags", [])
+    must_visits = [
+        item
+        for item in result.get("activities", [])
+        if item.get("category", "").strip().lower() == "must visit"
+        or "must visit" in [
+            str(tag).strip().lower()
+            for tag in item.get("tags", [])
+        ]
     ]
-]
 
-other_activities = [
-    item
-    for item in result.get("activities", [])
-    if item not in must_visits
-]
+    other_activities = [
+        item
+        for item in result.get("activities", [])
+        if item not in must_visits
+    ]
 
-_display_section("MUST-VISIT PLACES", must_visits)
-_display_section("ACTIVITIES", other_activities)
+    _display_section("MUST-VISIT PLACES", must_visits)
+    _display_section("ACTIVITIES", other_activities)
 
-_display_section("FOOD", result.get("food", []))
+    _display_section("FOOD", result.get("food", []))
 
-_display_section(
-        "ACCOMMODATION",
-        result.get("accommodation", []),
-        cost_note="per night",
-    )
+    _display_section(
+            "ACCOMMODATION",
+            result.get("accommodation", []),
+            cost_note="per night",
+        )
 
-_display_section(
-    "SHOPPING",
-    result.get("shopping", []),
-    cost_note="typical spend",
-    )
+    _display_section(
+        "SHOPPING",
+        result.get("shopping", []),
+        cost_note="typical spend",
+        )
     
 def _display_section(title, items, cost_note="per person"):
     """Show one group of approved recommendations."""
