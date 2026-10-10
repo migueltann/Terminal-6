@@ -192,6 +192,68 @@ def delete_set(index):
     except IOError:
         return False
 
+def save_recommendations(
+    destination,
+    recommendations_json,
+    user_inputs_json="{}",
+):
+    """Save recommendations received from the Flask website."""
+
+    # Convert JSON text into Python data
+    if isinstance(recommendations_json, str):
+        recommendations = json.loads(recommendations_json)
+    else:
+        recommendations = recommendations_json
+
+    if isinstance(user_inputs_json, str):
+        user_inputs = json.loads(user_inputs_json)
+    else:
+        user_inputs = user_inputs_json
+
+    # Separate recommendations according to type
+    activities = []
+    food = []
+    accommodation = []
+    shopping = []
+
+    for item in recommendations:
+        item_type = item.get("type", "")
+
+        if item_type == "activity":
+            activities.append(item)
+
+        elif item_type == "food":
+            food.append(item)
+
+        elif item_type == "accommodation":
+            accommodation.append(item)
+
+        elif item_type == "shopping":
+            shopping.append(item)
+
+    # Build the same structure used by the other managers
+    result = {
+        "destination": destination,
+        "requirements": user_inputs,
+        "activities": activities,
+        "food": food,
+        "accommodation": accommodation,
+        "shopping": shopping,
+        "summary": {
+            "approved_count": len(recommendations),
+        },
+    }
+
+    saved_paths = save_processed_recommendations(result)
+
+    if saved_paths is None:
+        raise RuntimeError(
+            "Recommendations could not be saved."
+        )
+
+    json_path, csv_path = saved_paths
+    return json_path
+
 """Simple terminal menu for viewing or deleting saved results."""
 def manage_saved_recommendations():
 
