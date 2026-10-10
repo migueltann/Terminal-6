@@ -403,121 +403,59 @@ def ask_transport(allow_back=False):
         allow_back=allow_back,
     )
 
+# Collecting requirements
+
+# Order the questions are asked in: (data key, function that asks it)
+_STEPS = [
+    ("destination", ask_destination),
+    ("max_activity_spend", ask_activity_budget),
+    ("max_meal_spend", ask_meal_budget),
+    ("max_accommodation_spend", ask_accommodation_budget),
+    ("max_shopping_spend", ask_shopping_budget),
+    ("interests", ask_interests),
+    ("preferred_activities", ask_preferred_activities),
+    ("accommodation_preferences", ask_accommodation_preferences),
+    ("shopping_preferences", ask_shopping_preferences),
+    ("must_visits", ask_must_visits),
+    ("avoid_list", ask_avoid_list),
+    ("dietary_requirement", get_dietary_requirement),
+    ("transport_preference", ask_transport),
+]
+
 
 def collect_user_requirements():
-    """Collect the requirements that Python will use for filtering."""
-
-    print("\n" + "=" * 70)
+    """Collect all requirements used by the Python filtering logic."""
+    print("\n" + LINE)
     print("USER INPUTS")
-    print("=" * 70)
+    print(LINE)
+    print("Type 'back' to return to the previous input, "
+          "or 'exit' to return to the main menu.")
 
-    destination = get_required_text("Destination: ")
-    if destination is None:
-        return None
+    data = {}
+    index = 0
 
-    max_activity_spend = get_positive_float(
-        "Max spend per activity (SGD): "
-    )
-    if max_activity_spend is None:
-        return None
+    while index < len(_STEPS):
+        key, ask = _STEPS[index]
 
-    max_meal_spend = get_positive_float(
-        "Max spend per meal (SGD): "
-    )
-    if max_meal_spend is None:
-        return None
-    
-    max_accommodation_spend = get_positive_float(
-        "Max accommodation spend per night (SGD): "
-        
-    )
+        # The first question has nothing before it, so 'back' is off there.
+        value = ask(allow_back=index > 0)
 
-    if max_accommodation_spend is None:
-        return None  
+        if value is None:  # user typed exit
+            return None
 
-    max_shopping_spend = get_positive_float(
-    "Max shopping spend (SGD): "
-    )
+        if value is BACK:
+            index -= 1
+            previous_key = _STEPS[index][0]
+            print(
+                "\nGoing back. Previous answer: "
+                f"{_format_value(previous_key, data[previous_key])}"
+            )
+            continue
 
-    if max_shopping_spend is None:
-        return None 
+        data[key] = value
+        index += 1
 
-    interests_text = get_optional_text(
-        "Interests (comma-separated) [Any]: ",
-        "",
-    )
-    if interests_text is None:
-        return None
-
-    preferred_text = get_optional_text(
-        "Preferred activities (comma-separated) [Any]: ",
-        "",
-    )
-    if preferred_text is None:
-        return None  
-    
-    accommodation_text = get_optional_text(
-        "Accommodation preferences (comma-separated) [Any]: ",
-        "",
-    )
-    if accommodation_text is None:
-        return None
-
-    shopping_text = get_optional_text(
-    "Shopping preferences (comma-separated) [Any]: ",
-    ""
-    )
-    if shopping_text is None:
-        return None
-
-    must_visit_text = get_optional_text(
-        "Must-visits (comma-separated) [None]: ",
-        "",
-    )
-    if must_visit_text is None:
-        return None
-
-    avoid_text = get_optional_text(
-        "Avoid list (comma-separated) [None]: ",
-        "",
-    )
-    if avoid_text is None:
-        return None
-
-    dietary = get_optional_text(
-        "Dietary requirement [None]: ",
-        "None",
-    )
-    if dietary is None:
-        return None
-
-    transport = get_choice(
-        "Preferred transport [Any] (Walk/Transit/Taxi/Any): ",
-        ["Walk", "Transit", "Taxi", "Any"],
-        "Any",
-    )
-    if transport is None:
-        return None
-
-    # Keep all user inputs together so the logic manager can use them
-    data = {
-        "destination": destination,
-        "max_activity_spend": max_activity_spend,
-        "max_meal_spend": max_meal_spend,
-        "max_accommodation_spend": max_accommodation_spend,
-        "max_shopping_spend": max_shopping_spend,
-        "interests": _split_csv(interests_text),
-        "preferred_activities": _split_csv(preferred_text),
-        "must_visit": _split_csv(must_visit_text),
-        "avoid_list": _split_csv(avoid_text),
-        "dietary": dietary,
-        "preferred_transport": transport,
-        "accommodation_preferences": _split_csv(accommodation_text),
-        "shopping_preferences": _split_csv(shopping_text),
-    }
-
-    display_input_summary(data)
-    return data
+    return confirm_or_edit_requirements(data)
 
 def display_input_summary(data):
     """Show the requirements back to the user before filtering."""
