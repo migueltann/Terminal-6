@@ -297,7 +297,7 @@ def display_approved_recommendations(result):
     )
     
     _display_section("ACTIVITIES", result.get("activities", []))
-    
+
     _display_section("FOOD", result.get("food", []))
 
     _display_section(
@@ -326,15 +326,21 @@ def _display_section(title, items, cost_note="per person"):
         print(f"\n{index}. {item['name']}")
         print(f"   {item['category']} · {item['location']}")
 
-        print(
-    f"   Estimated: SGD ${item['estimated_cost_sgd']:.2f} "
-    f"{cost_note}"
+    print(
+        f"   Estimated: SGD ${item['estimated_cost_sgd']:.2f} "
+        f"{cost_note}"
     )
 
-        print(f"   {item['description']}")
+    print(f"   {item['description']}")
 
-        if item.get("tags"):
+    if item.get("tags"):
             print("   Tags: " + ", ".join(item["tags"]))
+
+    if item.get("transport_options"):
+            print(
+                "   Transport: "
+                + ", ".join(item["transport_options"])
+            )
             
 def get_yes_no(prompt):
     """Ask a simple yes/no question."""
