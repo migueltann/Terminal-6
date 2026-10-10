@@ -71,7 +71,7 @@ def _suggest(key, pool):
 def validate_destination(text):
     """Check a destination. Returns (clean_destination, error_message).
 
-    Accepted formats: "Japan", "SG", "Paris", or "City, Country".
+    Accepted formats examples: "Japan", "SG", "Paris", or "City, Country".
     Exactly one of the two returned values is None.
     """
     parts = [part.strip() for part in text.split(",") if part.strip()]
@@ -240,12 +240,47 @@ def get_choice(prompt, choices, default, allow_back=False):
 
 def _split_csv(value):
     """Turn comma-separated text into a clean Python list."""
-
     return [
         part.strip()
         for part in value.split(",")
         if part.strip()
     ]
+
+# One ask function per input (used by both the first pass and the editor)
+
+def _ask_list(prompt, hint_lines, allow_back=False):
+    """Show a short hint, then ask for a comma-separated list."""
+    print()
+    for line in hint_lines:
+        print(line)
+    value = get_optional_text(prompt, allow_back=allow_back)
+    if value is None or value is BACK:
+        return value
+    return _split_csv(value)
+
+
+def ask_destination(allow_back=False):
+    """Ask for a destination and keep asking until it is valid."""
+    print("\nEnter a city and country, e.g. Paris, France.")
+    print("A country on its own (e.g. Japan), a short code (e.g. SG) "
+          "or a city also works.")
+    while True:
+        value = input("Destination (City, Country): ").strip()
+        if is_exit(value):
+            return None
+        if allow_back and is_back(value):
+            return BACK
+        if not value:
+            print("This field cannot be empty.")
+            continue
+        destination, error = validate_destination(value)
+        if destination:
+            # Show the full form if it differs from what was typed.
+            if destination.lower() != value.lower():
+                print(f"Understood as: {destination}")
+            return destination
+        print(error)
+
 
 def collect_user_requirements():
     """Collect the requirements that Python will use for filtering."""
@@ -502,19 +537,14 @@ def _display_section(title, items, cost_note="per person"):
             
 def get_yes_no(prompt):
     """Ask a simple yes/no question."""
-
     while True:
         value = input(prompt).strip().lower()
-
         if is_exit(value):
             return None
-
         if value in {"y", "yes"}:
             return True
-
         if value in {"n", "no"}:
             return False
-
         print("Please enter y or n.")
 
 
