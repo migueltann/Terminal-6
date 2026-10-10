@@ -18,6 +18,21 @@ DIVIDER = "-" * 70
 # (Only returned when allow_back=True, so other files never see it.)
 BACK = object()
 
+# Destination validation (uses the geonamescache dataset)
+_GEO = {}
+
+
+def _normalise(text):
+    """Lowercase and remove accents and punctuation from names."""
+
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(
+        char for char in text
+        if not unicodedata.combining(char)
+    )
+    return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+
+
 def display_welcome_banner():
     """Show the title when the program starts."""
 
