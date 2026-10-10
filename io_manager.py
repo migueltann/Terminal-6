@@ -163,14 +163,14 @@ def display_menu():
 
 def get_user_choice():
     """Ask the user to choose an option from the main menu."""
-
     while True:
-        choice = input("\nEnter choice (1-3): ").strip()
-
+        choice = input("\nEnter choice (1-3): ").strip().lower()
         if choice in {"1", "2", "3"}:
             return choice
-
+        if choice in EXIT_COMMANDS:
+            return "3"
         print("Invalid choice. Please enter 1, 2, or 3.")
+
 
 def is_exit(value):
     """Check whether the user typed an exit command."""
