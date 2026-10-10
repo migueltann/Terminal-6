@@ -282,6 +282,79 @@ def ask_destination(allow_back=False):
         print(error)
 
 
+def ask_activity_budget(allow_back=False):
+    print()
+    return get_positive_float(
+        "Max spend per activity (SGD): ", allow_back=allow_back
+    )
+
+
+def ask_meal_budget(allow_back=False):
+    return get_positive_float(
+        "Max spend per meal (SGD): ", allow_back=allow_back
+    )
+
+
+def ask_accommodation_budget(allow_back=False):
+    return get_positive_float(
+        "Max spend per night for accommodation (SGD): ", allow_back=allow_back
+    )
+
+
+def ask_shopping_budget(allow_back=False):
+    return get_positive_float(
+        "Max shopping spend (SGD): ", allow_back=allow_back
+    )
+
+
+def ask_interests(allow_back=False):
+    return _ask_list(
+        "Interests (comma-separated) [Any]: ",
+        [
+            "Interests are broad things you enjoy.",
+            "Examples: nature, culture, history, food, shopping, "
+            "entertainment, sports.",
+        ],
+        allow_back,
+    )
+
+
+def ask_preferred_activities(allow_back=False):
+    return _ask_list(
+        "Preferred activities (comma-separated) [Any]: ",
+        [
+            "Preferred activities are specific activity types.",
+            "Examples: museums, hiking, theme parks, water activities, "
+            "nightlife, food tours.",
+        ],
+        allow_back,
+    )
+
+
+def ask_accommodation_preferences(allow_back=False):
+    return _ask_list(
+        "Accommodation preferences (comma-separated) [Any]: ",
+        [
+            "Accommodation preferences are the type of stay you want.",
+            "Examples: hotel, hostel, budget motel, guesthouse, "
+            "serviced apartment, near MRT.",
+        ],
+        allow_back,
+    )
+
+
+def ask_shopping_preferences(allow_back=False):
+    return _ask_list(
+        "Shopping preferences (comma-separated) [Any]: ",
+        [
+            "Shopping preferences are the things or places you like to shop.",
+            "Examples: fashion, electronics, souvenirs, malls, "
+            "street markets, local crafts.",
+        ],
+        allow_back,
+    )
+
+
 def collect_user_requirements():
     """Collect the requirements that Python will use for filtering."""
 
