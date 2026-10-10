@@ -165,7 +165,8 @@ def evaluate_recommendation(item, user_inputs):
     avoided_terms = [
         term
         for term in user_inputs.get("avoid_list", [])
-        if _contains_term(item, term)
+        if _normalise(term) not in {"", "any", "none"}
+        and _contains_term(item, term)
     ]
 
     passed = not avoided_terms
@@ -205,6 +206,13 @@ def evaluate_recommendation(item, user_inputs):
             + user_inputs.get("preferred_activities", [])
         )
         preference_label = "Interests / preferred activities"
+
+    # Ignore placeholder answers instead of treating them as keywords.
+    preferences = [
+        term
+        for term in preferences
+        if _normalise(term) not in {"", "any", "none"}
+    ]
 
     if preferences:
         matched_preferences = [

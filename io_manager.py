@@ -144,6 +144,45 @@ def validate_destination(text):
     return None, message
 
 
+def normalise_optional_list(value):
+    """Convert Any, None, or an empty input into an empty list."""
+
+    if value is None:
+        return []
+
+    if isinstance(value, str):
+        value = value.split(",")
+
+    cleaned = [
+        str(item).strip()
+        for item in value
+        if str(item).strip()
+    ]
+
+    # Any or None means the user has no specific preference.
+    if not cleaned or any(
+        item.lower() in ("any", "none")
+        for item in cleaned
+    ):
+        return []
+
+    return cleaned
+
+
+def normalise_optional_text(value):
+    """Convert Any, None, or an empty input into None."""
+
+    if value is None:
+        return None
+
+    value = str(value).strip()
+
+    if value.lower() in ("", "any", "none"):
+        return None
+
+    return value
+
+
 # Banner and Menu
 
 def display_welcome_banner():
@@ -466,6 +505,31 @@ def collect_user_requirements():
         data[key] = value
         index += 1
 
+    # Normalise optional list inputs.
+    list_fields = [
+        "interests",
+        "preferred_activities",
+        "accommodation_preferences",
+        "shopping_preferences",
+        "avoid_list",
+    ]
+
+    for field in list_fields:
+        data[field] = normalise_optional_list(data[field])
+
+    # Normalise dietary and transport inputs.
+    data["dietary"] = normalise_optional_text(data["dietary"])
+    data["preferred_transport"] = normalise_optional_text(
+        data["preferred_transport"]
+    )
+
+    # Use consistent display values for inputs with no preference.
+    if data["dietary"] is None:
+        data["dietary"] = "None"
+
+    if data["preferred_transport"] is None:
+        data["preferred_transport"] = "Any"
+
     return confirm_or_edit_requirements(data)
 
 
@@ -594,8 +658,25 @@ def edit_one_requirement(data):
             print(f"\nCurrent {label}: {_format_value(key, data[key])}")
             print("Enter the new value below (type 'exit' to cancel this edit).")
             value = ask()
+            
             if value is not None:
+                if key in {
+                    "interests",
+                    "preferred_activities",
+                    "accommodation_preferences",
+                    "shopping_preferences",
+                    "avoid_list",
+                }:
+                    value = normalise_optional_list(value)
+
+                elif key == "dietary":
+                    value = normalise_optional_text(value) or "None"
+
+                elif key == "preferred_transport":
+                    value = normalise_optional_text(value) or "Any"
+
                 data[key] = value
+
             return data
 
         print("Invalid choice.")
