@@ -254,6 +254,41 @@ def save_recommendations(
     json_path, csv_path = saved_paths
     return json_path
 
+def get_saved_recommendations():
+    """Return saved recommendations in the format used by Flask."""
+
+    saved = load_all_sets()
+    result = []
+
+    for entry in saved:
+        json_path = entry.get("json_path", "")
+        filename = os.path.basename(json_path)
+
+        result.append(
+            {
+                "filename": filename,
+                "destination": entry.get(
+                    "destination",
+                    "Unknown",
+                ),
+                "approved_count": entry.get(
+                    "approved_count",
+                    0,
+                ),
+                "saved_at": entry.get(
+                    "saved_at",
+                    "",
+                ),
+                "json_path": json_path,
+                "csv_path": entry.get(
+                    "csv_path",
+                    "",
+                ),
+            }
+        )
+
+    return result
+
 """Simple terminal menu for viewing or deleting saved results."""
 def manage_saved_recommendations():
 
