@@ -213,7 +213,7 @@ def collect_user_requirements():
         "must_visit": _split_csv(must_visit_text),
         "avoid_list": _split_csv(avoid_text),
         "dietary": dietary,
-        "preferred_preference": transport,
+        "preferred_transport": transport,
         "accommodation_preferences": _split_csv(accommodation_text),
         "shopping_preferences": _split_csv(shopping_text),
     }
