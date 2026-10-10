@@ -33,6 +33,13 @@ def validate_ai_response(raw_items):
 
     valid_items = []
 
+    allowed_types = {
+    "activity",
+    "food",
+    "accommodation",
+    "shopping",
+    }
+
     for item in raw_items:
         if not isinstance(item, dict):
             continue
@@ -53,7 +60,7 @@ def validate_ai_response(raw_items):
             continue
 
         item_type = _normalise(item["type"])
-        if item_type not in {"activity", "food", "accommodation"}:
+        if item_type not in allowed_types:
             continue
 
         try:
