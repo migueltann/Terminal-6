@@ -96,14 +96,15 @@ def save_processed_recommendations(result):
             for item in all_approved:
                 writer.writerow(
                     {
-                        "type": item["type"],
-                        "name": item["name"],
-                        "category": item["category"],
-                        "estimated_cost_sgd": item[
-                            "estimated_cost_sgd"
-                        ],
-                        "location": item["location"],
-                        "description": item["description"],
+                        "type": item.get("type", ""),
+                        "name": item.get("name", ""),
+                        "category": item.get("category", ""),
+                        "estimated_cost_sgd": item.get(
+                            "estimated_cost_sgd",
+                            "",
+                        ),
+                        "location": item.get("location", ""),
+                        "description": item.get("description", ""),
                         "tags": ", ".join(
                             item.get("tags", [])
                         ),
