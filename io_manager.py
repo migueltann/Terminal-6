@@ -1,4 +1,4 @@
-"""Handles the terminal inputs and outputs shown to the user."""
+# Handles the terminal inputs and outputs shown to the user
 
 import difflib
 import re
@@ -19,6 +19,7 @@ DIVIDER = "-" * 70
 BACK = object()
 
 # Destination validation (uses the geonamescache)
+
 _GEO = {}
 
 def _normalise(text):
@@ -60,10 +61,89 @@ def _load_geo_data():
     _GEO["country_lookup"] = country_lookup
     _GEO["city_lookup"] = city_lookup
 
+
 def _suggest(key, pool):
     """Return the closest known name to a mistyped one, or None."""
     matches = difflib.get_close_matches(key, pool, n=1, cutoff=0.75)
     return matches[0] if matches else None
+
+
+def validate_destination(text):
+    """Check a destination. Returns (clean_destination, error_message).
+
+    Accepted formats: "Japan", "SG", "Paris", or "City, Country".
+    Exactly one of the two returned values is None.
+    """
+    parts = [part.strip() for part in text.split(",") if part.strip()]
+    if not parts:
+        return None, "Please enter a destination."
+
+    _load_geo_data()
+    if not _GEO:
+        # Library not installed: accept the text rather than crash.
+        return ", ".join(parts), None
+
+    names = _GEO["country_names"]
+    countries = _GEO["country_lookup"]
+    cities = _GEO["city_lookup"]
+
+    # Only one part: it must be a country (name or code) or a city.
+    if len(parts) == 1:
+        key = _normalise(parts[0])
+        if key in countries:
+            return names[countries[key]], None
+        if key in cities:
+            # If several countries have this city, use the most populous.
+            code, (_, city) = max(
+                cities[key].items(), key=lambda item: item[1][0]
+            )
+            if _normalise(city) == _normalise(names[code]):
+                return city, None
+            return f"{city}, {names[code]}", None
+
+        message = (
+            f"'{parts[0]}' is not a valid country or city. "
+            "Please enter a valid country or city."
+        )
+        guess = _suggest(key, list(countries) + list(cities))
+        if guess:
+            name = (
+                names[countries[guess]] if guess in countries
+                else next(iter(cities[guess].values()))[1]
+            )
+            message += f" Did you mean {name}?"
+        return None, message
+
+    # City + country: the country (last part) and the city must both be real.
+    country_text = parts[-1]
+    city_text = ", ".join(parts[:-1])
+    country_key = _normalise(country_text)
+
+    if country_key not in countries:
+        message = f"'{country_text}' is not a recognised country."
+        guess = _suggest(country_key, list(countries))
+        if guess:
+            message += f" Did you mean {names[countries[guess]]}?"
+        return None, message
+
+    code = countries[country_key]
+    country = names[code]
+    city_key = _normalise(city_text)
+
+    if city_key == _normalise(country):
+        return country, None
+    if city_key in cities and code in cities[city_key]:
+        return f"{cities[city_key][code][1]}, {country}", None
+
+    message = f"Could not find '{city_text}' in {country}."
+    in_country = [k for k, v in cities.items() if code in v]
+    guess = _suggest(city_key, in_country)
+    if guess:
+        message += f" Did you mean {cities[guess][code][1]}?"
+    return None, message
+
+
+# Banner and Menu
 
 def display_welcome_banner():
     """Show the title when the program starts."""
