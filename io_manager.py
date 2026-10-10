@@ -297,11 +297,19 @@ def display_approved_recommendations(result):
     )
     
     _display_section("ACTIVITIES", result.get("activities", []))
+    
     _display_section("FOOD", result.get("food", []))
+
     _display_section(
         "ACCOMMODATION",
         result.get("accommodation", []),
         cost_note="per night",
+    )
+
+    _display_section(
+    "SHOPPING",
+    result.get("shopping", []),
+    cost_note="typical spend",
     )
     
 def _display_section(title, items, cost_note="per person"):
