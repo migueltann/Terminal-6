@@ -164,7 +164,7 @@ def evaluate_recommendation(item, user_inputs):
 
     avoided_terms = [
         term
-        for term in user_inputs["avoid_list"]
+        for term in user_inputs.get("avoid_list", [])
         if _contains_term(item, term)
     ]
 
@@ -187,7 +187,7 @@ def evaluate_recommendation(item, user_inputs):
     # A must-visit can count as a strong preference match
     must_visit_match = any(
         _contains_term(item, term)
-        for term in user_inputs["must_visit"]
+        for term in user_inputs.get("must_visit", [])
     )
     
     # Check preferences based on the type of recommendation
@@ -309,7 +309,7 @@ def rank_recommendations(items, user_inputs):
         points = 0
 
         # Must-visits get the biggest boost
-        for term in user_inputs["must_visit"]:
+        for term in user_inputs.gets["must_visit",[]]:
             if _contains_term(item, term):
                 points += 100
 
@@ -333,11 +333,11 @@ def rank_recommendations(items, user_inputs):
         else:
             # Interests and preferred activities are for
             # activities and food
-            for term in user_inputs["interests"]:
+            for term in user_inputs.gets["interests",[]]:
                 if _contains_term(item, term):
                     points += 10
 
-            for term in user_inputs["preferred_activities"]:
+            for term in user_inputs.gets["preferred_activities",[]]:
                 if _contains_term(item, term):
                     points += 15
 
