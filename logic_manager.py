@@ -1,9 +1,33 @@
+import math
+
 """Filters generic AI recommendations using the user's requirements."""
 
 def _normalise(value):
     """Convert text to lowercase so comparisons are easier."""
     return str(value).strip().lower()
 
+def matches_shopping_preference(item, preference):
+    """Match shopping preferences against AI-generated shopping tags."""
+
+    def normalise_word(value):
+        value = _normalise(value).replace("_", " ")
+
+        if value.endswith("s") and not value.endswith("ss"):
+            value = value[:-1]
+
+        return value
+
+    preference = normalise_word(preference)
+
+    shopping_tags = (
+        item.get("shopping_types", [])
+        + item.get("shopping_interests", [])
+    )
+
+    return any(
+        preference == normalise_word(tag)
+        for tag in shopping_tags
+    )
 
 def _contains_term(item, term):
     """Check whether a keyword appears inside a recommendation."""
@@ -34,10 +58,10 @@ def validate_ai_response(raw_items):
     valid_items = []
 
     allowed_types = {
-    "activity",
-    "food",
-    "accommodation",
-    "shopping",
+        "activity",
+        "food",
+        "accommodation",
+        "shopping",
     }
 
     for item in raw_items:
@@ -56,30 +80,55 @@ def validate_ai_response(raw_items):
             "dietary_tags",
         ]
 
+        # Check required fields
         if not all(key in item for key in required):
             continue
 
+        # Validate recommendation type
         item_type = _normalise(item["type"])
+
         if item_type not in allowed_types:
             continue
 
+        # Validate estimated cost
         try:
             cost = float(item["estimated_cost_sgd"])
         except (TypeError, ValueError):
             continue
 
-        if cost < 0:
+        if not math.isfinite(cost) or cost < 0:
             continue
 
+        # Validate list fields
         if not isinstance(item["tags"], list):
             continue
+
         if not isinstance(item["transport_options"], list):
             continue
+
         if not isinstance(item["dietary_tags"], list):
             continue
 
-         # Clean the values before using them in the rest of the program
+        # Validate shopping-specific fields
+        if item_type == "shopping":
+            if not isinstance(item.get("shopping_types"), list):
+                continue
+
+            if not isinstance(item.get("shopping_interests"), list):
+                continue
+
+            if not all(
+                isinstance(value, str)
+                for value in (
+                    item["shopping_types"]
+                    + item["shopping_interests"]
+                )
+            ):
+                continue
+
+        # Clean values before processing
         cleaned = dict(item)
+
         cleaned["name"] = str(item["name"]).strip()
         cleaned["type"] = item_type
         cleaned["category"] = str(item["category"]).strip()
@@ -92,15 +141,30 @@ def validate_ai_response(raw_items):
             for value in item["tags"]
             if str(value).strip()
         ]
+
         cleaned["transport_options"] = [
             _normalise(value)
             for value in item["transport_options"]
             if str(value).strip()
         ]
+
         cleaned["dietary_tags"] = [
             _normalise(value)
             for value in item["dietary_tags"]
             if str(value).strip()
+        ]
+
+        # Clean shopping-specific fields
+        cleaned["shopping_types"] = [
+            _normalise(value)
+            for value in item.get("shopping_types", [])
+            if isinstance(value, str) and value.strip()
+        ]
+
+        cleaned["shopping_interests"] = [
+            _normalise(value)
+            for value in item.get("shopping_interests", [])
+            if isinstance(value, str) and value.strip()
         ]
 
         valid_items.append(cleaned)
@@ -220,11 +284,18 @@ def evaluate_recommendation(item, user_inputs):
     ]
 
     if preferences:
-        matched_preferences = [
-            term
-            for term in preferences
-            if _contains_term(item, term)
-        ]
+        if item["type"] == "shopping":
+            matched_preferences = [
+                term
+                for term in preferences
+                if matches_shopping_preference(item, term)
+            ]
+        else:
+            matched_preferences = [
+                term
+                for term in preferences
+                if _contains_term(item, term)
+            ]
 
         passed = bool(matched_preferences)
 
@@ -340,7 +411,7 @@ def rank_recommendations(items, user_inputs):
             ]
 
             for term in preferences:
-                if _contains_term(item, term):
+                if matches_shopping_preference(item, term):
                     points += 20
 
         else:
