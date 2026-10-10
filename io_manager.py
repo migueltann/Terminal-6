@@ -147,12 +147,13 @@ def validate_destination(text):
 
 def display_welcome_banner():
     """Show the title when the program starts."""
-
-    print("=" * 70)
+    print(LINE)
     print("              TRAVEL RECOMMENDATION ASSISTANT")
     print("     AI discovers places; Python checks your requirements")
-    print("=" * 70)
-    print("Type 'exit' at an input prompt to return to the main menu.\n")
+    print(LINE)
+    print("Press Enter to use the default shown in [ ] at the end of a prompt.\n")
+    print("Type 'back' or 'b' at an input prompt to return to the previous input.\n")
+    print("Type 'exit' or 'e' at an input prompt to return to the main menu.\n")
 
 def display_menu():
     print("\nMAIN MENU")
