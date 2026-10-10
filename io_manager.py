@@ -355,6 +355,55 @@ def ask_shopping_preferences(allow_back=False):
     )
 
 
+def ask_must_visits(allow_back=False):
+    return _ask_list(
+        "Must-visits (comma-separated) [None]: ",
+        [
+            "Must-visits are specific places you definitely want to go.",
+            "Examples: Universal Studios, Gardens by the Bay.",
+        ],
+        allow_back,
+    )
+
+
+def ask_avoid_list(allow_back=False):
+    return _ask_list(
+        "Avoid list (comma-separated) [None]: ",
+        [
+            "The avoid list is types of activities or places you do not "
+            "want recommended.",
+            "Examples: nightlife, theme parks, water activities, "
+            "shopping malls, hiking.",
+        ],
+        allow_back,
+    )
+
+
+def get_dietary_requirement(allow_back=False):
+    """Ask for a dietary requirement as free text (default: None)."""
+    print("\nExamples: halal, vegetarian, vegan, no beef, gluten-free.")
+    value = get_optional_text(
+        "Dietary requirement [None]: ", "None", allow_back=allow_back
+    )
+    if value is None or value is BACK:
+        return value
+    if value.lower() in {"none", "no", "nil", "na", "n/a", "-"}:
+        return "None"
+    if value.lower() in {"halal", "vegetarian", "vegan"}:
+        return value.title()
+    return value
+
+
+def ask_transport(allow_back=False):
+    print()
+    return get_choice(
+        "Preferred transport (Walk/Transit/Taxi/Any) [Any]: ",
+        ["Walk", "Transit", "Taxi", "Any"],
+        "Any",
+        allow_back=allow_back,
+    )
+
+
 def collect_user_requirements():
     """Collect the requirements that Python will use for filtering."""
 
