@@ -315,9 +315,21 @@ def rank_recommendations(items, user_inputs):
 
         # Accommodation has its own preferences
         if item["type"] == "accommodation":
-            for term in user_inputs.get("accommodation_preferences", []):
+            for term in user_inputs.get(
+                "accommodation_preferences",
+                [],
+            ):
                 if _contains_term(item, term):
                     points += 20
+
+        elif item["type"] == "shopping":
+            for term in user_inputs.get(
+                "shopping_preferences",
+                [],
+            ):
+                if _contains_term(item, term):
+                    points += 20
+
         else:
             # Interests and preferred activities are for
             # activities and food
