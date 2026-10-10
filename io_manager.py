@@ -18,6 +18,7 @@ DIVIDER = "-" * 70
 # (Only returned when allow_back=True, so other files never see it.)
 BACK = object()
 
+
 # Destination validation (uses the geonamescache)
 
 _GEO = {}
@@ -155,11 +156,13 @@ def display_welcome_banner():
     print("Type 'back' or 'b' at an input prompt to return to the previous input.\n")
     print("Type 'exit' or 'e' at an input prompt to return to the main menu.\n")
 
+
 def display_menu():
     print("\nMAIN MENU")
     print("1. Generate Recommendations")
     print("2. View / Delete Saved Recommendation Sets")
     print("3. Exit")
+
 
 def get_user_choice():
     """Ask the user to choose an option from the main menu."""
@@ -171,6 +174,7 @@ def get_user_choice():
             return "3"
         print("Invalid choice. Please enter 1, 2, or 3.")
 
+
 # Input helpers
 # Each returns None if the user types an exit command. When allow_back=True
 # they return BACK if the user types 'back'. allow_back defaults to False,
@@ -180,9 +184,11 @@ def is_exit(value):
     """Check whether the user typed an exit command."""
     return value.strip().lower() in EXIT_COMMANDS
 
+
 def is_back(value):
     """Check whether the user typed a back command."""
     return value.strip().lower() in BACK_COMMANDS
+
 
 def get_required_text(prompt, allow_back=False):
     """Ask for text that cannot be left blank."""
@@ -196,6 +202,7 @@ def get_required_text(prompt, allow_back=False):
             return value
         print("This field cannot be empty.")
 
+
 def get_optional_text(prompt, default="", allow_back=False):
     """Ask for optional text and use a default if it is blank."""
     value = input(prompt).strip()
@@ -204,6 +211,7 @@ def get_optional_text(prompt, default="", allow_back=False):
     if allow_back and is_back(value):
         return BACK
     return value if value else default
+
 
 def get_positive_float(prompt, allow_zero=False, allow_back=False):
     """Ask for a valid positive number."""
@@ -238,6 +246,19 @@ def get_choice(prompt, choices, default, allow_back=False):
         print("Invalid choice. Options: " + ", ".join(choices))
 
 
+def get_yes_no(prompt):
+    """Ask a simple yes/no question."""
+    while True:
+        value = input(prompt).strip().lower()
+        if is_exit(value):
+            return None
+        if value in {"y", "yes"}:
+            return True
+        if value in {"n", "no"}:
+            return False
+        print("Please enter y or n.")
+
+
 def _split_csv(value):
     """Turn comma-separated text into a clean Python list."""
     return [
@@ -245,6 +266,7 @@ def _split_csv(value):
         for part in value.split(",")
         if part.strip()
     ]
+
 
 # One ask function per input (used by both the first pass and the editor)
 
@@ -403,6 +425,7 @@ def ask_transport(allow_back=False):
         allow_back=allow_back,
     )
 
+
 # Collecting requirements
 
 # Order the questions are asked in: (data key, function that asks it)
@@ -456,6 +479,7 @@ def collect_user_requirements():
         index += 1
 
     return confirm_or_edit_requirements(data)
+
 
 def display_input_summary(data):
     """Show the requirements back to the user before filtering."""
@@ -539,6 +563,7 @@ def _format_value(key, value):
         return f"SGD ${value:.2f}"
     return str(value)
 
+
 def edit_one_requirement(data):
     """Edit only the input selected by the user."""
     # menu number -> (label, data key, function that asks for the new value)
@@ -617,55 +642,47 @@ def display_filter_audit(audit, user_inputs):
 
 
 def display_approved_recommendations(result):
-    """Show the final approved activities and food recommendations."""
-
-    print("\n" + "=" * 70)
-    print(f"APPROVED RECOMMENDATIONS: {result['destination'].upper()}")
-    print("=" * 70)
-   
+    """Show all approved recommendation categories in the terminal."""
+    print("\n" + LINE)
+    print(f"FINAL RECOMMENDATIONS: {result['destination'].upper()}")
+    print(LINE)
     print(
         f"Approved: {result['summary']['approved_count']} | "
         f"Filtered out: {result['summary']['filtered_out_count']}"
     )
 
-    must_visit = [
-        item
-        for item in result.get("activities", [])
+    # Must-visits are displayed separately so they are easy to identify.
+    must_visits = [
+        item for item in result.get("activities", [])
         if item.get("category", "").strip().lower() == "must visit"
         or "must visit" in [
-            str(tag).strip().lower()
-            for tag in item.get("tags", [])
+            str(tag).strip().lower() for tag in item.get("tags", [])
         ]
     ]
-
     other_activities = [
-        item
-        for item in result.get("activities", [])
-        if item not in must_visit
+        item for item in result.get("activities", [])
+        if item not in must_visits
     ]
 
-    _display_section("MUST-VISIT PLACES", must_visit)
+    _display_section("MUST-VISIT PLACES", must_visits)
     _display_section("ACTIVITIES", other_activities)
-
     _display_section("FOOD", result.get("food", []))
-
     _display_section(
-            "ACCOMMODATION",
-            result.get("accommodation", []),
-            cost_note="per night",
-        )
-
+        "ACCOMMODATION",
+        result.get("accommodation", []),
+        cost_note="per night",
+    )
     _display_section(
         "SHOPPING",
         result.get("shopping", []),
         cost_note="typical spend",
-        )
+    )
+
     
 def _display_section(title, items, cost_note="per person"):
     """Show one group of approved recommendations."""
-
     print("\n" + title)
-    print("-" * 70)
+    print(DIVIDER)
 
     if not items:
         print("No approved recommendations in this category.")
@@ -673,35 +690,39 @@ def _display_section(title, items, cost_note="per person"):
 
     for index, item in enumerate(items, start=1):
         print(f"\n{index}. {item['name']}")
-        print(f"   {item['category']} · {item['location']}")
+        print(f"   {item.get('category', '')}")
+        print(f"   Location: {item.get('location', 'Not provided')}")
+
+        if item.get("address"):
+            print(f"   Address: {item['address']}")
 
         print(
-            f"   Estimated: SGD ${item['estimated_cost_sgd']:.2f} "
+            f"   Estimated: SGD ${item.get('estimated_cost_sgd', 0):.2f} "
             f"{cost_note}"
         )
 
-        print(f"   {item['description']}")
+        if item.get("price_note"):
+            print(f"   Price note: {item['price_note']}")
+
+        if "score" in item:
+            print(f"   Logic score: {item['score']}")
+
+        print(f"   {item.get('description', '')}")
+
+        reasons = item.get("reasons", [])
+        if reasons:
+            print("   Why selected:")
+            for reason in reasons:
+                print(f"   ✓ {reason}")
 
         if item.get("tags"):
             print("   Tags: " + ", ".join(item["tags"]))
 
         if item.get("transport_options"):
-            print(
-                "   Transport: " + ", ".join(item["transport_options"])
-            )
-            
-def get_yes_no(prompt):
-    """Ask a simple yes/no question."""
-    while True:
-        value = input(prompt).strip().lower()
-        if is_exit(value):
-            return None
-        if value in {"y", "yes"}:
-            return True
-        if value in {"n", "no"}:
-            return False
-        print("Please enter y or n.")
+            print("   Transport: " + ", ".join(item["transport_options"]))
 
+
+# Messages
 
 def display_message(message):
     """Show a normal information message."""
