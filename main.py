@@ -100,7 +100,7 @@ def run_application():
 
         else:
             # End the program
-            io_manager.display_message("Goodbye!")
+            io_manager.display_message("Bon voyage! Thanks for planning your trip with us.")
             break
 
 

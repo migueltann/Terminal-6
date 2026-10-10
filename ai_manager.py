@@ -215,6 +215,25 @@ Every object must contain these fields:
 
   For non-food recommendations, use ["none"].
 
+For shopping recommendations, include:
+
+"shopping_types": an array describing the type of shopping location,
+such as mall, street_market, shopping_street, department_store,
+specialty_store, or outlet.
+
+"shopping_interests": an array of descriptive lowercase keywords
+representing what visitors can shop for at the location.
+
+Examples include fashion, sneakers, electronics, souvenirs,
+local crafts, luxury goods, watches, books, anime merchandise,
+vintage clothing, cosmetics, and sports equipment.
+
+Do not limit shopping_interests to these examples.
+Generate relevant keywords based on the actual shopping location.
+
+For non-shopping recommendations, return empty arrays for
+shopping_types and shopping_interests.
+
 Rules:
 
 1. Include a useful mix of all four types.
