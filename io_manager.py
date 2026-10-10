@@ -212,8 +212,8 @@ def collect_user_requirements():
         "preferred_activities": _split_csv(preferred_text),
         "must_visit": _split_csv(must_visit_text),
         "avoid_list": _split_csv(avoid_text),
-        "dietary_requirement": dietary,
-        "preferred_preference": transport,
+        "dietary": dietary,
+        "preferred_transport": transport,
         "accommodation_preferences": _split_csv(accommodation_text),
         "shopping_preferences": _split_csv(shopping_text),
     }
@@ -344,20 +344,19 @@ def _display_section(title, items, cost_note="per person"):
         print(f"\n{index}. {item['name']}")
         print(f"   {item['category']} · {item['location']}")
 
-    print(
-        f"   Estimated: SGD ${item['estimated_cost_sgd']:.2f} "
-        f"{cost_note}"
-    )
+        print(
+            f"   Estimated: SGD ${item['estimated_cost_sgd']:.2f} "
+            f"{cost_note}"
+        )
 
-    print(f"   {item['description']}")
+        print(f"   {item['description']}")
 
-    if item.get("tags"):
+        if item.get("tags"):
             print("   Tags: " + ", ".join(item["tags"]))
 
-    if item.get("transport_options"):
+        if item.get("transport_options"):
             print(
-                "   Transport: "
-                + ", ".join(item["transport_options"])
+                "   Transport: " + ", ".join(item["transport_options"])
             )
             
 def get_yes_no(prompt):
