@@ -311,29 +311,55 @@ def rank_recommendations(items, user_inputs):
 
         # Accommodation has its own preferences
         if item["type"] == "accommodation":
-            for term in user_inputs.get(
-                "accommodation_preferences",
-                [],
-            ):
+            preferences = user_inputs.get(
+                "accommodation_preferences", []
+            )
+
+            preferences = [
+                term for term in preferences
+                if _normalise(term) not in {"", "any", "none"}
+            ]
+
+            for term in preferences:
                 if _contains_term(item, term):
                     points += 20
 
         elif item["type"] == "shopping":
-            for term in user_inputs.get(
-                "shopping_preferences",
-                [],
-            ):
+            preferences = user_inputs.get(
+                "shopping_preferences", []
+            )
+
+            preferences = [
+                term for term in preferences
+                if _normalise(term) not in {"", "any", "none"}
+            ]
+
+            for term in preferences:
                 if _contains_term(item, term):
                     points += 20
 
         else:
             # Interests and preferred activities are for
             # activities and food
-            for term in user_inputs.get("interests", []):
+            interests = user_inputs.get("interests", [])
+            interests = [
+                term for term in interests
+                if _normalise(term) not in {"", "any", "none"}
+            ]
+
+            preferred_activities = user_inputs.get(
+                "preferred_activities", []
+            )
+            preferred_activities = [
+                term for term in preferred_activities
+                if _normalise(term) not in {"", "any", "none"}
+            ]
+
+            for term in interests:
                 if _contains_term(item, term):
                     points += 10
 
-            for term in user_inputs.get("preferred_activities", []):
+            for term in preferred_activities:
                 if _contains_term(item, term):
                     points += 15
 
