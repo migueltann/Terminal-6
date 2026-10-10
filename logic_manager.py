@@ -107,6 +107,33 @@ def validate_ai_response(raw_items):
 
     return valid_items
 
+def _budget_for_item(item, user_inputs):
+    """Select the correct budget for a recommendation type."""
+
+    mapping = {
+        "activity": (
+            "max_activity_spend",
+            "Activity budget",
+        ),
+        "food": (
+            "max_meal_spend",
+            "Meal budget",
+        ),
+        "accommodation": (
+            "max_accommodation_spend",
+            "Accommodation budget",
+        ),
+        "shopping": (
+            "max_shopping_spend",
+            "Shopping budget",
+        ),
+    }
+
+    key, label = mapping[item["type"]]
+    limit = float(user_inputs[key])
+
+    return limit, label
+
 def evaluate_recommendation(item, user_inputs):
     """Check one recommendation and record why it is kept or removed."""
 
@@ -114,17 +141,10 @@ def evaluate_recommendation(item, user_inputs):
     keep = True
     cost = item["estimated_cost_sgd"]
 
-    if item["type"] == "activity":
-        limit = user_inputs["max_activity_spend"]
-        label = "Activity budget"
-
-    elif item["type"] == "food":
-        limit = user_inputs["max_meal_spend"]
-        label = "Meal budget"
-
-    else:
-        limit = user_inputs["max_accommodation_spend"]
-        label = "Accommodation budget"
+    limit, label = _budget_for_item(
+        item,
+        user_inputs,
+    )   
 
     passed = cost <= limit
 
