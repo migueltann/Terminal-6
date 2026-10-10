@@ -200,12 +200,17 @@ def evaluate_recommendation(item, user_inputs):
         )
         preference_label = "Shopping preference"
 
-    else:
+    elif item["type"] == "activity":
         preferences = (
             user_inputs.get("interests", [])
             + user_inputs.get("preferred_activities", [])
         )
         preference_label = "Interests / preferred activities"
+
+    else:
+        # Food recommendations do not use activity preferences
+        preferences = []
+        preference_label = "Not applicable"
 
     # Ignore placeholder answers instead of treating them as keywords.
     preferences = [
