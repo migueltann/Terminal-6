@@ -1,0 +1,648 @@
+{
+    "destination": "United States",
+    "requirements": {
+        "destination": "United States",
+        "max_activity_spend": 100.0,
+        "max_meal_spend": 50.0,
+        "max_accommodation_spend": 150.0,
+        "max_shopping_spend": 200.0,
+        "interests": [
+            "food",
+            "nature",
+            "culture"
+        ],
+        "preferred_activities": [
+            "hiking"
+        ],
+        "accommodation_preferences": [],
+        "shopping_preferences": [],
+        "avoid_list": [],
+        "dietary": "None",
+        "preferred_transport": "Any"
+    },
+    "summary": {
+        "approved_count": 31,
+        "filtered_out_count": 9
+    },
+    "activities": [
+        {
+            "name": "Grand Canyon National Park",
+            "type": "activity",
+            "category": "Nature",
+            "estimated_cost_sgd": 45.0,
+            "location": "Arizona",
+            "description": "World-famous natural wonder featuring expansive canyon vistas, hiking trails, and scenic viewpoints.",
+            "tags": [
+                "nature",
+                "adventure",
+                "views"
+            ],
+            "transport_options": [
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Central Park",
+            "type": "activity",
+            "category": "Nature",
+            "estimated_cost_sgd": 0.0,
+            "location": "New York, NY",
+            "description": "Iconic urban park offering walking paths, lakes, green spaces, and cultural landmarks in the heart of Manhattan.",
+            "tags": [
+                "nature",
+                "culture",
+                "family",
+                "views"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Smithsonian National Air and Space Museum",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 0.0,
+            "location": "Washington, D.C.",
+            "description": "World-renowned museum showcasing historic aircraft, spacecraft, and aviation artifacts.",
+            "tags": [
+                "museum",
+                "culture",
+                "family"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Navy Pier",
+            "type": "activity",
+            "category": "Landmark",
+            "estimated_cost_sgd": 0.0,
+            "location": "Chicago, IL",
+            "description": "Lakeside pier featuring rides, gardens, shops, restaurants, and scenic lakefront views.",
+            "tags": [
+                "family",
+                "views",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "French Quarter Historic Walking",
+            "type": "activity",
+            "category": "Historic Site",
+            "estimated_cost_sgd": 0.0,
+            "location": "New Orleans, LA",
+            "description": "Historic neighborhood famous for Spanish colonial architecture, vibrant street life, and jazz history.",
+            "tags": [
+                "culture",
+                "views"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Statue of Liberty & Ellis Island",
+            "type": "activity",
+            "category": "Historic Site",
+            "estimated_cost_sgd": 35.0,
+            "location": "New York, NY",
+            "description": "Historic national monument and museum detailing American immigration history accessible by ferry.",
+            "tags": [
+                "culture",
+                "museum",
+                "views",
+                "family"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "The Metropolitan Museum of Art",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 40.0,
+            "location": "New York, NY",
+            "description": "One of the world's largest art museums, spanning thousands of years of global artistic culture.",
+            "tags": [
+                "museum",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Yellowstone National Park",
+            "type": "activity",
+            "category": "Nature",
+            "estimated_cost_sgd": 45.0,
+            "location": "Wyoming",
+            "description": "Expansive national park known for geysers, hot springs, deep canyons, and diverse wildlife.",
+            "tags": [
+                "nature",
+                "adventure",
+                "views"
+            ],
+            "transport_options": [
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Alcatraz Island Tour",
+            "type": "activity",
+            "category": "Historic Site",
+            "estimated_cost_sgd": 65.0,
+            "location": "San Francisco, CA",
+            "description": "Historic former federal penitentiary located on an island in San Francisco Bay with guided audio tours.",
+            "tags": [
+                "culture",
+                "museum",
+                "views"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        }
+    ],
+    "food": [
+        {
+            "name": "Grand Central Market",
+            "type": "food",
+            "category": "Market",
+            "estimated_cost_sgd": 25.0,
+            "location": "Los Angeles, CA",
+            "description": "Bustling downtown food hall hosting diverse international food vendors and specialty eateries.",
+            "tags": [
+                "food",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "halal",
+                "vegetarian",
+                "vegan"
+            ]
+        },
+        {
+            "name": "Katz's Delicatessen",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 35.0,
+            "location": "New York, NY",
+            "description": "Legendary Jewish deli serving towering pastrami sandwiches and classic Jewish comfort dishes.",
+            "tags": [
+                "food",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "no-pork"
+            ]
+        },
+        {
+            "name": "Randy's Donuts",
+            "type": "food",
+            "category": "Cafe",
+            "estimated_cost_sgd": 10.0,
+            "location": "Los Angeles, CA",
+            "description": "Landmark drive-in bakery topped with a giant rooftop donut offering classic baked goods.",
+            "tags": [
+                "food",
+                "family"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ]
+        },
+        {
+            "name": "Prince Street Pizza",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 15.0,
+            "location": "New York, NY",
+            "description": "Popular slice shop famous for thick Sicilian-style pepperoni and cheese squares.",
+            "tags": [
+                "food"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ]
+        },
+        {
+            "name": "Tartine Bakery",
+            "type": "food",
+            "category": "Cafe",
+            "estimated_cost_sgd": 20.0,
+            "location": "San Francisco, CA",
+            "description": "Acclaimed artisanal bakery offering rustic sourdough breads, pastries, and sandwiches.",
+            "tags": [
+                "food"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ]
+        },
+        {
+            "name": "Pike Place Chowder",
+            "type": "food",
+            "category": "Cafe",
+            "estimated_cost_sgd": 25.0,
+            "location": "Seattle, WA",
+            "description": "Casual favorite known for serving award-winning clam chowder and seafood rolls.",
+            "tags": [
+                "food"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Lou Malnati's Pizzeria",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 30.0,
+            "location": "Chicago, IL",
+            "description": "Famous Chicago eatery serving authentic deep-dish pizza with rich tomato sauce and cheese.",
+            "tags": [
+                "food",
+                "family"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ]
+        },
+        {
+            "name": "Joe's Kansas City Bar-B-Q",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 30.0,
+            "location": "Kansas City, KS",
+            "description": "Celebrated barbecue restaurant housed in a gas station serving smoked meats and sandwiches.",
+            "tags": [
+                "food"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Franklin Barbecue",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 40.0,
+            "location": "Austin, TX",
+            "description": "Renowned barbecue spot famous for its slow-smoked brisket and long lines of food lovers.",
+            "tags": [
+                "food"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        }
+    ],
+    "accommodation": [
+        {
+            "name": "Green Tortoise Hostel",
+            "type": "accommodation",
+            "category": "Hostel",
+            "estimated_cost_sgd": 75.0,
+            "location": "San Francisco, CA",
+            "description": "Social budget hostel located in North Beach, close to Chinatown and major city attractions.",
+            "tags": [
+                "hostel"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "HI New York City Hostel",
+            "type": "accommodation",
+            "category": "Hostel",
+            "estimated_cost_sgd": 80.0,
+            "location": "New York, NY",
+            "description": "Budget-friendly hostel near Central Park offering shared dorms, private rooms, and social spaces.",
+            "tags": [
+                "hostel"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Freehand Chicago",
+            "type": "accommodation",
+            "category": "Hostel",
+            "estimated_cost_sgd": 110.0,
+            "location": "Chicago, IL",
+            "description": "Stylish boutique hostel and hotel set in a restored 1920s building in River North.",
+            "tags": [
+                "hostel",
+                "hotel"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        }
+    ],
+    "shopping": [
+        {
+            "name": "French Market",
+            "type": "shopping",
+            "category": "Market",
+            "estimated_cost_sgd": 30.0,
+            "location": "New Orleans, LA",
+            "description": "Open-air market offering local crafts, souvenirs, fresh produce, and traditional snacks.",
+            "tags": [
+                "shopping",
+                "market",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Pike Place Market",
+            "type": "shopping",
+            "category": "Market",
+            "estimated_cost_sgd": 40.0,
+            "location": "Seattle, WA",
+            "description": "Historic public market featuring fresh fish throwers, flower vendors, artisan crafts, and food.",
+            "tags": [
+                "shopping",
+                "market",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Faneuil Hall Marketplace",
+            "type": "shopping",
+            "category": "Market",
+            "estimated_cost_sgd": 50.0,
+            "location": "Boston, MA",
+            "description": "Historic urban marketplace featuring street performers, souvenir shops, and food stalls.",
+            "tags": [
+                "shopping",
+                "market",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "King Street Shopping District",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 80.0,
+            "location": "Charleston, SC",
+            "description": "Historic street packed with antique shops, fashion boutiques, local art galleries, and cafes.",
+            "tags": [
+                "shopping",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Mall of America",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 100.0,
+            "location": "Bloomington, MN",
+            "description": "Massive retail complex containing hundreds of stores, an indoor theme park, and an aquarium.",
+            "tags": [
+                "shopping",
+                "family",
+                "theme park"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "The Forum Shops at Caesars",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 100.0,
+            "location": "Las Vegas, NV",
+            "description": "Ancient Roman-themed indoor luxury shopping mall featuring statue shows and fountain displays.",
+            "tags": [
+                "shopping",
+                "family"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "South Coast Plaza",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 120.0,
+            "location": "Costa Mesa, CA",
+            "description": "Large luxury shopping destination housing major fashion boutiques and fine dining establishments.",
+            "tags": [
+                "shopping"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Fifth Avenue Shopping District",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 150.0,
+            "location": "New York, NY",
+            "description": "World-famous shopping street featuring flagship department stores and designer boutiques.",
+            "tags": [
+                "shopping"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Woodbury Common Premium Outlets",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 150.0,
+            "location": "Central Valley, NY",
+            "description": "Expansive outdoor outlet center offering discounted designer brands outside New York City.",
+            "tags": [
+                "shopping"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        },
+        {
+            "name": "Rodeo Drive",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 200.0,
+            "location": "Beverly Hills, CA",
+            "description": "High-end luxury shopping street famous for haute couture fashion houses and upscale atmosphere.",
+            "tags": [
+                "shopping",
+                "views"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ]
+        }
+    ]
+}
