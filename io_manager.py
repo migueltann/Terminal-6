@@ -501,12 +501,12 @@ def _ask_list(prompt, hint_lines, allow_back=False):
         invalid = []
 
         for item in items:
-            normalised = _normalise(item)
-
-            # Require a category-specific match, not merely alphabetic text.
-            if normalised not in {
-                _normalise(term) for term in terms
-            }:
+            # Shopping allows custom preferences, but rejects numbers
+            # and text that does not contain meaningful words.
+            if category == "shopping":
+                if not re.search(r"[a-zA-Z]", item):
+                    invalid.append(item)
+            elif not _matches_travel_term(item, terms):
                 invalid.append(item)
 
         if invalid:
