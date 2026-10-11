@@ -577,19 +577,43 @@ def ask_avoid_list(allow_back=False):
     )
 
 
+
 def get_dietary_requirement(allow_back=False):
-    """Ask for a dietary requirement as free text (default: None)."""
+    """Collect a recognised dietary preference or restriction."""
     print("\nExamples: halal, vegetarian, vegan, no beef, gluten-free.")
-    value = get_optional_text(
-        "Dietary requirement [None]: ", "None", allow_back=allow_back
-    )
-    if value is None or value is BACK:
+
+    while True:
+        value = get_optional_text(
+            "Dietary requirement [None]: ",
+            "None",
+            allow_back=allow_back,
+        )
+
+        if value is None or value is BACK:
+            return value
+
+        value = value.strip()
+        normalised = _normalise(value)
+
+        valid_terms = {_normalise(term) for term in DIETARY_TERMS}
+
+        if normalised not in valid_terms:
+            print(
+                f"[ERROR] '{value}' is not a recognised dietary "
+                "preference or restriction."
+            )
+            print(
+                "Examples: halal, vegetarian, vegan, "
+                "no beef, gluten-free, dairy-free."
+            )
+            print("Enter 'None' if you have no dietary requirements.")
+            continue
+
+        if normalised in {"none", "no", "nil", "na", "n a"}:
+            return "None"
+
         return value
-    if value.lower() in {"none", "no", "nil", "na", "n/a", "-"}:
-        return "None"
-    if value.lower() in {"halal", "vegetarian", "vegan"}:
-        return value.title()
-    return value
+
 
 
 def ask_transport(allow_back=False):
