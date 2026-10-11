@@ -107,6 +107,50 @@ def _normalise(text):
     return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
 
 
+def _term_variants(text):
+    """Return simple singular and plural variants of a preference."""
+    normalised = _normalise(text)
+    variants = {normalised}
+
+    words = normalised.split()
+    if not words:
+        return variants
+
+    last_word = words[-1]
+    prefix = words[:-1]
+
+    # Convert common plural endings to singular.
+    if last_word.endswith("ies") and len(last_word) > 3:
+        singular = last_word[:-3] + "y"
+        variants.add(" ".join(prefix + [singular]))
+    elif last_word.endswith("s") and not last_word.endswith("ss"):
+        singular = last_word[:-1]
+        variants.add(" ".join(prefix + [singular]))
+
+    # Also recognise a simple plural when the input is singular.
+    else:
+        if last_word.endswith(("s", "x", "z", "ch", "sh")):
+            plural = last_word + "es"
+        elif last_word.endswith("y") and len(last_word) > 1:
+            plural = last_word[:-1] + "ies"
+        else:
+            plural = last_word + "s"
+
+        variants.add(" ".join(prefix + [plural]))
+
+    return variants
+
+
+def _matches_travel_term(value, terms):
+    """Match a preference regardless of simple singular/plural forms."""
+    value_variants = _term_variants(value)
+
+    for term in terms:
+        if value_variants.intersection(_term_variants(term)):
+            return True
+
+    return False
+
 def _load_geo_data():
     """Build lookup tables from geonamescache (runs once)."""
     if _GEO or geonamescache is None:
