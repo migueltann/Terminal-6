@@ -382,15 +382,67 @@ def _split_csv(value):
 
 # One ask function per input (used by both the first pass and the editor)
 
+
 def _ask_list(prompt, hint_lines, allow_back=False):
-    """Show a short hint, then ask for a comma-separated list."""
+    """Collect and validate category-specific travel preferences."""
     print()
     for line in hint_lines:
         print(line)
-    value = get_optional_text(prompt, allow_back=allow_back)
-    if value is None or value is BACK:
-        return value
-    return _split_csv(value)
+
+    # Map each question to its allowed travel vocabulary.
+    prompt_lower = prompt.lower()
+
+    if prompt_lower.startswith("interests"):
+        category = "interests"
+        terms = TRAVEL_TERMS[category]
+    elif prompt_lower.startswith("preferred activities"):
+        category = "activities"
+        terms = TRAVEL_TERMS[category]
+    elif prompt_lower.startswith("accommodation preferences"):
+        category = "accommodation"
+        terms = TRAVEL_TERMS[category]
+    elif prompt_lower.startswith("shopping preferences"):
+        category = "shopping"
+        terms = TRAVEL_TERMS[category]
+    else:
+        category = "avoid"
+        terms = TRAVEL_TERMS[category]
+
+    while True:
+        value = get_optional_text(prompt, allow_back=allow_back)
+
+        if value is None or value is BACK:
+            return value
+
+        # Blank, Any and None mean no specific preference.
+        if not value.strip() or value.strip().lower() in {
+            "any", "none", "no preference"
+        }:
+            return []
+
+        items = _split_csv(value)
+        invalid = []
+
+        for item in items:
+            normalised = _normalise(item)
+
+            # Require a category-specific match, not merely alphabetic text.
+            if normalised not in {
+                _normalise(term) for term in terms
+            }:
+                invalid.append(item)
+
+        if invalid:
+            print(
+                f"\n[ERROR] These entries are not recognised "
+                f"as {category} preferences: "
+                + ", ".join(repr(item) for item in invalid)
+            )
+            print("Please enter relevant travel-related terms.")
+            print("Examples: " + ", ".join(sorted(terms)[:8]))
+            continue
+
+        return items
 
 
 def ask_destination(allow_back=False):
