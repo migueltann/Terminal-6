@@ -152,10 +152,20 @@ def validate_destination(text):
     if not parts:
         return None, "Please enter a destination."
 
+
+    # Reject inputs that contain no letters, such as "1" or "123".
+    if not any(char.isalpha() for char in text):
+        return None, "Please enter a real city or country name, not a number."
+
     _load_geo_data()
+
     if not _GEO:
-        # Library not installed: accept the text rather than crash.
-        return ", ".join(parts), None
+        return None, (
+            "Destination validation is unavailable. "
+            "Please install geonamescache using: "
+            "pip install geonamescache"
+        )
+
 
     names = _GEO["country_names"]
     countries = _GEO["country_lookup"]
