@@ -325,21 +325,44 @@ def get_optional_text(prompt, default="", allow_back=False):
     return value if value else default
 
 
+
 def get_positive_float(prompt, allow_zero=False, allow_back=False):
-    """Ask for a valid positive number."""
+    """Collect a valid, finite monetary amount."""
     while True:
-        value = input(prompt).strip()
+        try:
+            value = input(prompt).strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n[INFO] Input cancelled.")
+            return None
+
         if is_exit(value):
             return None
+
         if allow_back and is_back(value):
             return BACK
+
+        if not value:
+            print("[ERROR] Please enter a budget amount.")
+            continue
+
         try:
             number = float(value)
-            if number > 0 or (allow_zero and number >= 0):
-                return number
         except ValueError:
-            pass
-        print("Please enter a valid positive amount.")
+            print(
+                "[ERROR] Invalid budget. Enter a number, "
+                "such as 50 or 25.50."
+            )
+            continue
+
+        if not math.isfinite(number):
+            print("[ERROR] The budget must be a finite number.")
+            continue
+
+        if number < 0 or (number == 0 and not allow_zero):
+            print("[ERROR] The budget must be greater than $0.")
+            continue
+
+        return round(number, 2)
 
 
 def get_choice(prompt, choices, default, allow_back=False):
