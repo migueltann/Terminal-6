@@ -3,6 +3,7 @@
 import difflib
 import re
 import unicodedata
+import math
 
 try:
     import geonamescache
@@ -17,6 +18,78 @@ DIVIDER = "-" * 70
 # Returned by the ask functions when the user wants the previous input.
 # (Only returned when allow_back=True, so other files never see it.)
 BACK = object()
+
+
+# Recognised travel-related terms for each preference category.
+# Add more terms here as the application supports more travel interests.
+
+TRAVEL_TERMS = {
+    "interests": {
+        "nature", "culture", "history", "food", "shopping",
+        "entertainment", "sports", "adventure", "relaxation",
+        "photography", "architecture", "art", "music", "beaches",
+        "wildlife", "nightlife", "wellness", "scenery", "heritage",
+        "religion", "festivals", "local experiences", "sightseeing",
+        "family", "luxury", "budget travel", "romance",
+    },
+    "activities": {
+        "museums", "hiking", "trekking", "theme parks",
+        "water activities", "snorkelling", "diving", "swimming",
+        "nightlife", "food tours", "walking tours", "sightseeing",
+        "cycling", "boat tours", "cruises", "shopping tours",
+        "cooking classes", "art galleries", "historical sites",
+        "temples", "beach activities", "skiing", "camping",
+        "safaris", "concerts", "live music", "markets",
+        "photography tours", "spas", "escape rooms",
+        "aquariums", "zoos", "parks", "gardens",
+    },
+    "accommodation": {
+        "hotel", "hotels", "hostel", "hostels", "budget motel",
+        "motel", "motels", "guesthouse", "guesthouses",
+        "serviced apartment", "serviced apartments",
+        "apartment", "apartments", "resort", "resorts",
+        "homestay", "homestays", "bed and breakfast",
+        "bnb", "airbnb", "capsule hotel", "boutique hotel",
+        "luxury hotel", "budget hotel", "near mrt",
+        "near public transport", "near city centre",
+        "family friendly", "beachfront", "city centre",
+        "business hotel", "eco lodge", "eco lodge",
+        "cabin", "camping", "villa", "villas",
+    },
+    "shopping": {
+        "fashion", "clothing", "electronics", "souvenirs",
+        "malls", "shopping malls", "street markets",
+        "local crafts", "handicrafts", "beauty", "skincare",
+        "cosmetics", "luxury goods", "designer brands",
+        "thrift shopping", "vintage", "antiques", "jewellery",
+        "jewelry", "books", "toys", "food markets",
+        "local products", "outlets", "outlet malls",
+        "night markets", "flea markets", "technology",
+        "shoes", "bags", "watches", "gifts",
+    },
+    "avoid": {
+        "nightlife", "theme parks", "water activities",
+        "shopping malls", "hiking", "crowds", "crowded places",
+        "long walks", "stairs", "museums", "religious sites",
+        "animals", "zoos", "aquariums", "beaches",
+        "high places", "heights", "adventure sports",
+        "extreme sports", "boat rides", "spicy food",
+        "expensive places", "tourist traps", "long queues",
+        "smoking areas", "bars", "clubs", "casinos",
+    },
+}
+
+DIETARY_TERMS = {
+    "none", "no", "nil", "na", "n/a", "-",
+    "halal", "kosher", "vegetarian", "vegan",
+    "pescatarian", "gluten-free", "gluten free",
+    "dairy-free", "dairy free", "lactose-free", "lactose free",
+    "nut-free", "nut free", "peanut-free", "peanut free",
+    "no beef", "no pork", "no seafood", "no shellfish",
+    "no eggs", "no dairy", "no meat", "no alcohol",
+    "low sodium", "low sugar", "no spicy food",
+    "food allergies", "allergies",
+}
 
 
 # Destination validation (uses the geonamescache)
