@@ -98,6 +98,24 @@ def _contains_term(item, term):
     """Check whether a term appears in searchable recommendation fields."""
     return _preference_matches_text(term, _recommendation_text(item))
 
+
+def _matching_field(item, preference, field_names):
+    """Return the first field that matches a preference, or None."""
+    for field in field_names:
+        value = item.get(field, "")
+
+        if isinstance(value, list):
+            values = _as_text_list(value)
+        else:
+            values = [str(value)] if value else []
+
+        for candidate in values:
+            if _preference_matches_text(preference, candidate):
+                return field
+
+    return None
+
+
 def validate_ai_response(raw_items):
     """Keep only AI recommendations that have the fields needed downstream."""
     if not isinstance(raw_items, list):
