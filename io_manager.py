@@ -750,53 +750,38 @@ def edit_one_requirement(data):
 # Showing results
 
 def _display_recommendation(item, decision, index):
-    """Display one recommendation with its audit explanations."""
+    """Display one recommendation with its restriction checks."""
 
     print(f"\n#{index} {item['name']}")
     print(f"   Category: {item.get('category', item['type'])}")
+    print(f"   Location: {item.get('location', 'Not provided')}")
+    print(f"   Environment: {item.get('environment', 'Not provided')}")
 
     cost = item["estimated_cost_sgd"]
     cost_note = " per night" if item["type"] == "accommodation" else ""
     print(f"   Estimated Spend: SGD ${cost:.2f}{cost_note}")
-    print(f"   Preference Score: {item.get('score', 0)} points")
+
+    if item.get("description"):
+        print(f"   Description: {item['description']}")
+
     print()
 
-    # Display hard-rule checks, but not preference scoring as PASS/FAIL.
-    if decision:
-        for check in decision["checks"]:
-            if check["label"] == "Preference score":
-                continue
+    # Read restriction checks directly from the processed recommendation.
+    checks = item.get("checks", [])
 
-            status = "PASS" if check["passed"] else "FAIL"
-            print(f"   [{status}] {check['label']}: {check['detail']}")
+    for check in checks:
+        status = "PASS" if check["passed"] else "FAIL"
+        print(f"   [{status}] {check['label']}: {check['detail']}")
 
-    # Display preference matches separately.
-    matches = item.get("preference_matches", [])
-
-    if matches:
-        for match in matches:
-            print(
-                f'   [+{match["points"]}] '
-                f'{match["preference_type"].title()}: '
-                f'{match["preference"]} '
-                f'(matched field: {match["field"]})'
-            )
-    elif item["type"] == "food":
-        print("   [INFO] Food is not preference-scored")
-    else:
-        print("   [INFO] No preference matches")
-
-    if decision and not decision["keep"]:
-        print("\n   STATUS: REJECTED")
-    elif item.get("score", 0) == 0:
-        print("\n   STATUS: ELIGIBLE (GENERAL RECOMMENDATION)")
-    else:
+    if item.get("eligible", True):
         print("\n   STATUS: ELIGIBLE")
+    else:
+        print("\n   STATUS: REJECTED")
 
     print(DIVIDER)
 
-def display_ranked_recommendations(result, audit):
-    """Show ranked recommendations grouped into four categories."""
+def display_filtered_recommendations(result, audit=None):
+    """Display eligible and filtered-out recommendations without ranking."""
 
     user_inputs = result["requirements"]
 
@@ -807,41 +792,20 @@ def display_ranked_recommendations(result, audit):
     print(f"Destination: {result['destination']}")
     print(
         "Preferred Activities: "
-        f"{', '.join(user_inputs['preferred_activities']) or 'Any'}"
+        f"{', '.join(user_inputs.get('preferred_activities', [])) or 'Any'}"
     )
     print(
         "Cuisine Preferences: "
-        f"{', '.join(user_inputs['food_preferences']) or 'Any'}"
+        f"{', '.join(user_inputs.get('food_preferences', [])) or 'Any'}"
     )
     print(
         "Accommodation Preferences: "
-        f"{', '.join(user_inputs['accommodation_preferences']) or 'Any'}"
+        f"{', '.join(user_inputs.get('accommodation_preferences', [])) or 'Any'}"
     )
     print(
         "Shopping Preferences: "
-        f"{', '.join(user_inputs['shopping_preferences']) or 'Any'}"
+        f"{', '.join(user_inputs.get('shopping_preferences', [])) or 'Any'}"
     )
-
-    # Find each recommendation's original audit decision.
-    # Using object identity avoids mixing up recommendations with the same name.
-    audit_lookup = {
-        id(decision["item"]): decision
-        for decision in audit
-    }
-
-    # Filtered recommendations are copies, so match audit entries by
-    # their original order and unique identifying fields.
-    def find_decision(item):
-        for decision in audit:
-            original = decision["item"]
-            if (
-                original.get("name") == item.get("name")
-                and original.get("type") == item.get("type")
-                and original.get("estimated_cost_sgd")
-                == item.get("estimated_cost_sgd")
-            ):
-                return decision
-        return None
 
     sections = [
         ("ACTIVITIES", result.get("activities", [])),
@@ -862,8 +826,7 @@ def display_ranked_recommendations(result, audit):
             continue
 
         for index, item in enumerate(items, start=1):
-            decision = find_decision(item)
-            _display_recommendation(item, decision, index)
+            _display_recommendation(item, None, index)
 
     print("\nFILTERED-OUT RECOMMENDATIONS")
     print(LINE)
@@ -873,25 +836,8 @@ def display_ranked_recommendations(result, audit):
     if not rejected:
         print("No recommendations were filtered out.")
     else:
-        for item in rejected:
-            decision = find_decision(item)
-
-            print(f"\n{item['name']}")
-            print(f"   Category: {item['type'].title()}")
-
-            if decision:
-                for check in decision["checks"]:
-                    if (
-                        check["label"] != "Preference score"
-                        and not check["passed"]
-                    ):
-                        print(
-                            f'   [FAIL] {check["label"]}: '
-                            f'{check["detail"]}'
-                        )
-
-            print("   STATUS: REJECTED")
-            print(DIVIDER)
+        for index, item in enumerate(rejected, start=1):
+            _display_recommendation(item, None, index)
 
     print("\nSUMMARY")
     print(LINE)
