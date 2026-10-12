@@ -1,10 +1,14 @@
+import re
 import math
 
 """Filters generic AI recommendations using the user's requirements."""
 
 def _normalise(value):
     """Convert text to lowercase so comparisons are easier."""
-    return str(value).strip().lower()
+    value = str(value or "").strip().lower()
+    value = re.sub(r"[_\-]+", " ", value)
+    value = re.sub(r"[^\w\s]", " ", value)
+    return " ".join(value.split())
 
 def matches_shopping_preference(item, preference):
     """Match shopping preferences against AI-generated shopping tags."""
