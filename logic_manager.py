@@ -1,5 +1,6 @@
 import re
 import math
+from difflib import SequenceMatcher
 
 """Filters generic AI recommendations using the user's requirements."""
 
@@ -26,6 +27,61 @@ def _as_text_list(value):
         return []
     return [str(item).strip() for item in value if str(item).strip()]
 
+def _recommendation_text(item):
+    """Collect recommendation fields that can describe its relevance."""
+    fields = [
+        item.get("name", ""),
+        item.get("category", ""),
+        item.get("description", ""),
+        item.get("location", ""),
+    ]
+    for key in (
+        "tags",
+        "shopping_types",
+        "shopping_interests",
+        "interests",
+        "activity_types",
+        "themes",
+        "keywords",
+    ):
+        fields.extend(_as_text_list(item.get(key, [])))
+    return _normalise(" ".join(str(field) for field in fields))
+
+
+def _preference_matches_text(preference, text):
+    """
+    Generic text matching:
+    1. exact phrase match;
+    2. word overlap;
+    3. conservative fuzzy matching for short text fields.
+
+    """
+    pref = _normalise(preference)
+    searchable = _normalise(text)
+
+    if not pref or not searchable:
+        return False
+
+    if pref in searchable:
+        return True
+
+    pref_words = set(pref.split())
+    text_words = set(searchable.split())
+
+    # Word overlap works for multi-word preferences when the recommendation
+    # uses some of the same meaningful words.
+    if pref_words and pref_words.issubset(text_words):
+        return True
+
+    # Fuzzy matching helps with minor spelling/word-form differences only.
+    # It is not a substitute for semantic matching.
+    if len(pref) >= 5:
+        for candidate in re.split(r"[,;|]", searchable):
+            candidate = candidate.strip()
+            if candidate and SequenceMatcher(None, pref, candidate).ratio() >= 0.88:
+                return True
+
+    return False
 
 def matches_shopping_preference(item, preference):
     """Match shopping preferences against AI-generated shopping tags."""
