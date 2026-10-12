@@ -126,8 +126,9 @@ def validate_ai_response(raw_items):
 
     required = [
         "name", "type", "category", "estimated_cost_sgd", "location",
-        "description", "tags", "transport_options", "dietary_tags",
-    ]
+        "environment", "description", "tags",
+        "transport_options", "dietary_tags",
+    ]   
 
     for item in raw_items:
         if not isinstance(item, dict) or not all(key in item for key in required):
@@ -135,6 +136,11 @@ def validate_ai_response(raw_items):
 
         item_type = _normalise(item["type"])
         if item_type not in allowed_types:
+            continue
+
+        environment = _normalise(item["environment"])
+
+        if environment not in {"indoor", "outdoor"}:
             continue
 
         try:
@@ -165,6 +171,7 @@ def validate_ai_response(raw_items):
         cleaned["category"] = str(item["category"]).strip()
         cleaned["estimated_cost_sgd"] = cost
         cleaned["location"] = str(item["location"]).strip()
+        cleaned["environment"] = environment.title()
         cleaned["description"] = str(item["description"]).strip()
 
         for key in ("tags", "transport_options", "dietary_tags",
@@ -209,107 +216,8 @@ def _budget_for_item(item, user_inputs):
     key, label = mapping[item["type"]]
     return float(user_inputs[key]), label
 
-
-def _preference_score(item, user_inputs):
-    """Calculate preference points and record the reason for each match."""
-    breakdown = {
-        "interest": 0,
-        "preferred_activity": 0,
-        "accommodation_preference": 0,
-        "shopping_preference": 0,
-    }
-    matches = []
-    item_type = item["type"]
-
-    # Activities: interests + preferred activities
-    if item_type == "activity":
-        interest_fields = [
-            "tags", "interests", "activity_types", "themes",
-            "keywords", "category", "name", "description", "location",
-        ]
-
-        for preference in _active_preferences(
-            user_inputs.get("interests", [])
-        ):
-            field = _matching_field(item, preference, interest_fields)
-            if field:
-                breakdown["interest"] = 3
-                matches.append({
-                    "preference_type": "interest",
-                    "preference": preference,
-                    "field": field,
-                    "points": 3,
-                })
-                break
-
-        activity_fields = [
-            "tags", "activity_types", "themes", "keywords",
-            "category", "name", "description", "location",
-        ]
-
-        for preference in _active_preferences(
-            user_inputs.get("preferred_activities", [])
-        ):
-            field = _matching_field(item, preference, activity_fields)
-            if field:
-                breakdown["preferred_activity"] = 5
-                matches.append({
-                    "preference_type": "preferred activity",
-                    "preference": preference,
-                    "field": field,
-                    "points": 5,
-                })
-                break
-
-    # Accommodation: accommodation preferences only
-    elif item_type == "accommodation":
-        fields = [
-            "tags", "themes", "keywords", "category",
-            "name", "description", "location",
-        ]
-
-        for preference in _active_preferences(
-            user_inputs.get("accommodation_preferences", [])
-        ):
-            field = _matching_field(item, preference, fields)
-            if field:
-                breakdown["accommodation_preference"] = 5
-                matches.append({
-                    "preference_type": "accommodation preference",
-                    "preference": preference,
-                    "field": field,
-                    "points": 5,
-                })
-                break
-
-    # Shopping: shopping preferences only
-    elif item_type == "shopping":
-        fields = [
-            "shopping_types", "shopping_interests", "tags",
-            "themes", "keywords", "category", "name",
-            "description", "location",
-        ]
-
-        for preference in _active_preferences(
-            user_inputs.get("shopping_preferences", [])
-        ):
-            field = _matching_field(item, preference, fields)
-            if field:
-                breakdown["shopping_preference"] = 5
-                matches.append({
-                    "preference_type": "shopping preference",
-                    "preference": preference,
-                    "field": field,
-                    "points": 5,
-                })
-                break
-
-    # Food deliberately receives no preference points.
-    return sum(breakdown.values()), breakdown, matches
-
-
 def evaluate_recommendation(item, user_inputs):
-    """Apply hard restrictions and score preferences without rejecting non-matches."""
+    """Apply hard restrictions and record pass/fail explanations."""    
     checks = []
     keep = True
     cost = item["estimated_cost_sgd"]
@@ -322,7 +230,37 @@ def evaluate_recommendation(item, user_inputs):
         "detail": f"${cost:.2f} <= ${limit:.2f}" if passed
                   else f"${cost:.2f} > ${limit:.2f}",
     })
-    keep = keep and passed
+
+    # Apply the environment restriction for this recommendation's category.
+    environment_keys = {
+        "activity": "activity_environment",
+        "food": "food_environment",
+        "accommodation": "accommodation_environment",
+        "shopping": "shopping_environment",
+    }
+
+    environment_key = environment_keys[item["type"]]
+    required_environment = _normalise(
+        user_inputs.get(environment_key, "Any")
+    )
+    actual_environment = _normalise(item["environment"])
+
+    if required_environment not in {"", "any", "none"}:
+        passed = actual_environment == required_environment
+
+        checks.append({
+            "label": "Environment",
+            "passed": passed,
+            "detail": (
+                f"{actual_environment.title()} matches "
+                f"{required_environment.title()}"
+                if passed else
+                f"{actual_environment.title()} does not match "
+                f"{required_environment.title()}"
+            ),
+        })
+
+        keep = keep and passed
 
     avoided_terms = [
         term for term in _active_preferences(user_inputs.get("avoid_list", []))
@@ -336,40 +274,6 @@ def evaluate_recommendation(item, user_inputs):
                   else "Matched: " + ", ".join(avoided_terms),
     })
     keep = keep and passed
-
-    score, score_breakdown, preference_matches = _preference_score(
-        item, user_inputs
-    )
-
-    if preference_matches:
-        match_descriptions = [
-            f'{match["preference_type"]} "{match["preference"]}" '
-            f'matched field "{match["field"]}" '
-            f'(+{match["points"]} points)'
-            for match in preference_matches
-        ]
-        preference_detail = (
-            f"+{score} points; " + "; ".join(match_descriptions)
-        )
-
-    elif item["type"] == "food":
-        preference_detail = (
-            "0 points; food is not scored against interests "
-            "or preferred activities"
-        )
-        
-    else:
-        preference_detail = (
-            "0 points; no matching preference found; "
-            "kept as a general recommendation if hard rules pass"
-        )
-
-    checks.append({
-        "label": "Preference score",
-        "passed": True,
-        "detail": preference_detail,
-    })
-
     
     dietary = _normalise(user_inputs.get("dietary", "any"))
     if item["type"] == "food" and dietary not in {"", "none", "any"}:
@@ -395,17 +299,18 @@ def evaluate_recommendation(item, user_inputs):
         })
         keep = keep and passed
 
-    return {
-        "item": item,
-        "keep": keep,
-        "eligible": keep,
-        "score": score,
-        "score_breakdown": score_breakdown,
-        "checks": checks,
-        "preference_matches": preference_matches,
-        "passed_rules": [c["label"] for c in checks if c["passed"]],
-        "failed_rules": [c["label"] for c in checks if not c["passed"]],
-    }
+        return {
+            "item": item,
+            "keep": keep,
+            "eligible": keep,
+            "checks": checks,
+            "passed_rules": [
+                check["label"] for check in checks if check["passed"]
+            ],
+            "failed_rules": [
+                check["label"] for check in checks if not check["passed"]
+            ],
+        }
 
 
 def filter_recommendations(items, user_inputs):
@@ -416,9 +321,8 @@ def filter_recommendations(items, user_inputs):
         decision = evaluate_recommendation(item, user_inputs)
         audit.append(decision)
         result_item = dict(item)
-        for key in ("eligible","score","score_breakdown",
-                    "preference_matches","passed_rules","failed_rules",
-                    ):
+
+        for key in ("eligible", "checks", "passed_rules", "failed_rules"):
             result_item[key] = decision[key]
 
         if decision["keep"]:
@@ -428,28 +332,8 @@ def filter_recommendations(items, user_inputs):
 
     return approved, rejected, audit
 
-def rank_recommendations(items, user_inputs):
-    """Rank by preference score, then lower estimated cost for ties."""
-    ranked = []
-    for item in items:
-        result_item = dict(item)
-        score, breakdown, matches = _preference_score(
-            item, user_inputs
-        )
-        result_item["score"] = score
-        result_item["score_breakdown"] = breakdown
-        result_item["preference_matches"] = matches
-        result_item.setdefault("eligible", True)
-        ranked.append(result_item)
-
-    return sorted(
-        ranked,
-        key=lambda item: (item["score"], -item["estimated_cost_sgd"]),
-        reverse=True,
-    )
-
 def categorise_recommendations(items):
-    """Separate the approved results into activities and food."""
+    """Separate approved recommendations into the four categories."""
 
     return {
         "activities": [
@@ -477,8 +361,7 @@ def build_processed_result(
 ):
     """Build the final result used by the terminal and web front end."""
 
-    ranked = rank_recommendations(approved_items, user_inputs)
-    categorised = categorise_recommendations(ranked)
+    categorised = categorise_recommendations(approved_items)
 
     return {
         "destination": destination,
