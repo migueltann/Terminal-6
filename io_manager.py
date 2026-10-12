@@ -584,7 +584,6 @@ def collect_user_requirements():
     environment_fields = [
         "activity_environment",
         "food_environment",
-        "accommodation_environment",
         "shopping_environment",
     ]
 
