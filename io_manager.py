@@ -487,17 +487,35 @@ def ask_transport(allow_back=False):
 
 # Order the questions are asked in: (data key, function that asks it)
 _STEPS = [
+    # Destination
     ("destination", ask_destination),
-    ("max_activity_spend", ask_activity_budget),
-    ("max_meal_spend", ask_meal_budget),
-    ("max_accommodation_spend", ask_accommodation_budget),
-    ("max_shopping_spend", ask_shopping_budget),
+
+    # Preferences
     ("preferred_activities", ask_preferred_activities),
+    ("food_preferences", ask_food_preferences),
     ("accommodation_preferences", ask_accommodation_preferences),
     ("shopping_preferences", ask_shopping_preferences),
-    ("avoid_list", ask_avoid_list),
+
+    # Activity restrictions
+    ("max_activity_spend", ask_activity_budget),
+    ("activity_environment", ask_activity_environment),
+
+    # Food restrictions
+    ("max_meal_spend", ask_meal_budget),
+    ("food_environment", ask_food_environment),
     ("dietary", get_dietary_requirement),
+
+    # Accommodation restrictions
+    ("max_accommodation_spend", ask_accommodation_budget),
+    ("accommodation_environment", ask_accommodation_environment),
+
+    # Shopping restrictions
+    ("max_shopping_spend", ask_shopping_budget),
+    ("shopping_environment", ask_shopping_environment),
+
+    # Universal restrictions
     ("preferred_transport", ask_transport),
+    ("avoid_list", ask_avoid_list),
 ]
 
 
@@ -535,8 +553,8 @@ def collect_user_requirements():
 
     # Normalise optional list inputs.
     list_fields = [
-        "interests",
         "preferred_activities",
+        "food_preferences",
         "accommodation_preferences",
         "shopping_preferences",
         "avoid_list",
@@ -546,49 +564,63 @@ def collect_user_requirements():
         data[field] = normalise_optional_list(data[field])
 
     # Normalise dietary and transport inputs.
-    data["dietary"] = normalise_optional_text(data["dietary"])
-    data["preferred_transport"] = normalise_optional_text(
-        data["preferred_transport"]
+    # Normalise dietary requirement.
+    data["dietary"] = normalise_optional_text(data["dietary"]) or "None"
+
+    # Normalise universal transport.
+    data["preferred_transport"] = (
+        normalise_optional_text(data["preferred_transport"]) or "Any"
     )
 
-    # Use consistent display values for inputs with no preference.
-    if data["dietary"] is None:
-        data["dietary"] = "None"
+    # Normalise category-specific environments.
+    environment_fields = [
+        "activity_environment",
+        "food_environment",
+        "accommodation_environment",
+        "shopping_environment",
+    ]
 
-    if data["preferred_transport"] is None:
-        data["preferred_transport"] = "Any"
+    for field in environment_fields:
+        data[field] = normalise_optional_text(data[field]) or "Any"
 
     return confirm_or_edit_requirements(data)
 
-
 def display_input_summary(data):
-    """Show the requirements back to the user before filtering."""
+    """Display preferences and restrictions for confirmation."""
+
     print("\n" + LINE)
     print("FINAL USER REQUIREMENTS")
     print(LINE)
-    print(f"Destination:             {data['destination']}")
-    print(f"Max per activity:        SGD ${data['max_activity_spend']:.2f}")
-    print(f"Max per meal:            SGD ${data['max_meal_spend']:.2f}")
-    print(
-        f"Max accommodation/night: SGD ${data['max_accommodation_spend']:.2f}"
-    )
-    print(f"Max shopping spend:      SGD ${data['max_shopping_spend']:.2f}")
-    print(f"Interests:               {', '.join(data['interests']) or 'Any'}")
-    print(
-        "Preferred activities:    "
-        f"{', '.join(data['preferred_activities']) or 'Any'}"
-    )
-    print(
-        "Accommodation:           "
-        f"{', '.join(data['accommodation_preferences']) or 'Any'}"
-    )
-    print(
-        "Shopping:                "
-        f"{', '.join(data['shopping_preferences']) or 'Any'}"
-    )
-    print(f"Avoid:                   {', '.join(data['avoid_list']) or 'None'}")
-    print(f"Dietary:                 {data['dietary']}")
-    print(f"Transport:               {data['preferred_transport']}")
+
+    print(f"Destination: {data['destination']}")
+
+    print("\n--- PREFERENCES ---")
+    print(f"Activities: {', '.join(data['preferred_activities']) or 'Any'}")
+    print(f"Cuisine: {', '.join(data['food_preferences']) or 'Any'}")
+    print(f"Accommodation: {', '.join(data['accommodation_preferences']) or 'Any'}")
+    print(f"Shopping: {', '.join(data['shopping_preferences']) or 'Any'}")
+
+    print("\n--- ACTIVITY RESTRICTIONS ---")
+    print(f"Budget: SGD ${data['max_activity_spend']:.2f}")
+    print(f"Environment: {data['activity_environment']}")
+
+    print("\n--- FOOD RESTRICTIONS ---")
+    print(f"Budget: SGD ${data['max_meal_spend']:.2f}")
+    print(f"Environment: {data['food_environment']}")
+    print(f"Dietary: {data['dietary']}")
+
+    print("\n--- ACCOMMODATION RESTRICTIONS ---")
+    print(f"Budget: SGD ${data['max_accommodation_spend']:.2f}/night")
+    print(f"Environment: {data['accommodation_environment']}")
+
+    print("\n--- SHOPPING RESTRICTIONS ---")
+    print(f"Budget: SGD ${data['max_shopping_spend']:.2f}")
+    print(f"Environment: {data['shopping_environment']}")
+
+    print("\n--- UNIVERSAL RESTRICTIONS ---")
+    print(f"Transport: {data['preferred_transport']}")
+    print(f"Places to avoid: {', '.join(data['avoid_list']) or 'None'}")
+
     print(LINE)
 
 
@@ -625,8 +657,8 @@ def confirm_or_edit_requirements(data):
 
 # Shown as the "current value" when the list is empty.
 _LIST_DEFAULTS = {
-    "interests": "Any",
     "preferred_activities": "Any",
+    "food_preferences": "Any",
     "accommodation_preferences": "Any",
     "shopping_preferences": "Any",
     "avoid_list": "None",
@@ -645,25 +677,30 @@ def _format_value(key, value):
 def edit_one_requirement(data):
     """Edit only the input selected by the user."""
     # menu number -> (label, data key, function that asks for the new value)
-    fields = {
-        "1": ("Destination", "destination", ask_destination),
-        "2": ("Activity budget", "max_activity_spend", ask_activity_budget),
-        "3": ("Meal budget", "max_meal_spend", ask_meal_budget),
-        "4": ("Accommodation budget", "max_accommodation_spend",
-              ask_accommodation_budget),
-        "5": ("Shopping budget", "max_shopping_spend", ask_shopping_budget),
-        "6": ("Interests", "interests", ask_interests),
-        "7": ("Preferred activities", "preferred_activities",
-              ask_preferred_activities),
-        "8": ("Accommodation preferences", "accommodation_preferences",
-              ask_accommodation_preferences),
-        "9": ("Shopping preferences", "shopping_preferences",
-              ask_shopping_preferences),
-        "10": ("Avoid list", "avoid_list", ask_avoid_list),
-        "11": ("Dietary requirement", "dietary",
-               get_dietary_requirement),
-        "12": ("Transport preference", "preferred_transport", ask_transport),
+    labels = {
+        "destination": "Destination",
+        "preferred_activities": "Activity preferences",
+        "food_preferences": "Cuisine preferences",
+        "accommodation_preferences": "Accommodation preferences",
+        "shopping_preferences": "Shopping preferences",
+        "max_activity_spend": "Activity budget",
+        "activity_environment": "Activity environment",
+        "max_meal_spend": "Meal budget",
+        "food_environment": "Food environment",
+        "dietary": "Dietary requirement",
+        "max_accommodation_spend": "Accommodation budget",
+        "accommodation_environment": "Accommodation environment",
+        "max_shopping_spend": "Shopping budget",
+        "shopping_environment": "Shopping environment",
+        "preferred_transport": "Universal transport",
+        "avoid_list": "Places to avoid",
     }
+
+    fields = {
+        str(index): (labels[key], key, ask)
+        for index, (key, ask) in enumerate(_STEPS, start=1)
+    }
+
     back_choice = str(len(fields) + 1)
 
     while True:
@@ -689,8 +726,8 @@ def edit_one_requirement(data):
             
             if value is not None:
                 if key in {
-                    "interests",
                     "preferred_activities",
+                    "food_preferences",
                     "accommodation_preferences",
                     "shopping_preferences",
                     "avoid_list",
