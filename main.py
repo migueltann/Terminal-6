@@ -1,3 +1,5 @@
+from unittest import result
+
 import ai_manager
 import logic_manager
 import data_manager
@@ -25,11 +27,11 @@ def run_application():
 
             # Only the destination is sent to Gemini
             io_manager.display_message(
-                "AI is generating generic destination recommendations..."
+                "AI is generating general and interest-related recommendations..."
             )
 
             try:
-                raw_items = ai_manager.generate_recommendations(destination)
+                raw_items = ai_manager.generate_recommendations(destination, user_inputs)
 
             except Exception as err:
                 io_manager.display_error(
@@ -54,8 +56,6 @@ def run_application():
                 )
             )
 
-            # Show the KEEP / FILTER OUT checks
-            io_manager.display_filter_audit(audit, user_inputs)
 
             # Organise the approved results into activities and food
             result = logic_manager.build_processed_result(
@@ -65,8 +65,8 @@ def run_application():
                 rejected,
             )
 
-            # Show the final approved recommendations
-            io_manager.display_approved_recommendations(result)
+            # Show categorised recommendations with audit explanations
+            io_manager.display_filtered_recommendations(result)
 
             # Let the user save the processed result if they want to
             save_choice = io_manager.get_yes_no(
