@@ -391,6 +391,18 @@ def ask_preferred_activities(allow_back=False):
         allow_back,
     )
 
+def ask_food_preferences(allow_back=False):
+    """Ask for the user's preferred cuisines."""
+
+    return _ask_list(
+        "Cuisine preferences (comma-separated) [Any]: ",
+        [
+            "What types of food do you enjoy?",
+            "Examples: Japanese, Korean, Italian, Thai, Local food.",
+        ],
+        allow_back,
+    )
+
 
 def ask_accommodation_preferences(allow_back=False):
     return _ask_list(
@@ -442,6 +454,8 @@ def get_dietary_requirement(allow_back=False):
     if value.lower() in {"halal", "vegetarian", "vegan"}:
         return value.title()
     return value
+
+
 
 
 def ask_transport(allow_back=False):
