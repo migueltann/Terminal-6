@@ -368,18 +368,6 @@ def ask_shopping_budget(allow_back=False):
     )
 
 
-def ask_interests(allow_back=False):
-    return _ask_list(
-        "Interests (comma-separated) [Any]: ",
-        [
-            "Interests are broad things you enjoy.",
-            "Examples: nature, culture, history, food, shopping, "
-            "entertainment, sports.",
-        ],
-        allow_back,
-    )
-
-
 def ask_preferred_activities(allow_back=False):
     return _ask_list(
         "Preferred activities (comma-separated) [Any]: ",
@@ -494,6 +482,7 @@ def ask_transport(allow_back=False):
     )
 
 
+
 # Collecting requirements
 
 # Order the questions are asked in: (data key, function that asks it)
@@ -503,7 +492,6 @@ _STEPS = [
     ("max_meal_spend", ask_meal_budget),
     ("max_accommodation_spend", ask_accommodation_budget),
     ("max_shopping_spend", ask_shopping_budget),
-    ("interests", ask_interests),
     ("preferred_activities", ask_preferred_activities),
     ("accommodation_preferences", ask_accommodation_preferences),
     ("shopping_preferences", ask_shopping_preferences),
