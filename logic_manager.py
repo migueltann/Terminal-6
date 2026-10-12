@@ -306,89 +306,40 @@ def evaluate_recommendation(item, user_inputs):
 
 
 def filter_recommendations(items, user_inputs):
-    """Split the recommendations into approved and filtered-out lists."""
-
-    approved = []
-    rejected = []
-    audit = []
+    """Split recommendations into eligible and rejected lists with audit details."""
+    approved, rejected, audit = [], [], []
 
     for item in items:
         decision = evaluate_recommendation(item, user_inputs)
         audit.append(decision)
+        result_item = dict(item)
+        for key in ("eligible", "score", "score_breakdown",
+                    "passed_rules", "failed_rules"):
+            result_item[key] = decision[key]
 
         if decision["keep"]:
-            approved.append(dict(item))
+            approved.append(result_item)
         else:
-            rejected.append(item)
+            rejected.append(result_item)
 
     return approved, rejected, audit
 
 def rank_recommendations(items, user_inputs):
-    """Put stronger matches near the top of the final result."""
+    """Rank by preference score, then lower estimated cost for ties."""
+    ranked = []
+    for item in items:
+        result_item = dict(item)
+        score, breakdown = _preference_score(item, user_inputs)
+        result_item["score"] = score
+        result_item["score_breakdown"] = breakdown
+        result_item.setdefault("eligible", True)
+        ranked.append(result_item)
 
-    def score(item):
-        points = 0
-
-        # Accommodation has its own preferences
-        if item["type"] == "accommodation":
-            preferences = user_inputs.get(
-                "accommodation_preferences", []
-            )
-
-            preferences = [
-                term for term in preferences
-                if _normalise(term) not in {"", "any", "none"}
-            ]
-
-            for term in preferences:
-                if _contains_term(item, term):
-                    points += 20
-
-        elif item["type"] == "shopping":
-            preferences = user_inputs.get(
-                "shopping_preferences", []
-            )
-
-            preferences = [
-                term for term in preferences
-                if _normalise(term) not in {"", "any", "none"}
-            ]
-
-            for term in preferences:
-                if matches_shopping_preference(item, term):
-                    points += 20
-
-        else:
-            # Interests and preferred activities are for
-            # activities and food
-            interests = user_inputs.get("interests", [])
-            interests = [
-                term for term in interests
-                if _normalise(term) not in {"", "any", "none"}
-            ]
-
-            preferred_activities = user_inputs.get(
-                "preferred_activities", []
-            )
-            preferred_activities = [
-                term for term in preferred_activities
-                if _normalise(term) not in {"", "any", "none"}
-            ]
-
-            for term in interests:
-                if _contains_term(item, term):
-                    points += 10
-
-            for term in preferred_activities:
-                if _contains_term(item, term):
-                    points += 15
-
-        # Slightly prefer cheaper options when matches are similar
-        points -= item["estimated_cost_sgd"] / 1000
-
-        return points
-
-    return sorted(items, key=score, reverse=True)
+    return sorted(
+        ranked,
+        key=lambda item: (item["score"], -item["estimated_cost_sgd"]),
+        reverse=True,
+    )
 
 def categorise_recommendations(items):
     """Separate the approved results into activities and food."""
@@ -433,4 +384,5 @@ def build_processed_result(
         "food": categorised["food"],
         "accommodation": categorised["accommodation"],
         "shopping": categorised["shopping"],
+        "filtered_out": rejected_items,
     }
