@@ -244,6 +244,7 @@ def get_required_text(prompt, allow_back=False):
 
 def get_optional_text(prompt, default="", allow_back=False):
     """Ask for optional text and use a default if it is blank."""
+    print()
     value = input(prompt).strip()
     if is_exit(value):
         return None
@@ -254,6 +255,7 @@ def get_optional_text(prompt, default="", allow_back=False):
 
 def get_positive_float(prompt, allow_zero=False, allow_back=False):
     """Ask for a valid positive number."""
+    print()
     while True:
         value = input(prompt).strip()
         if is_exit(value):
@@ -272,6 +274,7 @@ def get_positive_float(prompt, allow_zero=False, allow_back=False):
 def get_choice(prompt, choices, default, allow_back=False):
     """Ask the user to choose from a fixed list of options."""
     choices_lower = [choice.lower() for choice in choices]
+    print()
     while True:
         value = input(prompt).strip()
         if is_exit(value):
@@ -490,26 +493,24 @@ _STEPS = [
     # Destination
     ("destination", ask_destination),
 
-    # Preferences
+    # Activities
     ("preferred_activities", ask_preferred_activities),
-    ("food_preferences", ask_food_preferences),
-    ("accommodation_preferences", ask_accommodation_preferences),
-    ("shopping_preferences", ask_shopping_preferences),
-
-    # Activity restrictions
     ("max_activity_spend", ask_activity_budget),
     ("activity_environment", ask_activity_environment),
 
-    # Food restrictions
+    # Food
+    ("food_preferences", ask_food_preferences),
     ("max_meal_spend", ask_meal_budget),
     ("food_environment", ask_food_environment),
     ("dietary", get_dietary_requirement),
 
-    # Accommodation restrictions
+    # Accommodation
+    ("accommodation_preferences", ask_accommodation_preferences),
     ("max_accommodation_spend", ask_accommodation_budget),
     ("accommodation_environment", ask_accommodation_environment),
 
-    # Shopping restrictions
+    # Shopping
+    ("shopping_preferences", ask_shopping_preferences),
     ("max_shopping_spend", ask_shopping_budget),
     ("shopping_environment", ask_shopping_environment),
 
@@ -532,6 +533,18 @@ def collect_user_requirements():
 
     while index < len(_STEPS):
         key, ask = _STEPS[index]
+
+        headings = {
+            "destination": "DESTINATION",
+            "preferred_activities": "ACTIVITIES",
+            "food_preferences": "FOOD",
+            "accommodation_preferences": "ACCOMMODATION",
+            "shopping_preferences": "SHOPPING",
+            "preferred_transport": "UNIVERSAL RESTRICTIONS",
+        }
+
+        if key in headings:
+            print(f"\n--- {headings[key]} ---")
 
         # The first question has nothing before it, so 'back' is off there.
         value = ask(allow_back=index > 0)
@@ -586,7 +599,7 @@ def collect_user_requirements():
     return confirm_or_edit_requirements(data)
 
 def display_input_summary(data):
-    """Display preferences and restrictions for confirmation."""
+    """Display user requirements grouped by recommendation category."""
 
     print("\n" + LINE)
     print("FINAL USER REQUIREMENTS")
@@ -594,35 +607,52 @@ def display_input_summary(data):
 
     print(f"Destination: {data['destination']}")
 
-    print("\n--- PREFERENCES ---")
-    print(f"Activities: {', '.join(data['preferred_activities']) or 'Any'}")
-    print(f"Cuisine: {', '.join(data['food_preferences']) or 'Any'}")
-    print(f"Accommodation: {', '.join(data['accommodation_preferences']) or 'Any'}")
-    print(f"Shopping: {', '.join(data['shopping_preferences']) or 'Any'}")
-
-    print("\n--- ACTIVITY RESTRICTIONS ---")
-    print(f"Budget: SGD ${data['max_activity_spend']:.2f}")
+    # Activities
+    print("\n--- ACTIVITIES ---")
+    print(
+        "Preferred Activities: "
+        f"{', '.join(data['preferred_activities']) or 'Any'}"
+    )
+    print(f"Max Spend: SGD ${data['max_activity_spend']:.2f}")
     print(f"Environment: {data['activity_environment']}")
 
-    print("\n--- FOOD RESTRICTIONS ---")
-    print(f"Budget: SGD ${data['max_meal_spend']:.2f}")
+    # Food
+    print("\n--- FOOD ---")
+    print(
+        "Cuisine Preferences: "
+        f"{', '.join(data['food_preferences']) or 'Any'}"
+    )
+    print(f"Max Spend per Meal: SGD ${data['max_meal_spend']:.2f}")
     print(f"Environment: {data['food_environment']}")
-    print(f"Dietary: {data['dietary']}")
+    print(f"Dietary Requirement: {data['dietary']}")
 
-    print("\n--- ACCOMMODATION RESTRICTIONS ---")
-    print(f"Budget: SGD ${data['max_accommodation_spend']:.2f}/night")
+    # Accommodation
+    print("\n--- ACCOMMODATION ---")
+    print(
+        "Accommodation Preferences: "
+        f"{', '.join(data['accommodation_preferences']) or 'Any'}"
+    )
+    print(
+        f"Max Spend per Night: "
+        f"SGD ${data['max_accommodation_spend']:.2f}"
+    )
     print(f"Environment: {data['accommodation_environment']}")
 
-    print("\n--- SHOPPING RESTRICTIONS ---")
-    print(f"Budget: SGD ${data['max_shopping_spend']:.2f}")
+    # Shopping
+    print("\n--- SHOPPING ---")
+    print(
+        "Shopping Preferences: "
+        f"{', '.join(data['shopping_preferences']) or 'Any'}"
+    )
+    print(f"Max Spend: SGD ${data['max_shopping_spend']:.2f}")
     print(f"Environment: {data['shopping_environment']}")
 
+    # Universal restrictions
     print("\n--- UNIVERSAL RESTRICTIONS ---")
-    print(f"Transport: {data['preferred_transport']}")
-    print(f"Places to avoid: {', '.join(data['avoid_list']) or 'None'}")
+    print(f"Preferred Transport: {data['preferred_transport']}")
+    print(f"Places to Avoid: {', '.join(data['avoid_list']) or 'None'}")
 
     print(LINE)
-
 
 def confirm_or_edit_requirements(data):
     """Let the user confirm, edit one input, or start again."""
