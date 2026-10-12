@@ -1,0 +1,32 @@
+type,name,category,estimated_cost_sgd,location,description,tags,transport_options,dietary_tags
+activity,Grand Canyon National Park,Nature,45.0,Arizona,"World-famous natural wonder featuring expansive canyon vistas, hiking trails, and scenic viewpoints.","nature, adventure, views",taxi,none
+activity,Central Park,Nature,0.0,"New York, NY","Iconic urban park offering walking paths, lakes, green spaces, and cultural landmarks in the heart of Manhattan.","nature, culture, family, views","walk, transit, taxi",none
+activity,Smithsonian National Air and Space Museum,Museum,0.0,"Washington, D.C.","World-renowned museum showcasing historic aircraft, spacecraft, and aviation artifacts.","museum, culture, family","walk, transit, taxi",none
+activity,Navy Pier,Landmark,0.0,"Chicago, IL","Lakeside pier featuring rides, gardens, shops, restaurants, and scenic lakefront views.","family, views, culture","walk, transit, taxi",none
+activity,French Quarter Historic Walking,Historic Site,0.0,"New Orleans, LA","Historic neighborhood famous for Spanish colonial architecture, vibrant street life, and jazz history.","culture, views","walk, transit, taxi",none
+activity,Statue of Liberty & Ellis Island,Historic Site,35.0,"New York, NY",Historic national monument and museum detailing American immigration history accessible by ferry.,"culture, museum, views, family","transit, taxi",none
+activity,The Metropolitan Museum of Art,Museum,40.0,"New York, NY","One of the world's largest art museums, spanning thousands of years of global artistic culture.","museum, culture","walk, transit, taxi",none
+activity,Yellowstone National Park,Nature,45.0,Wyoming,"Expansive national park known for geysers, hot springs, deep canyons, and diverse wildlife.","nature, adventure, views",taxi,none
+activity,Alcatraz Island Tour,Historic Site,65.0,"San Francisco, CA",Historic former federal penitentiary located on an island in San Francisco Bay with guided audio tours.,"culture, museum, views","transit, taxi",none
+food,Grand Central Market,Market,25.0,"Los Angeles, CA",Bustling downtown food hall hosting diverse international food vendors and specialty eateries.,"food, culture","walk, transit, taxi","halal, vegetarian, vegan"
+food,Katz's Delicatessen,Restaurant,35.0,"New York, NY",Legendary Jewish deli serving towering pastrami sandwiches and classic Jewish comfort dishes.,"food, culture","walk, transit, taxi",no-pork
+food,Randy's Donuts,Cafe,10.0,"Los Angeles, CA",Landmark drive-in bakery topped with a giant rooftop donut offering classic baked goods.,"food, family","transit, taxi",vegetarian
+food,Prince Street Pizza,Restaurant,15.0,"New York, NY",Popular slice shop famous for thick Sicilian-style pepperoni and cheese squares.,food,"walk, transit, taxi",vegetarian
+food,Tartine Bakery,Cafe,20.0,"San Francisco, CA","Acclaimed artisanal bakery offering rustic sourdough breads, pastries, and sandwiches.",food,"walk, transit, taxi",vegetarian
+food,Pike Place Chowder,Cafe,25.0,"Seattle, WA",Casual favorite known for serving award-winning clam chowder and seafood rolls.,food,"walk, transit, taxi",none
+food,Lou Malnati's Pizzeria,Restaurant,30.0,"Chicago, IL",Famous Chicago eatery serving authentic deep-dish pizza with rich tomato sauce and cheese.,"food, family","walk, transit, taxi",vegetarian
+food,Joe's Kansas City Bar-B-Q,Restaurant,30.0,"Kansas City, KS",Celebrated barbecue restaurant housed in a gas station serving smoked meats and sandwiches.,food,"transit, taxi",none
+food,Franklin Barbecue,Restaurant,40.0,"Austin, TX",Renowned barbecue spot famous for its slow-smoked brisket and long lines of food lovers.,food,"transit, taxi",none
+accommodation,Green Tortoise Hostel,Hostel,75.0,"San Francisco, CA","Social budget hostel located in North Beach, close to Chinatown and major city attractions.",hostel,"walk, transit, taxi",none
+accommodation,HI New York City Hostel,Hostel,80.0,"New York, NY","Budget-friendly hostel near Central Park offering shared dorms, private rooms, and social spaces.",hostel,"walk, transit, taxi",none
+accommodation,Freehand Chicago,Hostel,110.0,"Chicago, IL",Stylish boutique hostel and hotel set in a restored 1920s building in River North.,"hostel, hotel","walk, transit, taxi",none
+shopping,French Market,Market,30.0,"New Orleans, LA","Open-air market offering local crafts, souvenirs, fresh produce, and traditional snacks.","shopping, market, culture","walk, transit, taxi",none
+shopping,Pike Place Market,Market,40.0,"Seattle, WA","Historic public market featuring fresh fish throwers, flower vendors, artisan crafts, and food.","shopping, market, culture","walk, transit, taxi",none
+shopping,Faneuil Hall Marketplace,Market,50.0,"Boston, MA","Historic urban marketplace featuring street performers, souvenir shops, and food stalls.","shopping, market, culture","walk, transit, taxi",none
+shopping,King Street Shopping District,Shopping Street,80.0,"Charleston, SC","Historic street packed with antique shops, fashion boutiques, local art galleries, and cafes.","shopping, culture","walk, transit, taxi",none
+shopping,Mall of America,Shopping Mall,100.0,"Bloomington, MN","Massive retail complex containing hundreds of stores, an indoor theme park, and an aquarium.","shopping, family, theme park","transit, taxi",none
+shopping,The Forum Shops at Caesars,Shopping Mall,100.0,"Las Vegas, NV",Ancient Roman-themed indoor luxury shopping mall featuring statue shows and fountain displays.,"shopping, family","walk, transit, taxi",none
+shopping,South Coast Plaza,Shopping Mall,120.0,"Costa Mesa, CA",Large luxury shopping destination housing major fashion boutiques and fine dining establishments.,shopping,"transit, taxi",none
+shopping,Fifth Avenue Shopping District,Shopping Street,150.0,"New York, NY",World-famous shopping street featuring flagship department stores and designer boutiques.,shopping,"walk, transit, taxi",none
+shopping,Woodbury Common Premium Outlets,Shopping Mall,150.0,"Central Valley, NY",Expansive outdoor outlet center offering discounted designer brands outside New York City.,shopping,"transit, taxi",none
+shopping,Rodeo Drive,Shopping Street,200.0,"Beverly Hills, CA",High-end luxury shopping street famous for haute couture fashion houses and upscale atmosphere.,"shopping, views","walk, transit, taxi",none
