@@ -456,7 +456,33 @@ def get_dietary_requirement(allow_back=False):
     return value
 
 
+def ask_environment(category, allow_back=False):
+    """Ask for the preferred environment for one category."""
 
+    print()
+
+    return get_choice(
+        f"{category} environment (Indoor/Outdoor/Any) [Any]: ",
+        ["Indoor", "Outdoor", "Any"],
+        "Any",
+        allow_back=allow_back,
+    )
+
+
+def ask_activity_environment(allow_back=False):
+    return ask_environment("Activity", allow_back)
+
+
+def ask_food_environment(allow_back=False):
+    return ask_environment("Food", allow_back)
+
+
+def ask_accommodation_environment(allow_back=False):
+    return ask_environment("Accommodation", allow_back)
+
+
+def ask_shopping_environment(allow_back=False):
+    return ask_environment("Shopping", allow_back)
 
 def ask_transport(allow_back=False):
     print()
