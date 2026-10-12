@@ -25,11 +25,11 @@ def run_application():
 
             # Only the destination is sent to Gemini
             io_manager.display_message(
-                "AI is generating generic destination recommendations..."
+                "AI is generating general and interest-related recommendations..."
             )
 
             try:
-                raw_items = ai_manager.generate_recommendations(destination)
+                raw_items = ai_manager.generate_recommendations(destination, user_inputs)
 
             except Exception as err:
                 io_manager.display_error(
