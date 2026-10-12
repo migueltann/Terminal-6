@@ -209,46 +209,104 @@ def _budget_for_item(item, user_inputs):
     key, label = mapping[item["type"]]
     return float(user_inputs[key]), label
 
+
 def _preference_score(item, user_inputs):
-    """Calculate soft-preference points and explain each component."""
+    """Calculate preference points and record the reason for each match."""
     breakdown = {
         "interest": 0,
         "preferred_activity": 0,
         "accommodation_preference": 0,
         "shopping_preference": 0,
     }
+    matches = []
+    item_type = item["type"]
 
-    if item["type"] in {"activity", "food", "shopping"}:
-        for preference in _active_preferences(user_inputs.get("interests", [])):
-            if _contains_term(item, preference):
+    # Activities: interests + preferred activities
+    if item_type == "activity":
+        interest_fields = [
+            "tags", "interests", "activity_types", "themes",
+            "keywords", "category", "name", "description", "location",
+        ]
+
+        for preference in _active_preferences(
+            user_inputs.get("interests", [])
+        ):
+            field = _matching_field(item, preference, interest_fields)
+            if field:
                 breakdown["interest"] = 3
+                matches.append({
+                    "preference_type": "interest",
+                    "preference": preference,
+                    "field": field,
+                    "points": 3,
+                })
                 break
 
-    if item["type"] == "activity":
+        activity_fields = [
+            "tags", "activity_types", "themes", "keywords",
+            "category", "name", "description", "location",
+        ]
+
         for preference in _active_preferences(
             user_inputs.get("preferred_activities", [])
         ):
-            if _contains_term(item, preference):
+            field = _matching_field(item, preference, activity_fields)
+            if field:
                 breakdown["preferred_activity"] = 5
+                matches.append({
+                    "preference_type": "preferred activity",
+                    "preference": preference,
+                    "field": field,
+                    "points": 5,
+                })
                 break
 
-    elif item["type"] == "accommodation":
+    # Accommodation: accommodation preferences only
+    elif item_type == "accommodation":
+        fields = [
+            "tags", "themes", "keywords", "category",
+            "name", "description", "location",
+        ]
+
         for preference in _active_preferences(
             user_inputs.get("accommodation_preferences", [])
         ):
-            if _contains_term(item, preference):
+            field = _matching_field(item, preference, fields)
+            if field:
                 breakdown["accommodation_preference"] = 5
+                matches.append({
+                    "preference_type": "accommodation preference",
+                    "preference": preference,
+                    "field": field,
+                    "points": 5,
+                })
                 break
 
-    elif item["type"] == "shopping":
+    # Shopping: shopping preferences only
+    elif item_type == "shopping":
+        fields = [
+            "shopping_types", "shopping_interests", "tags",
+            "themes", "keywords", "category", "name",
+            "description", "location",
+        ]
+
         for preference in _active_preferences(
             user_inputs.get("shopping_preferences", [])
         ):
-            if matches_shopping_preference(item, preference):
+            field = _matching_field(item, preference, fields)
+            if field:
                 breakdown["shopping_preference"] = 5
+                matches.append({
+                    "preference_type": "shopping preference",
+                    "preference": preference,
+                    "field": field,
+                    "points": 5,
+                })
                 break
 
-    return sum(breakdown.values()), breakdown
+    # Food deliberately receives no preference points.
+    return sum(breakdown.values()), breakdown, matches
+
 
 def evaluate_recommendation(item, user_inputs):
     """Apply hard restrictions and score preferences without rejecting non-matches."""
@@ -279,14 +337,40 @@ def evaluate_recommendation(item, user_inputs):
     })
     keep = keep and passed
 
-    score, score_breakdown = _preference_score(item, user_inputs)
+    score, score_breakdown, preference_matches = _preference_score(
+        item, user_inputs
+    )
+
+    if preference_matches:
+        match_descriptions = [
+            f'{match["preference_type"]} "{match["preference"]}" '
+            f'matched field "{match["field"]}" '
+            f'(+{match["points"]} points)'
+            for match in preference_matches
+        ]
+        preference_detail = (
+            f"+{score} points; " + "; ".join(match_descriptions)
+        )
+
+    elif item["type"] == "food":
+        preference_detail = (
+            "0 points; food is not scored against interests "
+            "or preferred activities"
+        )
+        
+    else:
+        preference_detail = (
+            "0 points; no matching preference found; "
+            "kept as a general recommendation if hard rules pass"
+        )
+
     checks.append({
         "label": "Preference score",
         "passed": True,
-        "detail": f"+{score} points" if score
-                  else "No preference match; kept as a general recommendation",
+        "detail": preference_detail,
     })
 
+    
     dietary = _normalise(user_inputs.get("dietary", "any"))
     if item["type"] == "food" and dietary not in {"", "none", "any"}:
         passed = dietary in item.get("dietary_tags", [])
@@ -318,6 +402,7 @@ def evaluate_recommendation(item, user_inputs):
         "score": score,
         "score_breakdown": score_breakdown,
         "checks": checks,
+        "preference_matches": preference_matches,
         "passed_rules": [c["label"] for c in checks if c["passed"]],
         "failed_rules": [c["label"] for c in checks if not c["passed"]],
     }
