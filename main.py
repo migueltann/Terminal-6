@@ -1,3 +1,5 @@
+from unittest import result
+
 import ai_manager
 import logic_manager
 import data_manager
@@ -54,8 +56,6 @@ def run_application():
                 )
             )
 
-            # Show the KEEP / FILTER OUT checks
-            io_manager.display_filter_audit(audit, user_inputs)
 
             # Organise the approved results into activities and food
             result = logic_manager.build_processed_result(
@@ -65,8 +65,8 @@ def run_application():
                 rejected,
             )
 
-            # Show the final approved recommendations
-            io_manager.display_approved_recommendations(result)
+            # Show categorised recommendations with audit explanations
+            io_manager.display_ranked_recommendations(result, audit)
 
             # Let the user save the processed result if they want to
             save_choice = io_manager.get_yes_no(

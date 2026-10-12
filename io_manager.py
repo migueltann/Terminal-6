@@ -684,6 +684,156 @@ def edit_one_requirement(data):
 
 # Showing results
 
+def _display_recommendation(item, decision, index):
+    """Display one recommendation with its audit explanations."""
+
+    print(f"\n#{index} {item['name']}")
+    print(f"   Category: {item.get('category', item['type'])}")
+
+    cost = item["estimated_cost_sgd"]
+    cost_note = " per night" if item["type"] == "accommodation" else ""
+    print(f"   Estimated Spend: SGD ${cost:.2f}{cost_note}")
+    print(f"   Preference Score: {item.get('score', 0)} points")
+    print()
+
+    # Display hard-rule checks, but not preference scoring as PASS/FAIL.
+    if decision:
+        for check in decision["checks"]:
+            if check["label"] == "Preference score":
+                continue
+
+            status = "PASS" if check["passed"] else "FAIL"
+            print(f"   [{status}] {check['label']}: {check['detail']}")
+
+    # Display preference matches separately.
+    matches = item.get("preference_matches", [])
+
+    if matches:
+        for match in matches:
+            print(
+                f'   [+{match["points"]}] '
+                f'{match["preference_type"].title()}: '
+                f'{match["preference"]} '
+                f'(matched field: {match["field"]})'
+            )
+    elif item["type"] == "food":
+        print("   [INFO] Food is not preference-scored")
+    else:
+        print("   [INFO] No preference matches")
+
+    if decision and not decision["keep"]:
+        print("\n   STATUS: REJECTED")
+    elif item.get("score", 0) == 0:
+        print("\n   STATUS: ELIGIBLE (GENERAL RECOMMENDATION)")
+    else:
+        print("\n   STATUS: ELIGIBLE")
+
+    print(DIVIDER)
+
+def display_ranked_recommendations(result, audit):
+    """Show ranked recommendations grouped into four categories."""
+
+    user_inputs = result["requirements"]
+
+    print("\n" + LINE)
+    print("TERMINAL-6 | PERSONALISED TRAVEL RECOMMENDATIONS")
+    print(LINE)
+
+    print(f"Destination: {result['destination']}")
+    print(f"Interests: {', '.join(user_inputs['interests']) or 'Any'}")
+    print(
+        "Preferred Activities: "
+        f"{', '.join(user_inputs['preferred_activities']) or 'Any'}"
+    )
+    print(
+        "Accommodation Preferences: "
+        f"{', '.join(user_inputs['accommodation_preferences']) or 'Any'}"
+    )
+    print(
+        "Shopping Preferences: "
+        f"{', '.join(user_inputs['shopping_preferences']) or 'Any'}"
+    )
+
+    # Find each recommendation's original audit decision.
+    # Using object identity avoids mixing up recommendations with the same name.
+    audit_lookup = {
+        id(decision["item"]): decision
+        for decision in audit
+    }
+
+    # Filtered recommendations are copies, so match audit entries by
+    # their original order and unique identifying fields.
+    def find_decision(item):
+        for decision in audit:
+            original = decision["item"]
+            if (
+                original.get("name") == item.get("name")
+                and original.get("type") == item.get("type")
+                and original.get("estimated_cost_sgd")
+                == item.get("estimated_cost_sgd")
+            ):
+                return decision
+        return None
+
+    sections = [
+        ("ACTIVITIES", result.get("activities", [])),
+        ("FOOD", result.get("food", [])),
+        ("ACCOMMODATION", result.get("accommodation", [])),
+        ("SHOPPING", result.get("shopping", [])),
+    ]
+
+    print("\nRECOMMENDED FOR YOU")
+    print(LINE)
+
+    for section_number, (title, items) in enumerate(sections, start=1):
+        print(f"\n[{section_number}] {title}")
+        print(DIVIDER)
+
+        if not items:
+            print("No eligible recommendations.")
+            continue
+
+        for index, item in enumerate(items, start=1):
+            decision = find_decision(item)
+            _display_recommendation(item, decision, index)
+
+    print("\nFILTERED-OUT RECOMMENDATIONS")
+    print(LINE)
+
+    rejected = result.get("filtered_out", [])
+
+    if not rejected:
+        print("No recommendations were filtered out.")
+    else:
+        for item in rejected:
+            decision = find_decision(item)
+
+            print(f"\n{item['name']}")
+            print(f"   Category: {item['type'].title()}")
+
+            if decision:
+                for check in decision["checks"]:
+                    if (
+                        check["label"] != "Preference score"
+                        and not check["passed"]
+                    ):
+                        print(
+                            f'   [FAIL] {check["label"]}: '
+                            f'{check["detail"]}'
+                        )
+
+            print("   STATUS: REJECTED")
+            print(DIVIDER)
+
+    print("\nSUMMARY")
+    print(LINE)
+
+    for title, items in sections:
+        print(f"Eligible {title.title()}: {len(items)}")
+
+    print(f"Filtered Out: {len(rejected)}")
+    print(LINE)
+
 def display_filter_audit(audit, user_inputs):
     """Show why each recommendation was kept or filtered out."""
     print("\n" + LINE)
@@ -786,4 +936,4 @@ def display_message(message):
 def display_error(error):
     """Show an error message."""
     print(f"\n[ERROR] {error}")
-        
+
