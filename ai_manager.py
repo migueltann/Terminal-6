@@ -7,15 +7,26 @@ import requests
 from dotenv import load_dotenv
 load_dotenv()
 
-def generate_recommendations(destination):
-    """Ask Gemini for generic travel recommendations."""
+def active_preferences(values):
+    """Remove empty and placeholder preferences."""
+    if not isinstance(values, list):
+        return []
+
+    return [
+        str(value).strip()
+        for value in values
+        if str(value).strip().lower() not in {"", "any", "none"}
+    ]
+
+def generate_recommendations(destination, user_inputs=None):
+    """Ask Gemini for general and preference-related recommendations."""
 
     # Read the Gemini API key from the .env file
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise ValueError("GEMINI_API_KEY environment variable is missing.")
     
-    prompt = build_ai_prompt(destination)
+    prompt = build_ai_prompt(destination, user_inputs)
 
     # Try another model if the first model is busy or unavailable
     models_to_try = [
@@ -143,116 +154,162 @@ def clean_json_response(content):
     return content
 
 
-def build_ai_prompt(destination):
-    """Create the prompt. Only the destination is sent to Gemini."""
+def build_ai_prompt(destination, user_inputs=None):
+    """Generate a mix of general and preference-related recommendations."""
+
+    user_inputs = user_inputs or {}
+
+    preferred_activities = active_preferences(
+        user_inputs.get("preferred_activities", [])
+    )
+
+    food_preferences = active_preferences(
+        user_inputs.get("food_preferences", [])
+    )
+
+    accommodation_preferences = active_preferences(
+        user_inputs.get("accommodation_preferences", [])
+    )
+
+    shopping_preferences = active_preferences(
+        user_inputs.get("shopping_preferences", [])
+    )
 
     return f"""
+
 You are a travel discovery engine.
 
 Destination: {destination}
 
-Generate 36 to 44 GENERIC recommendations for this destination.
+User activity preferences: {json.dumps(preferred_activities)}
+User food preferences: {json.dumps(food_preferences)}
+User accommodation preferences: {json.dumps(accommodation_preferences)}
+User shopping preferences: {json.dumps(shopping_preferences)}
+
+Generate exactly 60 travel recommendation candidates.
+
 Do not create an itinerary or schedule.
 
-Do not use user budgets, interests, preferred activities, 
-accommodation preferences, shopping preferences, dietary needs,
-must-visits, avoid lists, transport preferences, travel dates, 
-start times, end times, duration, pace, or any other personal 
-requirement.
+RECOMMENDATION BREAKDOWN:
 
-The Python program will apply all user-specific rules later.
+ACTIVITIES: exactly 15 recommendations.
+- If activity preferences are provided, aim for 10 recommendations
+  related to those preferences and 5 general activities.
+- Otherwise, generate 15 general activities.
 
-Include a balanced mix of:
-- activities
-- food
-- accommodation
-- shopping
+FOOD: exactly 15 recommendations.
+- If food preferences are provided, aim for 10 recommendations
+  related to those preferences and 5 general food choices.
+- Otherwise, generate 15 general food choices.
 
-Generate at least 5 accommodation recommendations.
+ACCOMMODATION: exactly 15 recommendations.
+- If accommodation preferences are provided, aim for 10 recommendations
+  related to those preferences and 5 general accommodation choices.
+- Otherwise, generate 15 general accommodation choices.
 
-Return ONLY valid JSON as one array.
+SHOPPING: exactly 15 recommendations.
+- If shopping preferences are provided, aim for 10 recommendations
+  related to those preferences and 5 general shopping choices.
+- Otherwise, generate 15 general shopping choices.
 
-Every object must contain these fields:
-- "name": string
+PREFERENCE GUIDELINES:
 
-- "type": one of:
-  "activity",
-  "food",
-  "accommodation",
-  "shopping"
+- Use preferences to guide discovery, not to filter or rank results.
+- If multiple preferences are provided, aim for variety across them.
+- Include popular and varied general recommendations even when
+  preferences are provided.
+- Do not invent places just to match a preference.
+- Avoid duplicate recommendations.
+- Keep recommendations specific to their assigned category.
 
-"category": short category such as Museum, Nature, Restaurant,
-  Cafe, Hotel, Hostel, Serviced Apartment, Shopping Mall,
-  Market, or Shopping Street
-  
-- "estimated_cost_sgd": non-negative number in SGD.
+IMPORTANT:
 
-  For activities and food, use the estimated cost for ONE person.
+- Do not apply budget restrictions.
+- Do not apply indoor/outdoor restrictions.
+- Do not apply dietary restrictions.
+- Do not apply transport restrictions.
+- Do not apply an avoid list.
+- Do not calculate scores or rankings.
+- The Python Logic Manager handles hard restrictions separately.
 
-  For accommodation, use the estimated price for ONE room
-  for ONE night.
+Return ONLY valid JSON as one array containing recommendation objects.
 
-  For shopping, use a reasonable typical spend for ONE person.
+Every object must contain:
 
-  Free activities and free-to-enter shopping places may use 0.
+"name": string
 
-- "location": string
+"type": one of:
+"activity", "food", "accommodation", "shopping"
 
-- "description": one short generic description
+"category": short descriptive category, such as Museum, Nature,
+Restaurant, Cafe, Hotel, Hostel, Serviced Apartment,
+Shopping Mall, Market or Shopping Street.
 
-- "tags": array of general keywords such as culture, shopping, nature,
-  family, theme park, museum, views, adventure, food, hotel, hostel, resort
+"estimated_cost_sgd": non-negative number in SGD.
+- Activities and food: estimated cost per person.
+- Accommodation: estimated cost per room per night.
+- Shopping: reasonable typical spend per person.
+- Free activities may cost 0.
+- Shopping cost represents typical spending, not entry fees.
 
-- "transport_options": array using only walk, transit, taxi
+"location": string
 
-- "dietary_tags":
-  For food recommendations, use labels such as:
-  halal,
-  vegetarian,
-  vegan,
-  no-pork,
-  none
+"environment": one of "Indoor" or "Outdoor".
+- Describe the actual environment of the recommendation.
+- Indoor means the main experience takes place inside a building
+  or other enclosed venue.
+- Outdoor means the main experience takes place outside.
+- For mixed venues, use the environment of the primary experience.
+- Do not choose an environment merely to match user preferences.
 
-  For non-food recommendations, use ["none"].
+"description": short, factual description of the recommendation.
 
-For shopping recommendations, include:
+"tags": array of specific, descriptive lowercase keywords.
+- Describe the actual place or experience.
+- Include relevant activity themes such as culture, sports,
+  museums, nature, history, adventure or entertainment.
+- Use relevant keywords beyond these examples.
+- Do not add tags simply to match the user's preferences.
+- Tags must accurately reflect the recommendation.
 
-"shopping_types": an array describing the type of shopping location,
-such as mall, street_market, shopping_street, department_store,
-specialty_store, or outlet.
+"transport_options": array containing only:
+"walk", "transit", "taxi"
+Include only transport options reasonably available.
 
-"shopping_interests": an array of descriptive lowercase keywords
-representing what visitors can shop for at the location.
+"dietary_tags": array.
+- For food, use applicable labels such as halal, vegetarian,
+  vegan, no-pork or none.
+- Do not label a place halal without reliable evidence.
+- If dietary suitability is uncertain, use ["none"].
+- For non-food recommendations, use ["none"].
 
-Examples include fashion, sneakers, electronics, souvenirs,
-local crafts, luxury goods, watches, books, anime merchandise,
-vintage clothing, cosmetics, and sports equipment.
+"shopping_types": array.
+- For shopping recommendations, describe the type of location,
+  such as mall, street_market, shopping_street,
+  department_store, specialty_store or outlet.
+- For non-shopping recommendations, use [].
 
-Do not limit shopping_interests to these examples.
-Generate relevant keywords based on the actual shopping location.
+"shopping_interests": array.
+- For shopping recommendations, include accurate keywords
+  describing what visitors can shop for.
+- Examples include fashion, sneakers, electronics, souvenirs,
+  local crafts, watches, books, cosmetics and sports equipment.
+- Generate keywords based on the actual location.
+- For non-shopping recommendations, use [].
 
-For non-shopping recommendations, return empty arrays for
-shopping_types and shopping_interests.
+RULES:
 
-Rules:
-
-1. Include a useful mix of all four types.
-
-2. Aim for at least 7 recommendations of each type.
-
-3. Use realistic places in {destination}.
-
-4. Do not decide whether a place suits this specific user.
-
-5. Do not include timing-related fields.
-
-6. Do not filter the recommendations.
-
-7. Accommodation recommendations can include hotels, hostels,
-   serviced apartments and similar places.
-
-8. Shopping recommendations can include malls, shopping streets,
-   markets, souvenir areas, fashion areas and electronics areas.
+1. Use real places in {destination}.
+2. Return exactly 60 recommendations:
+   15 activity, 15 food, 15 accommodation, 15 shopping.
+3. Personalise each category using its corresponding preferences.
+4. Include varied general choices in every category.
+5. Include different accommodation categories where available.
+6. Include different shopping categories where available.
+7. Every recommendation must include "environment".
+8. Do not invent venues or claim uncertain facts as verified.
+9. Do not include timing-related fields.
+10. Do not add preference scores, rankings or eligibility decisions.
+11. Every recommendation must contain all required fields.
+12. Do not include explanations outside the JSON array.
 """.strip()
-
-#test

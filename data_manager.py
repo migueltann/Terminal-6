@@ -61,12 +61,15 @@ def save_processed_recommendations(result):
             "category",
             "estimated_cost_sgd",
             "location",
+            "environment",
             "description",
             "tags",
             "transport_options",
             "dietary_tags",
+            "eligible",
+            "passed_rules",
+            "failed_rules",
         ]
-
         # Save approved activities and food as CSV rows
         with open(
             csv_path,
@@ -112,6 +115,14 @@ def save_processed_recommendations(result):
                         ),
                         "dietary_tags": ", ".join(
                             item.get("dietary_tags", [])
+                        ),
+                        "environment": item.get("environment", ""),
+                        "eligible": item.get("eligible", True),
+                        "passed_rules": ", ".join(
+                            item.get("passed_rules", [])
+                        ),
+                        "failed_rules": ", ".join(
+                            item.get("failed_rules", [])
                         ),
                     }
                 )
