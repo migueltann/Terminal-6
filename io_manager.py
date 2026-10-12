@@ -922,8 +922,6 @@ def _display_section(title, items, cost_note="per person"):
         if item.get("price_note"):
             print(f"   Price note: {item['price_note']}")
 
-        if "score" in item:
-            print(f"   Logic score: {item['score']}")
 
         print(f"   {item.get('description', '')}")
 

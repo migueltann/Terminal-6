@@ -66,7 +66,7 @@ def run_application():
             )
 
             # Show categorised recommendations with audit explanations
-            io_manager.display_ranked_recommendations(result, audit)
+            io_manager.display_filtered_recommendations(result)
 
             # Let the user save the processed result if they want to
             save_choice = io_manager.get_yes_no(
