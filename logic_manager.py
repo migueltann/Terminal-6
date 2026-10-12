@@ -95,105 +95,53 @@ def matches_shopping_preference(item, preference):
     return _preference_matches_text(preference, shopping_text)
 
 def _contains_term(item, term):
-    """Check whether a keyword appears inside a recommendation."""
-
-    term = _normalise(term)
-
-    if not term:
-        return False
-
-    searchable = " ".join(
-        [
-            str(item.get("name", "")),
-            str(item.get("category", "")),
-            str(item.get("description", "")),
-            str(item.get("location", "")),
-            " ".join(str(tag) for tag in item.get("tags", [])),
-        ]
-    ).lower()
-
-    return term in searchable
+    """Check whether a term appears in searchable recommendation fields."""
+    return _preference_matches_text(term, _recommendation_text(item))
 
 def validate_ai_response(raw_items):
-    """Keep only AI recommendations that have the fields we need."""
-
+    """Keep only AI recommendations that have the fields needed downstream."""
     if not isinstance(raw_items, list):
         return []
 
     valid_items = []
+    allowed_types = {"activity", "food", "accommodation", "shopping"}
 
-    allowed_types = {
-        "activity",
-        "food",
-        "accommodation",
-        "shopping",
-    }
+    required = [
+        "name", "type", "category", "estimated_cost_sgd", "location",
+        "description", "tags", "transport_options", "dietary_tags",
+    ]
 
     for item in raw_items:
-        if not isinstance(item, dict):
+        if not isinstance(item, dict) or not all(key in item for key in required):
             continue
 
-        required = [
-            "name",
-            "type",
-            "category",
-            "estimated_cost_sgd",
-            "location",
-            "description",
-            "tags",
-            "transport_options",
-            "dietary_tags",
-        ]
-
-        # Check required fields
-        if not all(key in item for key in required):
-            continue
-
-        # Validate recommendation type
         item_type = _normalise(item["type"])
-
         if item_type not in allowed_types:
             continue
 
-        # Validate estimated cost
         try:
             cost = float(item["estimated_cost_sgd"])
         except (TypeError, ValueError):
             continue
-
         if not math.isfinite(cost) or cost < 0:
             continue
 
-        # Validate list fields
-        if not isinstance(item["tags"], list):
+        if not all(isinstance(item[key], list) for key in (
+            "tags", "transport_options", "dietary_tags"
+        )):
             continue
 
-        if not isinstance(item["transport_options"], list):
-            continue
-
-        if not isinstance(item["dietary_tags"], list):
-            continue
-
-        # Validate shopping-specific fields
         if item_type == "shopping":
             if not isinstance(item.get("shopping_types"), list):
                 continue
-
             if not isinstance(item.get("shopping_interests"), list):
                 continue
-
-            if not all(
-                isinstance(value, str)
-                for value in (
-                    item["shopping_types"]
-                    + item["shopping_interests"]
-                )
-            ):
+            if not all(isinstance(value, str) for value in (
+                item["shopping_types"] + item["shopping_interests"]
+            )):
                 continue
 
-        # Clean values before processing
         cleaned = dict(item)
-
         cleaned["name"] = str(item["name"]).strip()
         cleaned["type"] = item_type
         cleaned["category"] = str(item["category"]).strip()
@@ -201,36 +149,18 @@ def validate_ai_response(raw_items):
         cleaned["location"] = str(item["location"]).strip()
         cleaned["description"] = str(item["description"]).strip()
 
-        cleaned["tags"] = [
-            str(value).strip()
-            for value in item["tags"]
-            if str(value).strip()
-        ]
-
-        cleaned["transport_options"] = [
-            _normalise(value)
-            for value in item["transport_options"]
-            if str(value).strip()
-        ]
-
-        cleaned["dietary_tags"] = [
-            _normalise(value)
-            for value in item["dietary_tags"]
-            if str(value).strip()
-        ]
-
-        # Clean shopping-specific fields
-        cleaned["shopping_types"] = [
-            _normalise(value)
-            for value in item.get("shopping_types", [])
-            if isinstance(value, str) and value.strip()
-        ]
-
-        cleaned["shopping_interests"] = [
-            _normalise(value)
-            for value in item.get("shopping_interests", [])
-            if isinstance(value, str) and value.strip()
-        ]
+        for key in ("tags", "transport_options", "dietary_tags",
+                    "shopping_types", "shopping_interests",
+                    "interests", "activity_types", "themes", "keywords"):
+            if key in cleaned:
+                if not isinstance(cleaned[key], list):
+                    cleaned[key] = []
+                else:
+                    cleaned[key] = [
+                        _normalise(value)
+                        for value in cleaned[key]
+                        if str(value).strip()
+                    ]
 
         valid_items.append(cleaned)
 
