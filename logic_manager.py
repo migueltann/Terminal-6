@@ -416,8 +416,9 @@ def filter_recommendations(items, user_inputs):
         decision = evaluate_recommendation(item, user_inputs)
         audit.append(decision)
         result_item = dict(item)
-        for key in ("eligible", "score", "score_breakdown",
-                    "passed_rules", "failed_rules"):
+        for key in ("eligible","score","score_breakdown",
+                    "preference_matches","passed_rules","failed_rules",
+                    ):
             result_item[key] = decision[key]
 
         if decision["keep"]:
@@ -432,9 +433,12 @@ def rank_recommendations(items, user_inputs):
     ranked = []
     for item in items:
         result_item = dict(item)
-        score, breakdown = _preference_score(item, user_inputs)
+        score, breakdown, matches = _preference_score(
+            item, user_inputs
+        )
         result_item["score"] = score
         result_item["score_breakdown"] = breakdown
+        result_item["preference_matches"] = matches
         result_item.setdefault("eligible", True)
         ranked.append(result_item)
 
