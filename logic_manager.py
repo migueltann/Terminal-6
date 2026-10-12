@@ -10,6 +10,23 @@ def _normalise(value):
     value = re.sub(r"[^\w\s]", " ", value)
     return " ".join(value.split())
 
+def _active_preferences(values):
+    """Remove empty answers and placeholder values from a preference list."""
+    if not isinstance(values, list):
+        return []
+    return [
+        str(value).strip()
+        for value in values
+        if _normalise(value) not in {"", "any", "none"}
+    ]
+
+def _as_text_list(value):
+    """Return a safe list of non-empty strings."""
+    if not isinstance(value, list):
+        return []
+    return [str(item).strip() for item in value if str(item).strip()]
+
+
 def matches_shopping_preference(item, preference):
     """Match shopping preferences against AI-generated shopping tags."""
 
