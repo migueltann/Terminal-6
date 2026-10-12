@@ -233,165 +233,75 @@ def _preference_score(item, user_inputs):
     return sum(breakdown.values()), breakdown
 
 def evaluate_recommendation(item, user_inputs):
-    """Check one recommendation and record why it is kept or removed."""
-
+    """Apply hard restrictions and score preferences without rejecting non-matches."""
     checks = []
     keep = True
     cost = item["estimated_cost_sgd"]
 
-    limit, label = _budget_for_item(
-        item,
-        user_inputs,
-    )   
-
+    limit, label = _budget_for_item(item, user_inputs)
     passed = cost <= limit
-
-    checks.append(
-        {
-            "label": label,
-            "passed": passed,
-            "detail": (
-                f"${cost:.2f} <= ${limit:.2f}"
-                if passed
-                else f"${cost:.2f} > ${limit:.2f}"
-            ),
-        }
-    )
-
+    checks.append({
+        "label": label,
+        "passed": passed,
+        "detail": f"${cost:.2f} <= ${limit:.2f}" if passed
+                  else f"${cost:.2f} > ${limit:.2f}",
+    })
     keep = keep and passed
 
     avoided_terms = [
-        term
-        for term in user_inputs.get("avoid_list", [])
-        if _normalise(term) not in {"", "any", "none"}
-        and _contains_term(item, term)
+        term for term in _active_preferences(user_inputs.get("avoid_list", []))
+        if _contains_term(item, term)
     ]
-
     passed = not avoided_terms
-
-    checks.append(
-        {
-            "label": "Avoid list",
-            "passed": passed,
-            "detail": (
-                "No avoided match"
-                if passed
-                else "Matched: " + ", ".join(avoided_terms)
-            ),
-        }
-    )
-
+    checks.append({
+        "label": "Avoid list",
+        "passed": passed,
+        "detail": "No avoided match" if passed
+                  else "Matched: " + ", ".join(avoided_terms),
+    })
     keep = keep and passed
-    
-    # Check preferences based on the type of recommendation
-    if item["type"] == "accommodation":
-        preferences = user_inputs.get(
-            "accommodation_preferences",
-            [],
-        )
-        preference_label = "Accommodation preference"
 
-    elif item["type"] == "shopping":
-        preferences = user_inputs.get(
-            "shopping_preferences",
-            [],
-        )
-        preference_label = "Shopping preference"
+    score, score_breakdown = _preference_score(item, user_inputs)
+    checks.append({
+        "label": "Preference score",
+        "passed": True,
+        "detail": f"+{score} points" if score
+                  else "No preference match; kept as a general recommendation",
+    })
 
-    elif item["type"] == "activity":
-        preferences = (
-            user_inputs.get("interests", [])
-            + user_inputs.get("preferred_activities", [])
-        )
-        preference_label = "Interests / preferred activities"
-
-    else:
-        # Food recommendations do not use activity preferences
-        preferences = []
-        preference_label = "Not applicable"
-
-    # Ignore placeholder answers instead of treating them as keywords.
-    preferences = [
-        term
-        for term in preferences
-        if _normalise(term) not in {"", "any", "none"}
-    ]
-
-    if preferences:
-        if item["type"] == "shopping":
-            matched_preferences = [
-                term
-                for term in preferences
-                if matches_shopping_preference(item, term)
-            ]
-        else:
-            matched_preferences = [
-                term
-                for term in preferences
-                if _contains_term(item, term)
-            ]
-
-        passed = bool(matched_preferences)
-
-        if matched_preferences:
-            detail = "Matched: " + ", ".join(matched_preferences)
-        else:
-            detail = "No preference match"
-
-        checks.append(
-            {
-                "label": preference_label,
-                "passed": passed,
-                "detail": detail,
-            }
-        )
-
-        keep = keep and passed
-        
-    # Dietary checks only make sense for food recommendations
-    dietary = _normalise(
-        user_inputs.get("dietary", "any")
-    )
-
+    dietary = _normalise(user_inputs.get("dietary", "any"))
     if item["type"] == "food" and dietary not in {"", "none", "any"}:
         passed = dietary in item.get("dietary_tags", [])
-        checks.append(
-            {
-                "label": "Dietary requirement",
-                "passed": passed,
-                "detail": (
-                    f"{dietary} supported"
-                    if passed
-                    else f"{dietary} not listed"
-                ),
-            }
-        )
+        checks.append({
+            "label": "Dietary requirement",
+            "passed": passed,
+            "detail": f"{dietary} supported" if passed
+                      else f"{dietary} not listed",
+        })
         keep = keep and passed
-        
-     # Check whether the user's preferred transport is listed
+
     preferred_transport = _normalise(
         user_inputs.get("preferred_transport", "any")
     )
-
-    if preferred_transport not in {"", "any"}:
+    if preferred_transport not in {"", "any", "none"}:
         passed = preferred_transport in item.get("transport_options", [])
-        checks.append(
-            {
-                "label": "Transport preference",
-                "passed": passed,
-                "detail": (
-                    f"{preferred_transport} available"
-                    if passed
-                    else f"{preferred_transport} not listed"
-                ),
-            }
-        )
+        checks.append({
+            "label": "Transport preference",
+            "passed": passed,
+            "detail": f"{preferred_transport} available" if passed
+                      else f"{preferred_transport} not listed",
+        })
         keep = keep and passed
-        
+
     return {
         "item": item,
         "keep": keep,
+        "eligible": keep,
+        "score": score,
+        "score_breakdown": score_breakdown,
         "checks": checks,
+        "passed_rules": [c["label"] for c in checks if c["passed"]],
+        "failed_rules": [c["label"] for c in checks if not c["passed"]],
     }
 
 
