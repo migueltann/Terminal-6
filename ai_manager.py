@@ -159,28 +159,32 @@ def build_ai_prompt(destination, user_inputs=None):
 
     user_inputs = user_inputs or {}
 
-    interests = active_preferences(
-        user_inputs.get("interests", [])
-    )
-
     preferred_activities = active_preferences(
         user_inputs.get("preferred_activities", [])
     )
 
-    # Only interests and preferred activities are used for discovery.
-    # All other user requirements remain with the Logic Manager.
-    interest_count = 10 if interests else 0
-    preferred_count = 10 if preferred_activities else 0
+    food_preferences = active_preferences(
+        user_inputs.get("food_preferences", [])
+    )
 
-    general_activity_count = 30 - interest_count - preferred_count
+    accommodation_preferences = active_preferences(
+        user_inputs.get("accommodation_preferences", [])
+    )
+
+    shopping_preferences = active_preferences(
+        user_inputs.get("shopping_preferences", [])
+    )
 
     return f"""
+
 You are a travel discovery engine.
 
 Destination: {destination}
 
-User interests: {json.dumps(interests)}
-User preferred activities: {json.dumps(preferred_activities)}
+User activity preferences: {json.dumps(preferred_activities)}
+User food preferences: {json.dumps(food_preferences)}
+User accommodation preferences: {json.dumps(accommodation_preferences)}
+User shopping preferences: {json.dumps(shopping_preferences)}
 
 Generate exactly 60 travel recommendation candidates.
 
@@ -188,32 +192,45 @@ Do not create an itinerary or schedule.
 
 RECOMMENDATION BREAKDOWN:
 
-ACTIVITIES: 30 total
-- {general_activity_count} general activities covering popular and
-  varied experiences in the destination.
-- {interest_count} activities related to the user's interests.
-- {preferred_count} activities related to the user's preferred activities.
+ACTIVITIES: exactly 15 recommendations.
+- If activity preferences are provided, aim for 10 recommendations
+  related to those preferences and 5 general activities.
+- Otherwise, generate 15 general activities.
 
-FOOD: 20 general recommendations.
-ACCOMMODATION: 20 general recommendations.
-SHOPPING: 20 general recommendations.
+FOOD: exactly 15 recommendations.
+- If food preferences are provided, aim for 10 recommendations
+  related to those preferences and 5 general food choices.
+- Otherwise, generate 15 general food choices.
 
-The interest-related and preferred-activity-related groups should
-be based on the actual user preferences provided above.
+ACCOMMODATION: exactly 15 recommendations.
+- If accommodation preferences are provided, aim for 10 recommendations
+  related to those preferences and 5 general accommodation choices.
+- Otherwise, generate 15 general accommodation choices.
 
-When there are multiple interests or preferred activities,
-aim for variety across them.
+SHOPPING: exactly 15 recommendations.
+- If shopping preferences are provided, aim for 10 recommendations
+  related to those preferences and 5 general shopping choices.
+- Otherwise, generate 15 general shopping choices.
 
-Avoid duplicate recommendations across groups.
+PREFERENCE GUIDELINES:
+
+- Use preferences to guide discovery, not to filter or rank results.
+- If multiple preferences are provided, aim for variety across them.
+- Include popular and varied general recommendations even when
+  preferences are provided.
+- Do not invent places just to match a preference.
+- Avoid duplicate recommendations.
+- Keep recommendations specific to their assigned category.
 
 IMPORTANT:
-- User interests and preferred activities influence activity discovery only.
-- Do not personalise food, accommodation or shopping.
-- Do not exclude general activities because they do not match preferences.
-- Do not filter or rank recommendations based on user preferences.
-- Do not assume any user budget, dietary restriction, avoid list,
-  accommodation preference, shopping preference or transport preference.
-- The Python Logic Manager handles filtering, scoring and ranking later.
+
+- Do not apply budget restrictions.
+- Do not apply indoor/outdoor restrictions.
+- Do not apply dietary restrictions.
+- Do not apply transport restrictions.
+- Do not apply an avoid list.
+- Do not calculate scores or rankings.
+- The Python Logic Manager handles hard restrictions separately.
 
 Return ONLY valid JSON as one array containing recommendation objects.
 
@@ -236,6 +253,14 @@ Shopping Mall, Market or Shopping Street.
 - Shopping cost represents typical spending, not entry fees.
 
 "location": string
+
+"environment": one of "Indoor" or "Outdoor".
+- Describe the actual environment of the recommendation.
+- Indoor means the main experience takes place inside a building
+  or other enclosed venue.
+- Outdoor means the main experience takes place outside.
+- For mixed venues, use the environment of the primary experience.
+- Do not choose an environment merely to match user preferences.
 
 "description": short, factual description of the recommendation.
 
@@ -275,13 +300,16 @@ Include only transport options reasonably available.
 RULES:
 
 1. Use real places in {destination}.
-2. Generate a varied selection of activities.
-3. Generate general food, accommodation and shopping choices.
-4. Include different accommodation categories where available.
-5. Include different shopping categories where available.
-6. Do not invent venues or claim uncertain facts as verified.
-7. Do not include timing-related fields.
-8. Do not include additional fields that replace the required fields.
-9. Every recommendation must have all required fields.
-10. Do not include explanations outside the JSON array.
+2. Return exactly 60 recommendations:
+   15 activity, 15 food, 15 accommodation, 15 shopping.
+3. Personalise each category using its corresponding preferences.
+4. Include varied general choices in every category.
+5. Include different accommodation categories where available.
+6. Include different shopping categories where available.
+7. Every recommendation must include "environment".
+8. Do not invent venues or claim uncertain facts as verified.
+9. Do not include timing-related fields.
+10. Do not add preference scores, rankings or eligibility decisions.
+11. Every recommendation must contain all required fields.
+12. Do not include explanations outside the JSON array.
 """.strip()
