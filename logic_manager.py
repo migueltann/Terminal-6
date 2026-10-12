@@ -84,27 +84,15 @@ def _preference_matches_text(preference, text):
     return False
 
 def matches_shopping_preference(item, preference):
-    """Match shopping preferences against AI-generated shopping tags."""
-
-    def normalise_word(value):
-        value = _normalise(value).replace("_", " ")
-
-        if value.endswith("s") and not value.endswith("ss"):
-            value = value[:-1]
-
-        return value
-
-    preference = normalise_word(preference)
-
-    shopping_tags = (
-        item.get("shopping_types", [])
-        + item.get("shopping_interests", [])
+    """Match a shopping preference against generated shopping tags and text."""
+    shopping_text = " ".join(
+        _as_text_list(item.get("shopping_types", []))
+        + _as_text_list(item.get("shopping_interests", []))
+        + _as_text_list(item.get("tags", []))
+        + [str(item.get("name", "")), str(item.get("category", "")),
+           str(item.get("description", ""))]
     )
-
-    return any(
-        preference == normalise_word(tag)
-        for tag in shopping_tags
-    )
+    return _preference_matches_text(preference, shopping_text)
 
 def _contains_term(item, term):
     """Check whether a keyword appears inside a recommendation."""
