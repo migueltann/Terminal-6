@@ -189,9 +189,48 @@ def _budget_for_item(item, user_inputs):
     }
 
     key, label = mapping[item["type"]]
-    limit = float(user_inputs[key])
+    return float(user_inputs[key]), label
 
-    return limit, label
+def _preference_score(item, user_inputs):
+    """Calculate soft-preference points and explain each component."""
+    breakdown = {
+        "interest": 0,
+        "preferred_activity": 0,
+        "accommodation_preference": 0,
+        "shopping_preference": 0,
+    }
+
+    if item["type"] in {"activity", "food", "shopping"}:
+        for preference in _active_preferences(user_inputs.get("interests", [])):
+            if _contains_term(item, preference):
+                breakdown["interest"] = 3
+                break
+
+    if item["type"] == "activity":
+        for preference in _active_preferences(
+            user_inputs.get("preferred_activities", [])
+        ):
+            if _contains_term(item, preference):
+                breakdown["preferred_activity"] = 5
+                break
+
+    elif item["type"] == "accommodation":
+        for preference in _active_preferences(
+            user_inputs.get("accommodation_preferences", [])
+        ):
+            if _contains_term(item, preference):
+                breakdown["accommodation_preference"] = 5
+                break
+
+    elif item["type"] == "shopping":
+        for preference in _active_preferences(
+            user_inputs.get("shopping_preferences", [])
+        ):
+            if matches_shopping_preference(item, preference):
+                breakdown["shopping_preference"] = 5
+                break
+
+    return sum(breakdown.values()), breakdown
 
 def evaluate_recommendation(item, user_inputs):
     """Check one recommendation and record why it is kept or removed."""
