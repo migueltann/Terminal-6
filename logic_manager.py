@@ -243,15 +243,16 @@ def evaluate_recommendation(item, user_inputs):
     environment_keys = {
         "activity": "activity_environment",
         "food": "food_environment",
-        "accommodation": "accommodation_environment",
         "shopping": "shopping_environment",
     }
 
-    environment_key = environment_keys[item["type"]]
+    environment_key = environment_keys.get(item["type"])
 
-    required_environment = _normalise(
-        user_inputs.get(environment_key, "Any")
+    required_environment = (
+        _normalise(user_inputs.get(environment_key, "Any"))
+        if environment_key else "any"
     )
+
     actual_environment = _normalise(item["environment"])
 
     if required_environment not in {"", "any", "none"}:

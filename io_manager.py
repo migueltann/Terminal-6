@@ -468,10 +468,6 @@ def ask_food_environment(allow_back=False):
     return ask_environment("Food", allow_back)
 
 
-def ask_accommodation_environment(allow_back=False):
-    return ask_environment("Accommodation", allow_back)
-
-
 def ask_shopping_environment(allow_back=False):
     return ask_environment("Shopping", allow_back)
 
@@ -507,7 +503,6 @@ _STEPS = [
     # Accommodation
     ("accommodation_preferences", ask_accommodation_preferences),
     ("max_accommodation_spend", ask_accommodation_budget),
-    ("accommodation_environment", ask_accommodation_environment),
 
     # Shopping
     ("shopping_preferences", ask_shopping_preferences),
@@ -636,7 +631,6 @@ def display_input_summary(data):
         f"Max Spend per Night: "
         f"SGD ${data['max_accommodation_spend']:.2f}"
     )
-    print(f"Environment: {data['accommodation_environment']}")
 
     # Shopping
     print("\n--- SHOPPING ---")
@@ -719,7 +713,6 @@ def edit_one_requirement(data):
         "food_environment": "Food environment",
         "dietary": "Dietary requirement",
         "max_accommodation_spend": "Accommodation budget",
-        "accommodation_environment": "Accommodation environment",
         "max_shopping_spend": "Shopping budget",
         "shopping_environment": "Shopping environment",
         "preferred_transport": "Universal transport",
