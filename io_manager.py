@@ -805,10 +805,13 @@ def display_ranked_recommendations(result, audit):
     print(LINE)
 
     print(f"Destination: {result['destination']}")
-    print(f"Interests: {', '.join(user_inputs['interests']) or 'Any'}")
     print(
         "Preferred Activities: "
         f"{', '.join(user_inputs['preferred_activities']) or 'Any'}"
+    )
+    print(
+        "Cuisine Preferences: "
+        f"{', '.join(user_inputs['food_preferences']) or 'Any'}"
     )
     print(
         "Accommodation Preferences: "
