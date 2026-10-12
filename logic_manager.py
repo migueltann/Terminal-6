@@ -217,21 +217,29 @@ def _budget_for_item(item, user_inputs):
     return float(user_inputs[key]), label
 
 def evaluate_recommendation(item, user_inputs):
-    """Apply hard restrictions and record pass/fail explanations."""    
+    """Apply hard restrictions and record pass/fail explanations."""
     checks = []
     keep = True
-    cost = item["estimated_cost_sgd"]
 
+    # 1. Category-specific budget restriction
+    cost = item["estimated_cost_sgd"]
     limit, label = _budget_for_item(item, user_inputs)
+
     passed = cost <= limit
+
     checks.append({
         "label": label,
         "passed": passed,
-        "detail": f"${cost:.2f} <= ${limit:.2f}" if passed
-                  else f"${cost:.2f} > ${limit:.2f}",
+        "detail": (
+            f"${cost:.2f} <= ${limit:.2f}"
+            if passed else
+            f"${cost:.2f} > ${limit:.2f}"
+        ),
     })
 
-    # Apply the environment restriction for this recommendation's category.
+    keep = keep and passed
+
+    # 2. Category-specific environment restriction
     environment_keys = {
         "activity": "activity_environment",
         "food": "food_environment",
@@ -240,6 +248,7 @@ def evaluate_recommendation(item, user_inputs):
     }
 
     environment_key = environment_keys[item["type"]]
+
     required_environment = _normalise(
         user_inputs.get(environment_key, "Any")
     )
@@ -262,55 +271,88 @@ def evaluate_recommendation(item, user_inputs):
 
         keep = keep and passed
 
+    # 3. Universal avoid-list restriction
     avoided_terms = [
-        term for term in _active_preferences(user_inputs.get("avoid_list", []))
+        term
+        for term in _active_preferences(
+            user_inputs.get("avoid_list", [])
+        )
         if _contains_term(item, term)
     ]
+
     passed = not avoided_terms
+
     checks.append({
         "label": "Avoid list",
         "passed": passed,
-        "detail": "No avoided match" if passed
-                  else "Matched: " + ", ".join(avoided_terms),
+        "detail": (
+            "No avoided match"
+            if passed else
+            "Matched: " + ", ".join(avoided_terms)
+        ),
     })
+
     keep = keep and passed
-    
-    dietary = _normalise(user_inputs.get("dietary", "any"))
+
+    # 4. Dietary restriction (food only)
+    dietary = _normalise(
+        user_inputs.get("dietary", "Any")
+    )
+
     if item["type"] == "food" and dietary not in {"", "none", "any"}:
         passed = dietary in item.get("dietary_tags", [])
+
         checks.append({
             "label": "Dietary requirement",
             "passed": passed,
-            "detail": f"{dietary} supported" if passed
-                      else f"{dietary} not listed",
+            "detail": (
+                f"{dietary} supported"
+                if passed else
+                f"{dietary} not listed"
+            ),
         })
+
         keep = keep and passed
 
+    # 5. Universal transport restriction
     preferred_transport = _normalise(
-        user_inputs.get("preferred_transport", "any")
+        user_inputs.get("preferred_transport", "Any")
     )
+
     if preferred_transport not in {"", "any", "none"}:
-        passed = preferred_transport in item.get("transport_options", [])
+        passed = preferred_transport in item.get(
+            "transport_options", []
+        )
+
         checks.append({
             "label": "Transport preference",
             "passed": passed,
-            "detail": f"{preferred_transport} available" if passed
-                      else f"{preferred_transport} not listed",
+            "detail": (
+                f"{preferred_transport} available"
+                if passed else
+                f"{preferred_transport} not listed"
+            ),
         })
+
         keep = keep and passed
 
-        return {
-            "item": item,
-            "keep": keep,
-            "eligible": keep,
-            "checks": checks,
-            "passed_rules": [
-                check["label"] for check in checks if check["passed"]
-            ],
-            "failed_rules": [
-                check["label"] for check in checks if not check["passed"]
-            ],
-        }
+    # 6. Return final decision and audit details
+    return {
+        "item": item,
+        "keep": keep,
+        "eligible": keep,
+        "checks": checks,
+        "passed_rules": [
+            check["label"]
+            for check in checks
+            if check["passed"]
+        ],
+        "failed_rules": [
+            check["label"]
+            for check in checks
+            if not check["passed"]
+        ],
+    }
 
 
 def filter_recommendations(items, user_inputs):
