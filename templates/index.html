@@ -354,22 +354,19 @@
 
                 <span class="step-badge">01 / 01</span>
             </div>
-            <form
-                id="travel-form"
-                method="post"
-                action="{{ url_for('generate') }}"
-                novalidate
-            >
+            <div id="validation-summary"
+                 class="client-validation-summary"
+                 role="alert"></div>
 
-                <!-- Destination -->
-                <div class="field-group">
-                    <div class="group-heading">
-                        <span>01</span>
-                        <div>
-                            <h3>Where are you going?</h3>
-                            <p>Tell us where your journey begins.</p>
-                        </div>
+            <!-- Destination -->
+            <div class="field-group">
+                <div class="group-heading">
+                    <span>01</span>
+                    <div>
+                        <h3>Where are you going?</h3>
+                        <p>Tell us where your journey begins.</p>
                     </div>
+                </div>
 
                     <label for="destination">Destination <b>*</b></label>
                     <input
