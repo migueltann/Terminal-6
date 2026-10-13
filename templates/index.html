@@ -244,10 +244,19 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+                
+                {% if item.tags %}
+                    <p class="tags">
+                        {{ item.tags|join(' · ') }}
+                    </p>
+                {% endif %}
 
-
-
-
+                {% if item.dietary_tags and item.type == 'food' %}
+                    <p class="muted">
+                        Dietary tags:
+                        {{ item.dietary_tags|join(', ') }}
+                    </p>
+                {% endif %}
             </section>
         {% endfor %}
 
