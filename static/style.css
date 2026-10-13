@@ -65,3 +65,14 @@ p {
     color: var(--muted);
     margin-top: 3px;
 }
+.brand-mark {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    background: var(--green);
+    color: white;
+    border-radius: 13px;
+    letter-spacing: 0;
+    font-size: 15px;
+}
