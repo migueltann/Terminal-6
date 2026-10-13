@@ -97,6 +97,26 @@ def _store_latest_result(result):
             allow_nan=False,
         )
 
+def _get_latest_result():
+    """Retrieve the latest generated result for the current session."""
+    result_key = session.get("latest_result_key")
+    path = _result_file_path(result_key)
+
+    if not path or not os.path.isfile(path):
+        return None
+
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            return json.load(file)
+
+    except (OSError, json.JSONDecodeError):
+        app.logger.exception(
+            "Could not read the latest generated recommendation result."
+        )
+        return None
+
+
+
 @app.get("/")
 def index():
     return render_template("index.html")
