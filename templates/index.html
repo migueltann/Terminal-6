@@ -301,6 +301,18 @@
                                         {{ item.failed_rules|join(', ') }}
                                     </p>
                                 {% endif %}
+                                
+                                {% if item.checks %}
+                                    <ul>
+                                        {% for check in item.checks %}
+                                            <li class="{{ 'pass' if check.passed else 'fail' }}">
+                                                {{ 'PASS' if check.passed else 'FAIL' }}
+                                                — {{ check.label }}: {{ check.detail }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+
 
                             </article>
                         {% endfor %}
