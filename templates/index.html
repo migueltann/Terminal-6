@@ -67,10 +67,8 @@
 
                 <span class="step-badge">01 / 01</span>
             </div>
-
             <form
                 id="travel-form"
-                class="form-panel"
                 method="post"
                 action="{{ url_for('generate') }}"
                 novalidate
@@ -288,7 +286,7 @@
                         </div>
                     </div>
 
-                    <label for="avoid">Places and activities to avoid</label>
+                    <label for="avoid_list">Places and activities to avoid</label>
 
                     <input
                         type="text"
@@ -312,7 +310,7 @@
                         </div>
                     </div>
 
-                    <label for="transport">Preferred transport</label>
+                    <label for="preferred_transport">Preferred transport</label>
                     <select id="preferred_transport" name="preferred_transport">
                         <option value="Any">Any</option>
                         <option value="Walk">Walk</option>
