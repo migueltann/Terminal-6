@@ -68,7 +68,13 @@
                 <span class="step-badge">01 / 01</span>
             </div>
 
-            <form id="travel-form">
+            <form
+                id="travel-form"
+                class="form-panel"
+                method="post"
+                action="{{ url_for('generate') }}"
+                novalidate
+            >
 
                 <!-- Destination -->
                 <div class="field-group">
