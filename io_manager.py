@@ -3,6 +3,7 @@
 import difflib
 import re
 import unicodedata
+from typing import Any, Optional
 
 try:
     import geonamescache
@@ -23,7 +24,7 @@ BACK = object()
 
 _GEO = {}
 
-def _normalise(text):
+def _normalise(text: str) -> str:
     """Lowercase and remove accents and punctuation from names."""
 
     text = unicodedata.normalize("NFKD", text)
@@ -34,7 +35,7 @@ def _normalise(text):
     return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
 
 
-def _load_geo_data():
+def _load_geo_data() -> None:
     """Build lookup tables from geonamescache (runs once)."""
     if _GEO or geonamescache is None:
         return
@@ -63,13 +64,13 @@ def _load_geo_data():
     _GEO["city_lookup"] = city_lookup
 
 
-def _suggest(key, pool):
+def _suggest(key: str, pool: list[str]) -> Optional[str]:
     """Return the closest known name to a mistyped one, or None."""
     matches = difflib.get_close_matches(key, pool, n=1, cutoff=0.75)
     return matches[0] if matches else None
 
 
-def validate_destination(text):
+def validate_destination(text: str) -> tuple[Optional[str], Optional[str]]:
     """Check a destination. Returns (clean_destination, error_message).
 
     Accepted formats examples: "Japan", "SG", "Paris", or "City, Country".
@@ -144,7 +145,7 @@ def validate_destination(text):
     return None, message
 
 
-def normalise_optional_list(value):
+def normalise_optional_list(value: Any) -> list[str]:
     """Convert Any, None, or an empty input into an empty list."""
 
     if value is None:
@@ -169,7 +170,7 @@ def normalise_optional_list(value):
     return cleaned
 
 
-def normalise_optional_text(value):
+def normalise_optional_text(value: Any) -> Optional[str]:
     """Convert Any, None, or an empty input into None."""
 
     if value is None:
@@ -185,7 +186,7 @@ def normalise_optional_text(value):
 
 # Banner and Menu
 
-def display_welcome_banner():
+def display_welcome_banner() -> None:
     """Show the title when the program starts."""
     print(LINE)
     print("              TRAVEL RECOMMENDATION ASSISTANT")
@@ -196,14 +197,14 @@ def display_welcome_banner():
     print("Type 'exit' or 'e' at an input prompt to return to the main menu.\n")
 
 
-def display_menu():
+def display_menu() -> None:
     print("\nMAIN MENU")
     print("1. Generate Recommendations")
     print("2. View / Delete Saved Recommendation Sets")
     print("3. Exit")
 
 
-def get_user_choice():
+def get_user_choice() -> str:
     """Ask the user to choose an option from the main menu."""
     while True:
         choice = input("\nEnter choice (1-3): ").strip().lower()
@@ -219,17 +220,17 @@ def get_user_choice():
 # they return BACK if the user types 'back'. allow_back defaults to False,
 # so any other file calling these helpers behaves exactly as before.
 
-def is_exit(value):
+def is_exit(value: str) -> bool:
     """Check whether the user typed an exit command."""
     return value.strip().lower() in EXIT_COMMANDS
 
 
-def is_back(value):
+def is_back(value: str) -> bool:
     """Check whether the user typed a back command."""
     return value.strip().lower() in BACK_COMMANDS
 
 
-def get_required_text(prompt, allow_back=False):
+def get_required_text(prompt: str, allow_back: bool = False) -> Any:
     """Ask for text that cannot be left blank."""
     while True:
         value = input(prompt).strip()
@@ -242,7 +243,7 @@ def get_required_text(prompt, allow_back=False):
         print("This field cannot be empty.")
 
 
-def get_optional_text(prompt, default="", allow_back=False):
+def get_optional_text(prompt: str, default: str = "", allow_back: bool = False) -> Any:
     """Ask for optional text and use a default if it is blank."""
     print()
     value = input(prompt).strip()
@@ -253,7 +254,7 @@ def get_optional_text(prompt, default="", allow_back=False):
     return value if value else default
 
 
-def get_positive_float(prompt, allow_zero=False, allow_back=False):
+def get_positive_float(prompt: str, allow_zero: bool = False, allow_back: bool = False) -> Any:
     """Ask for a valid positive number."""
     print()
     while True:
@@ -271,7 +272,7 @@ def get_positive_float(prompt, allow_zero=False, allow_back=False):
         print("Please enter a valid positive amount.")
 
 
-def get_choice(prompt, choices, default, allow_back=False):
+def get_choice(prompt: str, choices: list[str], default: str, allow_back: bool = False) -> Any:
     """Ask the user to choose from a fixed list of options."""
     choices_lower = [choice.lower() for choice in choices]
     print()
@@ -288,7 +289,7 @@ def get_choice(prompt, choices, default, allow_back=False):
         print("Invalid choice. Options: " + ", ".join(choices))
 
 
-def get_yes_no(prompt):
+def get_yes_no(prompt: str) -> Optional[bool]:
     """Ask a simple yes/no question."""
     while True:
         value = input(prompt).strip().lower()
@@ -301,7 +302,7 @@ def get_yes_no(prompt):
         print("Please enter y or n.")
 
 
-def _split_csv(value):
+def _split_csv(value: str) -> list[str]:
     """Turn comma-separated text into a clean Python list."""
     return [
         part.strip()
@@ -312,7 +313,7 @@ def _split_csv(value):
 
 # One ask function per input (used by both the first pass and the editor)
 
-def _ask_list(prompt, hint_lines, allow_back=False):
+def _ask_list(prompt: str, hint_lines: list[str], allow_back: bool = False) -> Any:
     """Show a short hint, then ask for a comma-separated list."""
     print()
     for line in hint_lines:
@@ -323,7 +324,7 @@ def _ask_list(prompt, hint_lines, allow_back=False):
     return _split_csv(value)
 
 
-def ask_destination(allow_back=False):
+def ask_destination(allow_back: bool = False) -> Any:
     """Ask for a destination and keep asking until it is valid."""
     print("\nEnter a city and country, e.g. Paris, France.")
     print("A country on its own (e.g. Japan), a short code (e.g. SG) "
@@ -346,32 +347,32 @@ def ask_destination(allow_back=False):
         print(error)
 
 
-def ask_activity_budget(allow_back=False):
+def ask_activity_budget(allow_back: bool = False) -> Any:
     print()
     return get_positive_float(
         "Max spend per activity (SGD): ", allow_back=allow_back
     )
 
 
-def ask_meal_budget(allow_back=False):
+def ask_meal_budget(allow_back: bool = False) -> Any:
     return get_positive_float(
         "Max spend per meal (SGD): ", allow_back=allow_back
     )
 
 
-def ask_accommodation_budget(allow_back=False):
+def ask_accommodation_budget(allow_back: bool = False) -> Any:
     return get_positive_float(
         "Max spend per night for accommodation (SGD): ", allow_back=allow_back
     )
 
 
-def ask_shopping_budget(allow_back=False):
+def ask_shopping_budget(allow_back: bool = False) -> Any:
     return get_positive_float(
         "Max shopping spend (SGD): ", allow_back=allow_back
     )
 
 
-def ask_preferred_activities(allow_back=False):
+def ask_preferred_activities(allow_back: bool = False) -> Any:
     return _ask_list(
         "Preferred activities (comma-separated) [Any]: ",
         [
@@ -382,7 +383,7 @@ def ask_preferred_activities(allow_back=False):
         allow_back,
     )
 
-def ask_food_preferences(allow_back=False):
+def ask_food_preferences(allow_back: bool = False) -> Any:
     """Ask for the user's preferred cuisines."""
 
     return _ask_list(
@@ -395,7 +396,7 @@ def ask_food_preferences(allow_back=False):
     )
 
 
-def ask_accommodation_preferences(allow_back=False):
+def ask_accommodation_preferences(allow_back: bool = False) -> Any:
     return _ask_list(
         "Accommodation preferences (comma-separated) [Any]: ",
         [
@@ -407,7 +408,7 @@ def ask_accommodation_preferences(allow_back=False):
     )
 
 
-def ask_shopping_preferences(allow_back=False):
+def ask_shopping_preferences(allow_back: bool = False) -> Any:
     return _ask_list(
         "Shopping preferences (comma-separated) [Any]: ",
         [
@@ -419,7 +420,7 @@ def ask_shopping_preferences(allow_back=False):
     )
 
 
-def ask_avoid_list(allow_back=False):
+def ask_avoid_list(allow_back: bool = False) -> Any:
     return _ask_list(
         "Avoid list (comma-separated) [None]: ",
         [
@@ -432,7 +433,7 @@ def ask_avoid_list(allow_back=False):
     )
 
 
-def get_dietary_requirement(allow_back=False):
+def get_dietary_requirement(allow_back: bool = False) -> Any:
     """Ask for a dietary requirement as free text (default: None)."""
     print("\nExamples: halal, vegetarian, vegan, no beef, gluten-free.")
     value = get_optional_text(
@@ -447,7 +448,7 @@ def get_dietary_requirement(allow_back=False):
     return value
 
 
-def ask_environment(category, allow_back=False):
+def ask_environment(category: str, allow_back: bool = False) -> Any:
     """Ask for the preferred environment for one category."""
 
     print()
@@ -460,18 +461,18 @@ def ask_environment(category, allow_back=False):
     )
 
 
-def ask_activity_environment(allow_back=False):
+def ask_activity_environment(allow_back: bool = False) -> Any:
     return ask_environment("Activity", allow_back)
 
 
-def ask_food_environment(allow_back=False):
+def ask_food_environment(allow_back: bool = False) -> Any:
     return ask_environment("Food", allow_back)
 
 
-def ask_shopping_environment(allow_back=False):
+def ask_shopping_environment(allow_back: bool = False) -> Any:
     return ask_environment("Shopping", allow_back)
 
-def ask_transport(allow_back=False):
+def ask_transport(allow_back: bool = False) -> Any:
     print()
     return get_choice(
         "Preferred transport (Walk/Transit/Taxi/Any) [Any]: ",
@@ -515,7 +516,7 @@ _STEPS = [
 ]
 
 
-def collect_user_requirements():
+def collect_user_requirements() -> Optional[dict]:
     """Collect all requirements used by the Python filtering logic."""
     print("\n" + LINE)
     print("USER INPUTS")
@@ -592,7 +593,7 @@ def collect_user_requirements():
 
     return confirm_or_edit_requirements(data)
 
-def display_input_summary(data):
+def display_input_summary(data: dict) -> None:
     """Display user requirements grouped by recommendation category."""
 
     print("\n" + LINE)
@@ -647,7 +648,7 @@ def display_input_summary(data):
 
     print(LINE)
 
-def confirm_or_edit_requirements(data):
+def confirm_or_edit_requirements(data: dict) -> Optional[dict]:
     """Let the user confirm, edit one input, or start again."""
     while True:
         display_input_summary(data)
@@ -688,7 +689,7 @@ _LIST_DEFAULTS = {
 }
 
 
-def _format_value(key, value):
+def _format_value(key: str, value: Any) -> str:
     """Turn a stored input into text for the 'current value' line."""
     if key in _LIST_DEFAULTS:
         return ", ".join(value) or _LIST_DEFAULTS[key]
@@ -697,7 +698,7 @@ def _format_value(key, value):
     return str(value)
 
 
-def edit_one_requirement(data):
+def edit_one_requirement(data: dict) -> Optional[dict]:
     """Edit only the input selected by the user."""
     # menu number -> (label, data key, function that asks for the new value)
     labels = {
@@ -771,7 +772,7 @@ def edit_one_requirement(data):
 
 # Showing results
 
-def _display_recommendation(item, decision, index):
+def _display_recommendation(item: dict, decision: Any, index: int) -> None:
     """Display one recommendation with its restriction checks."""
 
     print(f"\n#{index} {item['name']}")
@@ -807,7 +808,7 @@ def _display_recommendation(item, decision, index):
 
     print(DIVIDER)
 
-def display_filtered_recommendations(result, audit=None):
+def display_filtered_recommendations(result: dict, audit: Optional[list] = None) -> None:
     """Display eligible and filtered-out recommendations without ranking."""
 
     user_inputs = result["requirements"]
@@ -875,7 +876,7 @@ def display_filtered_recommendations(result, audit=None):
     print(f"Filtered Out: {len(rejected)}")
     print(LINE)
 
-def display_filter_audit(audit, user_inputs):
+def display_filter_audit(audit: list[dict], user_inputs: dict) -> None:
     """Show why each recommendation was kept or filtered out."""
     print("\n" + LINE)
     print("AI RECOMMENDATIONS -> PYTHON LOGIC CHECK")
@@ -900,7 +901,7 @@ def display_filter_audit(audit, user_inputs):
     print(LINE)
 
 
-def display_approved_recommendations(result):
+def display_approved_recommendations(result: dict) -> None:
     """Show all approved recommendation categories in the terminal."""
     print("\n" + LINE)
     print(f"FINAL RECOMMENDATIONS: {result['destination'].upper()}")
@@ -924,7 +925,7 @@ def display_approved_recommendations(result):
     )
 
     
-def _display_section(title, items, cost_note="per person"):
+def _display_section(title: str, items: list[dict], cost_note: str = "per person") -> None:
     """Show one group of approved recommendations."""
     print("\n" + title)
     print(DIVIDER)
@@ -967,21 +968,21 @@ def _display_section(title, items, cost_note="per person"):
 
 # Messages
 
-def display_message(message):
+def display_message(message: str) -> None:
     """Show a normal information message."""
     print(f"\n[INFO] {message}")
 
 
-def display_error(error):
+def display_error(error: Any) -> None:
     """Show an error message."""
     print(f"\n[ERROR] {error}")
 
 
-def display_status(level, message):
+def display_status(level: str, message: str) -> None:
     """Show an INFO or WARNING line sent by another module."""
     print(f"\n[{str(level).upper()}] {message}")
 
-def display_saved_sets(saved, keyword=""):
+def display_saved_sets(saved: list[dict], keyword: str = "") -> None:
     """Show the list of saved recommendation sets."""
     print("\n" + LINE)
     print("SAVED RECOMMENDATION SETS")
@@ -997,7 +998,7 @@ def display_saved_sets(saved, keyword=""):
             f"{entry.get('saved_at', '')}"
         )
 
-def ask_saved_set_action():
+def ask_saved_set_action() -> str:
     """Ask what to do in the saved sets menu."""
     print(
         "\nEnter a number to view, F to filter by destination, "
@@ -1006,11 +1007,11 @@ def ask_saved_set_action():
     return input("Choice: ").strip().lower()
 
 
-def ask_filter_keyword():
+def ask_filter_keyword() -> str:
     """Ask for text to search saved destinations for."""
     return input("Destination to search for (blank shows all): ").strip()
 
 
-def ask_delete_number():
+def ask_delete_number() -> str:
     """Ask which saved set number to delete."""
     return input("Number to delete: ").strip()
