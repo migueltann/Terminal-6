@@ -192,6 +192,16 @@
                         {{ items|length }} approved
                     </span>
                 </div>
+                
+                {% if items %}
+                    <div class="cards">
+                        {% for item in items %}
+                            <article class="recommendation-card">
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
 
             </section>
         {% endfor %}
