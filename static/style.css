@@ -332,6 +332,32 @@ p {
     padding-top: 25px;
 }
 
+#generate-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 22px;
+    border: none;
+    border-radius: 11px;
+    background: var(--green);
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+#generate-button:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+}
+
+#generate-button span {
+    font-size: 18px;
+    line-height: 1;
+}
 
 /*Make the form responsive on mobile*/
 @media (max-width: 600px) {
