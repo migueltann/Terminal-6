@@ -29,6 +29,7 @@ def generate_recommendations(
     destination: str,
     user_inputs: Optional[dict] = None,
     notify: Optional[Callable[[str, str], None]] = None,
+    validator: Optional[Callable[[list[dict]], Any]] = None,
 ) -> list[dict]:
     """Ask Gemini for general and preference-related recommendations.
 
@@ -85,6 +86,12 @@ def generate_recommendations(
             if response.status_code == 200:
                 try:
                     recommendations = parse_gemini_response(response)
+                    # Output that passes the schema but has no usable
+                    # items counts as malformed too
+                    if validator is not None and not validator(recommendations):
+                        raise RuntimeError(
+                            "Gemini returned no usable recommendations."
+                        )
                 except RuntimeError as err:
                     # Malformed output: retry, then try the next model
                     last_error = err

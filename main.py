@@ -100,6 +100,7 @@ def run_application() -> None:
                     destination,
                     user_inputs,
                     notify=io_manager.display_status,
+                    validator=logic_manager.validate_ai_response,
                 )
 
             except Exception as err:
