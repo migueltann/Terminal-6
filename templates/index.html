@@ -8,6 +8,43 @@
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .field-error {
+            display: none;
+            color: #b42318;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .field-error.shown {
+            display: block;
+        }
+
+        .invalid-field {
+            border: 1px solid #b42318 !important;
+            background-color: #fff8f7 !important;
+        }
+
+        .client-validation-summary {
+            display: none;
+            margin: 16px 0;
+            padding: 13px 16px;
+            color: #8b2119;
+            background: #fff0ed;
+            border: 1px solid #f0c8c0;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .client-validation-summary.shown {
+            display: block;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+    </style>
 </head>
 
 <body>
