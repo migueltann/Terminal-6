@@ -182,3 +182,9 @@ p {
     letter-spacing: -0.035em;
     margin: 0 0 5px;
 }
+.form-title p:not(.eyebrow),
+.results-head p:not(.eyebrow) {
+    color: var(--muted);
+    margin: 0;
+    font-size: 13px;
+}
