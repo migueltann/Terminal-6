@@ -612,5 +612,21 @@ def reset():
     return redirect(url_for("index"))
 
 
+@app.errorhandler(413)
+def too_large(_error):
+    return render_template(
+        "index.html",
+        form_data={},
+        result=None,
+        error="The submitted form is too large.",
+        field_errors={},
+    ), 413
+
+
 if __name__ == "__main__":
-        app.run(debug=True)
+        app.run(
+            debug=os.getenv(
+            "FLASK_DEBUG",
+            "false",
+        ).lower() == "true"
+    )
