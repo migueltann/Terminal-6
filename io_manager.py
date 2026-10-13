@@ -799,10 +799,7 @@ def _display_recommendation(item: dict, decision: Any, index: int) -> None:
     if item.get("eligible", True):
         print("\n   STATUS: ELIGIBLE")
         if item.get("top_pick"):
-            print(
-                "   TOP PICK: matches your preferences and costs "
-                "no more than half of your budget"
-            )
+            print(f"   TOP PICK: {item.get('top_pick_reason', 'recommended')}")
     else:
         print("\n   STATUS: REJECTED")
 
