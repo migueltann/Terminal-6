@@ -562,6 +562,46 @@ def download_json():
 
         return redirect(url_for("index"))
 
+@app.post("/save")
+def save():
+    """Save the current recommendation result using data_manager."""
+    result = _get_latest_result()
+
+    if not result:
+        flash(
+            "There is no generated recommendation set to save. "
+            "Generate recommendations first.",
+            "error",
+        )
+        return redirect(url_for("index"))
+
+    try:
+        paths = data_manager.save_processed_recommendations(
+            result
+        )
+
+        if not paths or len(paths) < 2:
+            raise OSError(
+                "The data manager did not return both JSON and CSV paths."
+            )
+
+        flash(
+            f"Saved JSON: {paths[0]} | Saved CSV: {paths[1]}",
+            "success",
+        )
+
+    except Exception as exc:
+        app.logger.exception(
+            "Saving recommendations failed"
+        )
+
+        flash(
+            f"Could not save recommendations: {exc}",
+            "error",
+        )
+
+    return redirect(url_for("index"))
+
 
 if __name__ == "__main__":
         app.run(debug=True)
