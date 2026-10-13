@@ -620,7 +620,7 @@
                         <p>Rules applied by the Python Logic Manager.</p>
                     </div>
                 </div>
-                                <label for="preferred_transport">
+                <label for="preferred_transport">
                     Preferred transport
                 </label>
 
@@ -632,6 +632,21 @@
                         </option>
                     {% endfor %}
                 </select>
+                <label for="avoid_list">Avoid list</label>
+
+                <input
+                    id="avoid_list"
+                    name="avoid_list"
+                    value="{{ form_data.get('avoid_list', '') }}"
+                    placeholder="Nightlife, theme parks, hiking"
+                >
+
+                <small class="hint">
+                    Separate multiple items with commas,
+                    or leave blank for None.
+                </small>
+            </div>
+
 
                 <!-- Generate button -->
                 <div class="form-actions">
