@@ -52,9 +52,9 @@
                 <span>03 · Rule checking</span>
             </div>
         </section>
-
-        <!-- Trip planner placeholder -->
+        <!-- Trip planner -->
         <section id="trip-planner" class="form-panel">
+
             <div class="form-title">
                 <div>
                     <p class="eyebrow">TRIP SETUP</p>
@@ -67,75 +67,115 @@
 
                 <span class="step-badge">01 / 01</span>
             </div>
-            <!-- Budget -->
-            <div class="field-group">
-                <div class="group-heading">
-                    <span>02</span>
-                    <div>
-                        <h3>Set your budget</h3>
-                        <p>Choose how much you want to spend.</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <label for="max_activity_spend">
-                    Activity budget (per activity)
-                </label>
-                <input
-                    type="number"
-                    id="max_activity_spend"
-                    name="max_activity_spend"
-                    min="0"
-                    step="0.01"
-                    placeholder="e.g. 100"
-                >
-            </div>
-            <div>
-                <label for="max_meal_spend">
-                    Meal budget (per meal)
-                </label>
-                <input
-                    type="number"
-                    id="max_meal_spend"
-                    name="max_meal_spend"
-                    min="0"
-                    step="0.01"
-                    placeholder="e.g. 50"
-                >
-            </div>
-            <div>
-                <label for="max_accommodation_spend">
-                    Accommodation budget (per night)
-                </label>
-                <input
-                    type="number"
-                    id="max_accommodation_spend"
-                    name="max_accommodation_spend"
-                    min="0"
-                    step="0.01"
-                    placeholder="e.g. 120"
-                >
-            </div>
-            <div>
-            <label for="max_shopping_spend">
-                Shopping budget
-            </label>
-            <input
-                type="number"
-                id="max_shopping_spend"
-                name="max_shopping_spend"
-                min="0"
-                step="0.01"
-                placeholder="e.g. 100"
-            >
-        </div>
-        <small class="hint">
-            Enter amounts in the destination's local currency.
-        </small>
 
+            <form id="travel-form">
+
+                <!-- Destination -->
+                <div class="field-group">
+                    <div class="group-heading">
+                        <span>01</span>
+                        <div>
+                            <h3>Where are you going?</h3>
+                            <p>Tell us where your journey begins.</p>
+                        </div>
+                    </div>
+
+                    <label for="destination">Destination <b>*</b></label>
+                    <input
+                        type="text"
+                        id="destination"
+                        name="destination"
+                        placeholder="e.g. Tokyo, Japan"
+                        required
+                    >
+
+                    <small class="hint">
+                        Enter a city and country, or a country.
+                    </small>
+                </div>
+
+                <!-- Budget -->
+                <div class="field-group">
+                    <div class="group-heading">
+                        <span>02</span>
+                        <div>
+                            <h3>Set your budget</h3>
+                            <p>Choose how much you want to spend.</p>
+                        </div>
+                    </div>
+
+                    <div class="two-col">
+
+                        <!-- Activity budget -->
+                        <div>
+                            <label for="max_activity_spend">
+                                Activity budget (per activity)
+                            </label>
+                            <input
+                                type="number"
+                                id="max_activity_spend"
+                                name="max_activity_spend"
+                                min="0"
+                                step="0.01"
+                                placeholder="e.g. 100"
+                            >
+                        </div>
+
+                        <!-- Meal budget -->
+                        <div>
+                            <label for="max_meal_spend">
+                                Meal budget (per meal)
+                            </label>
+                            <input
+                                type="number"
+                                id="max_meal_spend"
+                                name="max_meal_spend"
+                                min="0"
+                                step="0.01"
+                                placeholder="e.g. 50"
+                            >
+                        </div>
+
+                        <!-- Accommodation budget -->
+                        <div>
+                            <label for="max_accommodation_spend">
+                                Accommodation budget (per night)
+                            </label>
+                            <input
+                                type="number"
+                                id="max_accommodation_spend"
+                                name="max_accommodation_spend"
+                                min="0"
+                                step="0.01"
+                                placeholder="e.g. 120"
+                            >
+                        </div>
+
+                        <!-- Shopping budget -->
+                        <div>
+                            <label for="max_shopping_spend">
+                                Shopping budget
+                            </label>
+                            <input
+                                type="number"
+                                id="max_shopping_spend"
+                                name="max_shopping_spend"
+                                min="0"
+                                step="0.01"
+                                placeholder="e.g. 100"
+                            >
+                        </div>
+
+                    </div>
+
+                    <small class="hint">
+                        Enter amounts in the destination's local currency.
+                    </small>
+                </div>
+
+            </form>
 
         </section>
-
     </main>
 
 </body>
