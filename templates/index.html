@@ -294,6 +294,14 @@
                                         S${{ '%.2f'|format(item.estimated_cost_sgd) }}
                                     </span>
                                 </div>
+                                
+                                {% if item.failed_rules %}
+                                    <p>
+                                        Failed:
+                                        {{ item.failed_rules|join(', ') }}
+                                    </p>
+                                {% endif %}
+
                             </article>
                         {% endfor %}
                     </div>
