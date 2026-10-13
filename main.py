@@ -67,6 +67,12 @@ def run_application():
     # Show the welcome screen when the program starts
     io_manager.display_welcome_banner()
 
+    # Load the saved recommendation sets when the program starts
+    saved_sets = data_manager.load_all_sets()
+    io_manager.display_message(
+        f"{len(saved_sets)} saved recommendation set(s) found."
+    )
+
     while True:
         io_manager.display_menu()
         choice = io_manager.get_user_choice()
