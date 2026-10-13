@@ -705,50 +705,23 @@
     </div>
 </div>
 
+<script>
+(() => {
+    // Show or hide the custom dietary input.
+    const dietarySelect = document.getElementById('dietary');
+    const dietaryCustom = document.getElementById('dietary-custom-wrap');
 
-        <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const form = document.getElementById("travel-form");
-            const button = document.getElementById("generate-button");
-            const loadingScreen = document.getElementById("loading-screen");
-            const planner = document.getElementById("trip-planner");
-            const hero = document.querySelector(".hero");
+    if (dietarySelect && dietaryCustom) {
+        const updateDietary = () => {
+            dietaryCustom.style.display =
+                dietarySelect.value === 'Other' ? 'block' : 'none';
+        };
 
-            if (!form || !button || !loadingScreen) {
-                console.error("Travel form or loading screen could not be found.");
-                return;
-            }
-
-            form.addEventListener("submit", function (event) {
-                // Check required fields and browser validation first.
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    form.reportValidity();
-                    return;
-                }
-
-                // Stop repeated submissions while the request is processing.
-                button.disabled = true;
-                button.textContent = "Generating recommendations...";
-
-                // Hide the form and introduction while the AI works.
-                if (planner) {
-                    planner.hidden = true;
-                }
-
-                if (hero) {
-                    hero.hidden = true;
-                }
-
-                // Show the loading screen.
-                loadingScreen.hidden = false;
-                loadingScreen.setAttribute("aria-live", "polite");
-
-                // Allow the browser to submit the form normally to Flask.
-                // Do not prevent the default submission here.
-            });
-        });
-    </script>
-
+        dietarySelect.addEventListener('change', updateDietary);
+        updateDietary();
+    }
+})();
+</script>
 </body>
 </html>
+
