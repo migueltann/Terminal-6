@@ -475,5 +475,23 @@ def view_saved(filename):
     )
 
 
+@app.post("/saved/delete/<path:filename>")
+def delete_saved(filename):
+    if data_manager.delete_saved_recommendation(
+        os.path.basename(filename)
+    ):
+        flash(
+            "Saved recommendation set deleted.",
+            "success",
+        )
+
+    else:
+        flash(
+            "Could not delete that saved recommendation set.",
+            "error",
+        )
+
+    return redirect(url_for("saved_sets"))
+
 if __name__ == "__main__":
         app.run(debug=True)
