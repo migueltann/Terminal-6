@@ -157,3 +157,15 @@ p {
     border-radius: 30px;
     padding: 8px 12px;
 }
+/* ========================================
+   6. FORM PANEL
+======================================== */
+
+.form-panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: clamp(22px, 4vw, 42px);
+    box-shadow: 0 12px 40px #1e35230a;
+    margin: 12px 0 70px;
+}
