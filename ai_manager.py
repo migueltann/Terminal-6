@@ -146,6 +146,14 @@ def parse_gemini_response(response):
     """Turn Gemini's JSON response into a Python list."""
 
     response_data = response.json()
+    try:
+        response_data = response.json()
+    except ValueError as err:
+        raise RuntimeError(f"Gemini response was not valid JSON: {err}")
+
+    if not isinstance(response_data, dict):
+        raise RuntimeError("Gemini response format was unexpected.")
+
     candidates = response_data.get("candidates", [])
 
     if not candidates:
@@ -163,16 +171,30 @@ def parse_gemini_response(response):
 
     # Gemini normally returns the list directly
     if isinstance(parsed, list):
-        return parsed
+        return validate_response_schema(parsed)
 
     # Accept these wrapper names too in case Gemini adds one
     if isinstance(parsed, dict):
         for key in ("recommendations", "items"):
             if isinstance(parsed.get(key), list):
-                return parsed[key]
+                return validate_response_schema(parsed[key])
 
     raise RuntimeError("Gemini returned an unexpected JSON structure.")
 
+def validate_response_schema(items):
+    """Check the shape of the AI output: a non-empty list of objects.
+
+    Field-level checks (types, costs, environments) are done later by
+    logic_manager.validate_ai_response.
+    """
+
+    if not items:
+        raise RuntimeError("Gemini returned an empty recommendation list.")
+
+    if not all(isinstance(item, dict) for item in items):
+        raise RuntimeError("Gemini returned items that are not JSON objects.")
+
+    return items
 
 def clean_json_response(content):
     """Remove ```json fences if Gemini adds them around the JSON."""
