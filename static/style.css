@@ -176,3 +176,9 @@ p {
     padding-bottom: 25px;
     border-bottom: 1px solid var(--line);
 }
+.form-title h2,
+.results-head h2 {
+    font-size: 31px;
+    letter-spacing: -0.035em;
+    margin: 0 0 5px;
+}
