@@ -1,15 +1,18 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Terminal 6 - Travel Assistant</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-    
+
     <!-- Navigation -->
     <header class="topbar">
         <a class="brand" href="{{ url_for('index') }}">
@@ -26,7 +29,7 @@
             AI discovery · Python-checked
         </span>
     </header>
-    
+
     <main class="shell">
 
         <!-- Homepage introduction -->
@@ -50,52 +53,27 @@
                 <span>03 · Rule checking</span>
             </div>
         </section>
-        
-    <!-- Homepage introduction -->
-    <section class="hero">
-        <p class="eyebrow">YOUR NEXT JOURNEY STARTS HERE</p>
 
-        <h1>
-            Travel planning,<br>
-            <em>made personal.</em>
-        </h1>
+        <!-- Trip planner placeholder -->
+        <section id="trip-planner" class="form-panel">
+            <div class="form-title">
+                <div>
+                    <p class="eyebrow">TRIP SETUP</p>
+                    <h2>Make it yours</h2>
+                    <p>
+                        Start by choosing your destination and
+                        travel preferences.
+                    </p>
+                </div>
 
-        <p class="hero-copy">
-            Tell us what matters to you. AI discovers options,
-            then our Python rules check your budgets, preferences
-            and restrictions.
-        </p>
-
-        <div class="hero-tags">
-            <span>01 · Your preferences</span>
-            <span>02 · AI discovery</span>
-            <span>03 · Rule checking</span>
-        </div>
-    </section>
-
-    <!-- Trip planner will be added in a later commit -->
-    <section id="trip-planner" class="form-panel">
-        <div class="form-title">
-            <div>
-                <p class="eyebrow">TRIP SETUP</p>
-                <h2>Make it yours</h2>
-                <p>
-                    Start by choosing your destination and
-                    travel preferences.
-                </p>
+                <span class="step-badge">01 / 01</span>
             </div>
 
-            <span class="step-badge">01 / 01</span>
-        </div>
+            <p>Your personalised travel planner will appear here.</p>
+        </section>
 
-        <p>Your personalised travel planner will appear here.</p>
-    </section>
     </main>
-    <!-- Footer -->
-    <footer class="footer">
-        <span>TERMINAL 6</span>
-        <span>AI discovers · Python validates · You decide</span>
-    </footer>
 
 </body>
 </html>
+```
