@@ -167,8 +167,20 @@ def load_all_sets():
     except (IOError, json.JSONDecodeError):
         return []
 
-"""Load one saved JSON result."""
+
+def find_saved_sets(destination=""):
+    """Return saved sets whose destination contains the given text."""
+
+    keyword = str(destination).strip().lower()
+
+    return [
+        entry
+        for entry in load_all_sets()
+        if keyword in str(entry.get("destination", "")).lower()
+    ]
+
 def load_result(json_path):
+    """Load one saved JSON result."""
 
     try:
         with open(json_path, "r", encoding="utf-8") as file:
