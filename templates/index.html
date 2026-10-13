@@ -720,7 +720,7 @@
         dietarySelect.addEventListener('change', updateDietary);
         updateDietary();
     }
-    
+
     const form = document.getElementById('travel-form');
 
     // Results page does not contain the input form.
@@ -734,7 +734,36 @@
 
     let submitting = false;
 
-})();
+    function clearErrors() {
+        document.querySelectorAll('.field-error').forEach(error => {
+            error.textContent = '';
+            error.classList.remove('shown');
+        });
+
+        form.querySelectorAll('.invalid-field').forEach(input => {
+            input.classList.remove('invalid-field');
+        });
+
+        summary.textContent = '';
+        summary.classList.remove('shown');
+    }
+
+    function showError(fieldName, errorMessage) {
+        const input = document.getElementById(fieldName);
+        const error = document.getElementById('error-' + fieldName);
+
+        if (input) {
+            input.classList.add('invalid-field');
+        }
+
+        if (error) {
+            error.textContent = errorMessage;
+            error.classList.add('shown');
+        } else {
+            summary.textContent += errorMessage + ' ';
+            summary.classList.add('shown');
+        }
+    }
 </script>
 </body>
 </html>
