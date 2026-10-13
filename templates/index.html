@@ -620,6 +620,18 @@
                         <p>Rules applied by the Python Logic Manager.</p>
                     </div>
                 </div>
+                                <label for="preferred_transport">
+                    Preferred transport
+                </label>
+
+                <select id="preferred_transport" name="preferred_transport">
+                    {% for opt in ['Any', 'Walk', 'Transit', 'Taxi'] %}
+                        <option value="{{ opt }}"
+                            {{ 'selected' if form_data.get('preferred_transport', 'Any') == opt else '' }}>
+                            {{ opt }}
+                        </option>
+                    {% endfor %}
+                </select>
 
                 <!-- Generate button -->
                 <div class="form-actions">
