@@ -492,6 +492,35 @@
                         </select>
                     </div>
                 </div>
+                <label for="dietary">Dietary requirement</label>
+
+                <select id="dietary" name="dietary">
+                    {% for opt in [
+                        'None', 'Halal', 'Vegetarian', 'Vegan',
+                        'Gluten-free', 'No beef', 'No pork',
+                        'Dairy-free', 'Nut-free', 'Other'
+                    ] %}
+                        <option value="{{ opt }}"
+                            {{ 'selected' if form_data.get('dietary', 'None') == opt else '' }}>
+                            {{ opt }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <div id="dietary-custom-wrap" style="display:none">
+                    <label for="dietary_custom">
+                        Other dietary requirement
+                    </label>
+
+                    <input
+                        name="dietary_custom"
+                        id="dietary_custom"
+                        value="{{ form_data.get('dietary_custom', '') }}"
+                        placeholder="Describe your requirement"
+                    >
+                </div>
+            </div>
+
 
                 <!-- Generate button -->
                 <div class="form-actions">
