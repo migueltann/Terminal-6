@@ -219,6 +219,22 @@
 
                 <p>{{ item.description }}</p>
 
+                {% if item.price_note %}
+                    <p class="muted">
+                        Price note: {{ item.price_note }}
+                    </p>
+                {% endif %}
+
+                <div class="meta">
+                    <span>{{ item.environment }}</span>
+
+                    {% if item.transport_options %}
+                        <span>
+                            {{ item.transport_options|join(', ') }}
+                        </span>
+                    {% endif %}
+                </div>
+
 
 
             </section>
