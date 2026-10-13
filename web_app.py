@@ -408,5 +408,26 @@ def generate():
             field_errors={},
         ), 502
 
+@app.get("/saved")
+def saved_sets():
+    try:
+        saved = data_manager.get_saved_recommendations()
+
+    except Exception as exc:
+        app.logger.exception(
+            "Could not load saved recommendation sets"
+        )
+
+        saved = []
+        flash(
+            f"Could not load saved sets: {exc}",
+            "error",
+        )
+
+    return render_template(
+        "saved.html",
+        saved=saved,
+    )
+
 if __name__ == "__main__":
         app.run(debug=True)
