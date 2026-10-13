@@ -284,3 +284,23 @@ p {
 .field-group input::placeholder {
     color: #9aa49e;
 }
+
+.field-group select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 13px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+}
+
+.field-group select:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px var(--green2);
+}
