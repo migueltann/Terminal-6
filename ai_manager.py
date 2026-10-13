@@ -18,8 +18,18 @@ def active_preferences(values):
         if str(value).strip().lower() not in {"", "any", "none"}
     ]
 
-def generate_recommendations(destination, user_inputs=None):
-    """Ask Gemini for general and preference-related recommendations."""
+def _notify(notify, level, message):
+    """Send a status message to the caller if a callback was given."""
+    if notify is not None:
+        notify(level, message)
+
+
+def generate_recommendations(destination, user_inputs=None, notify=None):
+    """Ask Gemini for general and preference-related recommendations.
+
+    notify is an optional function(level, message). The caller decides how
+    status messages are shown, so this module never prints anything.
+    """
 
     # Read the Gemini API key from the .env file
     api_key = os.getenv("GEMINI_API_KEY")
@@ -38,7 +48,7 @@ def generate_recommendations(destination, user_inputs=None):
     last_error = None
 
     for model_name in models_to_try:
-        print(f"[INFO] Trying Gemini model: {model_name}")
+        _notify(notify, "info", f"Trying Gemini model: {model_name}")
 
         # Retry temporary errors before moving to the next model
         for attempt in range(3):
@@ -68,7 +78,7 @@ def generate_recommendations(destination, user_inputs=None):
 
             # Return the recommendations when the API call works
             if response.status_code == 200:
-                print(f"[INFO] Gemini succeeded using {model_name}.")
+                _notify(notify, "info", f"Gemini succeeded using {model_name}.")
                 return parse_gemini_response(response)
 
             # 429 and 5xx errors are usually temporary, so try again
@@ -79,14 +89,16 @@ def generate_recommendations(destination, user_inputs=None):
 
                 if attempt < 2:
                     wait_time = 2 ** (attempt + 1)
-                    print(
-                        f"[WARNING] {model_name} is busy. "
-                        f"Retrying in {wait_time} seconds..."
+                    _notify(
+                        notify,
+                        "warning",
+                        f"{model_name} is busy. "
+                        f"Retrying in {wait_time} seconds...",
                     )
                     time.sleep(wait_time)
                     continue
 
-                print(f"[WARNING] {model_name} is still unavailable.")
+                _notify(notify, "warning", f"{model_name} is still unavailable.")
                 break
 
             # If a model is not available, move to the next one
@@ -94,7 +106,7 @@ def generate_recommendations(destination, user_inputs=None):
                 last_error = RuntimeError(
                     f"HTTP 404: {response.text[:300]}"
                 )
-                print(f"[WARNING] {model_name} is not available.")
+                _notify(notify, "warning", f"{model_name} is not available.")
                 break
 
             last_error = RuntimeError(
