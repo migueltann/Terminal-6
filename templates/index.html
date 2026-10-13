@@ -720,6 +720,20 @@
         dietarySelect.addEventListener('change', updateDietary);
         updateDietary();
     }
+    
+    const form = document.getElementById('travel-form');
+
+    // Results page does not contain the input form.
+    if (!form) return;
+
+    const loading = document.getElementById('loading-screen');
+    const message = document.getElementById('loading-message');
+    const button = document.getElementById('generate-button');
+    const steps = loading.querySelectorAll('.loading-steps span');
+    const summary = document.getElementById('validation-summary');
+
+    let submitting = false;
+
 })();
 </script>
 </body>
