@@ -260,3 +260,27 @@ p {
     font-size: 12px;
     line-height: 1.6;
 }
+
+.field-group input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 13px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field-group input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px var(--green2);
+}
+
+.field-group input::placeholder {
+    color: #9aa49e;
+}
