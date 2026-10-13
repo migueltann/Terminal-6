@@ -426,7 +426,21 @@
                         <small class="field-error"
                                id="error-max_activity_spend"></small>
                     </div>
+                    <div>
+                        <label for="activity_environment">Environment</label>
 
+                        <select id="activity_environment"
+                                name="activity_environment">
+                            {% for opt in ['Any', 'Indoor', 'Outdoor'] %}
+                                <option value="{{ opt }}"
+                                    {{ 'selected' if form_data.get('activity_environment', 'Any') == opt else '' }}>
+                                    {{ opt }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
 
                 <!-- Budget -->
                 <div class="field-group">
