@@ -272,6 +272,7 @@
                 {% endif %}
             </section>
         {% endfor %}
+
         <section class="filtered-section">
             <details>
                 <summary>
@@ -282,11 +283,12 @@
                 <p class="muted">
                     These AI candidates failed one or more Python checks.
                 </p>
-                
+
                 {% if result.filtered_out %}
                     <div class="audit-list">
                         {% for item in result.filtered_out %}
                             <article class="audit-card">
+
                                 <div>
                                     <strong>{{ item.name }}</strong>
                                     <span>
@@ -294,14 +296,14 @@
                                         S${{ '%.2f'|format(item.estimated_cost_sgd) }}
                                     </span>
                                 </div>
-                                
+
                                 {% if item.failed_rules %}
                                     <p>
                                         Failed:
                                         {{ item.failed_rules|join(', ') }}
                                     </p>
                                 {% endif %}
-                                
+
                                 {% if item.checks %}
                                     <ul>
                                         {% for check in item.checks %}
@@ -313,16 +315,28 @@
                                     </ul>
                                 {% endif %}
 
-
                             </article>
                         {% endfor %}
                     </div>
                 {% else %}
                     <p>No recommendations were filtered out.</p>
                 {% endif %}
-
-
             </details>
+        </section>
+
+        <div class="result-actions">
+            <form method="post" action="{{ url_for('save') }}">
+                <button class="primary" type="submit">
+                    Save approved results to JSON + CSV
+                </button>
+            </form>
+
+            <a class="secondary" href="{{ url_for('reset') }}">
+                Plan another trip
+            </a>
+        </div>
+    {% else %}
+      
         </section>
             <div class="form-title">
                 <div>
