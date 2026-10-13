@@ -195,6 +195,12 @@
                         name="preferred_activities"
                         placeholder="e.g. museums, hiking, theme parks"
                     >
+                    <label for="activity_environment">Activity environment</label>
+                    <select id="activity_environment" name="activity_environment">
+                        <option value="Any">Any</option>
+                        <option value="Indoor">Indoor</option>
+                        <option value="Outdoor">Outdoor</option>
+                    </select>
 
                     <label for="food_preferences">
                         Food preferences
@@ -205,10 +211,13 @@
                         name="food_preferences"
                         placeholder="e.g. ramen, cafes, local street food"
                     >
+                    <label for="food_environment">Food environment</label>
+                    <select id="food_environment" name="food_environment">
+                        <option value="Any">Any</option>
+                        <option value="Indoor">Indoor</option>
+                        <option value="Outdoor">Outdoor</option>
+                    </select>
                 </div>
-
-                <!-- Accommodation and shopping preferences -->
-
                 <!-- Accommodation and shopping preferences -->
                 <div class="field-group">
                     <div class="group-heading">
@@ -219,6 +228,12 @@
                         </div>
                     </div>
 
+                    <label for="shopping_environment">Shopping environment</label>
+                    <select id="shopping_environment" name="shopping_environment">
+                        <option value="Any">Any</option>
+                        <option value="Indoor">Indoor</option>
+                        <option value="Outdoor">Outdoor</option>
+                    </select>
                     <label for="accommodation_preferences">
                         Accommodation preferences
                     </label>
@@ -334,7 +349,20 @@
             </form>
 
         </section>
+
     </main>
+
+    <!-- AI generation loading screen -->
+    <div id="loading-screen" class="loading-screen" hidden>
+        <div class="loading-card">
+            <div class="loading-spinner"></div>
+            <h2>Planning your next adventure...</h2>
+            <p>AI is finding recommendations based on your preferences.</p>
+            <p class="loading-note">
+                Checking activities, food, accommodation and shopping.
+            </p>
+        </div>
+    </div>
 
 </body>
 </html>
