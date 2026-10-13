@@ -314,7 +314,13 @@ def validate_inputs():
 
 @app.get("/")
 def index():
-    return render_template("index.html")
+    return render_template(
+        "index.html",
+        form_data={},
+        result=None,
+        error=None,
+        field_errors={},
+        )
 
 if __name__ == "__main__":
         app.run(debug=True)
