@@ -58,6 +58,25 @@ BUDGET_FIELDS = (
 ENVIRONMENTS = ("Indoor", "Outdoor", "Any")
 TRANSPORTS = ("Walk", "Transit", "Taxi", "Any")
 
+#server-side storage
+#store generated results as files rather than large cookies.
+def _result_file_path(result_key):
+    if not isinstance(result_key, str):
+        return None
+
+    if not result_key or any(
+        character not in "0123456789abcdef"
+        for character in result_key.lower()
+    ):
+        return None
+
+    return os.path.join(
+        app.instance_path,
+        f"latest_result_{result_key}.json",
+    )
+
+
+
 @app.get("/")
 def index():
     return render_template("index.html")
