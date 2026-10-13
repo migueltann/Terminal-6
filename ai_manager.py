@@ -1,13 +1,14 @@
 import json
 import os
 import time
+from typing import Any, Callable, Optional
 
 import requests
 
 from dotenv import load_dotenv
 load_dotenv()
 
-def active_preferences(values):
+def active_preferences(values: Any) -> list[str]:
     """Remove empty and placeholder preferences."""
     if not isinstance(values, list):
         return []
@@ -18,13 +19,17 @@ def active_preferences(values):
         if str(value).strip().lower() not in {"", "any", "none"}
     ]
 
-def _notify(notify, level, message):
+def _notify(notify: Optional[Callable[[str, str], None]], level: str, message: str) -> None:
     """Send a status message to the caller if a callback was given."""
     if notify is not None:
         notify(level, message)
 
 
-def generate_recommendations(destination, user_inputs=None, notify=None):
+def generate_recommendations(
+    destination: str,
+    user_inputs: Optional[dict] = None,
+    notify: Optional[Callable[[str, str], None]] = None,
+) -> list[dict]:
     """Ask Gemini for general and preference-related recommendations.
 
     notify is an optional function(level, message). The caller decides how
@@ -142,7 +147,7 @@ def generate_recommendations(destination, user_inputs=None, notify=None):
         f"Last error: {last_error}"
     )
 
-def parse_gemini_response(response):
+def parse_gemini_response(response: Any) -> list[dict]:
     """Turn Gemini's JSON response into a Python list."""
 
     response_data = response.json()
@@ -181,7 +186,7 @@ def parse_gemini_response(response):
 
     raise RuntimeError("Gemini returned an unexpected JSON structure.")
 
-def validate_response_schema(items):
+def validate_response_schema(items: Any) -> list[dict]:
     """Check the shape of the AI output: a non-empty list of objects.
 
     Field-level checks (types, costs, environments) are done later by
@@ -196,7 +201,7 @@ def validate_response_schema(items):
 
     return items
 
-def clean_json_response(content):
+def clean_json_response(content: str) -> str:
     """Remove ```json fences if Gemini adds them around the JSON."""
 
     content = content.strip()
@@ -210,7 +215,7 @@ def clean_json_response(content):
     return content
 
 
-def build_ai_prompt(destination, user_inputs=None):
+def build_ai_prompt(destination: str, user_inputs: Optional[dict] = None) -> str:
     """Generate a mix of general and preference-related recommendations."""
 
     user_inputs = user_inputs or {}
