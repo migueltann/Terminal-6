@@ -282,6 +282,13 @@
                 <p class="muted">
                     These AI candidates failed one or more Python checks.
                 </p>
+                
+                {% if result.filtered_out %}
+                    <!-- Filtered recommendation list will be added in Part 3 -->
+                {% else %}
+                    <p>No recommendations were filtered out.</p>
+                {% endif %}
+
 
             </details>
         </section>
