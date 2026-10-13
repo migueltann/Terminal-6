@@ -234,6 +234,17 @@
                         </span>
                     {% endif %}
                 </div>
+                
+                {% if item.reasons %}
+                    <div class="reasons">
+                        <strong>Why selected</strong>
+
+                        {% for reason in item.reasons %}
+                            <span>✓ {{ reason }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
 
 
 
