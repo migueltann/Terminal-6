@@ -2,10 +2,18 @@
     "destination": "Singapore",
     "requirements": {
         "destination": "Singapore",
-        "preferred_activities": [],
-        "food_preferences": [],
-        "accommodation_preferences": [],
-        "shopping_preferences": [],
+        "preferred_activities": [
+            "museum"
+        ],
+        "food_preferences": [
+            "local"
+        ],
+        "accommodation_preferences": [
+            "hotel"
+        ],
+        "shopping_preferences": [
+            "fashion"
+        ],
         "avoid_list": [],
         "max_activity_spend": 50.0,
         "max_meal_spend": 25.0,
@@ -18,28 +26,462 @@
         "dietary": "None"
     },
     "summary": {
-        "approved_count": 30,
-        "filtered_out_count": 30
+        "approved_count": 29,
+        "filtered_out_count": 31
     },
     "activities": [
+        {
+            "name": "National Museum of Singapore",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 15.0,
+            "location": "93 Stamford Rd, Singapore 178897",
+            "environment": "Indoor",
+            "description": "Singapore's oldest museum presenting the nation's history and culture through immersive and interactive exhibitions.",
+            "tags": [
+                "museum",
+                "history",
+                "culture",
+                "heritage",
+                "exhibition"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$15.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Asian Civilisations Museum",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 20.0,
+            "location": "1 Empress Pl, Singapore 179555",
+            "environment": "Indoor",
+            "description": "Museum highlighting the historical connections of civilizations across Asia through extensive artifact collections.",
+            "tags": [
+                "museum",
+                "history",
+                "asian",
+                "art",
+                "heritage"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$20.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Peranakan Museum",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 20.0,
+            "location": "39 Armenian St, Singapore 179941",
+            "environment": "Indoor",
+            "description": "Explores the culture and heritage of Peranakan communities in Southeast Asia with rich displays of textiles and jewelry.",
+            "tags": [
+                "museum",
+                "peranakan",
+                "culture",
+                "heritage",
+                "history"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$20.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "National Gallery Singapore",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 20.0,
+            "location": "1 St Andrew's Rd, #01-01, Singapore 178957",
+            "environment": "Indoor",
+            "description": "Art museum housing the world's largest public collection of Singaporean and Southeast Asian modern art.",
+            "tags": [
+                "museum",
+                "art",
+                "gallery",
+                "culture",
+                "painting"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$20.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Singapore Art Museum",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 10.0,
+            "location": "39 Keppel Rd, #01-02, Singapore 089065",
+            "environment": "Indoor",
+            "description": "Contemporary art museum showcasing works by local and international artists with a focus on Southeast Asia.",
+            "tags": [
+                "museum",
+                "contemporary art",
+                "modern art",
+                "exhibition"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$10.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Lee Kong Chian Natural History Museum",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 21.0,
+            "location": "2 Conservatory Dr, Singapore 117377",
+            "environment": "Indoor",
+            "description": "Biodiversity museum featuring thousands of natural history specimens, including three real sauropod dinosaur fossils.",
+            "tags": [
+                "museum",
+                "nature",
+                "science",
+                "fossils",
+                "biodiversity"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$21.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "ArtScience Museum",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 40.0,
+            "location": "6 Bayfront Ave, Singapore 018974",
+            "environment": "Indoor",
+            "description": "Iconic lotus-shaped building hosting major international touring exhibitions exploring the intersection of art, science, and technology.",
+            "tags": [
+                "museum",
+                "science",
+                "art",
+                "technology",
+                "digital art"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$40.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Red Dot Design Museum",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 10.0,
+            "location": "11 Marina Blvd, Singapore 018940",
+            "environment": "Indoor",
+            "description": "Museum exhibiting award-winning contemporary design concepts and physical products from around the world.",
+            "tags": [
+                "museum",
+                "design",
+                "architecture",
+                "innovation"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$10.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Indian Heritage Centre",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 8.0,
+            "location": "5 Campbell Ln, Singapore 209924",
+            "environment": "Indoor",
+            "description": "Cultural center and museum celebrating the history, heritage, and culture of Indian communities in Singapore.",
+            "tags": [
+                "museum",
+                "heritage",
+                "culture",
+                "history"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$8.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Malay Heritage Centre",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 8.0,
+            "location": "85 Sultan Gate, Singapore 198501",
+            "environment": "Indoor",
+            "description": "Cultural institution highlighting the history and culture of Singapore's Malay community located in the historic Kampong Glam district.",
+            "tags": [
+                "museum",
+                "heritage",
+                "culture",
+                "history",
+                "malay"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$8.00 <= $50.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
         {
             "name": "Gardens by the Bay",
             "type": "activity",
             "category": "Nature",
             "estimated_cost_sgd": 28.0,
-            "location": "Marina Gardens Drive",
+            "location": "18 Marina Gardens Dr, Singapore 018953",
             "environment": "Outdoor",
-            "description": "Massive nature park featuring the iconic Supertrees, climate-controlled cooled conservatories, and diverse plant life.",
+            "description": "Sprawling futuristic nature park featuring the iconic Supertrees and cooled conservatories.",
             "tags": [
                 "nature",
                 "gardens",
                 "architecture",
-                "botanical",
-                "scenic"
+                "sightseeing"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -71,19 +513,19 @@
             "type": "activity",
             "category": "Nature",
             "estimated_cost_sgd": 5.0,
-            "location": "Cluny Road",
+            "location": "1 Cluny Rd, Singapore 259569",
             "environment": "Outdoor",
-            "description": "A 158-year-old tropical garden and Singapore's first UNESCO World Heritage Site, featuring the National Orchid Garden.",
+            "description": "UNESCO World Heritage site featuring a vast collection of tropical plants and the world-renowned National Orchid Garden.",
             "tags": [
                 "nature",
                 "gardens",
-                "unesco",
+                "park",
                 "orchid",
-                "parks"
+                "unesco"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -111,196 +553,21 @@
             "failed_rules": []
         },
         {
-            "name": "National Museum of Singapore",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 15.0,
-            "location": "Stamford Road",
-            "environment": "Indoor",
-            "description": "The nation's oldest museum with progressive curation, showcasing Singapore's history and culture through immersive exhibits.",
-            "tags": [
-                "museum",
-                "history",
-                "culture",
-                "art",
-                "heritage"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$15.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "ArtScience Museum",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 20.0,
-            "location": "Bayfront Avenue",
-            "environment": "Indoor",
-            "description": "Iconic lotus-inspired building hosting major international exhibitions fusing art, science, culture, and technology.",
-            "tags": [
-                "museum",
-                "art",
-                "science",
-                "technology",
-                "exhibitions"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$20.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Sentosa Skyline Luge",
-            "type": "activity",
-            "category": "Adventure",
-            "estimated_cost_sgd": 30.0,
-            "location": "Sentosa Island",
-            "environment": "Outdoor",
-            "description": "Gravity-fuelled cart ride down specialized tracks with hairpin turns and tunnels on Sentosa Island.",
-            "tags": [
-                "adventure",
-                "thrill",
-                "sports",
-                "family",
-                "entertainment"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$30.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "S.E.A. Aquarium",
-            "type": "activity",
-            "category": "Aquarium",
-            "estimated_cost_sgd": 41.0,
-            "location": "Sentosa Island",
-            "environment": "Indoor",
-            "description": "One of the world's largest aquariums housing more than 100,000 marine animals across multiple distinct habitats.",
-            "tags": [
-                "aquarium",
-                "marine",
-                "nature",
-                "family",
-                "wildlife"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$41.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
             "name": "Singapore Flyer",
             "type": "activity",
-            "category": "Observation Wheel",
+            "category": "Attraction",
             "estimated_cost_sgd": 40.0,
-            "location": "Raffles Avenue",
+            "location": "30 Raffles Ave, Singapore 039803",
             "environment": "Outdoor",
-            "description": "Giant observation wheel offering panoramic views of the Marina Bay skyline and parts of Malaysia and Indonesia.",
+            "description": "Giant observation wheel offering panoramic views of the city skyline and Marina Bay.",
             "tags": [
-                "landmark",
+                "sightseeing",
                 "views",
-                "scenic",
-                "entertainment"
+                "landmark"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -328,109 +595,22 @@
             "failed_rules": []
         },
         {
-            "name": "Asian Civilisations Museum",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 20.0,
-            "location": "Empress Place",
-            "environment": "Indoor",
-            "description": "Museum dedicated to the material history and cultures of Asia, particularly the ancestral cultures of Singaporeans.",
-            "tags": [
-                "museum",
-                "history",
-                "culture",
-                "heritage",
-                "art"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$20.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
             "name": "Cloud Forest",
             "type": "activity",
             "category": "Nature",
-            "estimated_cost_sgd": 25.0,
-            "location": "Marina Gardens Drive",
+            "estimated_cost_sgd": 20.0,
+            "location": "18 Marina Gardens Dr, Singapore 018953",
             "environment": "Indoor",
-            "description": "A mysterious world veiled in mist, featuring a 35-meter tall mountain covered in lush vegetation and the world's tallest indoor waterfall.",
+            "description": "A mysterious world shrouded in mist, featuring a 35-meter tall mountain covered in lush vegetation and the world's tallest indoor waterfall.",
             "tags": [
                 "nature",
+                "indoor",
                 "waterfall",
-                "botanical",
-                "architecture"
+                "botanical"
             ],
             "transport_options": [
-                "transit",
                 "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$25.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "National Gallery Singapore",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 20.0,
-            "location": "St. Andrew's Road",
-            "environment": "Indoor",
-            "description": "Visual arts institution housing the world's largest public collection of Singapore and Southeast Asian modern art.",
-            "tags": [
-                "museum",
-                "art",
-                "culture",
-                "history"
-            ],
-            "transport_options": [
                 "transit",
-                "walk",
                 "taxi"
             ],
             "dietary_tags": [
@@ -444,138 +624,6 @@
                     "label": "Activity budget",
                     "passed": true,
                     "detail": "$20.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Singapore River Cruise",
-            "type": "activity",
-            "category": "Boat Tour",
-            "estimated_cost_sgd": 25.0,
-            "location": "Clarke Quay",
-            "environment": "Outdoor",
-            "description": "Traditional bumboat tour along the historic Singapore River passing iconic landmarks and modern skyscrapers.",
-            "tags": [
-                "boat",
-                "tour",
-                "history",
-                "scenic",
-                "water"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$25.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Buddha Tooth Relic Temple",
-            "type": "activity",
-            "category": "Temple",
-            "estimated_cost_sgd": 0.0,
-            "location": "South Bridge Road",
-            "environment": "Indoor",
-            "description": "Ornate Buddhist temple and museum in Chinatown built to house the tooth relic of the historical Buddha.",
-            "tags": [
-                "temple",
-                "culture",
-                "religion",
-                "history",
-                "architecture"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$0.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Fort Canning Park",
-            "type": "activity",
-            "category": "Park",
-            "estimated_cost_sgd": 0.0,
-            "location": "River Valley Road",
-            "environment": "Outdoor",
-            "description": "Historical hilltop park with ancient artefacts, spice gardens, and lawns that host outdoor concerts and events.",
-            "tags": [
-                "history",
-                "park",
-                "nature",
-                "heritage",
-                "scenic"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$0.00 <= $50.00"
                 },
                 {
                     "label": "Avoid list",
@@ -592,22 +640,195 @@
     ],
     "food": [
         {
-            "name": "Maxwell Food Centre",
+            "name": "Tian Tian Hainanese Chicken Rice",
             "type": "food",
             "category": "Hawker Centre",
-            "estimated_cost_sgd": 8.0,
-            "location": "Caddappa Street",
+            "estimated_cost_sgd": 6.0,
+            "location": "1 Kadayanallur St, #01-10/11 Maxwell Food Centre, Singapore 069184",
             "environment": "Indoor",
-            "description": "Famous hawker centre in Chinatown housing numerous legendary food stalls, including Tian Tian Hainanese Chicken Rice.",
+            "description": "Legendary hawker stall famous for serving tender poached chicken paired with fragrant seasoned rice and chili sauce.",
             "tags": [
+                "local",
                 "hawker",
-                "local food",
-                "street food",
-                "budget"
+                "chicken rice",
+                "street food"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "no pork"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$6.00 <= $25.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Lau Pa Sat Satay Street",
+            "type": "food",
+            "category": "Street Food",
+            "estimated_cost_sgd": 20.0,
+            "location": "18 Raffles Quay, Singapore 048582",
+            "environment": "Outdoor",
+            "description": "Open-air street food market operating at night where vendors grill skewers of chicken, beef, and mutton served with peanut sauce.",
+            "tags": [
+                "local",
+                "satay",
+                "street food",
+                "outdoor dining",
+                "nightlife"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "halal"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$20.00 <= $25.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Sungei Road Laksa",
+            "type": "food",
+            "category": "Hawker Stall",
+            "estimated_cost_sgd": 5.0,
+            "location": "27 Jalan Berseh, #01-100, Singapore 200027",
+            "environment": "Indoor",
+            "description": "Traditional stall serving a rich, spicy coconut curry noodle soup cooked over a charcoal stove.",
+            "tags": [
+                "local",
+                "laksa",
+                "noodles",
+                "hawker"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$5.00 <= $25.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Zam Zam Restaurant",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 12.0,
+            "location": "697-699 North Bridge Rd, Singapore 198675",
+            "environment": "Indoor",
+            "description": "Historic Muslim restaurant famous for its murtabak, briyani, and teh tarik.",
+            "tags": [
+                "local",
+                "murtabak",
+                "indian muslim",
+                "halal"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "halal"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$12.00 <= $25.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Hill Street Tai Hwa Pork Noodle",
+            "type": "food",
+            "category": "Hawker Stall",
+            "estimated_cost_sgd": 8.0,
+            "location": "466 Crawford Ln, #01-12, Singapore 190466",
+            "environment": "Indoor",
+            "description": "Michelin-starred hawker stall known for its savory, vinegar-laced minced pork noodles.",
+            "tags": [
+                "local",
+                "noodles",
+                "pork noodles",
+                "michelin"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -635,22 +856,22 @@
             "failed_rules": []
         },
         {
-            "name": "Lau Pa Sat",
+            "name": "Old Airport Road Food Centre",
             "type": "food",
             "category": "Hawker Centre",
-            "estimated_cost_sgd": 12.0,
-            "location": "Raffles Quay",
-            "environment": "Outdoor",
-            "description": "Historic Victorian-style cast-iron hawker market in the financial district, famous for evening satay street stalls.",
+            "estimated_cost_sgd": 10.0,
+            "location": "51 Old Airport Rd, Singapore 390051",
+            "environment": "Indoor",
+            "description": "One of Singapore's largest and most famous food centers offering a massive variety of local culinary delights.",
             "tags": [
-                "hawker",
-                "satay",
+                "local",
+                "hawker centre",
                 "street food",
-                "historic"
+                "variety"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -663,51 +884,7 @@
                 {
                     "label": "Meal budget",
                     "passed": true,
-                    "detail": "$12.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Ya Kun Kaya Toast",
-            "type": "food",
-            "category": "Coffee Shop",
-            "estimated_cost_sgd": 6.0,
-            "location": "Far East Square",
-            "environment": "Indoor",
-            "description": "Traditional kopitiam chain famous for kaya toast, soft-boiled eggs, and local Nanyang coffee.",
-            "tags": [
-                "breakfast",
-                "local cafe",
-                "coffee",
-                "toast"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "vegetarian",
-                "halal alternative"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$6.00 <= $25.00"
+                    "detail": "$10.00 <= $25.00"
                 },
                 {
                     "label": "Avoid list",
@@ -726,22 +903,22 @@
             "type": "food",
             "category": "Restaurant",
             "estimated_cost_sgd": 18.0,
-            "location": "New Bridge Road",
+            "location": "11 klinh Street, #01-01 Clarke Quay, Singapore 059381",
             "environment": "Indoor",
-            "description": "Popular casual eatery serving tender pork rib soup steeped in a peppery, garlic-infused broth.",
+            "description": "Popular casual eatery specializing in Teochew-style peppery pork rib soup.",
             "tags": [
-                "local food",
-                "pork",
-                "soup",
-                "casual"
+                "local",
+                "bak kut teh",
+                "pork ribs",
+                "soup"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
-                "no pork alternative"
+                "none"
             ],
             "shopping_types": [],
             "shopping_interests": [],
@@ -765,22 +942,23 @@
             "failed_rules": []
         },
         {
-            "name": "Zam Zam Restaurant",
+            "name": "Killiney Kopitiam",
             "type": "food",
-            "category": "Restaurant",
-            "estimated_cost_sgd": 15.0,
-            "location": "North Bridge Road",
+            "category": "Cafe",
+            "estimated_cost_sgd": 8.0,
+            "location": "67 Killiney Rd, Singapore 239525",
             "environment": "Indoor",
-            "description": "Historic Indian-Muslim restaurant operating since 1908, famous for murtabak and biryani.",
+            "description": "Traditional coffee shop serving breakfast staples like kaya toast, soft-boiled eggs, and local coffee.",
             "tags": [
-                "indian muslim",
-                "halal",
-                "murtabak",
-                "historic"
+                "local",
+                "kopitiam",
+                "breakfast",
+                "kaya toast",
+                "coffee"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -793,7 +971,7 @@
                 {
                     "label": "Meal budget",
                     "passed": true,
-                    "detail": "$15.00 <= $25.00"
+                    "detail": "$8.00 <= $25.00"
                 },
                 {
                     "label": "Avoid list",
@@ -808,108 +986,21 @@
             "failed_rules": []
         },
         {
-            "name": "Newton Food Centre",
+            "name": "Maxwell Fritters",
             "type": "food",
-            "category": "Hawker Centre",
-            "estimated_cost_sgd": 25.0,
-            "location": "Newton Circus",
-            "environment": "Outdoor",
-            "description": "Open-air hawker complex famous for BBQ seafood and local dishes, featured in the film Crazy Rich Asians.",
-            "tags": [
-                "hawker",
-                "seafood",
-                "outdoor dining",
-                "local food"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$25.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Amoy Street Food Centre",
-            "type": "food",
-            "category": "Hawker Centre",
-            "estimated_cost_sgd": 7.0,
-            "location": "Amoy Street",
+            "category": "Hawker Stall",
+            "estimated_cost_sgd": 5.0,
+            "location": "1 Kadayanallur St, Maxwell Food Centre, Singapore 069184",
             "environment": "Indoor",
-            "description": "Vibrant two-story hawker centre in the CBD featuring a mix of traditional hawker fare and Michelin-recommended stalls.",
+            "description": "Stall selling traditional sweet potato fritters and crisp local snacks.",
             "tags": [
+                "snacks",
                 "hawker",
-                "cbd",
-                "lunch",
-                "local food"
+                "street food"
             ],
             "transport_options": [
-                "transit",
                 "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$7.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "TIONG BAHRU BAKERY",
-            "type": "food",
-            "category": "Bakery Cafe",
-            "estimated_cost_sgd": 15.0,
-            "location": "Tiong Bahru Road",
-            "environment": "Indoor",
-            "description": "Artisan French bakery known for handcrafted croissants, pastries, and specialty coffee in a trendy neighborhood.",
-            "tags": [
-                "bakery",
-                "cafes",
-                "pastries",
-                "coffee"
-            ],
-            "transport_options": [
                 "transit",
-                "walk",
                 "taxi"
             ],
             "dietary_tags": [
@@ -922,50 +1013,7 @@
                 {
                     "label": "Meal budget",
                     "passed": true,
-                    "detail": "$15.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Komala Vilas",
-            "type": "food",
-            "category": "Restaurant",
-            "estimated_cost_sgd": 12.0,
-            "location": "Serangoon Road",
-            "environment": "Indoor",
-            "description": "Long-running vegetarian South Indian restaurant in Little India serving traditional thali and dosas.",
-            "tags": [
-                "vegetarian",
-                "indian",
-                "south indian",
-                "casual"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "vegetarian"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$12.00 <= $25.00"
+                    "detail": "$5.00 <= $25.00"
                 },
                 {
                     "label": "Avoid list",
@@ -980,169 +1028,38 @@
             "failed_rules": []
         }
     ],
-    "accommodation": [
-        {
-            "name": "CapsulePod@Aljunied",
-            "type": "accommodation",
-            "category": "Hostel",
-            "estimated_cost_sgd": 60.0,
-            "location": "Aljunied Road",
-            "environment": "Indoor",
-            "description": "Modern capsule hostel providing clean, private sleeping pods for budget travelers near a main MRT station.",
-            "tags": [
-                "hostel",
-                "budget",
-                "capsule",
-                "backpacker"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": true,
-                    "detail": "$60.00 <= $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Accommodation budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Champion Hotel",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 130.0,
-            "location": "Joo Chiat Road",
-            "environment": "Indoor",
-            "description": "Peranakan-inspired boutique hotel situated in the culturally rich Joo Chiat heritage district.",
-            "tags": [
-                "hotel",
-                "boutique",
-                "peranakan",
-                "heritage"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": true,
-                    "detail": "$130.00 <= $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Accommodation budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "MET A Space Pod at Chinatown",
-            "type": "accommodation",
-            "category": "Hostel",
-            "estimated_cost_sgd": 55.0,
-            "location": "Pagoda Street",
-            "environment": "Indoor",
-            "description": "Sci-fi themed capsule hostel located directly in the hustle and bustle of Chinatown.",
-            "tags": [
-                "hostel",
-                "budget",
-                "capsule",
-                "sci fi"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": true,
-                    "detail": "$55.00 <= $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Accommodation budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        }
-    ],
+    "accommodation": [],
     "shopping": [
         {
-            "name": "Mustafa Centre",
+            "name": "Design Orchard",
             "type": "shopping",
-            "category": "Department Store",
+            "category": "Specialty Store",
             "estimated_cost_sgd": 100.0,
-            "location": "Syed Alwi Road",
+            "location": "250 Orchard Rd, Singapore 238905",
             "environment": "Indoor",
-            "description": "Massive 24-hour department store in Little India selling everything from groceries and electronics to gold jewelry.",
+            "description": "Retail showcase and incubator space championing local Singaporean fashion designers and creative lifestyle brands.",
             "tags": [
-                "department store",
-                "24 hour",
-                "groceries",
-                "electronics"
+                "local designer",
+                "fashion",
+                "crafts",
+                "lifestyle"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
                 "none"
             ],
             "shopping_types": [
-                "department store"
+                "specialty store"
             ],
             "shopping_interests": [
-                "electronics",
-                "groceries",
-                "watches",
-                "souvenirs",
-                "cosmetics"
+                "fashion",
+                "local crafts",
+                "accessories",
+                "souvenirs"
             ],
             "eligible": true,
             "checks": [
@@ -1164,122 +1081,23 @@
             "failed_rules": []
         },
         {
-            "name": "Bugis Street Market",
-            "type": "shopping",
-            "category": "Market",
-            "estimated_cost_sgd": 50.0,
-            "location": "Bugis Street",
-            "environment": "Indoor",
-            "environment_note": "Covered street market",
-            "description": "Sprawling market complex popular for bargain fashion, souvenirs, accessories, and street snacks.",
-            "tags": [
-                "market",
-                "budget shopping",
-                "souvenirs",
-                "fashion"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "street market"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "souvenirs",
-                "accessories",
-                "shoes"
-            ],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": true,
-                    "detail": "$50.00 <= $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Shopping budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Chinatown Street Market",
-            "type": "shopping",
-            "category": "Street Market",
-            "estimated_cost_sgd": 40.0,
-            "location": "Pagoda Street",
-            "environment": "Outdoor",
-            "description": "Traditional street market set inside historical shophouses selling Chinese handicrafts, souvenirs, and traditional clothing.",
-            "tags": [
-                "market",
-                "souvenirs",
-                "crafts",
-                "heritage"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "street market"
-            ],
-            "shopping_interests": [
-                "souvenirs",
-                "local crafts",
-                "traditional clothing"
-            ],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": true,
-                    "detail": "$40.00 <= $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Shopping budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
             "name": "Haji Lane",
             "type": "shopping",
             "category": "Shopping Street",
             "estimated_cost_sgd": 80.0,
-            "location": "Haji Lane",
+            "location": "Haji Ln, Singapore",
             "environment": "Outdoor",
-            "description": "Narrow alleyway famous for independent local boutiques, vintage clothing stores, vibrant murals, and indie cafes.",
+            "description": "Narrow pedestrian street lined with independent boutiques, indie fashion labels, vintage stores, and colorful murals.",
             "tags": [
-                "indie boutiques",
+                "street",
+                "indie",
+                "fashion",
                 "vintage",
-                "street art",
-                "fashion"
+                "boutiques"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1292,7 +1110,7 @@
                 "fashion",
                 "vintage clothing",
                 "local crafts",
-                "accessories"
+                "souvenirs"
             ],
             "eligible": true,
             "checks": [
@@ -1314,34 +1132,182 @@
             "failed_rules": []
         },
         {
-            "name": "Little India Arcade",
+            "name": "Far East Plaza",
             "type": "shopping",
-            "category": "Shopping Arcade",
-            "estimated_cost_sgd": 50.0,
-            "location": "Serangoon Road",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 90.0,
+            "location": "14 Scotts Rd, Singapore 228213",
             "environment": "Indoor",
-            "description": "Colorful historical arcade offering Indian textiles, traditional sweets, spices, and intricate jewelry.",
+            "description": "Legendary retro mall known for underground streetwear, alternative fashion, custom tailoring, and quirky thrift shops.",
             "tags": [
-                "arcade",
-                "indian culture",
-                "textiles",
-                "spices"
+                "mall",
+                "streetwear",
+                "vintage",
+                "fashion"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
                 "none"
             ],
             "shopping_types": [
-                "specialty store"
+                "mall"
             ],
             "shopping_interests": [
-                "textiles",
-                "jewelry",
-                "spices",
+                "fashion",
+                "streetwear",
+                "sneakers",
+                "accessories"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$90.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Mustafa Centre",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 70.0,
+            "location": "145 Syed Alwi Rd, Singapore 207704",
+            "environment": "Indoor",
+            "description": "Massive 24-hour department store in Little India selling everything from groceries and electronics to textiles and souvenirs.",
+            "tags": [
+                "department store",
+                "24 hour",
+                "groceries",
+                "electronics"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "electronics",
+                "souvenirs",
+                "cosmetics",
+                "snacks"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$70.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Chinatown Street Market",
+            "type": "shopping",
+            "category": "Market",
+            "estimated_cost_sgd": 30.0,
+            "location": "Pagoda St, Singapore 050001",
+            "environment": "Outdoor",
+            "description": "Vibrant open-air street market selling traditional Chinese crafts, souvenirs, clothing, and festive goods.",
+            "tags": [
+                "market",
+                "street market",
+                "souvenirs",
+                "crafts"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "street market"
+            ],
+            "shopping_interests": [
+                "souvenirs",
+                "local crafts",
+                "clothing"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$30.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Bugis Street Market",
+            "type": "shopping",
+            "category": "Market",
+            "estimated_cost_sgd": 40.0,
+            "location": "3 New Bugis St, Singapore 188867",
+            "environment": "Indoor",
+            "description": "Sprawling market complex offering affordable clothing, accessories, souvenirs, and street snacks.",
+            "tags": [
+                "market",
+                "budget shopping",
+                "fashion",
+                "souvenirs"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "street market"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "accessories",
                 "souvenirs"
             ],
             "eligible": true,
@@ -1349,7 +1315,7 @@
                 {
                     "label": "Shopping budget",
                     "passed": true,
-                    "detail": "$50.00 <= $100.00"
+                    "detail": "$40.00 <= $100.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1366,63 +1332,18 @@
     ],
     "filtered_out": [
         {
-            "name": "Night Safari",
+            "name": "S.E.A. Aquarium",
             "type": "activity",
-            "category": "Wildlife Park",
-            "estimated_cost_sgd": 55.0,
-            "location": "Mandai Lake Road",
-            "environment": "Outdoor",
-            "description": "The world's first nocturnal wildlife park, allowing visitors to view animals in their natural nighttime habitat via tram or walking trails.",
+            "category": "Aquarium",
+            "estimated_cost_sgd": 51.0,
+            "location": "8 Sentosa Gateway, Sentosa Island, Singapore 098269",
+            "environment": "Indoor",
+            "description": "Massive oceanarium housing thousands of marine animals representing hundreds of species in varied habitats.",
             "tags": [
-                "wildlife",
-                "nature",
-                "adventure",
-                "animals",
-                "night"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": false,
-                    "detail": "$55.00 > $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Activity budget"
-            ]
-        },
-        {
-            "name": "Universal Studios Singapore",
-            "type": "activity",
-            "category": "Theme Park",
-            "estimated_cost_sgd": 82.0,
-            "location": "Sentosa Island",
-            "environment": "Outdoor",
-            "description": "Southeast Asia's first Hollywood movie theme park featuring thrilling rides, shows, and attractions based on blockbuster films.",
-            "tags": [
-                "theme park",
-                "rides",
-                "entertainment",
+                "aquarium",
+                "marine life",
                 "family",
-                "adventure"
+                "indoor"
             ],
             "transport_options": [
                 "transit",
@@ -1438,7 +1359,7 @@
                 {
                     "label": "Activity budget",
                     "passed": false,
-                    "detail": "$82.00 > $50.00"
+                    "detail": "$51.00 > $50.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1457,19 +1378,19 @@
             "name": "Jumbo Seafood",
             "type": "food",
             "category": "Restaurant",
-            "estimated_cost_sgd": 70.0,
-            "location": "Riverside Point",
+            "estimated_cost_sgd": 65.0,
+            "location": "30 Merchant Rd, #01-01/02 Riverside Point, Singapore 058282",
             "environment": "Indoor",
-            "description": "Renowned seafood restaurant famous for its signature chili crab and black pepper crab dishes.",
+            "description": "Renowned seafood restaurant celebrated for its signature chili crab and black pepper crab dishes.",
             "tags": [
+                "local",
                 "seafood",
-                "chinese",
-                "local specialty",
+                "chili crab",
                 "dinner"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1482,7 +1403,93 @@
                 {
                     "label": "Meal budget",
                     "passed": false,
-                    "detail": "$70.00 > $25.00"
+                    "detail": "$65.00 > $25.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Meal budget"
+            ]
+        },
+        {
+            "name": "Sin Hoi Sai Seafood Restaurant",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 45.0,
+            "location": "187 Tembeling Rd, Singapore 423680",
+            "environment": "Outdoor",
+            "description": "Late-night zi char restaurant serving a wide selection of local seafood, frog porridge, and stir-fried dishes.",
+            "tags": [
+                "local",
+                "zi char",
+                "seafood",
+                "late night"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": false,
+                    "detail": "$45.00 > $25.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Meal budget"
+            ]
+        },
+        {
+            "name": "Burnt Ends",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 180.0,
+            "location": "7 Dempsey Rd, #01-04, Singapore 249671",
+            "environment": "Indoor",
+            "description": "Modern barbecue restaurant serving Australian-style smoked meats and grilled dishes from an open kitchen.",
+            "tags": [
+                "barbecue",
+                "grill",
+                "modern",
+                "fine dining"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": false,
+                    "detail": "$180.00 > $25.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1500,20 +1507,20 @@
         {
             "name": "Odette",
             "type": "food",
-            "category": "Fine Dining",
+            "category": "Restaurant",
             "estimated_cost_sgd": 350.0,
-            "location": "St. Andrew's Road",
+            "location": "1 St Andrew's Rd, #01-04 National Gallery Singapore, Singapore 178957",
             "environment": "Indoor",
-            "description": "Three Michelin-starred modern French restaurant located within the National Gallery Singapore.",
+            "description": "Multi-award-winning fine dining establishment offering refined modern French cuisine.",
             "tags": [
                 "fine dining",
                 "french",
-                "michelin",
-                "luxury"
+                "luxury",
+                "michelin"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1542,22 +1549,22 @@
             ]
         },
         {
-            "name": "Burnt Ends",
+            "name": "Native",
             "type": "food",
-            "category": "Modern Australian BBQ",
-            "estimated_cost_sgd": 150.0,
-            "location": "Teck Lim Road",
+            "category": "Bar",
+            "estimated_cost_sgd": 30.0,
+            "location": "52A Amoy St, Singapore 069878",
             "environment": "Indoor",
-            "description": "Michelin-starred modern barbecue restaurant featuring custom-built dual cavity ovens and an open-concept kitchen.",
+            "description": "Cocktail bar focused on using regional ingredients, local spirits, and foraged botanicals.",
             "tags": [
-                "barbecue",
-                "modern",
-                "michelin",
-                "grill"
+                "bar",
+                "cocktails",
+                "nightlife",
+                "drinks"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1570,7 +1577,7 @@
                 {
                     "label": "Meal budget",
                     "passed": false,
-                    "detail": "$150.00 > $25.00"
+                    "detail": "$30.00 > $25.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1590,18 +1597,19 @@
             "type": "food",
             "category": "Bar",
             "estimated_cost_sgd": 40.0,
-            "location": "Parkview Square",
+            "location": "600 North Bridge Rd, Parkview Square, Singapore 188778",
             "environment": "Indoor",
-            "description": "Grand Art Deco lobby bar boasting one of the world's largest gin collections and opulent architecture.",
+            "description": "Grand Art Deco lobby bar known for its extensive gin collection and opulent interior design.",
             "tags": [
                 "bar",
-                "cocktails",
+                "gin",
+                "art deco",
                 "luxury",
-                "art deco"
+                "cocktails"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1630,108 +1638,22 @@
             ]
         },
         {
-            "name": "Candlenut",
-            "type": "food",
-            "category": "Restaurant",
-            "estimated_cost_sgd": 90.0,
-            "location": "Dempsey Road",
-            "environment": "Indoor",
-            "description": "World's first Michelin-starred Peranakan restaurant serving refined Straits-Chinese cuisine.",
-            "tags": [
-                "peranakan",
-                "nyonya",
-                "michelin",
-                "fusion"
-            ],
-            "transport_options": [
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": false,
-                    "detail": "$90.00 > $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Meal budget"
-            ]
-        },
-        {
-            "name": "National Kitchen by Violet Oon",
-            "type": "food",
-            "category": "Restaurant",
-            "estimated_cost_sgd": 80.0,
-            "location": "National Gallery Singapore",
-            "environment": "Indoor",
-            "description": "Elegant dining venue celebrating traditional Peranakan flavours set within the historic City Hall building.",
-            "tags": [
-                "peranakan",
-                "local cuisine",
-                "elegant",
-                "heritage"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": false,
-                    "detail": "$80.00 > $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Meal budget"
-            ]
-        },
-        {
-            "name": "Marina Bay Sands",
+            "name": "Marina Bay Sands Hotel",
             "type": "accommodation",
             "category": "Hotel",
             "estimated_cost_sgd": 650.0,
-            "location": "Bayfront Avenue",
+            "location": "10 Bayfront Ave, Singapore 018956",
             "environment": "Indoor",
-            "description": "Luxury integrated resort featuring iconic rooftop infinity pool, casino, and sweeping views of the city skyline.",
+            "description": "Iconic luxury hotel featuring the world's largest rooftop infinity pool and expansive views of the city.",
             "tags": [
-                "luxury",
                 "hotel",
-                "pool",
-                "iconic"
+                "luxury",
+                "infinity pool",
+                "landmark"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1763,19 +1685,19 @@
             "name": "Raffles Hotel Singapore",
             "type": "accommodation",
             "category": "Hotel",
-            "estimated_cost_sgd": 1100.0,
-            "location": "Beach Road",
+            "estimated_cost_sgd": 950.0,
+            "location": "1 Beach Rd, Singapore 189673",
             "environment": "Indoor",
-            "description": "Historic colonial-style luxury hotel established in 1887, home of the legendary Singapore Sling cocktail.",
+            "description": "Historic colonial-style luxury hotel renowned for its heritage architecture, high-end hospitality, and the birthplace of the Singapore Sling.",
             "tags": [
-                "luxury",
+                "hotel",
                 "heritage",
-                "colonial",
+                "luxury",
                 "historic"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1788,7 +1710,7 @@
                 {
                     "label": "Accommodation budget",
                     "passed": false,
-                    "detail": "$1100.00 > $150.00"
+                    "detail": "$950.00 > $150.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1808,18 +1730,18 @@
             "type": "accommodation",
             "category": "Hotel",
             "estimated_cost_sgd": 450.0,
-            "location": "Fullerton Square",
+            "location": "1 Fullerton Sq, Singapore 049178",
             "environment": "Indoor",
-            "description": "Grand neoclassical luxury hotel housed in a historic 1928 heritage building overlooking the Singapore River.",
+            "description": "Five-star heritage hotel housed in a magnificent neoclassical building overlooking the Singapore River.",
             "tags": [
-                "luxury",
                 "hotel",
                 "heritage",
+                "luxury",
                 "riverside"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1848,22 +1770,22 @@
             ]
         },
         {
-            "name": "YOTEL Singapore Orchard Road",
+            "name": "Capella Singapore",
             "type": "accommodation",
             "category": "Hotel",
-            "estimated_cost_sgd": 220.0,
-            "location": "Orchard Road",
+            "estimated_cost_sgd": 900.0,
+            "location": "1 The Knolls, Sentosa Island, Singapore 098297",
             "environment": "Indoor",
-            "description": "Futuristic, cabin-inspired hotel right in the heart of Singapore's premier shopping district.",
+            "description": "Resort hotel on Sentosa Island blending colonial manor buildings with modern architectural extensions surrounded by lush rainforest.",
             "tags": [
-                "modern",
                 "hotel",
-                "compact",
-                "central"
+                "resort",
+                "luxury",
+                "island",
+                "nature"
             ],
             "transport_options": [
                 "transit",
-                "walk",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1876,51 +1798,7 @@
                 {
                     "label": "Accommodation budget",
                     "passed": false,
-                    "detail": "$220.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Hotel Jen Orchardgateway Singapore",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 320.0,
-            "location": "Orchard Road",
-            "environment": "Indoor",
-            "description": "Contemporary hotel with direct access to Orchard Road shopping malls and a stunning rooftop infinity pool.",
-            "tags": [
-                "hotel",
-                "modern",
-                "pool",
-                "shopping"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$320.00 > $150.00"
+                    "detail": "$900.00 > $150.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1938,20 +1816,20 @@
         {
             "name": "The Warehouse Hotel",
             "type": "accommodation",
-            "category": "Boutique Hotel",
+            "category": "Hotel",
             "estimated_cost_sgd": 380.0,
-            "location": "Havelock Road",
+            "location": "320 Havelock Rd, Singapore 169628",
             "environment": "Indoor",
-            "description": "Industrial-chic boutique hotel situated inside a meticulously restored 1895 godown warehouse along the river.",
+            "description": "Boutique hotel housed in a restored 1895 godown warehouse along the Singapore River, featuring industrial-chic design.",
             "tags": [
+                "hotel",
                 "boutique",
-                "historic",
                 "design",
-                "riverside"
+                "industrial"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -1980,22 +1858,22 @@
             ]
         },
         {
-            "name": "lyf Funan Singapore",
+            "name": "Lloyd's Inn",
             "type": "accommodation",
-            "category": "Serviced Apartment",
-            "estimated_cost_sgd": 200.0,
-            "location": "North Bridge Road",
+            "category": "Hotel",
+            "estimated_cost_sgd": 220.0,
+            "location": "2 Lloyd Rd, Singapore 239091",
             "environment": "Indoor",
-            "description": "Experiential co-living serviced apartment designed for digital nomads and young travelers, integrated with the Funan mall.",
+            "description": "Minimalist boutique hotel offering a tranquil escape tucked away in a quiet residential street near Orchard Road.",
             "tags": [
-                "co living",
-                "modern",
-                "serviced apartment",
-                "hub"
+                "hotel",
+                "boutique",
+                "minimalist",
+                "quiet"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -2008,7 +1886,7 @@
                 {
                     "label": "Accommodation budget",
                     "passed": false,
-                    "detail": "$200.00 > $150.00"
+                    "detail": "$220.00 > $150.00"
                 },
                 {
                     "label": "Avoid list",
@@ -2024,22 +1902,66 @@
             ]
         },
         {
-            "name": "Heritage Collection on Chinatown",
+            "name": "Pan Pacific Singapore",
             "type": "accommodation",
-            "category": "Boutique Hotel",
-            "estimated_cost_sgd": 180.0,
-            "location": "Kreta Ayer Road",
+            "category": "Hotel",
+            "estimated_cost_sgd": 350.0,
+            "location": "7 Raffles Blvd, Marina Square, Singapore 039595",
             "environment": "Indoor",
-            "description": "Appartement-style boutique accommodation housed in restored conservation shophouses in vibrant Chinatown.",
+            "description": "Modern upscale hotel featuring a dramatic atrium and spacious rooms in the heart of Marina Centre.",
             "tags": [
-                "boutique",
-                "shophouse",
-                "apartment",
-                "culture"
+                "hotel",
+                "upscale",
+                "atrium",
+                "business"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$350.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Hotel Mono",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 180.0,
+            "location": "18 Mosque St, Singapore 059498",
+            "environment": "Indoor",
+            "description": "Chic budget-design hotel located in Chinatown, featuring a striking monochromatic interior across conserved shophouses.",
+            "tags": [
+                "hotel",
+                "budget design",
+                "monochrome",
+                "chinatown"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -2068,64 +1990,21 @@
             ]
         },
         {
-            "name": "Ascott Raffles Place Singapore",
-            "type": "accommodation",
-            "category": "Serviced Apartment",
-            "estimated_cost_sgd": 310.0,
-            "location": "Finlayson Green",
-            "environment": "Indoor",
-            "description": "Art deco luxury serviced residence offering spacious apartments with kitchenettes right in the financial district.",
-            "tags": [
-                "serviced apartment",
-                "luxury",
-                "cbd",
-                "business"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$310.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "W Singapore - Sentosa Cove",
+            "name": "Andaz Singapore",
             "type": "accommodation",
             "category": "Hotel",
             "estimated_cost_sgd": 420.0,
-            "location": "Sentosa Island",
+            "location": "5 Fraser St, Singapore 189354",
             "environment": "Indoor",
-            "description": "Glamorous upscale resort hotel located in the marina-side enclave of Sentosa Cove.",
+            "description": "Lifestyle hotel designed by Ole Scheeren, offering vibrant interiors, floor-to-ceiling windows, and panoramic views from Kampong Glam.",
             "tags": [
-                "resort",
-                "luxury",
-                "marina",
-                "island"
+                "hotel",
+                "lifestyle",
+                "modern",
+                "design"
             ],
             "transport_options": [
+                "walk",
                 "transit",
                 "taxi"
             ],
@@ -2155,23 +2034,110 @@
             ]
         },
         {
-            "name": "Pan Pacific Singapore",
+            "name": "Oakwood Premier AMTD Singapore",
+            "type": "accommodation",
+            "category": "Serviced Apartment",
+            "estimated_cost_sgd": 300.0,
+            "location": "6 Shenton Way, OUE Downtown 1, Singapore 068809",
+            "environment": "Indoor",
+            "description": "Luxury serviced apartments in the Central Business District offering apartment-style living with hotel amenities.",
+            "tags": [
+                "serviced apartment",
+                "apartment",
+                "cbd",
+                "long stay"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$300.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Orchard Scotts Residences",
+            "type": "accommodation",
+            "category": "Serviced Apartment",
+            "estimated_cost_sgd": 350.0,
+            "location": "5 Anthony Rd, Singapore 229954",
+            "environment": "Indoor",
+            "description": "High-end serviced apartments featuring extensive outdoor gardens and recreational facilities near Orchard Road.",
+            "tags": [
+                "serviced apartment",
+                "orchard",
+                "residential",
+                "pool"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$350.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "lyf Funan Singapore",
             "type": "accommodation",
             "category": "Hotel",
-            "estimated_cost_sgd": 390.0,
-            "location": "Marina Square",
+            "estimated_cost_sgd": 190.0,
+            "location": "67 Hill St, Level 4 Funan, Singapore 179370",
             "environment": "Indoor",
-            "environment_note": "Indoor atrium",
-            "description": "Renowned luxury hotel with a soaring 38-story atrium, offering panoramic views of Marina Bay.",
+            "description": "Co-living hotel tailored for digital nomads and travelers seeking social community spaces.",
             "tags": [
-                "luxury",
                 "hotel",
-                "atrium",
-                "bay views"
+                "co living",
+                "modern",
+                "tech"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -2184,7 +2150,7 @@
                 {
                     "label": "Accommodation budget",
                     "passed": false,
-                    "detail": "$390.00 > $150.00"
+                    "detail": "$190.00 > $150.00"
                 },
                 {
                     "label": "Avoid list",
@@ -2200,22 +2166,21 @@
             ]
         },
         {
-            "name": "Lloyd's Inn",
+            "name": "Chroma Serviced Apartments",
             "type": "accommodation",
-            "category": "Boutique Hotel",
-            "estimated_cost_sgd": 240.0,
-            "location": "Lloyd Road",
+            "category": "Serviced Apartment",
+            "estimated_cost_sgd": 250.0,
+            "location": "38 Armenian St, Singapore 179942",
             "environment": "Indoor",
-            "description": "Minimalist, brutalist-inspired boutique hotel tucked away in a quiet residential alley near Orchard Road.",
+            "description": "Comfortable apartment rentals centrally located within the arts and heritage district.",
             "tags": [
-                "boutique",
-                "minimalist",
-                "design",
-                "quiet"
+                "serviced apartment",
+                "heritage",
+                "central"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -2228,7 +2193,7 @@
                 {
                     "label": "Accommodation budget",
                     "passed": false,
-                    "detail": "$240.00 > $150.00"
+                    "detail": "$250.00 > $150.00"
                 },
                 {
                     "label": "Avoid list",
@@ -2244,34 +2209,372 @@
             ]
         },
         {
-            "name": "Orchard Road",
-            "type": "shopping",
-            "category": "Shopping Street",
-            "estimated_cost_sgd": 200.0,
-            "location": "Orchard Road",
-            "environment": "Outdoor",
-            "description": "Singapore's premier retail boulevard lined with mega malls, department stores, and international fashion boutiques.",
+            "name": "W Singapore - Sentosa Cove",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 500.0,
+            "location": "21 Ocean Way, Sentosa Island, Singapore 098374",
+            "environment": "Indoor",
+            "description": "Vibrant luxury resort hotel located in the upscale marina residential enclave of Sentosa Cove.",
             "tags": [
-                "shopping street",
-                "fashion",
-                "malls",
-                "retail"
+                "hotel",
+                "resort",
+                "marina",
+                "luxury"
             ],
             "transport_options": [
                 "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$500.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Sofitel Singapore Sentosa Resort & Spa",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 480.0,
+            "location": "2 Bukit Manis Rd, Sentosa Island, Singapore 099891",
+            "environment": "Indoor",
+            "description": "Cliffside luxury resort blending French luxury with lush island greenery overlooking the South China Sea.",
+            "tags": [
+                "hotel",
+                "resort",
+                "spa",
+                "cliffside"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$480.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "ION Orchard",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 250.0,
+            "location": "2 Orchard Turn, Singapore 238801",
+            "environment": "Indoor",
+            "description": "Ultra-modern shopping mall at the gateway of Orchard Road featuring luxury flagship boutiques and high street fashion brands.",
+            "tags": [
+                "mall",
+                "fashion",
+                "luxury",
+                "shopping"
+            ],
+            "transport_options": [
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
                 "none"
             ],
             "shopping_types": [
-                "shopping street"
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "luxury goods",
+                "cosmetics",
+                "watches"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$250.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Ngee Ann City",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 300.0,
+            "location": "391 Orchard Rd, Singapore 238872",
+            "environment": "Indoor",
+            "description": "Prominent shopping complex housing Takashimaya department store and numerous international fashion designer houses.",
+            "tags": [
+                "mall",
+                "department store",
+                "fashion",
+                "shopping"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall",
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "books",
+                "cosmetics",
+                "food"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$300.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Mandarin Gallery",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 400.0,
+            "location": "333 Orchard Rd, Singapore 238867",
+            "environment": "Indoor",
+            "description": "Upscale shopping mall focused on premium international fashion labels and bespoke tailoring.",
+            "tags": [
+                "mall",
+                "fashion",
+                "luxury",
+                "boutiques"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "designer clothing",
+                "accessories"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$400.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Orchard Gateway",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 120.0,
+            "location": "277 Orchard Rd, Singapore 238858",
+            "environment": "Indoor",
+            "description": "Contemporary mall with a sleek glass tubular bridge, popular for trendy youth fashion and local apparel brands.",
+            "tags": [
+                "mall",
+                "fashion",
+                "youth",
+                "streetwear"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "streetwear",
+                "lifestyle"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$120.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Somerset 313",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 110.0,
+            "location": "313 Orchard Rd, Singapore 238895",
+            "environment": "Indoor",
+            "description": "Popular youth-centric shopping destination featuring accessible fast-fashion brands and trendy lifestyle stores.",
+            "tags": [
+                "mall",
+                "fashion",
+                "fast fashion",
+                "youth"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
             ],
             "shopping_interests": [
                 "fashion",
                 "shoes",
-                "accessories",
+                "accessories"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$110.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Wisma Atria",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 150.0,
+            "location": "435 Orchard Rd, Singapore 238877",
+            "environment": "Indoor",
+            "description": "Established shopping centre featuring a mix of international fast-fashion retailers and Japanese specialty stores.",
+            "tags": [
+                "mall",
+                "fashion",
+                "retail",
+                "shopping"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "watches",
                 "cosmetics"
             ],
             "eligible": false,
@@ -2279,7 +2582,56 @@
                 {
                     "label": "Shopping budget",
                     "passed": false,
-                    "detail": "$200.00 > $100.00"
+                    "detail": "$150.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Queensway Shopping Centre",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 140.0,
+            "location": "1 Queensway, Singapore 149053",
+            "environment": "Indoor",
+            "description": "Iconic older mall famous for its concentration of sports equipment stores, sneaker shops, and jersey printing services.",
+            "tags": [
+                "mall",
+                "sports",
+                "sneakers",
+                "fashion"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "sports equipment",
+                "sneakers",
+                "sportswear"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$140.00 > $100.00"
                 },
                 {
                     "label": "Avoid list",
@@ -2299,18 +2651,18 @@
             "type": "shopping",
             "category": "Shopping Mall",
             "estimated_cost_sgd": 500.0,
-            "location": "Bayfront Avenue",
+            "location": "8 Bayfront Ave, Singapore 018955",
             "environment": "Indoor",
-            "description": "Ultra-luxury shopping mall featuring high-end designer brands, indoor waterways with bumboat rides, and fine dining.",
+            "description": "Ultra-luxury shopping mall featuring high-end designer duplexes, canal boat rides, and premier dining options.",
             "tags": [
-                "luxury mall",
-                "designer fashion",
+                "mall",
                 "luxury",
-                "watches"
+                "fashion",
+                "high end"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -2321,8 +2673,8 @@
             ],
             "shopping_interests": [
                 "fashion",
-                "watches",
                 "luxury goods",
+                "watches",
                 "jewelry"
             ],
             "eligible": false,
@@ -2346,124 +2698,22 @@
             ]
         },
         {
-            "name": "ION Orchard",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 300.0,
-            "location": "Orchard Turn",
-            "environment": "Indoor",
-            "description": "Striking futuristic shopping mall at the gateway of Orchard Road featuring luxury flagships and an observation deck.",
-            "tags": [
-                "mall",
-                "luxury",
-                "fashion",
-                "architecture"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "cosmetics",
-                "watches",
-                "luxury goods"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$300.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Takashimaya Department Store",
-            "type": "shopping",
-            "category": "Department Store",
-            "estimated_cost_sgd": 250.0,
-            "location": "Ngee Ann City",
-            "environment": "Indoor",
-            "description": "Renowned Japanese department store occupying multiple floors in Ngee Ann City, complete with a massive basement food hall.",
-            "tags": [
-                "department store",
-                "japanese",
-                "food hall",
-                "fashion"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "department store"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "cosmetics",
-                "food",
-                "homeware"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$250.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
             "name": "VivoCity",
             "type": "shopping",
             "category": "Shopping Mall",
-            "estimated_cost_sgd": 150.0,
-            "location": "HarbourFront Walk",
+            "estimated_cost_sgd": 130.0,
+            "location": "1 HarbourFront Walk, Singapore 098585",
             "environment": "Indoor",
-            "description": "Singapore's largest shopping mall designed by Toyo Ito, featuring sprawling retail stores, rooftop amphitheater, and Sentosa gateway.",
+            "description": "Singapore's largest shopping mall featuring a wide range of retail outlets, rooftop spaces, and scenic waterfront views.",
             "tags": [
                 "mall",
                 "retail",
                 "family",
-                "waterfront"
+                "entertainment"
             ],
             "transport_options": [
-                "transit",
                 "walk",
+                "transit",
                 "taxi"
             ],
             "dietary_tags": [
@@ -2474,270 +2724,16 @@
             ],
             "shopping_interests": [
                 "fashion",
+                "electronics",
                 "books",
-                "electronics",
-                "sports equipment"
+                "cosmetics"
             ],
             "eligible": false,
             "checks": [
                 {
                     "label": "Shopping budget",
                     "passed": false,
-                    "detail": "$150.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Funan Mall",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 180.0,
-            "location": "North Bridge Road",
-            "environment": "Indoor",
-            "description": "Tech-forward lifestyle mall featuring indoor cycling paths, an indoor rock climbing wall, and gadget showrooms.",
-            "tags": [
-                "tech mall",
-                "gadgets",
-                "lifestyle",
-                "indoor sports"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "electronics",
-                "gadgets",
-                "sports equipment",
-                "fashion"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$180.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Jewel Changi Airport",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 200.0,
-            "location": "Airport Boulevard",
-            "environment": "Indoor",
-            "environment_note": "Indoor dome housing outdoor garden elements",
-            "description": "Nature-themed entertainment and retail complex featuring the world's tallest indoor waterfall (Rain Vortex).",
-            "tags": [
-                "airport mall",
-                "waterfall",
-                "retail",
-                "architecture"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "souvenirs",
-                "cosmetics",
-                "food"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$200.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Sim Lim Square",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 300.0,
-            "location": "Rochor Canal Road",
-            "environment": "Indoor",
-            "description": "Multi-story retail center legendary across Southeast Asia as the ultimate destination for IT, computers, and electronics.",
-            "tags": [
-                "electronics",
-                "computers",
-                "gadgets",
-                "tech"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "electronics",
-                "computers",
-                "gadgets",
-                "camera equipment"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$300.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Tang Plaza",
-            "type": "shopping",
-            "category": "Department Store",
-            "estimated_cost_sgd": 220.0,
-            "location": "Orchard Road",
-            "environment": "Indoor",
-            "description": "Iconic local Chinese-pagoda-roofed department store offering fashion, beauty products, and home goods.",
-            "tags": [
-                "department store",
-                "local brand",
-                "fashion",
-                "home goods"
-            ],
-            "transport_options": [
-                "transit",
-                "walk",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "department store"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "cosmetics",
-                "homeware",
-                "souvenirs"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$220.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Queensway Shopping Centre",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 150.0,
-            "location": "Queensway",
-            "environment": "Indoor",
-            "description": "Old-school neighborhood mall widely known as Singapore's go-to spot for discounted sports apparel and sneakers.",
-            "tags": [
-                "sports mall",
-                "sneakers",
-                "discount",
-                "footwear"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "sneakers",
-                "sports equipment",
-                "sportswear",
-                "fashion"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$150.00 > $100.00"
+                    "detail": "$130.00 > $100.00"
                 },
                 {
                     "label": "Avoid list",
