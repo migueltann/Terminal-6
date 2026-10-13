@@ -493,3 +493,63 @@ textarea.invalid-field:focus {
 .client-validation-summary.shown {
     display: block;
 }
+
+.error-panel,
+.notice {
+    display: flex;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    margin: 18px 0;
+    background: #fff0ed;
+    border: 1px solid #f0c8c0;
+    color: #71332c;
+}
+
+.error-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: #a84639;
+    color: #fff;
+    font-weight: 700;
+}
+
+.error-panel h2 {
+    font-size: 16px;
+    margin: 0 0 5px;
+}
+
+.error-panel p {
+    font-size: 13px;
+    margin: 0;
+}
+
+.error-panel .preserved {
+    margin-top: 10px;
+    color: #8e4a40;
+}
+
+.error-panel details {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.error-panel pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.notice {
+    display: block;
+    font-size: 13px;
+}
+
+.notice.success {
+    background: #e9f5ed;
+    border-color: #c7e3d0;
+    color: #225b46;
+}
