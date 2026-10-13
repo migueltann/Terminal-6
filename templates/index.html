@@ -201,6 +201,19 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+                
+                <div class="card-top">
+                    <span class="type-chip">
+                        {{ item.category or title }}
+                    </span>
+
+                    <span class="cost">
+                        S${{ '%.2f'|format(item.estimated_cost_sgd) }}
+                    </span>
+                </div>
+
+                <h3>{{ item.name }}</h3>
+
 
 
             </section>
