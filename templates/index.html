@@ -663,32 +663,22 @@
 
 </main>
 
+<footer>
+    <span>TERMINAL 6</span>
+    <span>AI discovers · Python validates · You decide</span>
+</footer>
 
-                <!-- Generate button -->
-                <div class="form-actions">
-                    <button type="submit" id="generate-button">
-                        Generate recommendations
-                        <span aria-hidden="true">→</span>
-                    </button>
-                </div>
 
-            </form>
+<!-- AI LOADING SCREEN -->
+<div id="loading-screen"
+     class="loading-screen"
+     aria-live="polite"
+     aria-hidden="true">
 
-        </section>
-
-    </main>
-
-    <!-- AI generation loading screen -->
-    <div id="loading-screen" class="loading-screen" hidden>
-        <div class="loading-card">
-            <div class="loading-spinner"></div>
-            <h2>Planning your next adventure...</h2>
-            <p>AI is finding recommendations based on your preferences.</p>
-            <p class="loading-note">
-                Checking activities, food, accommodation and shopping.
-            </p>
-        </div>
+    <div class="loading-card">
     </div>
+</div>
+
         <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("travel-form");
