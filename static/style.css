@@ -196,3 +196,16 @@ p {
     font-size: 11px;
     font-weight: 700;
 }
+
+/* ========================================
+   7. FORM GROUPS AND INPUTS
+======================================== */
+
+.field-group {
+    padding: 25px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.field-group:last-of-type {
+    border-bottom: none;
+}
