@@ -603,5 +603,14 @@ def save():
     return redirect(url_for("index"))
 
 
+@app.get("/reset")
+def reset():
+    _clear_latest_result()
+
+    session.pop("latest_form", None)
+
+    return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
         app.run(debug=True)
