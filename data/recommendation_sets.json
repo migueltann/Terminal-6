@@ -1,9 +1,9 @@
 [
     {
-        "destination": "United States",
-        "approved_count": 31,
-        "json_path": "data\\united_states_20261011_000959.json",
-        "csv_path": "data\\united_states_20261011_000959.csv",
-        "saved_at": "20261011_000959"
+        "destination": "Bangkok, Thailand",
+        "approved_count": 44,
+        "json_path": "data\\bangkok__thailand_20261014_002245.json",
+        "csv_path": "data\\bangkok__thailand_20261014_002245.csv",
+        "saved_at": "20261014_002245"
     }
 ]

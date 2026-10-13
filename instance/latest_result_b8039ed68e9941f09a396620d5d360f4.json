@@ -1,0 +1,2677 @@
+{
+    "destination": "Paris, France",
+    "requirements": {
+        "destination": "Paris, France",
+        "preferred_activities": [
+            "museum"
+        ],
+        "food_preferences": [
+            "local"
+        ],
+        "accommodation_preferences": [
+            "hotel"
+        ],
+        "shopping_preferences": [
+            "fashion"
+        ],
+        "avoid_list": [],
+        "max_activity_spend": 200.0,
+        "max_meal_spend": 100.0,
+        "max_accommodation_spend": 300.0,
+        "max_shopping_spend": 500.0,
+        "activity_environment": "Any",
+        "food_environment": "Any",
+        "shopping_environment": "Any",
+        "preferred_transport": "Any",
+        "dietary": "None"
+    },
+    "summary": {
+        "approved_count": 42,
+        "filtered_out_count": 18
+    },
+    "activities": [
+        {
+            "name": "Musée du Louvre",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 32.0,
+            "location": "Rue de Rivoli, 75001 Paris",
+            "environment": "Indoor",
+            "description": "The world's largest art museum and a historic monument, housing works such as the Mona Lisa and the Venus de Milo.",
+            "tags": [
+                "art",
+                "history",
+                "museum",
+                "culture",
+                "landmark"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$32.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée d'Orsay",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 25.0,
+            "location": "1 Rue de la Légion d'Honneur, 75007 Paris",
+            "environment": "Indoor",
+            "description": "Museum housed in a former railway station, famous for holding the largest collection of impressionist and post-impressionist masterpieces.",
+            "tags": [
+                "art",
+                "museum",
+                "history",
+                "impressionism",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$25.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Centre Pompidou",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 22.0,
+            "location": "Place Georges-Pompidou, 75004 Paris",
+            "environment": "Indoor",
+            "description": "Complex building housing the National Museum of Modern Art, known for its high-tech architecture with external pipes and escalators.",
+            "tags": [
+                "modern art",
+                "architecture",
+                "museum",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$22.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée de l'Orangerie",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 18.0,
+            "location": "Jardin Tuileries, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Art gallery of impressionist and post-impressionist paintings, most notably famous for housing eight Water Lilies murals by Claude Monet.",
+            "tags": [
+                "art",
+                "museum",
+                "monet",
+                "painting",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée Rodin",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 18.0,
+            "location": "77 Rue de Varenne, 75007 Paris",
+            "environment": "Indoor",
+            "description": "Museum that showcases the works of the French sculptor Auguste Rodin, featuring sculptures inside an 18th-century mansion and its expansive gardens.",
+            "tags": [
+                "sculpture",
+                "art",
+                "museum",
+                "gardens"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée Picasso Paris",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 20.0,
+            "location": "5 Rue de Thorigny, 75003 Paris",
+            "environment": "Indoor",
+            "description": "Art museum dedicated to the life and works of the Spanish artist Pablo Picasso, located in the historic Hôtel Salé.",
+            "tags": [
+                "art",
+                "museum",
+                "picasso",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$20.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée Carnavalet",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 0.0,
+            "location": "23 Rue de Sévigné, 75003 Paris",
+            "environment": "Indoor",
+            "description": "Museum dedicated to the history of Paris, from its prehistoric origins up to the modern day, situated in two neighboring mansions.",
+            "tags": [
+                "history",
+                "paris",
+                "museum",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée Yves Saint Laurent Paris",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 21.0,
+            "location": "5 Av. Marceau, 75116 Paris",
+            "environment": "Indoor",
+            "description": "Museum dedicated to the work of fashion designer Yves Saint Laurent, housed in the historic fashion house where he created his designs.",
+            "tags": [
+                "fashion",
+                "museum",
+                "design",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$21.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée de Cluny",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 17.0,
+            "location": "28 Rue du Sommerard, 75005 Paris",
+            "environment": "Indoor",
+            "description": "National museum of the Middle Ages, known for its extensive collection of medieval artifacts including the famous Lady and the Unicorn tapestries.",
+            "tags": [
+                "medieval",
+                "history",
+                "art",
+                "museum"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$17.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Palais de Tokyo",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 18.0,
+            "location": "13 Av. du Président Wilson, 75116 Paris",
+            "environment": "Indoor",
+            "description": "Building dedicated to modern and contemporary art, featuring rotating installations, exhibitions, and performances.",
+            "tags": [
+                "contemporary art",
+                "modern art",
+                "museum",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Eiffel Tower",
+            "type": "activity",
+            "category": "Landmark",
+            "estimated_cost_sgd": 45.0,
+            "location": "Champ de Mars, 5 Av. Anatole France, 75007 Paris",
+            "environment": "Outdoor",
+            "description": "Iconic wrought-iron lattice tower on the Champ de Mars, offering panoramic views of the city from its observation decks.",
+            "tags": [
+                "landmark",
+                "architecture",
+                "views",
+                "sightseeing"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$45.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Seine River Cruise",
+            "type": "activity",
+            "category": "Cruise",
+            "estimated_cost_sgd": 25.0,
+            "location": "Bateaux Parisiens, Port de la Bourdonnais, 75007 Paris",
+            "environment": "Outdoor",
+            "description": "Scenic boat tour along the River Seine passing under historic bridges and past major Parisian monuments.",
+            "tags": [
+                "river",
+                "cruise",
+                "sightseeing",
+                "relax"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$25.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Sainte-Chapelle",
+            "type": "activity",
+            "category": "Historic Site",
+            "estimated_cost_sgd": 18.0,
+            "location": "10 Bd du Palais, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Royal chapel in Gothic style, renowned for its stunning collection of stained-glass windows depicting biblical scenes.",
+            "tags": [
+                "architecture",
+                "history",
+                "religion",
+                "stained glass"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Luxembourg Gardens",
+            "type": "activity",
+            "category": "Park",
+            "estimated_cost_sgd": 0.0,
+            "location": "75006 Paris",
+            "environment": "Outdoor",
+            "description": "Popular public park created in the 17th century, featuring tree-lined promenades, lawns, tennis courts, and the Medici Fountain.",
+            "tags": [
+                "park",
+                "nature",
+                "gardens",
+                "relax"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Montmartre Walking Tour",
+            "type": "activity",
+            "category": "Tour",
+            "estimated_cost_sgd": 0.0,
+            "location": "Montmartre, 75018 Paris",
+            "environment": "Outdoor",
+            "description": "Self-guided walk through the hilly artistic district of Montmartre, winding past cobbled streets, historic cafes, and the Sacré-Cœur.",
+            "tags": [
+                "walking",
+                "neighborhood",
+                "historic",
+                "views"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "food": [
+        {
+            "name": "Le Comptoir de la Relais",
+            "type": "food",
+            "category": "Bistro",
+            "estimated_cost_sgd": 60.0,
+            "location": "9 Carrefour de l'Odėon, 75006 Paris",
+            "environment": "Indoor",
+            "description": "Renowned neighborhood bistro serving traditional local French comfort food in a lively, casual atmosphere.",
+            "tags": [
+                "local",
+                "bistro",
+                "french",
+                "dining"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$60.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Bouillon Chartier",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 30.0,
+            "location": "7 Rue du Faubourg Montmartre, 75009 Paris",
+            "environment": "Indoor",
+            "description": "Historic Belle Époque brasserie offering classic French local dishes at affordable prices in a cavernous, ornate dining room.",
+            "tags": [
+                "local",
+                "historic",
+                "brasserie",
+                "traditional"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$30.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Café de Flore",
+            "type": "food",
+            "category": "Cafe",
+            "estimated_cost_sgd": 35.0,
+            "location": "172 Bd Saint-Germain, 75006 Paris",
+            "environment": "Outdoor",
+            "description": "Famous historic cafe on Saint-Germain-des-Prés, known for its literary history, sidewalk seating, and traditional coffee and pastries.",
+            "tags": [
+                "local",
+                "cafe",
+                "historic",
+                "coffee"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$35.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Les Deux Magots",
+            "type": "food",
+            "category": "Cafe",
+            "estimated_cost_sgd": 35.0,
+            "location": "6 Place Saint-Germain-des-Prés, 75006 Paris",
+            "environment": "Outdoor",
+            "description": "Iconic café frequented by famous intellectuals and artists, serving traditional French breakfast items, hot chocolate, and local bistro snacks.",
+            "tags": [
+                "local",
+                "cafe",
+                "historic",
+                "literary"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$35.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Au Pied de Cochon",
+            "type": "food",
+            "category": "Brasserie",
+            "estimated_cost_sgd": 55.0,
+            "location": "6 Rue Coquillière, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Traditional 24-hour brasserie near Châtelet serving hearty, classic French local pork dishes and seafood platters.",
+            "tags": [
+                "local",
+                "brasserie",
+                "traditional",
+                "no pork"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "no pork"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$55.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Breizh Café",
+            "type": "food",
+            "category": "Creperie",
+            "estimated_cost_sgd": 30.0,
+            "location": "109 Rue Vieille-du-Temple, 75003 Paris",
+            "environment": "Indoor",
+            "description": "Popular creperie in the Marais serving artisanal Breton buckwheat galettes and sweet crepes made with high-quality local ingredients.",
+            "tags": [
+                "local",
+                "crepes",
+                "bistro",
+                "casual"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$30.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Le Procope",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 65.0,
+            "location": "13 Rue de l'Ancienne Comédie, 75006 Paris",
+            "environment": "Indoor",
+            "description": "Claimed to be the oldest continuously operating restaurant in Paris, serving historic French local cuisine in an opulent 18th-century setting.",
+            "tags": [
+                "local",
+                "historic",
+                "restaurant",
+                "french"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$65.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "L'As du Fallafel",
+            "type": "food",
+            "category": "Casual Restaurant",
+            "estimated_cost_sgd": 15.0,
+            "location": "34 Rue des Rosiers, 75004 Paris",
+            "environment": "Indoor",
+            "description": "Famous Middle Eastern eatery in the historic Jewish quarter of the Marais, popular for its bustling takeaway window and falafel pita.",
+            "tags": [
+                "local",
+                "street food",
+                "falafel",
+                "casual"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$15.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Bistrot Paul Bert",
+            "type": "food",
+            "category": "Bistro",
+            "estimated_cost_sgd": 70.0,
+            "location": "18 Rue Paul Bert, 75011 Paris",
+            "environment": "Indoor",
+            "description": "Quintessential Parisian bistro known for its retro decor, traditional steak frites, and classic Grand Marnier soufflé.",
+            "tags": [
+                "bistro",
+                "steak",
+                "traditional",
+                "french"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$70.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Du Pain et des Idées",
+            "type": "food",
+            "category": "Bakery",
+            "estimated_cost_sgd": 10.0,
+            "location": "34 Rue Yves Toudic, 75010 Paris",
+            "environment": "Indoor",
+            "description": "Renowned artisanal bakery in an old-world setting, famous for its escargot pastries and traditional loaves.",
+            "tags": [
+                "bakery",
+                "pastries",
+                "bread",
+                "breakfast"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$10.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Pierre Hermé Paris",
+            "type": "food",
+            "category": "Patisserie",
+            "estimated_cost_sgd": 25.0,
+            "location": "72 Rue Bonaparte, 75006 Paris",
+            "environment": "Indoor",
+            "description": "High-end pastry shop renowned for its inventive macaron flavors and exquisite sweet creations.",
+            "tags": [
+                "patisserie",
+                "dessert",
+                "macarons",
+                "sweets"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$25.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "accommodation": [
+        {
+            "name": "Generator Paris",
+            "type": "accommodation",
+            "category": "Hostel",
+            "estimated_cost_sgd": 120.0,
+            "location": "9 Pl. du Colonel Fabien, 75010 Paris",
+            "environment": "Indoor",
+            "description": "Trendy design hostel offering both shared dorms and private rooms, featuring a lively rooftop bar and social areas.",
+            "tags": [
+                "hostel",
+                "budget",
+                "social",
+                "rooftop"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$120.00 <= $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "CitizenM Paris Gare de Lyon",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 280.0,
+            "location": "8 Rue Van Gogh, 75012 Paris",
+            "environment": "Indoor",
+            "description": "Contemporary tech-forward hotel with compact, mood-lit rooms and a 24-hour rooftop cloud M bar overlooking the city.",
+            "tags": [
+                "hotel",
+                "modern",
+                "tech",
+                "budget luxury"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$280.00 <= $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Saint Christopher's Inn Paris Canal",
+            "type": "accommodation",
+            "category": "Hostel",
+            "estimated_cost_sgd": 90.0,
+            "location": "159 Rue de Crimée, 75019 Paris",
+            "environment": "Indoor",
+            "description": "Lively waterfront hostel located right by the Bassin de la Villette, featuring an attached bar and outdoor terrace.",
+            "tags": [
+                "hostel",
+                "budget",
+                "waterfront",
+                "social"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$90.00 <= $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "shopping": [
+        {
+            "name": "Galeries Lafayette Haussmann",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 300.0,
+            "location": "40 Bd Haussmann, 75009 Paris",
+            "environment": "Indoor",
+            "description": "Famed upscale department store featuring a magnificent neo-Byzantine stained-glass dome and floors of luxury fashion brands.",
+            "tags": [
+                "fashion",
+                "department store",
+                "luxury",
+                "clothing"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "cosmetics",
+                "accessories"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$300.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Le Bon Marché",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 350.0,
+            "location": "24 Rue de Sèvres, 75007 Paris",
+            "environment": "Indoor",
+            "description": "The world's oldest department store, offering an elite selection of designer fashion, beauty products, and gourmet foods.",
+            "tags": [
+                "fashion",
+                "department store",
+                "luxury",
+                "boutique"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "luxury goods",
+                "souvenirs"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$350.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Printemps Haussmann",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 250.0,
+            "location": "64 Bd Haussmann, 75009 Paris",
+            "environment": "Indoor",
+            "description": "Major department store dedicated to French fashion, luxury brands, beauty, and home design under historic stained-glass ceilings.",
+            "tags": [
+                "fashion",
+                "department store",
+                "clothing",
+                "beauty"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "cosmetics",
+                "watches"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$250.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Marais Boutiques District",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 150.0,
+            "location": "Rue des Francs-Bourgeois, 75003 Paris",
+            "environment": "Outdoor",
+            "description": "Trendy historic district filled with independent fashion designers, vintage stores, and concept clothing boutiques.",
+            "tags": [
+                "fashion",
+                "boutique",
+                "shopping street",
+                "trendy"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "vintage clothing",
+                "local crafts"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$150.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Champs-Élysées",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 200.0,
+            "location": "Av. des Champs-Élysées, 75008 Paris",
+            "environment": "Outdoor",
+            "description": "Famous avenue lined with international flagship fashion retailers, luxury car showrooms, cinemas, and cafes.",
+            "tags": [
+                "fashion",
+                "shopping street",
+                "retail",
+                "flagship"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "apparel",
+                "souvenirs"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$200.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "BHV Marais",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 120.0,
+            "location": "52 Rue de Rivoli, 75004 Paris",
+            "environment": "Indoor",
+            "description": "Historic department store focusing on fashion, home improvement, DIY, hardware, and creative design supplies.",
+            "tags": [
+                "fashion",
+                "department store",
+                "home",
+                "hardware"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "home decor",
+                "crafts"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$120.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Rue de Rivoli",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 100.0,
+            "location": "Rue de Rivoli, 75001 Paris",
+            "environment": "Outdoor",
+            "description": "Long historic shopping street featuring continuous arcades, filled with popular fast-fashion apparel brands and souvenir shops.",
+            "tags": [
+                "fashion",
+                "shopping street",
+                "apparel",
+                "retail"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "apparel",
+                "souvenirs"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$100.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Palais Royal Arcades",
+            "type": "shopping",
+            "category": "Specialty Store",
+            "estimated_cost_sgd": 200.0,
+            "location": "Galerie de Valois, 75001 Paris",
+            "environment": "Outdoor",
+            "description": "Covered historical arcades surrounding the Palais Royal garden, housing exclusive vintage fashion, perfume, and art boutiques.",
+            "tags": [
+                "fashion",
+                "specialty store",
+                "vintage",
+                "perfume"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "specialty store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "perfume",
+                "vintage clothing"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$200.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Forum des Halles",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 150.0,
+            "location": "101 Pass. Secteur 3, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Large multi-level subterranean and open-air shopping mall featuring numerous popular clothing brands and beauty shops.",
+            "tags": [
+                "shopping mall",
+                "fashion",
+                "retail",
+                "clothing"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "cosmetics",
+                "shoes"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$150.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Beaugrenelle Paris",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 160.0,
+            "location": "12 Rue Linois, 75015 Paris",
+            "environment": "Indoor",
+            "description": "Modern department store and shopping mall complex near the Seine featuring contemporary fashion brands and lifestyle stores.",
+            "tags": [
+                "shopping mall",
+                "fashion",
+                "modern",
+                "retail"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "lifestyle",
+                "electronics"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$160.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Rue Saint-Honoré",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 300.0,
+            "location": "Rue Saint-Honoré, 75001 Paris",
+            "environment": "Outdoor",
+            "description": "Historic and upscale shopping street known for trendy concept stores, luxury fashion boutiques, and fine leather goods.",
+            "tags": [
+                "fashion",
+                "shopping street",
+                "designer",
+                "luxury"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "leather goods",
+                "accessories"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$300.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Marché aux Puces de Saint-Ouen",
+            "type": "shopping",
+            "category": "Market",
+            "estimated_cost_sgd": 100.0,
+            "location": "140 Rue des Rosiers, 93400 Saint-Ouen",
+            "environment": "Outdoor",
+            "description": "Massive and historic flea market on the northern edge of Paris known for antique furniture, vintage fashion, and collectibles.",
+            "tags": [
+                "street market",
+                "vintage",
+                "antiques",
+                "fashion"
+            ],
+            "transport_options": [
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "street market"
+            ],
+            "shopping_interests": [
+                "vintage clothing",
+                "antiques",
+                "local crafts"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$100.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Shakespeare and Company Bookstore",
+            "type": "shopping",
+            "category": "Specialty Store",
+            "estimated_cost_sgd": 35.0,
+            "location": "37 Rue de la Bûcherie, 75005 Paris",
+            "environment": "Indoor",
+            "description": "World-famous independent English-language bookstore facing the Seine, known for its literary history and cozy nooks.",
+            "tags": [
+                "books",
+                "historic",
+                "specialty store",
+                "independent"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "specialty store"
+            ],
+            "shopping_interests": [
+                "books",
+                "souvenirs"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$35.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "filtered_out": [
+        {
+            "name": "L'Ami Louis",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 150.0,
+            "location": "32 Rue du Vertbois, 75003 Paris",
+            "environment": "Indoor",
+            "description": "Legendary traditional Parisian bistro famed for its old-school interior, generous portions of local French delicacies, and roasted meats.",
+            "tags": [
+                "local",
+                "bistro",
+                "gourmet",
+                "traditional"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": false,
+                    "detail": "$150.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Meal budget"
+            ]
+        },
+        {
+            "name": "Septime",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 120.0,
+            "location": "80 Rue de Tazar, 75011 Paris",
+            "environment": "Indoor",
+            "description": "Acclaimed contemporary neo-bistro serving inventive, seasonal dishes rooted in local French culinary traditions.",
+            "tags": [
+                "local",
+                "modern",
+                "bistro",
+                "gourmet"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": false,
+                    "detail": "$120.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Meal budget"
+            ]
+        },
+        {
+            "name": "Le Jules Verne",
+            "type": "food",
+            "category": "Fine Dining",
+            "estimated_cost_sgd": 350.0,
+            "location": "Eiffel Tower, 75007 Paris",
+            "environment": "Indoor",
+            "description": "Gastronomic restaurant located on the second floor of the Eiffel Tower, offering refined French cuisine and views over the city.",
+            "tags": [
+                "gourmet",
+                "fine dining",
+                "views",
+                "luxury"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": false,
+                    "detail": "$350.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Meal budget"
+            ]
+        },
+        {
+            "name": "Le Train Bleu",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 110.0,
+            "location": "Gare de Lyon, Pl. Louis-Armand, 75012 Paris",
+            "environment": "Indoor",
+            "description": "Opulent Belle Époque restaurant located inside the Gare de Lyon railway station, serving classic French dishes under painted ceilings.",
+            "tags": [
+                "restaurant",
+                "historic",
+                "architecture",
+                "fine dining"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": false,
+                    "detail": "$110.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Meal budget"
+            ]
+        },
+        {
+            "name": "Hôtel Le Bristol Paris",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1800.0,
+            "location": "112 Rue du Faubourg Saint-Honoré, 75008 Paris",
+            "environment": "Indoor",
+            "description": "Luxury palace hotel featuring elegant 18th-century style rooms, a Michelin-starred restaurant, and a courtyard garden.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "spa",
+                "pool"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1800.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Le Meurice",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1600.0,
+            "location": "228 Rue de Rivoli, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Palace hotel combining 18th-century opulence with contemporary surrealist design, overlooking the Tuileries Garden.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "historic",
+                "art"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1600.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Hôtel Plaza Athénée",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1900.0,
+            "location": "25 Av. Montaigne, 75008 Paris",
+            "environment": "Indoor",
+            "description": "Renowned luxury hotel on Avenue Montaigne featuring haute couture decor, signature red awnings, and a courtyard.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "fashion",
+                "spa"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1900.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Mandarin Oriental Paris",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1500.0,
+            "location": "251 Rue Saint-Honoré, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Chic luxury hotel situated on a fashion-focused street near Place Vendôme, offering sleek modern rooms and a peaceful garden.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "modern",
+                "spa"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1500.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Hotel Lutetia",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1400.0,
+            "location": "45 Bd Raspail, 75006 Paris",
+            "environment": "Indoor",
+            "description": "Historic Art Deco luxury hotel located in the vibrant Saint-Germain-des-Prés district on the Left Bank.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "art deco",
+                "historic"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1400.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Shangri-La Paris",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1700.0,
+            "location": "10 Av. d'Iéna, 75116 Paris",
+            "environment": "Indoor",
+            "description": "Former residence of Prince Roland Bonaparte turned luxury hotel, offering breathtaking views of the Eiffel Tower.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "historic",
+                "views"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1700.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "The Hoxton Paris",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 380.0,
+            "location": "30-32 Rue du Sentier, 75002 Paris",
+            "environment": "Indoor",
+            "description": "Vibrant design-focused hotel housed in an 18th-century residence in the 2nd arrondissement, featuring multiple bars and a courtyard.",
+            "tags": [
+                "hotel",
+                "boutique",
+                "design",
+                "trendy"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$380.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Grand Hotel du Palais Royal",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 700.0,
+            "location": "4 Rue de Valois, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Boutique luxury hotel steps away from the Palais Royal gardens, offering refined, quiet rooms and personalized service.",
+            "tags": [
+                "hotel",
+                "boutique",
+                "luxury",
+                "quiet"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$700.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Hotel Regina Louvre",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 550.0,
+            "location": "2 Pl des Pyramides, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Traditional Belle Époque hotel facing the Louvre Museum and the Tuileries Garden, featuring classic antique-furnished rooms.",
+            "tags": [
+                "hotel",
+                "historic",
+                "traditional",
+                "classic"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$550.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Citadines Les Halles Paris",
+            "type": "accommodation",
+            "category": "Serviced Apartment",
+            "estimated_cost_sgd": 320.0,
+            "location": "4 Rue des Innocents, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Modern serviced apartments situated right above the Forum des Halles transport and shopping hub.",
+            "tags": [
+                "apartment",
+                "serviced",
+                "central",
+                "kitchenette"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$320.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Hotel Caron de Beaumarchais",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 350.0,
+            "location": "12 Rue Vieille-du-Temple, 75004 Paris",
+            "environment": "Indoor",
+            "description": "Quaint boutique hotel in the Marais decorated in an authentic 18th-century style inspired by the author of The Marriage of Figaro.",
+            "tags": [
+                "hotel",
+                "boutique",
+                "historic",
+                "romantic"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$350.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Novotel Paris Les Halles",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 340.0,
+            "location": "Place Marguerite de Navarre, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Comfortable, modern four-star hotel situated right in the center of Paris with direct access to major metro lines.",
+            "tags": [
+                "hotel",
+                "central",
+                "family friendly",
+                "modern"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$340.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Avenue Montaigne",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 800.0,
+            "location": "Av. Montaigne, 75008 Paris",
+            "environment": "Outdoor",
+            "description": "Prestigious tree-lined avenue home to haute couture flagship fashion houses including Dior, Chanel, and Saint Laurent.",
+            "tags": [
+                "fashion",
+                "shopping street",
+                "haute couture",
+                "luxury"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "luxury goods",
+                "accessories"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$800.00 > $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Rue du Faubourg Saint-Honoré",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 700.0,
+            "location": "Rue du Faubourg Saint-Honoré, 75008 Paris",
+            "environment": "Outdoor",
+            "description": "World-famous fashion street known for high-end designer boutiques, luxury leather goods, and high-fashion flagships.",
+            "tags": [
+                "fashion",
+                "shopping street",
+                "designer",
+                "luxury"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "leather goods",
+                "shoes"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$700.00 > $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        }
+    ]
+}

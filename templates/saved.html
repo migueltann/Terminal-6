@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Saved Trips · Terminal 6</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">T6</span>
+
+            <span>
+                TERMINAL 6
+                <small>TRAVEL RECOMMENDATION ASSISTANT</small>
+            </span>
+        </a>
+
+        <a class="secondary" href="{{ url_for('index') }}">
+            ← Plan a trip
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="shell">
+
+        <!-- Page Introduction -->
+        <section class="hero">
+            <p class="eyebrow">YOUR TRAVEL LIBRARY</p>
+
+            <h1>
+                Saved <em>journeys.</em>
+            </h1>
+
+            <p class="hero-copy">
+                Open a previous recommendation set or delete one
+                you no longer need.
+            </p>
+        </section>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Saved Recommendation Sets -->
+        {% if saved %}
+
+            <div class="saved-list">
+
+                {% for item in saved | reverse %}
+
+                    <article class="recommendation-card saved-card">
+
+                        <!-- Saved Trip Details -->
+                        <div>
+                            <p class="eyebrow">
+                                SAVED RECOMMENDATION SET
+                            </p>
+
+                            <h3>{{ item.destination }}</h3>
+
+                            <p class="muted">
+                                {{ item.saved_at or 'Saved date unavailable' }}
+                                ·
+                                {{ item.approved_count }}
+                                approved recommendations
+                            </p>
+
+                            <p class="muted">
+                                {{ item.filename }}
+                            </p>
+                        </div>
+
+                        <!-- Saved Trip Actions -->
+                        <div class="saved-actions">
+
+                            <a
+                                class="primary"
+                                href="{{ url_for(
+                                    'view_saved',
+                                    filename=item.filename
+                                ) }}"
+                            >
+                                View results ↗
+                            </a>
+
+                            <form
+                                method="post"
+                                action="{{ url_for(
+                                    'delete_saved',
+                                    filename=item.filename
+                                ) }}"
+                                onsubmit="return confirm(
+                                    'Delete this saved recommendation set and its JSON/CSV files?'
+                                )"
+                            >
+                                <button
+                                    class="secondary"
+                                    type="submit"
+                                >
+                                    Delete
+                                </button>
+                            </form>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        <!-- Empty State -->
+        {% else %}
+
+            <div class="empty-state">
+
+                <span>＋</span>
+
+                <div>
+                    <h3>
+                        No saved recommendation sets yet.
+                    </h3>
+
+                    <p>
+                        Generate a trip and choose
+                        “Save approved results to JSON + CSV”.
+                    </p>
+
+                    <a
+                        href="{{ url_for('index') }}"
+                        class="primary"
+                        style="margin-top: 14px;"
+                    >
+                        Generate recommendations
+                    </a>
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <span>TERMINAL 6</span>
+        <span>AI discovers · Python validates · You decide</span>
+    </footer>
+
+</body>
+</html>

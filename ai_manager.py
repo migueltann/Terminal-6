@@ -60,7 +60,7 @@ def generate_recommendations(destination, user_inputs=None):
                             "response_mime_type": "application/json"
                         },
                     },
-                    timeout=45,
+                    timeout=100,
                 )
             except requests.RequestException as err:
                 last_error = err

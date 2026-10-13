@@ -1,0 +1,971 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Terminal 6 · Travel Recommendation Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .field-error {
+            display: none;
+            color: #b42318;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .field-error.shown {
+            display: block;
+        }
+
+        .invalid-field {
+            border: 1px solid #b42318 !important;
+            background-color: #fff8f7 !important;
+        }
+
+        .client-validation-summary {
+            display: none;
+            margin: 16px 0;
+            padding: 13px 16px;
+            color: #8b2119;
+            background: #fff0ed;
+            border: 1px solid #f0c8c0;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        .client-validation-summary.shown {
+            display: block;
+        }
+
+        button:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <a class="brand" href="{{ url_for('index') }}">
+        <span class="brand-mark">T6</span>
+        <span>
+            TERMINAL 6
+            <small>TRAVEL RECOMMENDATION ASSISTANT</small>
+        </span>
+    </a>
+
+    <span class="status">
+        <i></i>
+        AI discovery · Python-checked &nbsp;
+        <a href="{{ url_for('saved_sets') }}">Saved trips ↗</a>
+    </span>
+</header>
+
+<main class="shell">
+
+    <section class="hero">
+        <p class="eyebrow">YOUR NEXT JOURNEY STARTS HERE</p>
+
+        <h1>
+            Travel planning,<br>
+            <em>made personal.</em>
+        </h1>
+
+        <p class="hero-copy">
+            Tell us what matters to you. AI discovers options,
+            then our Python rules check your budgets, preferences
+            and restrictions.
+        </p>
+
+        <div class="hero-tags">
+            <span>01 · Your preferences</span>
+            <span>02 · AI discovery</span>
+            <span>03 · Rule checking</span>
+        </div>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if error %}
+        <section class="error-panel" role="alert">
+            <div class="error-icon">!</div>
+
+            <div>
+                <h2>We couldn't complete your request</h2>
+                <p>{{ error }}</p>
+
+                {% if technical_error %}
+                    <details>
+                        <summary>Technical details</summary>
+                        <pre>{{ technical_error }}</pre>
+                    </details>
+                {% endif %}
+
+                <p class="preserved">
+                    Your form entries are still here.
+                    Correct the issue above and submit again.
+                </p>
+            </div>
+        </section>
+    {% endif %}
+
+    {% if result %}
+
+        <section class="results-head">
+            <div>
+                <p class="eyebrow">YOUR RESULTS</p>
+                <h2>Ideas for {{ result.destination }}</h2>
+                <p>
+                    AI-generated candidates checked against your requirements.
+                </p>
+            </div>
+
+            <div class="result-count">
+                <strong>{{ result.summary.approved_count }}</strong>
+                <span>approved</span>
+                <small>
+                    {{ result.summary.filtered_out_count }} filtered out
+                </small>
+            </div>
+        </section>
+
+        <section class="summary-grid">           
+            {% for label, value in [
+                ('Activity budget', result.requirements.max_activity_spend),
+                ('Meal budget', result.requirements.max_meal_spend),
+                ('Accommodation / night',
+                    result.requirements.max_accommodation_spend),
+                ('Shopping budget', result.requirements.max_shopping_spend)
+            ] %}
+                <article class="summary-card">
+                    <span>{{ label }}</span>
+                    <strong>S${{ '%.2f'|format(value) }}</strong>
+                </article>
+            {% endfor %}
+        </section>
+
+        <nav class="category-nav">
+            <a href="#activities">
+                Activities <b>{{ result.activities|length }}</b>
+            </a>
+            <a href="#food">
+                Food <b>{{ result.food|length }}</b>
+            </a>
+            <a href="#accommodation">
+                Accommodation <b>{{ result.accommodation|length }}</b>
+            </a>
+            <a href="#shopping">
+                Shopping <b>{{ result.shopping|length }}</b>
+            </a>
+        </nav>
+        {% set sections = [
+            ('activities', 'Activities', result.activities, 'per person'),
+            ('food', 'Food & dining', result.food, 'per person'),
+            ('accommodation', 'Accommodation', result.accommodation, 'per room / night'),
+            ('shopping', 'Shopping', result.shopping, 'typical spend')
+        ] %}
+
+        {% for slug, title, items, cost_note in sections %}
+            <section class="result-section" id="{{ slug }}">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">RECOMMENDATIONS</p>
+                        <h2>{{ title }}</h2>
+                    </div>
+
+                    <span class="pill">
+                        {{ items|length }} approved
+                    </span>
+                </div>
+
+                {% if items %}
+                    <div class="cards">
+                        {% for item in items %}
+                            <article class="recommendation-card">
+
+                                <div class="card-top">
+                                    <span class="type-chip">
+                                        {{ item.category or title }}
+                                    </span>
+
+                                    <span class="cost">
+                                        S${{ '%.2f'|format(item.estimated_cost_sgd) }}
+                                    </span>
+                                </div>
+
+                                <h3>{{ item.name }}</h3>
+
+                                <p class="location">
+                                    ⌖ {{ item.location or 'Location not provided' }}
+                                </p>
+
+                                <p>{{ item.description }}</p>
+
+                                {% if item.price_note %}
+                                    <p class="muted">
+                                        Price note: {{ item.price_note }}
+                                    </p>
+                                {% endif %}
+
+                                <div class="meta">
+                                    <span>{{ item.environment }}</span>
+
+                                    {% if item.transport_options %}
+                                        <span>
+                                            {{ item.transport_options|join(', ') }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                {% if item.reasons %}
+                                    <div class="reasons">
+                                        <strong>Why selected</strong>
+
+                                        {% for reason in item.reasons %}
+                                            <span>✓ {{ reason }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if item.tags %}
+                                    <p class="tags">
+                                        {{ item.tags|join(' · ') }}
+                                    </p>
+                                {% endif %}
+
+                                {% if item.dietary_tags and item.type == 'food' %}
+                                    <p class="muted">
+                                        Dietary tags:
+                                        {{ item.dietary_tags|join(', ') }}
+                                    </p>
+                                {% endif %}
+
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <span>↗</span>
+                        <div>
+                            <h3>No approved recommendations in this category.</h3>
+                            <p>
+                                Try increasing the budget or changing your
+                                preferences and generate again.
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+        {% endfor %}
+
+        <section class="filtered-section">
+            <details>
+                <summary>
+                    Filtered-out recommendations
+                    <span>{{ result.filtered_out|length }}</span>
+                </summary>
+
+                <p class="muted">
+                    These AI candidates failed one or more Python checks.
+                </p>
+
+                {% if result.filtered_out %}
+                    <div class="audit-list">
+                        {% for item in result.filtered_out %}
+                            <article class="audit-card">
+
+                                <div>
+                                    <strong>{{ item.name }}</strong>
+                                    <span>
+                                        {{ item.type|title }} ·
+                                        S${{ '%.2f'|format(item.estimated_cost_sgd) }}
+                                    </span>
+                                </div>
+
+                                {% if item.failed_rules %}
+                                    <p>
+                                        Failed:
+                                        {{ item.failed_rules|join(', ') }}
+                                    </p>
+                                {% endif %}
+
+                                {% if item.checks %}
+                                    <ul>
+                                        {% for check in item.checks %}
+                                            <li class="{{ 'pass' if check.passed else 'fail' }}">
+                                                {{ 'PASS' if check.passed else 'FAIL' }}
+                                                — {{ check.label }}: {{ check.detail }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No recommendations were filtered out.</p>
+                {% endif %}
+            </details>
+        </section>
+
+        <div class="result-actions">
+            <form method="post" action="{{ url_for('save') }}">
+                <button class="primary" type="submit">
+                    Save approved results to JSON + CSV
+                </button>
+            </form>
+
+            <a class="secondary" href="{{ url_for('reset') }}">
+                Plan another trip
+            </a>
+        </div>
+    {% else %}
+        <form id="travel-form"
+              class="form-panel"
+              method="post"
+              action="{{ url_for('generate') }}"
+              novalidate>
+
+            <div class="form-title">
+                <div>
+                    <p class="eyebrow">TRIP SETUP</p>
+                    <h2>Make it yours</h2>
+                    <p>
+                        Required budgets must be greater than zero.
+                        Preference fields are optional.
+                    </p>
+                </div>
+
+                <span class="step-badge">01 / 01</span>
+            </div>
+            <div id="validation-summary"
+                 class="client-validation-summary"
+                 role="alert"></div>
+
+            <!-- DESTINATION -->
+            <div class="field-group">
+                <div class="group-heading">
+                    <span>01</span>
+                    <div>
+                        <h3>Destination</h3>
+                        <p>Enter a city, country, or recognised country code.</p>
+                    </div>
+                </div>
+
+                <label for="destination">Destination <b>*</b></label>
+
+                <input
+                    id="destination"
+                    name="destination"
+                    value="{{ form_data.get('destination', '') }}"
+                    placeholder="e.g. Paris, France or Japan"
+                    required
+                    aria-describedby="error-destination"
+                >
+                <small class="field-error" id="error-destination"></small>
+
+                <small class="hint">
+                    Enter a valid city or country, as in the terminal.
+                </small>
+            </div>
+            <!-- ACTIVITIES -->
+            <div class="field-group">
+                <div class="group-heading">
+                    <span>02</span>
+                    <div>
+                        <h3>Activities</h3>
+                        <p>Set your activity interests and per-activity limit.</p>
+                    </div>
+                </div>
+
+                <label for="preferred_activities">Preferred activities</label>
+                <input
+                    id="preferred_activities"
+                    name="preferred_activities"
+                    value="{{ form_data.get('preferred_activities', '') }}"
+                    placeholder="Museums, hiking, theme parks"
+                >
+
+                <small class="hint">
+                    Separate multiple preferences with commas,
+                    or leave blank for Any.
+                </small>
+
+                <div class="two-col">
+                    <div>
+                        <label for="max_activity_spend">
+                            Max spend per activity (SGD) <b>*</b>
+                        </label>
+
+                        <input
+                            type="number"
+                            id="max_activity_spend"
+                            name="max_activity_spend"
+                            min="0.01"
+                            step="0.01"
+                            value="{{ form_data.get('max_activity_spend', '50') }}"
+                            required
+                            aria-describedby="error-max_activity_spend"
+                        >
+
+                        <small class="field-error"
+                               id="error-max_activity_spend"></small>
+                    </div>
+                    <div>
+                        <label for="activity_environment">Environment</label>
+
+                        <select id="activity_environment"
+                                name="activity_environment">
+                            {% for opt in ['Any', 'Indoor', 'Outdoor'] %}
+                                <option value="{{ opt }}"
+                                    {{ 'selected' if form_data.get('activity_environment', 'Any') == opt else '' }}>
+                                    {{ opt }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FOOD -->
+            <div class="field-group">
+                <div class="group-heading">
+                    <span>03</span>
+                    <div>
+                        <h3>Food & dining</h3>
+                        <p>Tell us your cuisine and dietary requirements.</p>
+                    </div>
+                </div>
+
+                <label for="food_preferences">Cuisine preferences</label>
+
+                <input
+                    id="food_preferences"
+                    name="food_preferences"
+                    value="{{ form_data.get('food_preferences', '') }}"
+                    placeholder="Japanese, Korean, local food"
+                >
+                                <div class="two-col">
+                    <div>
+                        <label for="max_meal_spend">
+                            Max spend per meal (SGD) <b>*</b>
+                        </label>
+
+                        <input
+                            type="number"
+                            id="max_meal_spend"
+                            name="max_meal_spend"
+                            min="0.01"
+                            step="0.01"
+                            value="{{ form_data.get('max_meal_spend', '25') }}"
+                            required
+                            aria-describedby="error-max_meal_spend"
+                        >
+
+                        <small class="field-error"
+                               id="error-max_meal_spend"></small>
+                    </div>
+                    <div>
+                        <label for="food_environment">Food environment</label>
+
+                        <select id="food_environment" name="food_environment">
+                            {% for opt in ['Any', 'Indoor', 'Outdoor'] %}
+                                <option value="{{ opt }}"
+                                    {{ 'selected' if form_data.get('food_environment', 'Any') == opt else '' }}>
+                                    {{ opt }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <label for="dietary">Dietary requirement</label>
+
+                <select id="dietary" name="dietary">
+                    {% for opt in [
+                        'None', 'Halal', 'Vegetarian', 'Vegan',
+                        'Gluten-free', 'No beef', 'No pork',
+                        'Dairy-free', 'Nut-free', 'Other'
+                    ] %}
+                        <option value="{{ opt }}"
+                            {{ 'selected' if form_data.get('dietary', 'None') == opt else '' }}>
+                            {{ opt }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <div id="dietary-custom-wrap" style="display:none">
+                    <label for="dietary_custom">
+                        Other dietary requirement
+                    </label>
+
+                    <input
+                        name="dietary_custom"
+                        id="dietary_custom"
+                        value="{{ form_data.get('dietary_custom', '') }}"
+                        placeholder="Describe your requirement"
+                    >
+                </div>
+            </div>
+            <!-- ACCOMMODATION -->
+            <div class="field-group">
+                <div class="group-heading">
+                    <span>04</span>
+                    <div>
+                        <h3>Accommodation</h3>
+                        <p>Set the type of stay and nightly limit.</p>
+                    </div>
+                </div>
+
+                <label for="accommodation_preferences">
+                    Accommodation preferences
+                </label>
+                <input
+                    id="accommodation_preferences"
+                    name="accommodation_preferences"
+                    value="{{ form_data.get('accommodation_preferences', '') }}"
+                    placeholder="Hotel, hostel, near MRT"
+                >
+                                <label for="max_accommodation_spend">
+                    Max spend per night (SGD) <b>*</b>
+                </label>
+
+                <input
+                    type="number"
+                    id="max_accommodation_spend"
+                    name="max_accommodation_spend"
+                    min="0.01"
+                    step="0.01"
+                    value="{{ form_data.get('max_accommodation_spend', '150') }}"
+                    required
+                    aria-describedby="error-max_accommodation_spend"
+                >
+
+                <small class="field-error"
+                       id="error-max_accommodation_spend"></small>
+            </div>
+            <!-- SHOPPING -->
+            <div class="field-group">
+                <div class="group-heading">
+                    <span>05</span>
+                    <div>
+                        <h3>Shopping</h3>
+                        <p>Choose shopping interests and spending limit.</p>
+                    </div>
+                </div>
+                <label for="shopping_preferences">
+                    Shopping preferences
+                </label>
+
+                <input
+                    id="shopping_preferences"
+                    name="shopping_preferences"
+                    value="{{ form_data.get('shopping_preferences', '') }}"
+                    placeholder="Fashion, electronics, souvenirs, markets"
+                >
+                <div class="two-col">
+                    <div>
+                        <label for="max_shopping_spend">
+                            Max shopping spend (SGD) <b>*</b>
+                        </label>
+
+                        <input
+                            type="number"
+                            id="max_shopping_spend"
+                            name="max_shopping_spend"
+                            min="0.01"
+                            step="0.01"
+                            value="{{ form_data.get('max_shopping_spend', '100') }}"
+                            required
+                            aria-describedby="error-max_shopping_spend"
+                        >
+
+                        <small class="field-error"
+                               id="error-max_shopping_spend"></small>
+                    </div>
+                                        <div>
+                        <label for="shopping_environment">Environment</label>
+
+                        <select id="shopping_environment"
+                                name="shopping_environment">
+                            {% for opt in ['Any', 'Indoor', 'Outdoor'] %}
+                                <option value="{{ opt }}"
+                                    {{ 'selected' if form_data.get('shopping_environment', 'Any') == opt else '' }}>
+                                    {{ opt }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- TRAVEL RESTRICTIONS -->
+            <div class="field-group">
+                <div class="group-heading">
+                    <span>06</span>
+                    <div>
+                        <h3>Travel restrictions</h3>
+                        <p>Rules applied by the Python Logic Manager.</p>
+                    </div>
+                </div>
+                <label for="preferred_transport">
+                    Preferred transport
+                </label>
+
+                <select id="preferred_transport" name="preferred_transport">
+                    {% for opt in ['Any', 'Walk', 'Transit', 'Taxi'] %}
+                        <option value="{{ opt }}"
+                            {{ 'selected' if form_data.get('preferred_transport', 'Any') == opt else '' }}>
+                            {{ opt }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label for="avoid_list">Avoid list</label>
+
+                <input
+                    id="avoid_list"
+                    name="avoid_list"
+                    value="{{ form_data.get('avoid_list', '') }}"
+                    placeholder="Nightlife, theme parks, hiking"
+                >
+
+                <small class="hint">
+                    Separate multiple items with commas,
+                    or leave blank for None.
+                </small>
+            </div>
+                        <div class="submit-row">
+                <div>
+                    <strong>Ready to discover?</strong>
+                    <p>Your inputs will be checked before AI generation.</p>
+                </div>
+
+                <button id="generate-button" class="primary" type="submit">
+                    Generate recommendations <span>↗</span>
+                </button>
+            </div>
+
+        </form>
+
+    {% endif %}
+
+</main>
+
+<footer>
+    <span>TERMINAL 6</span>
+    <span>AI discovers · Python validates · You decide</span>
+</footer>
+
+<!-- AI LOADING SCREEN -->
+<div id="loading-screen"
+     class="loading-screen"
+     hidden
+     aria-live="polite"
+     aria-hidden="true">
+
+    <div class="loading-card">
+        <div class="loader-orbit">
+            <span></span>
+            <i></i>
+        </div>
+
+        <p class="eyebrow">TERMINAL 6 · AI ENGINE</p>
+
+        <h2>Finding your next favourite place</h2>
+
+        <p id="loading-message">
+            Checking your travel requirements…
+        </p>
+
+        <div class="loading-progress">
+            <span></span>
+        </div>
+
+        <div class="loading-steps">
+            <span class="active">01 <small>Validate</small></span>
+            <span>02 <small>Discover</small></span>
+            <span>03 <small>Check rules</small></span>
+        </div>
+
+        <p class="loading-note">
+            This can take a little while while the AI responds.
+            Please keep this page open.
+        </p>
+    </div>
+</div>
+
+<script>
+(() => {
+    // Show or hide the custom dietary input.
+    const dietarySelect = document.getElementById('dietary');
+    const dietaryCustom = document.getElementById('dietary-custom-wrap');
+
+    if (dietarySelect && dietaryCustom) {
+        const updateDietary = () => {
+            dietaryCustom.style.display =
+                dietarySelect.value === 'Other' ? 'block' : 'none';
+        };
+
+        dietarySelect.addEventListener('change', updateDietary);
+        updateDietary();
+    }
+
+    const form = document.getElementById('travel-form');
+
+    // Results page does not contain the input form.
+    if (!form) return;
+
+    const loading = document.getElementById('loading-screen');
+    const message = document.getElementById('loading-message');
+    const button = document.getElementById('generate-button');
+    const steps = loading.querySelectorAll('.loading-steps span');
+    const summary = document.getElementById('validation-summary');
+
+    let submitting = false;
+
+    function clearErrors() {
+        document.querySelectorAll('.field-error').forEach(error => {
+            error.textContent = '';
+            error.classList.remove('shown');
+        });
+
+        form.querySelectorAll('.invalid-field').forEach(input => {
+            input.classList.remove('invalid-field');
+        });
+
+        summary.textContent = '';
+        summary.classList.remove('shown');
+    }
+
+    function showError(fieldName, errorMessage) {
+        const input = document.getElementById(fieldName);
+        const error = document.getElementById('error-' + fieldName);
+
+        if (input) {
+            input.classList.add('invalid-field');
+        }
+
+        if (error) {
+            error.textContent = errorMessage;
+            error.classList.add('shown');
+        } else {
+            summary.textContent += errorMessage + ' ';
+            summary.classList.add('shown');
+        }
+    }
+
+    // Clear an individual error when the user edits that field.
+    form.querySelectorAll('input, select').forEach(input => {
+        input.addEventListener('input', () => {
+            input.classList.remove('invalid-field');
+
+            const error = document.getElementById('error-' + input.name);
+
+            if (error) {
+                error.textContent = '';
+                error.classList.remove('shown');
+            }
+
+            summary.textContent = '';
+            summary.classList.remove('shown');
+        });
+
+        input.addEventListener('change', () => {
+            input.classList.remove('invalid-field');
+
+            const error = document.getElementById('error-' + input.name);
+
+            if (error) {
+                error.textContent = '';
+                error.classList.remove('shown');
+            }
+        });
+    });
+
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        if (submitting) return;
+
+        clearErrors();
+
+        let firstInvalid = null;
+
+        function flagInvalid(fieldName, errorMessage) {
+            showError(fieldName, errorMessage);
+
+            if (!firstInvalid) {
+                firstInvalid = document.getElementById(fieldName);
+            }
+        }
+
+        // Check required fields and budget values locally first.
+        const destinationInput = document.getElementById('destination');
+        const destination = destinationInput.value.trim();
+
+        if (!destination) {
+            flagInvalid(
+                'destination',
+                'Please enter a valid city or country.'
+            );
+        }
+
+        const budgetFields = [
+            'max_activity_spend',
+            'max_meal_spend',
+            'max_accommodation_spend',
+            'max_shopping_spend'
+        ];
+
+        budgetFields.forEach(fieldName => {
+            const input = document.getElementById(fieldName);
+            const raw = input.value.trim();
+            const amount = Number(raw);
+
+            if (
+                raw === '' ||
+                !Number.isFinite(amount) ||
+                amount <= 0
+            ) {
+                flagInvalid(
+                    fieldName,
+                    'Please enter a valid positive amount.'
+                );
+            }
+        });
+
+        // Do not contact the server if a local check has failed.
+        if (firstInvalid) {
+            firstInvalid.focus();
+            firstInvalid.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            return;
+        }
+
+        // Ask Python to validate the destination and other requirements.
+        button.disabled = true;
+        button.textContent = 'Checking your inputs…';
+
+        try {
+            const response = await fetch(
+                "{{ url_for('validate_inputs') }}",
+                {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    'The validation endpoint returned HTTP ' +
+                    response.status
+                );
+            }
+
+            const result = await response.json();
+
+            if (!result.valid) {
+                Object.entries(result.errors || {}).forEach(
+                    ([fieldName, errorMessage]) => {
+                        flagInvalid(fieldName, errorMessage);
+                    }
+                );
+
+                if (!firstInvalid) {
+                    summary.textContent =
+                        result.message ||
+                        'Please correct your inputs and try again.';
+
+                    summary.classList.add('shown');
+                }
+
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                    firstInvalid.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+
+                button.disabled = false;
+                button.innerHTML =
+                    'Generate recommendations <span>↗</span>';
+
+                return;
+            }
+
+            // Validation passed. Now show the loading screen.
+            submitting = true;
+
+            form.style.display = 'none';
+
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.display = 'none';
+            }
+            loading.hidden = false; 
+            loading.classList.add('visible');
+            loading.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('is-loading');
+
+            message.textContent =
+                'Preparing recommendations for ' + destination + '…';
+
+            steps[0].classList.add('active');
+
+            setTimeout(() => {
+                steps[1].classList.add('active');
+                message.textContent =
+                    'Asking AI to discover activities, food, ' +
+                    'accommodation and shopping…';
+            }, 900);
+
+            setTimeout(() => {
+                steps[2].classList.add('active');
+                message.textContent =
+                    'Python is checking budgets, dietary needs, ' +
+                    'transport and avoid-list rules…';
+            }, 3500);
+
+            // Submit to the existing Python generation route.
+            HTMLFormElement.prototype.submit.call(form);
+
+        } catch (error) {
+            console.error('Input validation failed:', error);
+
+            summary.textContent =
+                'Unable to validate your inputs with the server. ' +
+                'Please check that the Python server is running ' +
+                'and try again.';
+
+            summary.classList.add('shown');
+
+            button.disabled = false;
+            button.innerHTML =
+                'Generate recommendations <span>↗</span>';
+        }
+    });
+})();
+</script>
+</body>
+</html>
+

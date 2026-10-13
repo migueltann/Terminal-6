@@ -1,0 +1,2793 @@
+{
+    "destination": "South Korea",
+    "requirements": {
+        "destination": "South Korea",
+        "preferred_activities": [
+            "shopping"
+        ],
+        "food_preferences": [
+            "local"
+        ],
+        "accommodation_preferences": [
+            "hotel"
+        ],
+        "shopping_preferences": [
+            "fashion"
+        ],
+        "avoid_list": [],
+        "max_activity_spend": 200.0,
+        "max_meal_spend": 100.0,
+        "max_accommodation_spend": 150.0,
+        "max_shopping_spend": 100.0,
+        "activity_environment": "Any",
+        "food_environment": "Any",
+        "shopping_environment": "Any",
+        "preferred_transport": "Any",
+        "dietary": "None"
+    },
+    "summary": {
+        "approved_count": 37,
+        "filtered_out_count": 23
+    },
+    "activities": [
+        {
+            "name": "Dongdaemun Design Plaza",
+            "type": "activity",
+            "category": "Landmark",
+            "estimated_cost_sgd": 0.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A major urban landmark in Seoul with a neo-futuristic design, featuring exhibition spaces, a design museum, and rolling rooftop parks.",
+            "tags": [
+                "architecture",
+                "design",
+                "exhibition",
+                "culture",
+                "landmark"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Gyeongbokgung Palace",
+            "type": "activity",
+            "category": "Historical Site",
+            "estimated_cost_sgd": 3.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "The largest of the Five Grand Palaces built during the Joseon Dynasty, featuring expansive throne halls, pavilions, and royal museums.",
+            "tags": [
+                "history",
+                "culture",
+                "palace",
+                "architecture",
+                "heritage"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$3.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "N Seoul Tower",
+            "type": "activity",
+            "category": "Observation Deck",
+            "estimated_cost_sgd": 22.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "Communication and observation tower located on Namsan Mountain, offering panoramic views of the entire Seoul metropolitan area.",
+            "tags": [
+                "observation",
+                "landmark",
+                "views",
+                "cityscape",
+                "entertainment"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$22.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Bukchon Hanok Village",
+            "type": "activity",
+            "category": "Culture Village",
+            "estimated_cost_sgd": 0.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A traditional residential neighborhood in Seoul boasting hundreds of hanok traditional houses dating back to the Joseon Dynasty.",
+            "tags": [
+                "culture",
+                "history",
+                "village",
+                "architecture",
+                "heritage"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Lotte World",
+            "type": "activity",
+            "category": "Theme Park",
+            "estimated_cost_sgd": 65.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A major recreation complex in Seoul containing the world's largest indoor theme park, an outdoor amusement park, an artificial island, and luxury hotels.",
+            "tags": [
+                "amusement park",
+                "entertainment",
+                "rides",
+                "family",
+                "adventure"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$65.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Changdeokgung Palace Secret Garden",
+            "type": "activity",
+            "category": "Garden",
+            "estimated_cost_sgd": 8.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A rear garden of Changdeokgung Palace featuring natural wooded areas, lotus ponds, and pavilions built for the royal family.",
+            "tags": [
+                "nature",
+                "garden",
+                "history",
+                "palace",
+                "heritage"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$8.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "National Museum of Korea",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 0.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "The flagship museum of Korean history and art in South Korea, housing a vast collection of cultural properties and historical artifacts.",
+            "tags": [
+                "museum",
+                "history",
+                "art",
+                "culture",
+                "exhibition"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Bukhansan National Park",
+            "type": "activity",
+            "category": "Nature",
+            "estimated_cost_sgd": 0.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A mountainous national park on the northern fringes of Seoul, popular for hiking, granite peaks, and historical mountain fortresses.",
+            "tags": [
+                "nature",
+                "hiking",
+                "mountains",
+                "adventure",
+                "outdoors"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Leeum Museum of Art",
+            "type": "activity",
+            "category": "Art Museum",
+            "estimated_cost_sgd": 18.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A museum showcasing traditional Korean art alongside contemporary international works, housed in architecturally distinct buildings.",
+            "tags": [
+                "art",
+                "museum",
+                "culture",
+                "exhibition",
+                "architecture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Seoul Folk Flea Market",
+            "type": "activity",
+            "category": "Market",
+            "estimated_cost_sgd": 0.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A massive flea market featuring vintage items, antiques, secondhand goods, and traditional crafts from various eras.",
+            "tags": [
+                "market",
+                "antiques",
+                "vintage",
+                "culture",
+                "shopping"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Garosu-gil Street Styling Tour",
+            "type": "activity",
+            "category": "Walking Tour",
+            "estimated_cost_sgd": 45.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A guided walking tour focusing on the trendy fashion boutiques, designer flagships, and street style culture of Sinsa-dong.",
+            "tags": [
+                "fashion",
+                "walking tour",
+                "style",
+                "design",
+                "local culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$45.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "K-Beauty Makeover Experience",
+            "type": "activity",
+            "category": "Beauty Studio",
+            "estimated_cost_sgd": 120.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A professional styling and makeup session inspired by current Korean celebrity trends and skincare routines.",
+            "tags": [
+                "beauty",
+                "fashion",
+                "styling",
+                "cosmetics",
+                "entertainment"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$120.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Seoul Style Museum Exhibition",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 10.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "An exhibition space dedicated to the evolution of Korean clothing, modern fashion design, and textile arts.",
+            "tags": [
+                "fashion",
+                "history",
+                "museum",
+                "culture",
+                "design"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$10.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Dongdaemun Fashion District Walking Tour",
+            "type": "activity",
+            "category": "Walking Tour",
+            "estimated_cost_sgd": 30.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "An introductory tour of South Korea's largest wholesale and retail fashion hub, exploring manufacturing history and design markets.",
+            "tags": [
+                "fashion",
+                "walking tour",
+                "industry",
+                "design",
+                "local life"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$30.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Styling & Personal Shopper Workshop",
+            "type": "activity",
+            "category": "Workshop",
+            "estimated_cost_sgd": 90.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "An interactive workshop led by local stylists teaching Korean fashion aesthetics, wardrobe curation, and trend forecasting.",
+            "tags": [
+                "fashion",
+                "workshop",
+                "styling",
+                "design",
+                "education"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$90.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "food": [
+        {
+            "name": "Tosokhon Samgyetang",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 20.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A renowned traditional restaurant famous for serving samgyetang, a nourishing ginseng chicken soup stuffed with glutinous rice and jujubes.",
+            "tags": [
+                "local food",
+                "chicken soup",
+                "traditional",
+                "ginseng",
+                "comfort food"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "no pork"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$20.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Gwangjang Market Food Alley",
+            "type": "food",
+            "category": "Food Market",
+            "estimated_cost_sgd": 15.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A bustling traditional street food market offering local delicacies such as bindaetteok mung bean pancakes and mayak gimbap.",
+            "tags": [
+                "street food",
+                "market",
+                "local specialties",
+                "snack",
+                "traditional"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$15.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Myeongdong Kyoja",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 12.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "An iconic local eatery specializing in hand-made knife-cut noodles in a rich chicken broth and steamed dumplings.",
+            "tags": [
+                "noodles",
+                "dumplings",
+                "local eatery",
+                "comfort food",
+                "casual"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$12.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Maple Tree House",
+            "type": "food",
+            "category": "Barbecue Restaurant",
+            "estimated_cost_sgd": 45.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A popular Korean barbecue restaurant serving high-grade hanwoo beef and pork belly grilled at the table.",
+            "tags": [
+                "barbecue",
+                "meat",
+                "local dining",
+                "grilled",
+                "dinner"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$45.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Tongin Market",
+            "type": "food",
+            "category": "Market",
+            "estimated_cost_sgd": 10.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A traditional market where visitors can use brass coins to fill a lunchbox with various small side dishes and street food items from different vendors.",
+            "tags": [
+                "market",
+                "street food",
+                "dosirak",
+                "local culture",
+                "casual"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$10.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Hadongkwan",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 15.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A long-standing institution famous for gomtang, a clear and hearty beef bone soup served with rice.",
+            "tags": [
+                "soup",
+                "beef",
+                "traditional",
+                "local cuisine",
+                "breakfast"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "no pork"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$15.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Noryangjin Fisheries Wholesale Market",
+            "type": "food",
+            "category": "Seafood Market",
+            "estimated_cost_sgd": 40.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A massive wholesale seafood market where visitors can buy fresh catch and have it prepared immediately at nearby restaurants.",
+            "tags": [
+                "seafood",
+                "market",
+                "fresh catch",
+                "local dining",
+                "interactive"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$40.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Balwoo Gongyang",
+            "type": "food",
+            "category": "Temple Food Restaurant",
+            "estimated_cost_sgd": 60.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A Michelin-starred restaurant run by the Jogye Order of Korean Buddhism, serving authentic temple cuisine free of pungent herbs and animal products.",
+            "tags": [
+                "temple food",
+                "vegetarian",
+                "vegan",
+                "buddhist",
+                "mindful dining"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "vegan",
+                "vegetarian"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$60.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Seoul Animation Center Cafe",
+            "type": "food",
+            "category": "Cafe",
+            "estimated_cost_sgd": 10.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A themed cafe located in the animation district offering specialty coffee, character desserts, and creative beverages.",
+            "tags": [
+                "cafe",
+                "coffee",
+                "desserts",
+                "themed",
+                "casual"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$10.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Tosokchon Korean BBQ House",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 35.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A traditional eatery specializing in marinated galbi and locally sourced pork cuts served with authentic banchan side dishes.",
+            "tags": [
+                "local",
+                "barbecue",
+                "meat",
+                "traditional",
+                "banchan"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$35.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Insa-dong Traditional Teahouse",
+            "type": "food",
+            "category": "Teahouse",
+            "estimated_cost_sgd": 12.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A quiet heritage teahouse serving traditional Korean herbal teas, flower teas, and handmade rice cakes.",
+            "tags": [
+                "local",
+                "tea",
+                "traditional",
+                "dessert",
+                "relaxation"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "vegetarian",
+                "vegan"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$12.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Gwangjang Market Dak Hanmari Alley",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 25.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A local favorite spot specializing in whole chicken soup boiled with garlic, potatoes, and rice cakes, paired with spicy dipping sauce.",
+            "tags": [
+                "local",
+                "chicken soup",
+                "comfort food",
+                "hot pot",
+                "shared dining"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "no pork"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$25.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Mangwon Market Street Food Stalls",
+            "type": "food",
+            "category": "Market",
+            "estimated_cost_sgd": 15.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A vibrant neighborhood market offering a wide range of local street snacks, handmade croquettes, and fried chicken.",
+            "tags": [
+                "local",
+                "street food",
+                "market",
+                "snack",
+                "casual"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$15.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Namdaemun Kalguksu Alley",
+            "type": "food",
+            "category": "Food Alley",
+            "estimated_cost_sgd": 10.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A historic alley inside Namdaemun Market where vendors serve steaming bowls of handmade knife-cut noodles and barley rice.",
+            "tags": [
+                "local",
+                "noodles",
+                "market",
+                "alley food",
+                "budget"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$10.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "accommodation": [
+        {
+            "name": "Glad Mapo",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 150.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A sleek business hotel with minimalist industrial interiors, direct subway connectivity, and comfortable work-friendly rooms.",
+            "tags": [
+                "business hotel",
+                "minimalist",
+                "modern",
+                "convenient",
+                "clean"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$150.00 <= $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Seoul N Hotel",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 95.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A neat and functional tourist hotel located within easy reach of Dongdaemun market areas and subway lines.",
+            "tags": [
+                "hotel",
+                "budget friendly",
+                "convenient",
+                "clean",
+                "tourist"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$95.00 <= $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Edele Hotel Myeongdong",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 140.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A comfortable hotel situated steps away from major fashion shopping streets and department stores.",
+            "tags": [
+                "hotel",
+                "fashion district",
+                "shopping",
+                "convenient",
+                "modern"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$140.00 <= $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Hongdae Trend Hotel",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 130.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A vibrant lodging choice surrounded by indie fashion boutiques, youthful nightlife, and concept stores.",
+            "tags": [
+                "hotel",
+                "youth culture",
+                "independent fashion",
+                "lively",
+                "urban"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$130.00 <= $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "shopping": [
+        {
+            "name": "Hongdae Shopping Street",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 100.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A vibrant youth-oriented shopping street featuring indie clothing labels, footwear shops, and quirky accessory stores.",
+            "tags": [
+                "shopping street",
+                "fashion",
+                "indie brands",
+                "streetwear",
+                "youth culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "sneakers",
+                "accessories"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$100.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Namdaemun Market",
+            "type": "shopping",
+            "category": "Market",
+            "estimated_cost_sgd": 80.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "Traditional open-air market offering traditional crafts, kitchenware, garments, souvenirs, and inexpensive clothing.",
+            "tags": [
+                "market",
+                "souvenirs",
+                "traditional crafts",
+                "clothing",
+                "bargain"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "street market"
+            ],
+            "shopping_interests": [
+                "souvenirs",
+                "local crafts",
+                "fashion"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$80.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Yeongdeungpo Underground Shopping Mall",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 60.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A sprawling subterranean shopping arcade offering affordable apparel, shoes, and accessories popular with budget-conscious shoppers.",
+            "tags": [
+                "underground mall",
+                "fashion",
+                "budget shopping",
+                "clothing",
+                "accessories"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "accessories",
+                "shoes"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$60.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Express Bus Terminal Underground Mall",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 70.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "Known as Goto Mall, this massive underground shopping center offers hundreds of shops selling women's fashion, flowers, and home accessories at low prices.",
+            "tags": [
+                "underground mall",
+                "fashion",
+                "clothing",
+                "budget shopping",
+                "accessories"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "accessories",
+                "home goods"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$70.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "filtered_out": [
+        {
+            "name": "Jungsik",
+            "type": "food",
+            "category": "Fine Dining",
+            "estimated_cost_sgd": 200.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A celebrated fine dining establishment pioneering modern innovative Korean cuisine with refined presentation and local ingredients.",
+            "tags": [
+                "fine dining",
+                "modern korean",
+                "gourmet",
+                "luxury",
+                "fusion"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": false,
+                    "detail": "$200.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Meal budget"
+            ]
+        },
+        {
+            "name": "Signiel Seoul",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 550.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A luxury five-star hotel occupying the upper floors of the Lotte World Tower, offering panoramic city views and upscale amenities.",
+            "tags": [
+                "luxury",
+                "hotel",
+                "views",
+                "skyscraper",
+                "premium"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$550.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "L7 Myeongdong",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 180.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A trendy lifestyle hotel situated in the vibrant shopping district of Myeongdong, featuring contemporary interior design and a rooftop foot spa.",
+            "tags": [
+                "lifestyle hotel",
+                "modern",
+                "boutique",
+                "shopping district",
+                "urban"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$180.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Rakkojae Seoul Bukchon Hanok",
+            "type": "accommodation",
+            "category": "Hanok Stay",
+            "estimated_cost_sgd": 400.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A restored traditional Korean courtyard house offering guests an authentic hanok lodging experience with modern comforts.",
+            "tags": [
+                "traditional",
+                "hanok",
+                "heritage",
+                "boutique",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$400.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Grand Hyatt Seoul",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 320.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A luxury hotel nestled on Namsan Mountain, featuring extensive resort-like facilities, pools, and views over the Han River.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "mountain view",
+                "resort",
+                "pools"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$320.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "RYSE, Autograph Collection",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 250.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "An artsy design hotel located in Hongdae, deeply connected to local youth culture, creative communities, and indie music scenes.",
+            "tags": [
+                "design hotel",
+                "art",
+                "youth culture",
+                "boutique",
+                "hip"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$250.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Four Seasons Hotel Seoul",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 480.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A premier luxury hotel in central Seoul offering sophisticated rooms, multiple dining venues, and a subterranean wellness spa.",
+            "tags": [
+                "luxury hotel",
+                "spa",
+                "fine dining",
+                "central",
+                "premium"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$480.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Banyan Tree Club & Spa Seoul",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 600.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "An urban resort providing spacious rooms with private dipping pools, extensive wellness facilities, and tranquil mountain surroundings.",
+            "tags": [
+                "urban resort",
+                "luxury",
+                "spa",
+                "private pool",
+                "relaxation"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$600.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "The Shilla Seoul",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 420.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A legendary luxury hotel renowned for its traditional Korean hospitality, sculpture park, outdoor pool, and high-end duty-free shopping.",
+            "tags": [
+                "luxury hotel",
+                "heritage",
+                "sculpture park",
+                "duty free",
+                "prestigious"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$420.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Sinsa Boutique Hotel",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 170.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A chic hotel located in the heart of Garosu-gil, convenient for boutique shopping and cafe hopping.",
+            "tags": [
+                "hotel",
+                "boutique",
+                "fashion",
+                "trendy",
+                "design"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$170.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Dongdaemun Design Hotel",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 160.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A modern property situated right next to the fashion wholesale markets, popular with apparel buyers and shoppers.",
+            "tags": [
+                "hotel",
+                "fashion hub",
+                "wholesale district",
+                "modern",
+                "convenient"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$160.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Apgujeong Designer Stay",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 210.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A stylish accommodation option located near high-end designer flagships and luxury shopping avenues.",
+            "tags": [
+                "hotel",
+                "luxury shopping",
+                "designer district",
+                "chic",
+                "modern"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$210.00 > $150.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Myeongdong Shopping Street",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 150.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A bustling retail district packed with cosmetics shops, global fast-fashion flagships, and street food carts.",
+            "tags": [
+                "shopping street",
+                "fashion",
+                "cosmetics",
+                "retail",
+                "bustling"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "cosmetics"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$150.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Starfield Coex Mall",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 200.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A massive underground shopping complex housing hundreds of fashion brands, lifestyle stores, and the famous Starfield Library.",
+            "tags": [
+                "mall",
+                "fashion",
+                "books",
+                "entertainment",
+                "indoor shopping"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "books",
+                "lifestyle"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$200.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Garosu-gil",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 250.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A tree-lined street in Sinsa-dong known for independent designer boutiques, trendy apparel shops, and stylish cafes.",
+            "tags": [
+                "shopping street",
+                "fashion",
+                "independent designers",
+                "trendy",
+                "boutiques"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "local crafts",
+                "accessories"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$250.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Dongdaemun Fashion Town",
+            "type": "shopping",
+            "category": "Market",
+            "estimated_cost_sgd": 120.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A massive commercial zone featuring multi-story retail malls and wholesale markets operating late into the night for apparel and accessories.",
+            "tags": [
+                "market",
+                "fashion",
+                "wholesale",
+                "clothing",
+                "night shopping"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "market",
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "textiles",
+                "accessories"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$120.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Shinsegae Department Store Main Branch",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 400.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "Historic department store offering luxury international fashion houses, cosmetics, designer goods, and a gourmet food hall.",
+            "tags": [
+                "department store",
+                "luxury",
+                "fashion",
+                "cosmetics",
+                "designer"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "cosmetics",
+                "watches",
+                "luxury goods"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$400.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Apgujeong Rodeo Street",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 500.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "An upscale fashion street known for luxury boutiques, high-end designer showrooms, and trendy concept stores.",
+            "tags": [
+                "shopping street",
+                "luxury",
+                "fashion",
+                "designer",
+                "exclusive"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "luxury goods",
+                "designer apparel"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$500.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Common Ground",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 130.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "South Korea's first pop-up store built from stacked shipping containers, housing youth fashion brands and creative lifestyle shops.",
+            "tags": [
+                "mall",
+                "container architecture",
+                "fashion",
+                "indie brands",
+                "streetwear"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall",
+                "specialty store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "lifestyle",
+                "accessories"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$130.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Lotte Department Store Main Branch",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 350.0,
+            "location": "Seoul",
+            "environment": "Indoor",
+            "description": "A landmark department store offering extensive selections of domestic and international fashion brands, cosmetics, and duty-free goods.",
+            "tags": [
+                "department store",
+                "fashion",
+                "cosmetics",
+                "duty free",
+                "retail"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "cosmetics",
+                "souvenirs"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$350.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Insa-dong Antique Street",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 150.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A specialized street lined with antique shops, traditional Korean art galleries, calligraphy supplies, and pottery stores.",
+            "tags": [
+                "shopping street",
+                "antiques",
+                "art",
+                "traditional crafts",
+                "souvenirs"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street",
+                "specialty store"
+            ],
+            "shopping_interests": [
+                "local crafts",
+                "antiques",
+                "souvenirs"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$150.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Itaewon Antique Furniture Street",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 200.0,
+            "location": "Seoul",
+            "environment": "Outdoor",
+            "description": "A unique neighborhood street featuring imported vintage furniture, European antiques, and eclectic home decor items.",
+            "tags": [
+                "shopping street",
+                "antiques",
+                "furniture",
+                "vintage",
+                "decor"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street",
+                "specialty store"
+            ],
+            "shopping_interests": [
+                "antiques",
+                "furniture",
+                "vintage items"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$200.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        },
+        {
+            "name": "Hyundai Department Store Pangyo",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 300.0,
+            "location": "Seongnam",
+            "environment": "Indoor",
+            "description": "One of the largest department stores in the metropolitan area featuring premium fashion brands, lifestyle goods, and an expansive food hall.",
+            "tags": [
+                "department store",
+                "fashion",
+                "lifestyle",
+                "food hall",
+                "luxury"
+            ],
+            "transport_options": [
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "lifestyle",
+                "cosmetics"
+            ],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": false,
+                    "detail": "$300.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Shopping budget"
+            ]
+        }
+    ]
+}
