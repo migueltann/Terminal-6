@@ -493,5 +493,75 @@ def delete_saved(filename):
 
     return redirect(url_for("saved_sets"))
 
+@app.post("/download/json")
+def download_json():
+    """Send the current recommendation result to the browser."""
+    result = _get_latest_result()
+
+    if not result:
+        flash(
+            "There are no recommendations to download. "
+            "Please generate recommendations first.",
+            "error",
+        )
+        return redirect(url_for("index"))
+
+    try:
+        destination = str(
+            result.get(
+                "destination",
+                "travel_recommendations",
+            )
+        )
+
+        # Create a safe filename.
+        safe_name = "".join(
+            character.lower()
+            if character.isalnum()
+            else "_"
+            for character in destination
+        ).strip("_")
+
+        if not safe_name:
+            safe_name = "travel_recommendations"
+
+        filename = (
+            f"{safe_name}_recommendations.json"
+        )
+
+        # Serialise the result as readable JSON.
+        json_content = json.dumps(
+            result,
+            indent=4,
+            ensure_ascii=False,
+            allow_nan=False,
+        )
+
+        # Create an in-memory file for the download response.
+        json_file = io.BytesIO(
+            json_content.encode("utf-8")
+        )
+        json_file.seek(0)
+
+        return send_file(
+            json_file,
+            mimetype="application/json",
+            as_attachment=True,
+            download_name=filename,
+        )
+
+    except Exception as exc:
+        app.logger.exception(
+            "JSON download failed"
+        )
+
+        flash(
+            f"Could not download JSON: {exc}",
+            "error",
+        )
+
+        return redirect(url_for("index"))
+
+
 if __name__ == "__main__":
         app.run(debug=True)
