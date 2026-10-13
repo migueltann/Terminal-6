@@ -13,13 +13,17 @@ def manage_saved_recommendations() -> None:
         saved = data_manager.find_saved_sets(keyword)
 
         if not saved:
+            if keyword:
+                io_manager.display_message(
+                    "No saved recommendation sets match that destination."
+                )
+                keyword = ""
+                continue
+            
             io_manager.display_message(
                 "No saved recommendation sets found."
             )
-            if not keyword:
-                return
-            keyword = ""
-            continue
+            return
 
         io_manager.display_saved_sets(saved, keyword)
         choice = io_manager.ask_saved_set_action()
