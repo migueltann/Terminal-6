@@ -129,6 +129,11 @@ def _clear_latest_result():
     except OSError:
         app.logger.exception("Could not remove temporary result.")
 
+# input helpers
+def _split_list(value):
+    """Use the terminal's comma-separated list handling."""
+    return io_manager.normalise_optional_list(value or "")
+
 
 def _error_message(err):
     """Convert common AI/API errors into helpful messages."""
@@ -196,7 +201,106 @@ def _error_message(err):
         )
 
     return f"Recommendation generation failed: {raw}"
-      
+
+
+# validate and normalise form inputs
+def _collect_inputs(form):
+    """Validate and normalise the same requirements as the terminal."""
+
+    destination_raw = (form.get("destination") or "").strip()
+
+    destination, destination_error = (
+        io_manager.validate_destination(destination_raw)
+    )
+
+    errors = []
+    field_errors = {}
+
+    if destination_error:
+        errors.append(destination_error)
+        field_errors["destination"] = destination_error
+
+    data = {
+        "destination": destination or destination_raw,
+    }
+
+    # Preferred activities, food, accommodation, shopping and exclusions.
+    for key in LIST_FIELDS:
+        data[key] = _split_list(form.get(key, ""))
+
+    # Validate all budgets.
+    for key, label in BUDGET_FIELDS:
+        raw = (form.get(key) or "").strip()
+
+        try:
+            number = float(raw)
+
+            if not math.isfinite(number) or number <= 0:
+                raise ValueError
+
+            data[key] = number
+
+        except (ValueError, TypeError):
+            message = "Please enter a valid positive amount."
+
+            errors.append(f"{label}: {message}")
+            field_errors[key] = message
+            data[key] = None
+
+    # Validate environment selections.
+    environment_fields = (
+        ("activity_environment", "Activity environment"),
+        ("food_environment", "Food environment"),
+        ("shopping_environment", "Shopping environment"),
+    )
+
+    for key, label in environment_fields:
+        value = (form.get(key) or "Any").strip().title()
+
+        if value not in ENVIRONMENTS:
+            message = (
+                f"{label} must be Indoor, Outdoor, or Any."
+            )
+            errors.append(message)
+            field_errors[key] = message
+            value = "Any"
+
+        data[key] = value
+
+    # Validate transport.
+    transport = (
+        form.get("preferred_transport") or "Any"
+    ).strip().title()
+
+    if transport not in TRANSPORTS:
+        message = "Transport must be Walk, Transit, Taxi, or Any."
+        errors.append(message)
+        field_errors["preferred_transport"] = message
+        transport = "Any"
+
+    data["preferred_transport"] = transport
+
+    # Normalise dietary preferences.
+    dietary = (
+        io_manager.normalise_optional_text(
+            form.get("dietary")
+        )
+        or "None"
+    )
+
+    if dietary == "Other":
+        dietary = (
+            io_manager.normalise_optional_text(
+                form.get("dietary_custom")
+            )
+            or "None"
+        )
+
+    data["dietary"] = dietary
+
+    return data, errors, field_errors
+
+
 
 @app.get("/")
 def index():
