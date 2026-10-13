@@ -179,6 +179,23 @@
             ('shopping', 'Shopping', result.shopping, 'typical spend')
         ] %}
 
+        {% for slug, title, items, cost_note in sections %}
+            <section class="result-section" id="{{ slug }}">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">RECOMMENDATIONS</p>
+                        <h2>{{ title }}</h2>
+                    </div>
+
+                    <span class="pill">
+                        {{ items|length }} approved
+                    </span>
+                </div>
+
+            </section>
+        {% endfor %}
+
             <!-- Your existing trip planner form starts here -->
             <section id="trip-planner" class="form-panel">
 
