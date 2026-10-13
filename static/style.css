@@ -350,7 +350,7 @@ p {
 }
 
 #generate-button:hover {
-    background: var(--green-dark);
+    background: #194735;
     transform: translateY(-1px);
 }
 
