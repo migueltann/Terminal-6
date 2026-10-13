@@ -764,6 +764,34 @@
             summary.classList.add('shown');
         }
     }
+        // Clear an individual error when the user edits that field.
+    form.querySelectorAll('input, select').forEach(input => {
+        input.addEventListener('input', () => {
+            input.classList.remove('invalid-field');
+
+            const error = document.getElementById('error-' + input.name);
+
+            if (error) {
+                error.textContent = '';
+                error.classList.remove('shown');
+            }
+
+            summary.textContent = '';
+            summary.classList.remove('shown');
+        });
+
+        input.addEventListener('change', () => {
+            input.classList.remove('invalid-field');
+
+            const error = document.getElementById('error-' + input.name);
+
+            if (error) {
+                error.textContent = '';
+                error.classList.remove('shown');
+            }
+        });
+    });
+
 </script>
 </body>
 </html>
