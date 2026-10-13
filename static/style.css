@@ -8,3 +8,17 @@ body {
     background-color: #f5f7f5;
     color: #24352b;
 }
+header {
+    background-color: #225b46;
+    color: white;
+    padding: 24px 40px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+header p {
+    margin-bottom: 0;
+}
