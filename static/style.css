@@ -76,3 +76,7 @@ p {
     letter-spacing: 0;
     font-size: 15px;
 }
+.status {
+    font-size: 12px;
+    color: var(--muted);
+}
