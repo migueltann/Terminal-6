@@ -451,6 +451,14 @@
                     </div>
                 </div>
 
+                <label for="food_preferences">Cuisine preferences</label>
+
+                <input
+                    id="food_preferences"
+                    name="food_preferences"
+                    value="{{ form_data.get('food_preferences', '') }}"
+                    placeholder="Japanese, Korean, local food"
+                >
 
                 <!-- Generate button -->
                 <div class="form-actions">
