@@ -320,8 +320,20 @@ p {
     min-width: 0;
 }
 
-/*Make the form responsive on mobile*/
+/* ========================================
+   8. BUTTONS
+======================================== */
 
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding-top: 25px;
+}
+
+
+/*Make the form responsive on mobile*/
 @media (max-width: 600px) {
     .two-col {
         grid-template-columns: 1fr;
