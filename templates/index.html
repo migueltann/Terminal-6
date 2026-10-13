@@ -394,6 +394,18 @@
                     </div>
                 </div>
             </div>
+            <label for="preferred_activities">Preferred activities</label>
+            <input
+                id="preferred_activities"
+                name="preferred_activities"
+                value="{{ form_data.get('preferred_activities', '') }}"
+                placeholder="Museums, hiking, theme parks"
+            >
+
+            <small class="hint">
+                Separate multiple preferences with commas,
+                or leave blank for Any.
+            </small>
 
 
                 <!-- Budget -->
