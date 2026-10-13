@@ -4,7 +4,7 @@ import logic_manager
 import data_manager
 import io_manager
 
-def manage_saved_recommendations():
+def manage_saved_recommendations() -> None:
     """Terminal menu for viewing, filtering or deleting saved results."""
 
     keyword = ""
@@ -61,7 +61,7 @@ def manage_saved_recommendations():
         else:
             io_manager.display_error("Invalid choice.")
 
-def run_application():
+def run_application() -> None:
     """Run the terminal menu until the user exits."""
 
     # Show the welcome screen when the program starts
