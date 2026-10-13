@@ -292,8 +292,8 @@
 
                     <input
                         type="text"
-                        id="avoid"
-                        name="avoid"
+                        id="avoid_list"
+                        name="avoid_list"
                         placeholder="e.g. crowded places, nightlife, museums"
                     >
 
@@ -313,13 +313,11 @@
                     </div>
 
                     <label for="transport">Preferred transport</label>
-                    <select id="transport" name="transport">
-                        <option value="">No specific preference</option>
-                        <option value="public transport">Public transport</option>
-                        <option value="walking">Walking</option>
-                        <option value="taxi or ride-hailing">Taxi or ride-hailing</option>
-                        <option value="rental car">Rental car</option>
-                        <option value="cycling">Cycling</option>
+                    <select id="preferred_transport" name="preferred_transport">
+                        <option value="Any">Any</option>
+                        <option value="Walk">Walk</option>
+                        <option value="Transit">Transit</option>
+                        <option value="Taxi">Taxi</option>
                     </select>
 
                     <small class="hint">
