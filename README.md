@@ -13,8 +13,9 @@ The application supports both a **terminal interface** and a **Flask web interfa
 - Python-based validation and filtering
 - Approved and rejected recommendations with filtering explanations
 - JSON saving and CSV exporting
-- Automated testing using pytest
+- Automated testing using pytest (works without a live API connection)
 - Continuous integration using GitHub Actions
+- Transparent PASS/FAIL checks for every recommendation and a multi-condition "top pick" rule
 
 ## Setup
 
