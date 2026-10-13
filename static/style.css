@@ -374,3 +374,14 @@ p {
         font-size: 26px;
     }
 }
+
+/* Make the button full-width on mobile*/
+@media (max-width: 600px) {
+    .form-actions {
+        justify-content: stretch;
+    }
+
+    #generate-button {
+        width: 100%;
+    }
+}
