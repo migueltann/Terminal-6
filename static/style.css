@@ -241,6 +241,8 @@ p {
     color: var(--muted);
     font-size: 13px;
 }
+/* Style the labels and hints */
+
 .field-group label {
     display: block;
     margin: 16px 0 8px;
@@ -261,6 +263,7 @@ p {
     line-height: 1.6;
 }
 
+/* Style text and number inputs*/
 .field-group input {
     display: block;
     width: 100%;
@@ -285,6 +288,7 @@ p {
     color: #9aa49e;
 }
 
+/* Style dropdowns*/
 .field-group select {
     display: block;
     width: 100%;
@@ -303,4 +307,15 @@ p {
 .field-group select:focus {
     border-color: var(--green);
     box-shadow: 0 0 0 3px var(--green2);
+}
+/* Create the two-column budget layout*/
+
+.two-col {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.two-col > div {
+    min-width: 0;
 }
