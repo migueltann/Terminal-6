@@ -216,6 +216,40 @@ def _budget_for_item(item, user_inputs):
     key, label = mapping[item["type"]]
     return float(user_inputs[key]), label
 
+def _preferences_for_item(item, user_inputs):
+    """Return the user's preferences for the item's category."""
+
+    keys = {
+        "activity": "preferred_activities",
+        "food": "food_preferences",
+        "accommodation": "accommodation_preferences",
+        "shopping": "shopping_preferences",
+    }
+    return _active_preferences(user_inputs.get(keys[item["type"]], []))
+
+
+def is_top_pick(item, user_inputs, passed_all_checks):
+    """Multi-condition rule using AI output fields.
+
+    A recommendation is a top pick only when ALL three are true:
+    1. it passed every hard restriction,
+    2. its AI-generated tags/text match one of the user's preferences,
+    3. its AI-estimated cost is at most half of the category budget.
+    """
+
+    if not passed_all_checks:
+        return False
+
+    limit, _ = _budget_for_item(item, user_inputs)
+    within_half_budget = item["estimated_cost_sgd"] <= 0.5 * limit
+
+    matches_preference = any(
+        _contains_term(item, preference)
+        for preference in _preferences_for_item(item, user_inputs)
+    )
+
+    return within_half_budget and matches_preference
+
 def evaluate_recommendation(item, user_inputs):
     """Apply hard restrictions and record pass/fail explanations."""
     checks = []
@@ -342,6 +376,7 @@ def evaluate_recommendation(item, user_inputs):
         "item": item,
         "keep": keep,
         "eligible": keep,
+        "top_pick": is_top_pick(item, user_inputs, keep),
         "checks": checks,
         "passed_rules": [
             check["label"]
@@ -365,7 +400,13 @@ def filter_recommendations(items, user_inputs):
         audit.append(decision)
         result_item = dict(item)
 
-        for key in ("eligible", "checks", "passed_rules", "failed_rules"):
+        for key in (
+            "eligible",
+            "top_pick",
+            "checks",
+            "passed_rules",
+            "failed_rules",
+        ):
             result_item[key] = decision[key]
 
         if decision["keep"]:
