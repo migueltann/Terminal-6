@@ -852,6 +852,60 @@
             });
             return;
         }
+                // Ask Python to validate the destination and other requirements.
+        button.disabled = true;
+        button.textContent = 'Checking your inputs…';
+
+        try {
+            const response = await fetch(
+                "{{ url_for('validate_inputs') }}",
+                {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    'The validation endpoint returned HTTP ' +
+                    response.status
+                );
+            }
+
+            const result = await response.json();
+
+            if (!result.valid) {
+                Object.entries(result.errors || {}).forEach(
+                    ([fieldName, errorMessage]) => {
+                        flagInvalid(fieldName, errorMessage);
+                    }
+                );
+
+                if (!firstInvalid) {
+                    summary.textContent =
+                        result.message ||
+                        'Please correct your inputs and try again.';
+
+                    summary.classList.add('shown');
+                }
+
+                if (firstInvalid) {
+                    firstInvalid.focus();
+                    firstInvalid.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+
+                button.disabled = false;
+                button.innerHTML =
+                    'Generate recommendations <span>↗</span>';
+
+                return;
+            }
 </script>
 </body>
 </html>
