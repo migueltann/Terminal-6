@@ -284,7 +284,19 @@
                 </p>
                 
                 {% if result.filtered_out %}
-                    <!-- Filtered recommendation list will be added in Part 3 -->
+                    <div class="audit-list">
+                        {% for item in result.filtered_out %}
+                            <article class="audit-card">
+                                <div>
+                                    <strong>{{ item.name }}</strong>
+                                    <span>
+                                        {{ item.type|title }} ·
+                                        S${{ '%.2f'|format(item.estimated_cost_sgd) }}
+                                    </span>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
                 {% else %}
                     <p>No recommendations were filtered out.</p>
                 {% endif %}
