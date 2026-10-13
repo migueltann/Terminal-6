@@ -89,6 +89,40 @@
                 <span>03 · Rule checking</span>
             </div>
         </section>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if error %}
+        <section class="error-panel" role="alert">
+            <div class="error-icon">!</div>
+
+            <div>
+                <h2>We couldn't complete your request</h2>
+                <p>{{ error }}</p>
+
+                {% if technical_error %}
+                    <details>
+                        <summary>Technical details</summary>
+                        <pre>{{ technical_error }}</pre>
+                    </details>
+                {% endif %}
+
+                <p class="preserved">
+                    Your form entries are still here.
+                    Correct the issue above and submit again.
+                </p>
+            </div>
+        </section>
+    {% endif %}
+
+    {% if result %}
         <!-- Trip planner -->
         <section id="trip-planner" class="form-panel">
 
