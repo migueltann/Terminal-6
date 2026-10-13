@@ -241,3 +241,22 @@ p {
     color: var(--muted);
     font-size: 13px;
 }
+.field-group label {
+    display: block;
+    margin: 16px 0 8px;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.field-group label b {
+    color: #b64b3e;
+}
+
+.hint {
+    display: block;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
