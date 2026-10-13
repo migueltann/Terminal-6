@@ -322,5 +322,91 @@ def index():
         field_errors={},
         )
 
+@app.post("/generate")
+def generate():
+    form_data = request.form.to_dict()
+
+    user_inputs, errors, field_errors = _collect_inputs(
+        request.form
+    )
+
+    # Do not call the AI if validation fails.
+    if errors:
+        return render_template(
+            "index.html",
+            form_data=form_data,
+            result=None,
+            error=(
+                "Please correct the highlighted fields and try again."
+            ),
+            field_errors=field_errors,
+        ), 400
+
+    try:
+        # Generate recommendations using the existing AI manager.
+        raw_items = ai_manager.generate_recommendations(
+            user_inputs["destination"],
+            user_inputs,
+        )
+
+        # Validate the structure returned by the AI.
+        valid_items = logic_manager.validate_ai_response(
+            raw_items
+        )
+
+        if not valid_items:
+            raise ValueError(
+                "AI returned no valid recommendations. "
+                "Please retry; if this repeats, check the AI prompt "
+                "and response fields."
+            )
+
+        # Apply the existing recommendation filtering logic.
+        approved, rejected, audit = (
+            logic_manager.filter_recommendations(
+                valid_items,
+                user_inputs,
+            )
+        )
+
+        # Build the final processed result.
+        result = logic_manager.build_processed_result(
+            user_inputs["destination"],
+            user_inputs,
+            approved,
+            rejected,
+        )
+
+        # Store the full result on the server, not in the cookie.
+        _store_latest_result(result)
+
+        # The form data is small enough to retain in the session.
+        session["latest_form"] = form_data
+
+        return render_template(
+            "index.html",
+            form_data=form_data,
+            result=result,
+            error=None,
+            field_errors={},
+            audit=audit,
+        )
+
+    except Exception as exc:
+        app.logger.exception(
+            "Recommendation generation failed"
+        )
+
+        message = _error_message(exc)
+
+        return render_template(
+            "index.html",
+            form_data=form_data,
+            result=None,
+            error=message,
+            technical_error=str(exc),
+            field_errors={},
+        ), 502
+
 if __name__ == "__main__":
         app.run(debug=True)
