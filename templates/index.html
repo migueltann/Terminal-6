@@ -6,15 +6,26 @@
     <title>Terminal 6 - Travel Assistant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
-    <header>
-        <h1>Terminal 6</h1>
-        <p>Travel Recommendation Assistant</p>
+    <!-- Navigation -->
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">T6</span>
+
+            <span>
+                TERMINAL 6
+                <small>TRAVEL RECOMMENDATION ASSISTANT</small>
+            </span>
+        </a>
+
+        <span class="status">
+            <i></i>
+            AI discovery · Python-checked
+        </span>
     </header>
-        <main>
-        <h2>Plan your next trip</h2>
-        <p>Tell us your preferences and discover travel recommendations.</p>
-    </main>
-    </body>
+
 </html>
+<main>
+</main>
