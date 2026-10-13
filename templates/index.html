@@ -566,7 +566,16 @@
                         <p>Choose shopping interests and spending limit.</p>
                     </div>
                 </div>
+                <label for="shopping_preferences">
+                    Shopping preferences
+                </label>
 
+                <input
+                    id="shopping_preferences"
+                    name="shopping_preferences"
+                    value="{{ form_data.get('shopping_preferences', '') }}"
+                    placeholder="Fashion, electronics, souvenirs, markets"
+                >
 
                 <!-- Generate button -->
                 <div class="form-actions">
