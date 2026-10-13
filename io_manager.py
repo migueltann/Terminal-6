@@ -971,3 +971,41 @@ def display_error(error):
     """Show an error message."""
     print(f"\n[ERROR] {error}")
 
+
+def display_status(level, message):
+    """Show an INFO or WARNING line sent by another module."""
+    print(f"\n[{str(level).upper()}] {message}")
+
+def display_saved_sets(saved, keyword=""):
+    """Show the list of saved recommendation sets."""
+    print("\n" + LINE)
+    print("SAVED RECOMMENDATION SETS")
+    print(LINE)
+
+    if keyword:
+        print(f"Filter: destination contains '{keyword}'")
+
+    for index, entry in enumerate(saved, start=1):
+        print(
+            f"{index}. {entry.get('destination', 'Unknown')} | "
+            f"Approved: {entry.get('approved_count', 0)} | "
+            f"{entry.get('saved_at', '')}"
+        )
+
+def ask_saved_set_action():
+    """Ask what to do in the saved sets menu."""
+    print(
+        "\nEnter a number to view, F to filter by destination, "
+        "D to delete, or B to go back."
+    )
+    return input("Choice: ").strip().lower()
+
+
+def ask_filter_keyword():
+    """Ask for text to search saved destinations for."""
+    return input("Destination to search for (blank shows all): ").strip()
+
+
+def ask_delete_number():
+    """Ask which saved set number to delete."""
+    return input("Number to delete: ").strip()
