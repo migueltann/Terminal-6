@@ -192,71 +192,85 @@
                         {{ items|length }} approved
                     </span>
                 </div>
-                
+
                 {% if items %}
                     <div class="cards">
                         {% for item in items %}
                             <article class="recommendation-card">
+
+                                <div class="card-top">
+                                    <span class="type-chip">
+                                        {{ item.category or title }}
+                                    </span>
+
+                                    <span class="cost">
+                                        S${{ '%.2f'|format(item.estimated_cost_sgd) }}
+                                    </span>
+                                </div>
+
+                                <h3>{{ item.name }}</h3>
+
+                                <p class="location">
+                                    ⌖ {{ item.location or 'Location not provided' }}
+                                </p>
+
+                                <p>{{ item.description }}</p>
+
+                                {% if item.price_note %}
+                                    <p class="muted">
+                                        Price note: {{ item.price_note }}
+                                    </p>
+                                {% endif %}
+
+                                <div class="meta">
+                                    <span>{{ item.environment }}</span>
+
+                                    {% if item.transport_options %}
+                                        <span>
+                                            {{ item.transport_options|join(', ') }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                {% if item.reasons %}
+                                    <div class="reasons">
+                                        <strong>Why selected</strong>
+
+                                        {% for reason in item.reasons %}
+                                            <span>✓ {{ reason }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if item.tags %}
+                                    <p class="tags">
+                                        {{ item.tags|join(' · ') }}
+                                    </p>
+                                {% endif %}
+
+                                {% if item.dietary_tags and item.type == 'food' %}
+                                    <p class="muted">
+                                        Dietary tags:
+                                        {{ item.dietary_tags|join(', ') }}
+                                    </p>
+                                {% endif %}
+
                             </article>
                         {% endfor %}
                     </div>
-                {% endif %}
-                
-                <div class="card-top">
-                    <span class="type-chip">
-                        {{ item.category or title }}
-                    </span>
-
-                    <span class="cost">
-                        S${{ '%.2f'|format(item.estimated_cost_sgd) }}
-                    </span>
-                </div>
-
-                <h3>{{ item.name }}</h3>
-                <p class="location">
-                    ⌖ {{ item.location or 'Location not provided' }}
-                </p>
-
-                <p>{{ item.description }}</p>
-
-                {% if item.price_note %}
-                    <p class="muted">
-                        Price note: {{ item.price_note }}
-                    </p>
-                {% endif %}
-
-                <div class="meta">
-                    <span>{{ item.environment }}</span>
-
-                    {% if item.transport_options %}
-                        <span>
-                            {{ item.transport_options|join(', ') }}
-                        </span>
-                    {% endif %}
-                </div>
-                
-                {% if item.reasons %}
-                    <div class="reasons">
-                        <strong>Why selected</strong>
-
-                        {% for reason in item.reasons %}
-                            <span>✓ {{ reason }}</span>
-                        {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <span>↗</span>
+                        <div>
+                            <h3>No approved recommendations in this category.</h3>
+                            <p>
+                                Try increasing the budget or changing your
+                                preferences and generate again.
+                            </p>
+                        </div>
                     </div>
                 {% endif %}
-                
-                {% if item.tags %}
-                    <p class="tags">
-                        {{ item.tags|join(' · ') }}
-                    </p>
-                {% endif %}
 
-                {% if item.dietary_tags and item.type == 'food' %}
-                    <p class="muted">
-                        Dietary tags:
-                        {{ item.dietary_tags|join(', ') }}
-                    </p>
-                {% endif %}
             </section>
         {% endfor %}
 
