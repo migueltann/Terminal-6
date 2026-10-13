@@ -358,29 +358,26 @@
                  class="client-validation-summary"
                  role="alert"></div>
 
-            <!-- Destination -->
+            <!-- DESTINATION -->
             <div class="field-group">
                 <div class="group-heading">
                     <span>01</span>
                     <div>
-                        <h3>Where are you going?</h3>
-                        <p>Tell us where your journey begins.</p>
+                        <h3>Destination</h3>
+                        <p>Enter a city, country, or recognised country code.</p>
                     </div>
                 </div>
 
-                    <label for="destination">Destination <b>*</b></label>
-                    <input
-                        type="text"
-                        id="destination"
-                        name="destination"
-                        placeholder="e.g. Tokyo, Japan"
-                        required
-                    >
+                <label for="destination">Destination <b>*</b></label>
 
-                    <small class="hint">
-                        Enter a city and country, or a country.
-                    </small>
-                </div>
+                <input
+                    id="destination"
+                    name="destination"
+                    value="{{ form_data.get('destination', '') }}"
+                    placeholder="e.g. Paris, France or Japan"
+                    required
+                    aria-describedby="error-destination"
+                >
 
                 <!-- Budget -->
                 <div class="field-group">
