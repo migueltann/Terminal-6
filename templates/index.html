@@ -157,7 +157,7 @@
                 </article>
             {% endfor %}
         </section>
-        
+
         <nav class="category-nav">
             <a href="#activities">
                 Activities <b>{{ result.activities|length }}</b>
@@ -172,6 +172,12 @@
                 Shopping <b>{{ result.shopping|length }}</b>
             </a>
         </nav>
+        {% set sections = [
+            ('activities', 'Activities', result.activities, 'per person'),
+            ('food', 'Food & dining', result.food, 'per person'),
+            ('accommodation', 'Accommodation', result.accommodation, 'per room / night'),
+            ('shopping', 'Shopping', result.shopping, 'typical spend')
+        ] %}
 
             <!-- Your existing trip planner form starts here -->
             <section id="trip-planner" class="form-panel">
