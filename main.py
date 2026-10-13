@@ -1,8 +1,65 @@
+import os
 import ai_manager
 import logic_manager
 import data_manager
 import io_manager
 
+def manage_saved_recommendations():
+    """Terminal menu for viewing, filtering or deleting saved results."""
+
+    keyword = ""
+
+    while True:
+        saved = data_manager.find_saved_sets(keyword)
+
+        if not saved:
+            io_manager.display_message(
+                "No saved recommendation sets found."
+            )
+            if not keyword:
+                return
+            keyword = ""
+            continue
+
+        io_manager.display_saved_sets(saved, keyword)
+        choice = io_manager.ask_saved_set_action()
+
+        if choice == "b":
+            return
+
+        if choice == "f":
+            keyword = io_manager.ask_filter_keyword()
+            continue
+
+        if choice == "d":
+            number = io_manager.ask_delete_number()
+
+            if number.isdigit() and 1 <= int(number) <= len(saved):
+                filename = os.path.basename(
+                    saved[int(number) - 1]["json_path"]
+                )
+                if data_manager.delete_saved_recommendation(filename):
+                    io_manager.display_message(
+                        "Saved recommendation set deleted."
+                    )
+                    continue
+
+            io_manager.display_error("Invalid selection.")
+            continue
+
+        if choice.isdigit() and 1 <= int(choice) <= len(saved):
+            result = data_manager.load_result(
+                saved[int(choice) - 1]["json_path"]
+            )
+
+            if result:
+                io_manager.display_approved_recommendations(result)
+            else:
+                io_manager.display_error(
+                    "Saved JSON file could not be read."
+                )
+        else:
+            io_manager.display_error("Invalid choice.")
 
 def run_application():
     """Run the terminal menu until the user exits."""
@@ -29,7 +86,11 @@ def run_application():
             )
 
             try:
-                raw_items = ai_manager.generate_recommendations(destination, user_inputs)
+                raw_items = ai_manager.generate_recommendations(
+                    destination,
+                    user_inputs,
+                    notify=io_manager.display_status,
+                )
 
             except Exception as err:
                 io_manager.display_error(
@@ -94,7 +155,7 @@ def run_application():
 
         elif choice == "2":
             # Open the saved recommendations menu
-            data_manager.manage_saved_recommendations()
+            manage_saved_recommendations()
 
         else:
             # End the program
