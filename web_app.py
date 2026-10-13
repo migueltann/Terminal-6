@@ -301,6 +301,16 @@ def _collect_inputs(form):
     return data, errors, field_errors
 
 
+@app.post("/validate-inputs")
+def validate_inputs():
+    """Validate the submitted form before starting AI generation."""
+    _data, errors, field_errors = _collect_inputs(request.form)
+
+    return jsonify({
+        "valid": not errors,
+        "errors": field_errors,
+        "message": " ".join(errors),
+    })
 
 @app.get("/")
 def index():
