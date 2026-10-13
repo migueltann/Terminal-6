@@ -22,3 +22,17 @@ header h1 {
 header p {
     margin-bottom: 0;
 }
+main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px;
+}
+
+main h2 {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+main p {
+    line-height: 1.6;
+}
