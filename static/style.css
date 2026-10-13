@@ -319,3 +319,20 @@ p {
 .two-col > div {
     min-width: 0;
 }
+
+/*Make the form responsive on mobile*/
+
+@media (max-width: 600px) {
+    .two-col {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .group-heading {
+        gap: 10px;
+    }
+
+    .form-title h2 {
+        font-size: 26px;
+    }
+}
