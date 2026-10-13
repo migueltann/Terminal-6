@@ -906,6 +906,39 @@
 
                 return;
             }
+                        // Validation passed. Now show the loading screen.
+            submitting = true;
+
+            form.style.display = 'none';
+
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.display = 'none';
+            }
+
+            loading.classList.add('visible');
+            loading.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('is-loading');
+
+            message.textContent =
+                'Preparing recommendations for ' + destination + '…';
+
+            steps[0].classList.add('active');
+
+            setTimeout(() => {
+                steps[1].classList.add('active');
+                message.textContent =
+                    'Asking AI to discover activities, food, ' +
+                    'accommodation and shopping…';
+            }, 900);
+
+            setTimeout(() => {
+                steps[2].classList.add('active');
+                message.textContent =
+                    'Python is checking budgets, dietary needs, ' +
+                    'transport and avoid-list rules…';
+            }, 3500);
+
 </script>
 </body>
 </html>
