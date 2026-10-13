@@ -116,6 +116,20 @@ def _get_latest_result():
         return None
 
 
+def _clear_latest_result():
+    result_key = session.pop("latest_result_key", None)
+    path = _result_file_path(result_key)
+
+    if not path:
+        return
+
+    try:
+        if os.path.isfile(path):
+            os.remove(path)
+    except OSError:
+        app.logger.exception("Could not remove temporary result.")
+
+        
 
 @app.get("/")
 def index():
