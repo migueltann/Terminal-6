@@ -1,5 +1,5 @@
-@"
-.env
-__pycache__/
-*.py[cod]
-"@ | Set-Content .gitignore
+Set-Content .gitignore -Value @(
+    ".env"
+    "__pycache__/"
+    "*.py[cod]"
+)
