@@ -4,12 +4,13 @@ import csv
 import json
 import os
 from datetime import datetime
+from typing import Any, Optional
 
 DATA_DIR = "data"
 INDEX_FILE = os.path.join(DATA_DIR, "recommendation_sets.json")
 
 
-def ensure_storage_directory():
+def ensure_storage_directory() -> None:
     """Create the data folder and index file if they do not exist yet."""
 
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -18,7 +19,7 @@ def ensure_storage_directory():
             json.dump([], file, indent=4)
 
 
-def _safe_name(value):
+def _safe_name(value: str) -> str:
     """Create a simple file-safe name from the destination."""
 
     return "".join(
@@ -26,7 +27,7 @@ def _safe_name(value):
         for character in value
     ).strip("_")
 
-def save_processed_recommendations(result):
+def save_processed_recommendations(result: dict) -> Optional[tuple[str, str]]:
     """Save approved recommendations in both JSON and CSV format."""
 
     ensure_storage_directory()
@@ -155,7 +156,7 @@ def save_processed_recommendations(result):
     except (IOError, OSError):
         return None
 
-def load_all_sets():
+def load_all_sets() -> list[dict]:
     """Load the list of previously saved recommendation sets."""
 
     ensure_storage_directory()
@@ -168,7 +169,7 @@ def load_all_sets():
         return []
 
 
-def find_saved_sets(destination=""):
+def find_saved_sets(destination: str = "") -> list[dict]:
     """Return saved sets whose destination contains the given text."""
 
     keyword = str(destination).strip().lower()
@@ -179,7 +180,7 @@ def find_saved_sets(destination=""):
         if keyword in str(entry.get("destination", "")).lower()
     ]
 
-def load_result(json_path):
+def load_result(json_path: str) -> Optional[dict]:
     """Load one saved JSON result."""
 
     try:
@@ -188,7 +189,7 @@ def load_result(json_path):
     except (IOError, json.JSONDecodeError):
         return None
 
-def delete_set(index):
+def delete_set(index: int) -> bool:
     """Delete one saved result and its JSON/CSV files."""
 
     saved = load_all_sets()
@@ -215,10 +216,10 @@ def delete_set(index):
         return False
 
 def save_recommendations(
-    destination,
-    recommendations_json,
-    user_inputs_json="{}",
-):
+    destination: str,
+    recommendations_json: Any,
+    user_inputs_json: Any = "{}",
+) -> str:
     """Save recommendations received from the Flask website."""
 
     # Convert JSON text into Python data
@@ -276,7 +277,7 @@ def save_recommendations(
     json_path, csv_path = saved_paths
     return json_path
 
-def get_saved_recommendations():
+def get_saved_recommendations() -> list[dict]:
     """Return saved recommendations in the format used by Flask."""
 
     saved = load_all_sets()
@@ -311,7 +312,7 @@ def get_saved_recommendations():
 
     return result
 
-def delete_saved_recommendation(filename):
+def delete_saved_recommendation(filename: str) -> bool:
     """Delete a saved recommendation using its JSON filename."""
 
     saved = load_all_sets()
