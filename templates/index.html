@@ -336,15 +336,19 @@
             </a>
         </div>
     {% else %}
-      
-        </section>
+        <form id="travel-form"
+              class="form-panel"
+              method="post"
+              action="{{ url_for('generate') }}"
+              novalidate>
+
             <div class="form-title">
                 <div>
                     <p class="eyebrow">TRIP SETUP</p>
                     <h2>Make it yours</h2>
                     <p>
-                        Start by choosing your destination and
-                        travel preferences.
+                        Required budgets must be greater than zero.
+                        Preference fields are optional.
                     </p>
                 </div>
 
