@@ -251,6 +251,41 @@ def is_top_pick(item: dict, user_inputs: dict, passed_all_checks: bool) -> bool:
 
     return within_half_budget and matches_preference
 
+# When a category has no preferences, this many of its cheapest eligible
+# recommendations are marked as top picks instead
+CHEAPEST_TOP_PICK_COUNT = 3
+
+
+def mark_cheapest_top_picks(approved: list[dict], user_inputs: dict) -> None:
+    """Mark the cheapest eligible items as top picks for categories where
+    the user gave no preferences.
+
+    Multi-condition rule: eligible AND no preferences for the category AND
+    cost is at most half of the category budget AND among the cheapest ones.
+    """
+
+    for item_type in ("activity", "food", "accommodation", "shopping"):
+        in_category = [item for item in approved if item["type"] == item_type]
+
+        if not in_category:
+            continue
+
+        if _preferences_for_item(in_category[0], user_inputs):
+            continue
+
+        limit, _ = _budget_for_item(in_category[0], user_inputs)
+        affordable = [
+            item for item in in_category
+            if item["estimated_cost_sgd"] <= 0.5 * limit
+        ]
+        affordable.sort(key=lambda item: item["estimated_cost_sgd"])
+
+        for item in affordable[:CHEAPEST_TOP_PICK_COUNT]:
+            item["top_pick"] = True
+            item["top_pick_reason"] = (
+                "one of the cheapest options and within half of your budget"
+            )
+
 def evaluate_recommendation(item: dict, user_inputs: dict) -> dict:
     """Apply hard restrictions and record pass/fail explanations."""
     checks = []
@@ -410,10 +445,19 @@ def filter_recommendations(items: list[dict], user_inputs: dict) -> tuple[list[d
         ):
             result_item[key] = decision[key]
 
+        if result_item["top_pick"]:
+            result_item["top_pick_reason"] = (
+                "matches your preferences and costs no more than "
+                "half of your budget"
+            )
+
         if decision["keep"]:
             approved.append(result_item)
         else:
             rejected.append(result_item)
+
+    # Categories without preferences: the cheapest eligible items are picked
+    mark_cheapest_top_picks(approved, user_inputs)
 
     return approved, rejected, audit
 
