@@ -1,13 +1,15 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Terminal 6 - Travel Assistant</title>
+    <title>Terminal 6 · Travel Recommendation Assistant</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
     <style>
         .field-error {
             display: none;
@@ -49,81 +51,80 @@
 
 <body>
 
-    <!-- Navigation -->
-    <header class="topbar">
-        <a class="brand" href="{{ url_for('index') }}">
-            <span class="brand-mark">T6</span>
-
-            <span>
-                TERMINAL 6
-                <small>TRAVEL RECOMMENDATION ASSISTANT</small>
-            </span>
-        </a>
-        <span class="status">
-            <i></i>
-            AI discovery · Python-checked &nbsp;
-            <a href="{{ url_for('saved_sets') }}">Saved trips ↗</a>
+<header class="topbar">
+    <a class="brand" href="{{ url_for('index') }}">
+        <span class="brand-mark">T6</span>
+        <span>
+            TERMINAL 6
+            <small>TRAVEL RECOMMENDATION ASSISTANT</small>
         </span>
-    </header>
+    </a>
 
-    <main class="shell">
+    <span class="status">
+        <i></i>
+        AI discovery · Python-checked &nbsp;
+        <a href="{{ url_for('saved_sets') }}">Saved trips ↗</a>
+    </span>
+</header>
 
-        <!-- Homepage introduction -->
-        <section class="hero">
-            <p class="eyebrow">YOUR NEXT JOURNEY STARTS HERE</p>
+<main class="shell">
 
-            <h1>
-                Travel planning,<br>
-                <em>made personal.</em>
-            </h1>
+    <section class="hero">
+        <p class="eyebrow">YOUR NEXT JOURNEY STARTS HERE</p>
 
-            <p class="hero-copy">
-                Tell us what matters to you. AI discovers options,
-                then our Python rules check your budgets, preferences
-                and restrictions.
-            </p>
+        <h1>
+            Travel planning,<br>
+            <em>made personal.</em>
+        </h1>
 
-            <div class="hero-tags">
-                <span>01 · Your preferences</span>
-                <span>02 · AI discovery</span>
-                <span>03 · Rule checking</span>
+        <p class="hero-copy">
+            Tell us what matters to you. AI discovers options,
+            then our Python rules check your budgets, preferences
+            and restrictions.
+        </p>
+
+        <div class="hero-tags">
+            <span>01 · Your preferences</span>
+            <span>02 · AI discovery</span>
+            <span>03 · Rule checking</span>
+        </div>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if error %}
+        <section class="error-panel" role="alert">
+            <div class="error-icon">!</div>
+
+            <div>
+                <h2>We couldn't complete your request</h2>
+                <p>{{ error }}</p>
+
+                {% if technical_error %}
+                    <details>
+                        <summary>Technical details</summary>
+                        <pre>{{ technical_error }}</pre>
+                    </details>
+                {% endif %}
+
+                <p class="preserved">
+                    Your form entries are still here.
+                    Correct the issue above and submit again.
+                </p>
             </div>
         </section>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="notice {{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        {% if error %}
-            <section class="error-panel" role="alert">
-                <div class="error-icon">!</div>
-
-                <div>
-                    <h2>We couldn't complete your request</h2>
-                    <p>{{ error }}</p>
-
-                    {% if technical_error %}
-                        <details>
-                            <summary>Technical details</summary>
-                            <pre>{{ technical_error }}</pre>
-                        </details>
-                    {% endif %}
-
-                    <p class="preserved">
-                        Your form entries are still here.
-                        Correct the issue above and submit again.
-                    </p>
-                </div>
-            </section>
-        {% endif %}
+    {% endif %}
 
     {% if result %}
+
         <section class="results-head">
             <div>
                 <p class="eyebrow">YOUR RESULTS</p>
@@ -141,7 +142,8 @@
                 </small>
             </div>
         </section>
-        <section class="summary-grid">
+
+        <section class="summary-grid">           
             {% for label, value in [
                 ('Activity budget', result.requirements.max_activity_spend),
                 ('Meal budget', result.requirements.max_meal_spend),
@@ -155,7 +157,22 @@
                 </article>
             {% endfor %}
         </section>
-        {% else %}
+        
+        <nav class="category-nav">
+            <a href="#activities">
+                Activities <b>{{ result.activities|length }}</b>
+            </a>
+            <a href="#food">
+                Food <b>{{ result.food|length }}</b>
+            </a>
+            <a href="#accommodation">
+                Accommodation <b>{{ result.accommodation|length }}</b>
+            </a>
+            <a href="#shopping">
+                Shopping <b>{{ result.shopping|length }}</b>
+            </a>
+        </nav>
+
             <!-- Your existing trip planner form starts here -->
             <section id="trip-planner" class="form-panel">
 
