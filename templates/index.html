@@ -123,6 +123,24 @@
     {% endif %}
 
     {% if result %}
+        <section class="results-head">
+            <div>
+                <p class="eyebrow">YOUR RESULTS</p>
+                <h2>Ideas for {{ result.destination }}</h2>
+                <p>
+                    AI-generated candidates checked against your requirements.
+                </p>
+            </div>
+
+            <div class="result-count">
+                <strong>{{ result.summary.approved_count }}</strong>
+                <span>approved</span>
+                <small>
+                    {{ result.summary.filtered_out_count }} filtered out
+                </small>
+            </div>
+        </section>
+    {% endif %}
         <!-- Trip planner -->
         <section id="trip-planner" class="form-panel">
 
