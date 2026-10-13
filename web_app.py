@@ -429,5 +429,51 @@ def saved_sets():
         saved=saved,
     )
 
+
+@app.get("/saved/view/<path:filename>")
+def view_saved(filename):
+    """Display a saved recommendation set."""
+    # Only open files registered by the data manager.
+    entry = next(
+        (
+            item
+            for item in data_manager.get_saved_recommendations()
+            if os.path.basename(
+                item.get("json_path", "")
+            ) == filename
+        ),
+        None,
+    )
+
+    if not entry:
+        flash(
+            "That saved recommendation set was not found.",
+            "error",
+        )
+        return redirect(url_for("saved_sets"))
+
+    result = data_manager.load_result(
+        entry["json_path"]
+    )
+
+    if not result:
+        flash(
+            "The saved JSON file could not be read.",
+            "error",
+        )
+        return redirect(url_for("saved_sets"))
+
+    # Make this result available to the Save and Download buttons.
+    _store_latest_result(result)
+
+    return render_template(
+        "index.html",
+        form_data={},
+        result=result,
+        error=None,
+        field_errors={},
+    )
+
+
 if __name__ == "__main__":
         app.run(debug=True)
