@@ -655,3 +655,77 @@ textarea.invalid-field:focus {
     color: var(--muted);
     margin: 0;
 }
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 22px max(5vw, 24px);
+    background: #fff;
+    border-top: 1px solid var(--line);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+footer span:first-child {
+    font-weight: 700;
+    color: var(--green);
+}
+
+@media (max-width: 700px) {
+    .topbar { height: 68px; }
+    .status { display: none; }
+    .hero { padding-top: 40px; }
+    .form-panel { padding: 22px 18px; }
+
+    .two-col,
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+
+    .submit-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .submit-row .primary { width: 100%; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .results-head {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .results-head h2 { font-size: 25px; }
+    .result-count strong { font-size: 30px; }
+    .loading-card { padding: 35px 20px; }
+
+    footer {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .result-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .result-actions .primary,
+    .result-actions .secondary {
+        width: 100%;
+    }
+
+    .saved-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .saved-actions { width: 100%; }
+
+    .saved-actions .primary,
+    .saved-actions .secondary { flex: 1; }
+
+    .field-error { font-size: 12px; }
+    .client-validation-summary { font-size: 12px; padding: 12px; }
+}
