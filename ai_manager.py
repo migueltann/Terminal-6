@@ -78,8 +78,30 @@ def generate_recommendations(destination, user_inputs=None, notify=None):
 
             # Return the recommendations when the API call works
             if response.status_code == 200:
+                try:
+                    recommendations = parse_gemini_response(response)
+                except RuntimeError as err:
+                    # Malformed output: retry, then try the next model
+                    last_error = err
+
+                    if attempt < 2:
+                        _notify(
+                            notify,
+                            "warning",
+                            f"{model_name} returned malformed output. "
+                            "Retrying...",
+                        )
+                        continue
+
+                    _notify(
+                        notify,
+                        "warning",
+                        f"{model_name} kept returning malformed output.",
+                    )
+                    break
+
                 _notify(notify, "info", f"Gemini succeeded using {model_name}.")
-                return parse_gemini_response(response)
+                return recommendations
 
             # 429 and 5xx errors are usually temporary, so try again
             if response.status_code in {429, 500, 502, 503, 504}:
