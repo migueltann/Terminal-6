@@ -95,3 +95,13 @@ p {
     font-weight: 700;
     margin-left: 7px;
 }
+
+/* ========================================
+   4. MAIN LAYOUT
+======================================== */
+
+.shell {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
