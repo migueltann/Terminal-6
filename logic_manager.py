@@ -1,17 +1,18 @@
 import re
 import math
 from difflib import SequenceMatcher
+from typing import Any, Optional
 
 """Filters generic AI recommendations using the user's requirements."""
 
-def _normalise(value):
+def _normalise(value: Any) -> str:
     """Convert text to lowercase so comparisons are easier."""
     value = str(value or "").strip().lower()
     value = re.sub(r"[_\-]+", " ", value)
     value = re.sub(r"[^\w\s]", " ", value)
     return " ".join(value.split())
 
-def _active_preferences(values):
+def _active_preferences(values: Any) -> list[str]:
     """Remove empty answers and placeholder values from a preference list."""
     if not isinstance(values, list):
         return []
@@ -21,13 +22,13 @@ def _active_preferences(values):
         if _normalise(value) not in {"", "any", "none"}
     ]
 
-def _as_text_list(value):
+def _as_text_list(value: Any) -> list[str]:
     """Return a safe list of non-empty strings."""
     if not isinstance(value, list):
         return []
     return [str(item).strip() for item in value if str(item).strip()]
 
-def _recommendation_text(item):
+def _recommendation_text(item: dict) -> str:
     """Collect recommendation fields that can describe its relevance."""
     fields = [
         item.get("name", ""),
@@ -48,7 +49,7 @@ def _recommendation_text(item):
     return _normalise(" ".join(str(field) for field in fields))
 
 
-def _preference_matches_text(preference, text):
+def _preference_matches_text(preference: str, text: str) -> bool:
     """
     Generic text matching:
     1. exact phrase match;
@@ -83,7 +84,7 @@ def _preference_matches_text(preference, text):
 
     return False
 
-def matches_shopping_preference(item, preference):
+def matches_shopping_preference(item: dict, preference: str) -> bool:
     """Match a shopping preference against generated shopping tags and text."""
     shopping_text = " ".join(
         _as_text_list(item.get("shopping_types", []))
@@ -94,12 +95,12 @@ def matches_shopping_preference(item, preference):
     )
     return _preference_matches_text(preference, shopping_text)
 
-def _contains_term(item, term):
+def _contains_term(item: dict, term: str) -> bool:
     """Check whether a term appears in searchable recommendation fields."""
     return _preference_matches_text(term, _recommendation_text(item))
 
 
-def _matching_field(item, preference, field_names):
+def _matching_field(item: dict, preference: str, field_names: list[str]) -> Optional[str]:
     """Return the first field that matches a preference, or None."""
     for field in field_names:
         value = item.get(field, "")
@@ -116,7 +117,7 @@ def _matching_field(item, preference, field_names):
     return None
 
 
-def validate_ai_response(raw_items):
+def validate_ai_response(raw_items: Any) -> list[dict]:
     """Keep only AI recommendations that have the fields needed downstream."""
     if not isinstance(raw_items, list):
         return []
@@ -191,7 +192,7 @@ def validate_ai_response(raw_items):
 
     return valid_items
 
-def _budget_for_item(item, user_inputs):
+def _budget_for_item(item: dict, user_inputs: dict) -> tuple[float, str]:
     """Select the correct budget for a recommendation type."""
 
     mapping = {
@@ -216,7 +217,7 @@ def _budget_for_item(item, user_inputs):
     key, label = mapping[item["type"]]
     return float(user_inputs[key]), label
 
-def _preferences_for_item(item, user_inputs):
+def _preferences_for_item(item: dict, user_inputs: dict) -> list[str]:
     """Return the user's preferences for the item's category."""
 
     keys = {
@@ -228,7 +229,7 @@ def _preferences_for_item(item, user_inputs):
     return _active_preferences(user_inputs.get(keys[item["type"]], []))
 
 
-def is_top_pick(item, user_inputs, passed_all_checks):
+def is_top_pick(item: dict, user_inputs: dict, passed_all_checks: bool) -> bool:
     """Multi-condition rule using AI output fields.
 
     A recommendation is a top pick only when ALL three are true:
@@ -250,7 +251,7 @@ def is_top_pick(item, user_inputs, passed_all_checks):
 
     return within_half_budget and matches_preference
 
-def evaluate_recommendation(item, user_inputs):
+def evaluate_recommendation(item: dict, user_inputs: dict) -> dict:
     """Apply hard restrictions and record pass/fail explanations."""
     checks = []
     keep = True
@@ -391,7 +392,7 @@ def evaluate_recommendation(item, user_inputs):
     }
 
 
-def filter_recommendations(items, user_inputs):
+def filter_recommendations(items: list[dict], user_inputs: dict) -> tuple[list[dict], list[dict], list[dict]]:
     """Split recommendations into eligible and rejected lists with audit details."""
     approved, rejected, audit = [], [], []
 
@@ -416,7 +417,7 @@ def filter_recommendations(items, user_inputs):
 
     return approved, rejected, audit
 
-def categorise_recommendations(items):
+def categorise_recommendations(items: list[dict]) -> dict[str, list[dict]]:
     """Separate approved recommendations into the four categories."""
 
     return {
@@ -438,11 +439,11 @@ def categorise_recommendations(items):
     }
 
 def build_processed_result(
-    destination,
-    user_inputs,
-    approved_items,
-    rejected_items,
-):
+    destination: str,
+    user_inputs: dict,
+    approved_items: list[dict],
+    rejected_items: list[dict],
+) -> dict:
     """Build the final result used by the terminal and web front end."""
 
     categorised = categorise_recommendations(approved_items)
