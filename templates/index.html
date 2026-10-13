@@ -270,14 +270,21 @@
                         </div>
                     </div>
                 {% endif %}
-
             </section>
         {% endfor %}
+        <section class="filtered-section">
+            <details>
+                <summary>
+                    Filtered-out recommendations
+                    <span>{{ result.filtered_out|length }}</span>
+                </summary>
 
-            <!-- Your existing trip planner form starts here -->
-            <section id="trip-planner" class="form-panel">
+                <p class="muted">
+                    These AI candidates failed one or more Python checks.
+                </p>
 
-
+            </details>
+        </section>
             <div class="form-title">
                 <div>
                     <p class="eyebrow">TRIP SETUP</p>
