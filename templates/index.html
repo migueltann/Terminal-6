@@ -791,7 +791,67 @@
             }
         });
     });
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
 
+        if (submitting) return;
+
+        clearErrors();
+
+        let firstInvalid = null;
+
+        function flagInvalid(fieldName, errorMessage) {
+            showError(fieldName, errorMessage);
+
+            if (!firstInvalid) {
+                firstInvalid = document.getElementById(fieldName);
+            }
+        }
+
+        // Check required fields and budget values locally first.
+        const destinationInput = document.getElementById('destination');
+        const destination = destinationInput.value.trim();
+
+        if (!destination) {
+            flagInvalid(
+                'destination',
+                'Please enter a valid city or country.'
+            );
+        }
+
+        const budgetFields = [
+            'max_activity_spend',
+            'max_meal_spend',
+            'max_accommodation_spend',
+            'max_shopping_spend'
+        ];
+
+        budgetFields.forEach(fieldName => {
+            const input = document.getElementById(fieldName);
+            const raw = input.value.trim();
+            const amount = Number(raw);
+
+            if (
+                raw === '' ||
+                !Number.isFinite(amount) ||
+                amount <= 0
+            ) {
+                flagInvalid(
+                    fieldName,
+                    'Please enter a valid positive amount.'
+                );
+            }
+        });
+
+        // Do not contact the server if a local check has failed.
+        if (firstInvalid) {
+            firstInvalid.focus();
+            firstInvalid.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            return;
+        }
 </script>
 </body>
 </html>
