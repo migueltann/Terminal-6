@@ -150,7 +150,6 @@ def generate_recommendations(
 def parse_gemini_response(response: Any) -> list[dict]:
     """Turn Gemini's JSON response into a Python list."""
 
-    response_data = response.json()
     try:
         response_data = response.json()
     except ValueError as err:
