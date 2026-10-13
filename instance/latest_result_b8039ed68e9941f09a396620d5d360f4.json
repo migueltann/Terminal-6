@@ -1,7 +1,7 @@
 {
-    "destination": "Singapore",
+    "destination": "Paris, France",
     "requirements": {
-        "destination": "Singapore",
+        "destination": "Paris, France",
         "preferred_activities": [
             "museum"
         ],
@@ -15,10 +15,10 @@
             "fashion"
         ],
         "avoid_list": [],
-        "max_activity_spend": 50.0,
-        "max_meal_spend": 25.0,
-        "max_accommodation_spend": 150.0,
-        "max_shopping_spend": 100.0,
+        "max_activity_spend": 200.0,
+        "max_meal_spend": 100.0,
+        "max_accommodation_spend": 300.0,
+        "max_shopping_spend": 500.0,
         "activity_environment": "Any",
         "food_environment": "Any",
         "shopping_environment": "Any",
@@ -26,549 +26,28 @@
         "dietary": "None"
     },
     "summary": {
-        "approved_count": 29,
-        "filtered_out_count": 31
+        "approved_count": 42,
+        "filtered_out_count": 18
     },
     "activities": [
         {
-            "name": "National Museum of Singapore",
+            "name": "Musée du Louvre",
             "type": "activity",
             "category": "Museum",
-            "estimated_cost_sgd": 15.0,
-            "location": "93 Stamford Rd, Singapore 178897",
+            "estimated_cost_sgd": 32.0,
+            "location": "Rue de Rivoli, 75001 Paris",
             "environment": "Indoor",
-            "description": "Singapore's oldest museum presenting the nation's history and culture through immersive and interactive exhibitions.",
+            "description": "The world's largest art museum and a historic monument, housing works such as the Mona Lisa and the Venus de Milo.",
             "tags": [
-                "museum",
-                "history",
-                "culture",
-                "heritage",
-                "exhibition"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$15.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Asian Civilisations Museum",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 20.0,
-            "location": "1 Empress Pl, Singapore 179555",
-            "environment": "Indoor",
-            "description": "Museum highlighting the historical connections of civilizations across Asia through extensive artifact collections.",
-            "tags": [
-                "museum",
-                "history",
-                "asian",
                 "art",
-                "heritage"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$20.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Peranakan Museum",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 20.0,
-            "location": "39 Armenian St, Singapore 179941",
-            "environment": "Indoor",
-            "description": "Explores the culture and heritage of Peranakan communities in Southeast Asia with rich displays of textiles and jewelry.",
-            "tags": [
-                "museum",
-                "peranakan",
-                "culture",
-                "heritage",
-                "history"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$20.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "National Gallery Singapore",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 20.0,
-            "location": "1 St Andrew's Rd, #01-01, Singapore 178957",
-            "environment": "Indoor",
-            "description": "Art museum housing the world's largest public collection of Singaporean and Southeast Asian modern art.",
-            "tags": [
-                "museum",
-                "art",
-                "gallery",
-                "culture",
-                "painting"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$20.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Singapore Art Museum",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 10.0,
-            "location": "39 Keppel Rd, #01-02, Singapore 089065",
-            "environment": "Indoor",
-            "description": "Contemporary art museum showcasing works by local and international artists with a focus on Southeast Asia.",
-            "tags": [
-                "museum",
-                "contemporary art",
-                "modern art",
-                "exhibition"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$10.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Lee Kong Chian Natural History Museum",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 21.0,
-            "location": "2 Conservatory Dr, Singapore 117377",
-            "environment": "Indoor",
-            "description": "Biodiversity museum featuring thousands of natural history specimens, including three real sauropod dinosaur fossils.",
-            "tags": [
-                "museum",
-                "nature",
-                "science",
-                "fossils",
-                "biodiversity"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$21.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "ArtScience Museum",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 40.0,
-            "location": "6 Bayfront Ave, Singapore 018974",
-            "environment": "Indoor",
-            "description": "Iconic lotus-shaped building hosting major international touring exhibitions exploring the intersection of art, science, and technology.",
-            "tags": [
-                "museum",
-                "science",
-                "art",
-                "technology",
-                "digital art"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$40.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Red Dot Design Museum",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 10.0,
-            "location": "11 Marina Blvd, Singapore 018940",
-            "environment": "Indoor",
-            "description": "Museum exhibiting award-winning contemporary design concepts and physical products from around the world.",
-            "tags": [
-                "museum",
-                "design",
-                "architecture",
-                "innovation"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$10.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Indian Heritage Centre",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 8.0,
-            "location": "5 Campbell Ln, Singapore 209924",
-            "environment": "Indoor",
-            "description": "Cultural center and museum celebrating the history, heritage, and culture of Indian communities in Singapore.",
-            "tags": [
-                "museum",
-                "heritage",
-                "culture",
-                "history"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$8.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Malay Heritage Centre",
-            "type": "activity",
-            "category": "Museum",
-            "estimated_cost_sgd": 8.0,
-            "location": "85 Sultan Gate, Singapore 198501",
-            "environment": "Indoor",
-            "description": "Cultural institution highlighting the history and culture of Singapore's Malay community located in the historic Kampong Glam district.",
-            "tags": [
-                "museum",
-                "heritage",
-                "culture",
                 "history",
-                "malay"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$8.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Gardens by the Bay",
-            "type": "activity",
-            "category": "Nature",
-            "estimated_cost_sgd": 28.0,
-            "location": "18 Marina Gardens Dr, Singapore 018953",
-            "environment": "Outdoor",
-            "description": "Sprawling futuristic nature park featuring the iconic Supertrees and cooled conservatories.",
-            "tags": [
-                "nature",
-                "gardens",
-                "architecture",
-                "sightseeing"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$28.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Singapore Botanic Gardens",
-            "type": "activity",
-            "category": "Nature",
-            "estimated_cost_sgd": 5.0,
-            "location": "1 Cluny Rd, Singapore 259569",
-            "environment": "Outdoor",
-            "description": "UNESCO World Heritage site featuring a vast collection of tropical plants and the world-renowned National Orchid Garden.",
-            "tags": [
-                "nature",
-                "gardens",
-                "park",
-                "orchid",
-                "unesco"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": true,
-                    "detail": "$5.00 <= $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Activity budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Singapore Flyer",
-            "type": "activity",
-            "category": "Attraction",
-            "estimated_cost_sgd": 40.0,
-            "location": "30 Raffles Ave, Singapore 039803",
-            "environment": "Outdoor",
-            "description": "Giant observation wheel offering panoramic views of the city skyline and Marina Bay.",
-            "tags": [
-                "sightseeing",
-                "views",
+                "museum",
+                "culture",
                 "landmark"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -580,7 +59,7 @@
                 {
                     "label": "Activity budget",
                     "passed": true,
-                    "detail": "$40.00 <= $50.00"
+                    "detail": "$32.00 <= $200.00"
                 },
                 {
                     "label": "Avoid list",
@@ -595,23 +74,23 @@
             "failed_rules": []
         },
         {
-            "name": "Cloud Forest",
+            "name": "Musée d'Orsay",
             "type": "activity",
-            "category": "Nature",
-            "estimated_cost_sgd": 20.0,
-            "location": "18 Marina Gardens Dr, Singapore 018953",
+            "category": "Museum",
+            "estimated_cost_sgd": 25.0,
+            "location": "1 Rue de la Légion d'Honneur, 75007 Paris",
             "environment": "Indoor",
-            "description": "A mysterious world shrouded in mist, featuring a 35-meter tall mountain covered in lush vegetation and the world's tallest indoor waterfall.",
+            "description": "Museum housed in a former railway station, famous for holding the largest collection of impressionist and post-impressionist masterpieces.",
             "tags": [
-                "nature",
-                "indoor",
-                "waterfall",
-                "botanical"
+                "art",
+                "museum",
+                "history",
+                "impressionism",
+                "culture"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -623,7 +102,554 @@
                 {
                     "label": "Activity budget",
                     "passed": true,
-                    "detail": "$20.00 <= $50.00"
+                    "detail": "$25.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Centre Pompidou",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 22.0,
+            "location": "Place Georges-Pompidou, 75004 Paris",
+            "environment": "Indoor",
+            "description": "Complex building housing the National Museum of Modern Art, known for its high-tech architecture with external pipes and escalators.",
+            "tags": [
+                "modern art",
+                "architecture",
+                "museum",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$22.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée de l'Orangerie",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 18.0,
+            "location": "Jardin Tuileries, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Art gallery of impressionist and post-impressionist paintings, most notably famous for housing eight Water Lilies murals by Claude Monet.",
+            "tags": [
+                "art",
+                "museum",
+                "monet",
+                "painting",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée Rodin",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 18.0,
+            "location": "77 Rue de Varenne, 75007 Paris",
+            "environment": "Indoor",
+            "description": "Museum that showcases the works of the French sculptor Auguste Rodin, featuring sculptures inside an 18th-century mansion and its expansive gardens.",
+            "tags": [
+                "sculpture",
+                "art",
+                "museum",
+                "gardens"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée Picasso Paris",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 20.0,
+            "location": "5 Rue de Thorigny, 75003 Paris",
+            "environment": "Indoor",
+            "description": "Art museum dedicated to the life and works of the Spanish artist Pablo Picasso, located in the historic Hôtel Salé.",
+            "tags": [
+                "art",
+                "museum",
+                "picasso",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$20.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée Carnavalet",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 0.0,
+            "location": "23 Rue de Sévigné, 75003 Paris",
+            "environment": "Indoor",
+            "description": "Museum dedicated to the history of Paris, from its prehistoric origins up to the modern day, situated in two neighboring mansions.",
+            "tags": [
+                "history",
+                "paris",
+                "museum",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée Yves Saint Laurent Paris",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 21.0,
+            "location": "5 Av. Marceau, 75116 Paris",
+            "environment": "Indoor",
+            "description": "Museum dedicated to the work of fashion designer Yves Saint Laurent, housed in the historic fashion house where he created his designs.",
+            "tags": [
+                "fashion",
+                "museum",
+                "design",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$21.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Musée de Cluny",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 17.0,
+            "location": "28 Rue du Sommerard, 75005 Paris",
+            "environment": "Indoor",
+            "description": "National museum of the Middle Ages, known for its extensive collection of medieval artifacts including the famous Lady and the Unicorn tapestries.",
+            "tags": [
+                "medieval",
+                "history",
+                "art",
+                "museum"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$17.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Palais de Tokyo",
+            "type": "activity",
+            "category": "Museum",
+            "estimated_cost_sgd": 18.0,
+            "location": "13 Av. du Président Wilson, 75116 Paris",
+            "environment": "Indoor",
+            "description": "Building dedicated to modern and contemporary art, featuring rotating installations, exhibitions, and performances.",
+            "tags": [
+                "contemporary art",
+                "modern art",
+                "museum",
+                "culture"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Eiffel Tower",
+            "type": "activity",
+            "category": "Landmark",
+            "estimated_cost_sgd": 45.0,
+            "location": "Champ de Mars, 5 Av. Anatole France, 75007 Paris",
+            "environment": "Outdoor",
+            "description": "Iconic wrought-iron lattice tower on the Champ de Mars, offering panoramic views of the city from its observation decks.",
+            "tags": [
+                "landmark",
+                "architecture",
+                "views",
+                "sightseeing"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$45.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Seine River Cruise",
+            "type": "activity",
+            "category": "Cruise",
+            "estimated_cost_sgd": 25.0,
+            "location": "Bateaux Parisiens, Port de la Bourdonnais, 75007 Paris",
+            "environment": "Outdoor",
+            "description": "Scenic boat tour along the River Seine passing under historic bridges and past major Parisian monuments.",
+            "tags": [
+                "river",
+                "cruise",
+                "sightseeing",
+                "relax"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$25.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Sainte-Chapelle",
+            "type": "activity",
+            "category": "Historic Site",
+            "estimated_cost_sgd": 18.0,
+            "location": "10 Bd du Palais, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Royal chapel in Gothic style, renowned for its stunning collection of stained-glass windows depicting biblical scenes.",
+            "tags": [
+                "architecture",
+                "history",
+                "religion",
+                "stained glass"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$18.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Luxembourg Gardens",
+            "type": "activity",
+            "category": "Park",
+            "estimated_cost_sgd": 0.0,
+            "location": "75006 Paris",
+            "environment": "Outdoor",
+            "description": "Popular public park created in the 17th century, featuring tree-lined promenades, lawns, tennis courts, and the Medici Fountain.",
+            "tags": [
+                "park",
+                "nature",
+                "gardens",
+                "relax"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Activity budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Montmartre Walking Tour",
+            "type": "activity",
+            "category": "Tour",
+            "estimated_cost_sgd": 0.0,
+            "location": "Montmartre, 75018 Paris",
+            "environment": "Outdoor",
+            "description": "Self-guided walk through the hilly artistic district of Montmartre, winding past cobbled streets, historic cafes, and the Sacré-Cœur.",
+            "tags": [
+                "walking",
+                "neighborhood",
+                "historic",
+                "views"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Activity budget",
+                    "passed": true,
+                    "detail": "$0.00 <= $200.00"
                 },
                 {
                     "label": "Avoid list",
@@ -640,23 +666,190 @@
     ],
     "food": [
         {
-            "name": "Tian Tian Hainanese Chicken Rice",
+            "name": "Le Comptoir de la Relais",
             "type": "food",
-            "category": "Hawker Centre",
-            "estimated_cost_sgd": 6.0,
-            "location": "1 Kadayanallur St, #01-10/11 Maxwell Food Centre, Singapore 069184",
+            "category": "Bistro",
+            "estimated_cost_sgd": 60.0,
+            "location": "9 Carrefour de l'Odėon, 75006 Paris",
             "environment": "Indoor",
-            "description": "Legendary hawker stall famous for serving tender poached chicken paired with fragrant seasoned rice and chili sauce.",
+            "description": "Renowned neighborhood bistro serving traditional local French comfort food in a lively, casual atmosphere.",
             "tags": [
                 "local",
-                "hawker",
-                "chicken rice",
-                "street food"
+                "bistro",
+                "french",
+                "dining"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$60.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Bouillon Chartier",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 30.0,
+            "location": "7 Rue du Faubourg Montmartre, 75009 Paris",
+            "environment": "Indoor",
+            "description": "Historic Belle Époque brasserie offering classic French local dishes at affordable prices in a cavernous, ornate dining room.",
+            "tags": [
+                "local",
+                "historic",
+                "brasserie",
+                "traditional"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$30.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Café de Flore",
+            "type": "food",
+            "category": "Cafe",
+            "estimated_cost_sgd": 35.0,
+            "location": "172 Bd Saint-Germain, 75006 Paris",
+            "environment": "Outdoor",
+            "description": "Famous historic cafe on Saint-Germain-des-Prés, known for its literary history, sidewalk seating, and traditional coffee and pastries.",
+            "tags": [
+                "local",
+                "cafe",
+                "historic",
+                "coffee"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$35.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Les Deux Magots",
+            "type": "food",
+            "category": "Cafe",
+            "estimated_cost_sgd": 35.0,
+            "location": "6 Place Saint-Germain-des-Prés, 75006 Paris",
+            "environment": "Outdoor",
+            "description": "Iconic café frequented by famous intellectuals and artists, serving traditional French breakfast items, hot chocolate, and local bistro snacks.",
+            "tags": [
+                "local",
+                "cafe",
+                "historic",
+                "literary"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$35.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Au Pied de Cochon",
+            "type": "food",
+            "category": "Brasserie",
+            "estimated_cost_sgd": 55.0,
+            "location": "6 Rue Coquillière, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Traditional 24-hour brasserie near Châtelet serving hearty, classic French local pork dishes and seafood platters.",
+            "tags": [
+                "local",
+                "brasserie",
+                "traditional",
+                "no pork"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
             ],
             "dietary_tags": [
                 "no pork"
@@ -668,7 +861,7 @@
                 {
                     "label": "Meal budget",
                     "passed": true,
-                    "detail": "$6.00 <= $25.00"
+                    "detail": "$55.00 <= $100.00"
                 },
                 {
                     "label": "Avoid list",
@@ -683,325 +876,22 @@
             "failed_rules": []
         },
         {
-            "name": "Lau Pa Sat Satay Street",
+            "name": "Breizh Café",
             "type": "food",
-            "category": "Street Food",
-            "estimated_cost_sgd": 20.0,
-            "location": "18 Raffles Quay, Singapore 048582",
-            "environment": "Outdoor",
-            "description": "Open-air street food market operating at night where vendors grill skewers of chicken, beef, and mutton served with peanut sauce.",
+            "category": "Creperie",
+            "estimated_cost_sgd": 30.0,
+            "location": "109 Rue Vieille-du-Temple, 75003 Paris",
+            "environment": "Indoor",
+            "description": "Popular creperie in the Marais serving artisanal Breton buckwheat galettes and sweet crepes made with high-quality local ingredients.",
             "tags": [
                 "local",
-                "satay",
-                "street food",
-                "outdoor dining",
-                "nightlife"
+                "crepes",
+                "bistro",
+                "casual"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "halal"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$20.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Sungei Road Laksa",
-            "type": "food",
-            "category": "Hawker Stall",
-            "estimated_cost_sgd": 5.0,
-            "location": "27 Jalan Berseh, #01-100, Singapore 200027",
-            "environment": "Indoor",
-            "description": "Traditional stall serving a rich, spicy coconut curry noodle soup cooked over a charcoal stove.",
-            "tags": [
-                "local",
-                "laksa",
-                "noodles",
-                "hawker"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$5.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Zam Zam Restaurant",
-            "type": "food",
-            "category": "Restaurant",
-            "estimated_cost_sgd": 12.0,
-            "location": "697-699 North Bridge Rd, Singapore 198675",
-            "environment": "Indoor",
-            "description": "Historic Muslim restaurant famous for its murtabak, briyani, and teh tarik.",
-            "tags": [
-                "local",
-                "murtabak",
-                "indian muslim",
-                "halal"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "halal"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$12.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Hill Street Tai Hwa Pork Noodle",
-            "type": "food",
-            "category": "Hawker Stall",
-            "estimated_cost_sgd": 8.0,
-            "location": "466 Crawford Ln, #01-12, Singapore 190466",
-            "environment": "Indoor",
-            "description": "Michelin-starred hawker stall known for its savory, vinegar-laced minced pork noodles.",
-            "tags": [
-                "local",
-                "noodles",
-                "pork noodles",
-                "michelin"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$8.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Old Airport Road Food Centre",
-            "type": "food",
-            "category": "Hawker Centre",
-            "estimated_cost_sgd": 10.0,
-            "location": "51 Old Airport Rd, Singapore 390051",
-            "environment": "Indoor",
-            "description": "One of Singapore's largest and most famous food centers offering a massive variety of local culinary delights.",
-            "tags": [
-                "local",
-                "hawker centre",
-                "street food",
-                "variety"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$10.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Song Fa Bak Kut Teh",
-            "type": "food",
-            "category": "Restaurant",
-            "estimated_cost_sgd": 18.0,
-            "location": "11 klinh Street, #01-01 Clarke Quay, Singapore 059381",
-            "environment": "Indoor",
-            "description": "Popular casual eatery specializing in Teochew-style peppery pork rib soup.",
-            "tags": [
-                "local",
-                "bak kut teh",
-                "pork ribs",
-                "soup"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$18.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Killiney Kopitiam",
-            "type": "food",
-            "category": "Cafe",
-            "estimated_cost_sgd": 8.0,
-            "location": "67 Killiney Rd, Singapore 239525",
-            "environment": "Indoor",
-            "description": "Traditional coffee shop serving breakfast staples like kaya toast, soft-boiled eggs, and local coffee.",
-            "tags": [
-                "local",
-                "kopitiam",
-                "breakfast",
-                "kaya toast",
-                "coffee"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "halal"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": true,
-                    "detail": "$8.00 <= $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Meal budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Maxwell Fritters",
-            "type": "food",
-            "category": "Hawker Stall",
-            "estimated_cost_sgd": 5.0,
-            "location": "1 Kadayanallur St, Maxwell Food Centre, Singapore 069184",
-            "environment": "Indoor",
-            "description": "Stall selling traditional sweet potato fritters and crisp local snacks.",
-            "tags": [
-                "snacks",
-                "hawker",
-                "street food"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "vegetarian"
@@ -1013,7 +903,217 @@
                 {
                     "label": "Meal budget",
                     "passed": true,
-                    "detail": "$5.00 <= $25.00"
+                    "detail": "$30.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Le Procope",
+            "type": "food",
+            "category": "Restaurant",
+            "estimated_cost_sgd": 65.0,
+            "location": "13 Rue de l'Ancienne Comédie, 75006 Paris",
+            "environment": "Indoor",
+            "description": "Claimed to be the oldest continuously operating restaurant in Paris, serving historic French local cuisine in an opulent 18th-century setting.",
+            "tags": [
+                "local",
+                "historic",
+                "restaurant",
+                "french"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$65.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "L'As du Fallafel",
+            "type": "food",
+            "category": "Casual Restaurant",
+            "estimated_cost_sgd": 15.0,
+            "location": "34 Rue des Rosiers, 75004 Paris",
+            "environment": "Indoor",
+            "description": "Famous Middle Eastern eatery in the historic Jewish quarter of the Marais, popular for its bustling takeaway window and falafel pita.",
+            "tags": [
+                "local",
+                "street food",
+                "falafel",
+                "casual"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$15.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Bistrot Paul Bert",
+            "type": "food",
+            "category": "Bistro",
+            "estimated_cost_sgd": 70.0,
+            "location": "18 Rue Paul Bert, 75011 Paris",
+            "environment": "Indoor",
+            "description": "Quintessential Parisian bistro known for its retro decor, traditional steak frites, and classic Grand Marnier soufflé.",
+            "tags": [
+                "bistro",
+                "steak",
+                "traditional",
+                "french"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$70.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Du Pain et des Idées",
+            "type": "food",
+            "category": "Bakery",
+            "estimated_cost_sgd": 10.0,
+            "location": "34 Rue Yves Toudic, 75010 Paris",
+            "environment": "Indoor",
+            "description": "Renowned artisanal bakery in an old-world setting, famous for its escargot pastries and traditional loaves.",
+            "tags": [
+                "bakery",
+                "pastries",
+                "bread",
+                "breakfast"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$10.00 <= $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Meal budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Pierre Hermé Paris",
+            "type": "food",
+            "category": "Patisserie",
+            "estimated_cost_sgd": 25.0,
+            "location": "72 Rue Bonaparte, 75006 Paris",
+            "environment": "Indoor",
+            "description": "High-end pastry shop renowned for its inventive macaron flavors and exquisite sweet creations.",
+            "tags": [
+                "patisserie",
+                "dessert",
+                "macarons",
+                "sweets"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "vegetarian"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": true,
+                    "detail": "$25.00 <= $100.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1028,45 +1128,170 @@
             "failed_rules": []
         }
     ],
-    "accommodation": [],
-    "shopping": [
+    "accommodation": [
         {
-            "name": "Design Orchard",
-            "type": "shopping",
-            "category": "Specialty Store",
-            "estimated_cost_sgd": 100.0,
-            "location": "250 Orchard Rd, Singapore 238905",
+            "name": "Generator Paris",
+            "type": "accommodation",
+            "category": "Hostel",
+            "estimated_cost_sgd": 120.0,
+            "location": "9 Pl. du Colonel Fabien, 75010 Paris",
             "environment": "Indoor",
-            "description": "Retail showcase and incubator space championing local Singaporean fashion designers and creative lifestyle brands.",
+            "description": "Trendy design hostel offering both shared dorms and private rooms, featuring a lively rooftop bar and social areas.",
             "tags": [
-                "local designer",
-                "fashion",
-                "crafts",
-                "lifestyle"
+                "hostel",
+                "budget",
+                "social",
+                "rooftop"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$120.00 <= $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "CitizenM Paris Gare de Lyon",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 280.0,
+            "location": "8 Rue Van Gogh, 75012 Paris",
+            "environment": "Indoor",
+            "description": "Contemporary tech-forward hotel with compact, mood-lit rooms and a 24-hour rooftop cloud M bar overlooking the city.",
+            "tags": [
+                "hotel",
+                "modern",
+                "tech",
+                "budget luxury"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$280.00 <= $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Saint Christopher's Inn Paris Canal",
+            "type": "accommodation",
+            "category": "Hostel",
+            "estimated_cost_sgd": 90.0,
+            "location": "159 Rue de Crimée, 75019 Paris",
+            "environment": "Indoor",
+            "description": "Lively waterfront hostel located right by the Bassin de la Villette, featuring an attached bar and outdoor terrace.",
+            "tags": [
+                "hostel",
+                "budget",
+                "waterfront",
+                "social"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": true,
+                    "detail": "$90.00 <= $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Accommodation budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        }
+    ],
+    "shopping": [
+        {
+            "name": "Galeries Lafayette Haussmann",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 300.0,
+            "location": "40 Bd Haussmann, 75009 Paris",
+            "environment": "Indoor",
+            "description": "Famed upscale department store featuring a magnificent neo-Byzantine stained-glass dome and floors of luxury fashion brands.",
+            "tags": [
+                "fashion",
+                "department store",
+                "luxury",
+                "clothing"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
             ],
             "dietary_tags": [
                 "none"
             ],
             "shopping_types": [
-                "specialty store"
+                "department store"
             ],
             "shopping_interests": [
                 "fashion",
-                "local crafts",
-                "accessories",
-                "souvenirs"
+                "cosmetics",
+                "accessories"
             ],
             "eligible": true,
             "checks": [
                 {
                     "label": "Shopping budget",
                     "passed": true,
-                    "detail": "$100.00 <= $100.00"
+                    "detail": "$300.00 <= $500.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1081,24 +1306,118 @@
             "failed_rules": []
         },
         {
-            "name": "Haji Lane",
+            "name": "Le Bon Marché",
             "type": "shopping",
-            "category": "Shopping Street",
-            "estimated_cost_sgd": 80.0,
-            "location": "Haji Ln, Singapore",
-            "environment": "Outdoor",
-            "description": "Narrow pedestrian street lined with independent boutiques, indie fashion labels, vintage stores, and colorful murals.",
+            "category": "Department Store",
+            "estimated_cost_sgd": 350.0,
+            "location": "24 Rue de Sèvres, 75007 Paris",
+            "environment": "Indoor",
+            "description": "The world's oldest department store, offering an elite selection of designer fashion, beauty products, and gourmet foods.",
             "tags": [
-                "street",
-                "indie",
                 "fashion",
-                "vintage",
-                "boutiques"
+                "department store",
+                "luxury",
+                "boutique"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "luxury goods",
+                "souvenirs"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$350.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Printemps Haussmann",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 250.0,
+            "location": "64 Bd Haussmann, 75009 Paris",
+            "environment": "Indoor",
+            "description": "Major department store dedicated to French fashion, luxury brands, beauty, and home design under historic stained-glass ceilings.",
+            "tags": [
+                "fashion",
+                "department store",
+                "clothing",
+                "beauty"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "cosmetics",
+                "watches"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$250.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Marais Boutiques District",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 150.0,
+            "location": "Rue des Francs-Bourgeois, 75003 Paris",
+            "environment": "Outdoor",
+            "description": "Trendy historic district filled with independent fashion designers, vintage stores, and concept clothing boutiques.",
+            "tags": [
+                "fashion",
+                "boutique",
+                "shopping street",
+                "trendy"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -1109,15 +1428,14 @@
             "shopping_interests": [
                 "fashion",
                 "vintage clothing",
-                "local crafts",
-                "souvenirs"
+                "local crafts"
             ],
             "eligible": true,
             "checks": [
                 {
                     "label": "Shopping budget",
                     "passed": true,
-                    "detail": "$80.00 <= $100.00"
+                    "detail": "$150.00 <= $500.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1132,23 +1450,214 @@
             "failed_rules": []
         },
         {
-            "name": "Far East Plaza",
+            "name": "Champs-Élysées",
             "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 90.0,
-            "location": "14 Scotts Rd, Singapore 228213",
-            "environment": "Indoor",
-            "description": "Legendary retro mall known for underground streetwear, alternative fashion, custom tailoring, and quirky thrift shops.",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 200.0,
+            "location": "Av. des Champs-Élysées, 75008 Paris",
+            "environment": "Outdoor",
+            "description": "Famous avenue lined with international flagship fashion retailers, luxury car showrooms, cinemas, and cafes.",
             "tags": [
-                "mall",
-                "streetwear",
-                "vintage",
-                "fashion"
+                "fashion",
+                "shopping street",
+                "retail",
+                "flagship"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "apparel",
+                "souvenirs"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$200.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "BHV Marais",
+            "type": "shopping",
+            "category": "Department Store",
+            "estimated_cost_sgd": 120.0,
+            "location": "52 Rue de Rivoli, 75004 Paris",
+            "environment": "Indoor",
+            "description": "Historic department store focusing on fashion, home improvement, DIY, hardware, and creative design supplies.",
+            "tags": [
+                "fashion",
+                "department store",
+                "home",
+                "hardware"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "department store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "home decor",
+                "crafts"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$120.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Rue de Rivoli",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 100.0,
+            "location": "Rue de Rivoli, 75001 Paris",
+            "environment": "Outdoor",
+            "description": "Long historic shopping street featuring continuous arcades, filled with popular fast-fashion apparel brands and souvenir shops.",
+            "tags": [
+                "fashion",
+                "shopping street",
+                "apparel",
+                "retail"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "apparel",
+                "souvenirs"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$100.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Palais Royal Arcades",
+            "type": "shopping",
+            "category": "Specialty Store",
+            "estimated_cost_sgd": 200.0,
+            "location": "Galerie de Valois, 75001 Paris",
+            "environment": "Outdoor",
+            "description": "Covered historical arcades surrounding the Palais Royal garden, housing exclusive vintage fashion, perfume, and art boutiques.",
+            "tags": [
+                "fashion",
+                "specialty store",
+                "vintage",
+                "perfume"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "specialty store"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "perfume",
+                "vintage clothing"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$200.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Forum des Halles",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 150.0,
+            "location": "101 Pass. Secteur 3, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Large multi-level subterranean and open-air shopping mall featuring numerous popular clothing brands and beauty shops.",
+            "tags": [
+                "shopping mall",
+                "fashion",
+                "retail",
+                "clothing"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -1158,8 +1667,103 @@
             ],
             "shopping_interests": [
                 "fashion",
-                "streetwear",
-                "sneakers",
+                "cosmetics",
+                "shoes"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$150.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Beaugrenelle Paris",
+            "type": "shopping",
+            "category": "Shopping Mall",
+            "estimated_cost_sgd": 160.0,
+            "location": "12 Rue Linois, 75015 Paris",
+            "environment": "Indoor",
+            "description": "Modern department store and shopping mall complex near the Seine featuring contemporary fashion brands and lifestyle stores.",
+            "tags": [
+                "shopping mall",
+                "fashion",
+                "modern",
+                "retail"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "mall"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "lifestyle",
+                "electronics"
+            ],
+            "eligible": true,
+            "checks": [
+                {
+                    "label": "Shopping budget",
+                    "passed": true,
+                    "detail": "$160.00 <= $500.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Shopping budget",
+                "Avoid list"
+            ],
+            "failed_rules": []
+        },
+        {
+            "name": "Rue Saint-Honoré",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 300.0,
+            "location": "Rue Saint-Honoré, 75001 Paris",
+            "environment": "Outdoor",
+            "description": "Historic and upscale shopping street known for trendy concept stores, luxury fashion boutiques, and fine leather goods.",
+            "tags": [
+                "fashion",
+                "shopping street",
+                "designer",
+                "luxury"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [
+                "shopping street"
+            ],
+            "shopping_interests": [
+                "fashion",
+                "leather goods",
                 "accessories"
             ],
             "eligible": true,
@@ -1167,7 +1771,7 @@
                 {
                     "label": "Shopping budget",
                     "passed": true,
-                    "detail": "$90.00 <= $100.00"
+                    "detail": "$300.00 <= $500.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1182,73 +1786,21 @@
             "failed_rules": []
         },
         {
-            "name": "Mustafa Centre",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 70.0,
-            "location": "145 Syed Alwi Rd, Singapore 207704",
-            "environment": "Indoor",
-            "description": "Massive 24-hour department store in Little India selling everything from groceries and electronics to textiles and souvenirs.",
-            "tags": [
-                "department store",
-                "24 hour",
-                "groceries",
-                "electronics"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "department store"
-            ],
-            "shopping_interests": [
-                "electronics",
-                "souvenirs",
-                "cosmetics",
-                "snacks"
-            ],
-            "eligible": true,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": true,
-                    "detail": "$70.00 <= $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Shopping budget",
-                "Avoid list"
-            ],
-            "failed_rules": []
-        },
-        {
-            "name": "Chinatown Street Market",
+            "name": "Marché aux Puces de Saint-Ouen",
             "type": "shopping",
             "category": "Market",
-            "estimated_cost_sgd": 30.0,
-            "location": "Pagoda St, Singapore 050001",
+            "estimated_cost_sgd": 100.0,
+            "location": "140 Rue des Rosiers, 93400 Saint-Ouen",
             "environment": "Outdoor",
-            "description": "Vibrant open-air street market selling traditional Chinese crafts, souvenirs, clothing, and festive goods.",
+            "description": "Massive and historic flea market on the northern edge of Paris known for antique furniture, vintage fashion, and collectibles.",
             "tags": [
-                "market",
                 "street market",
-                "souvenirs",
-                "crafts"
+                "vintage",
+                "antiques",
+                "fashion"
             ],
             "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -1257,16 +1809,16 @@
                 "street market"
             ],
             "shopping_interests": [
-                "souvenirs",
-                "local crafts",
-                "clothing"
+                "vintage clothing",
+                "antiques",
+                "local crafts"
             ],
             "eligible": true,
             "checks": [
                 {
                     "label": "Shopping budget",
                     "passed": true,
-                    "detail": "$30.00 <= $100.00"
+                    "detail": "$100.00 <= $500.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1281,33 +1833,31 @@
             "failed_rules": []
         },
         {
-            "name": "Bugis Street Market",
+            "name": "Shakespeare and Company Bookstore",
             "type": "shopping",
-            "category": "Market",
-            "estimated_cost_sgd": 40.0,
-            "location": "3 New Bugis St, Singapore 188867",
+            "category": "Specialty Store",
+            "estimated_cost_sgd": 35.0,
+            "location": "37 Rue de la Bûcherie, 75005 Paris",
             "environment": "Indoor",
-            "description": "Sprawling market complex offering affordable clothing, accessories, souvenirs, and street snacks.",
+            "description": "World-famous independent English-language bookstore facing the Seine, known for its literary history and cozy nooks.",
             "tags": [
-                "market",
-                "budget shopping",
-                "fashion",
-                "souvenirs"
+                "books",
+                "historic",
+                "specialty store",
+                "independent"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "none"
             ],
             "shopping_types": [
-                "street market"
+                "specialty store"
             ],
             "shopping_interests": [
-                "fashion",
-                "accessories",
+                "books",
                 "souvenirs"
             ],
             "eligible": true,
@@ -1315,7 +1865,7 @@
                 {
                     "label": "Shopping budget",
                     "passed": true,
-                    "detail": "$40.00 <= $100.00"
+                    "detail": "$35.00 <= $500.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1332,66 +1882,22 @@
     ],
     "filtered_out": [
         {
-            "name": "S.E.A. Aquarium",
-            "type": "activity",
-            "category": "Aquarium",
-            "estimated_cost_sgd": 51.0,
-            "location": "8 Sentosa Gateway, Sentosa Island, Singapore 098269",
-            "environment": "Indoor",
-            "description": "Massive oceanarium housing thousands of marine animals representing hundreds of species in varied habitats.",
-            "tags": [
-                "aquarium",
-                "marine life",
-                "family",
-                "indoor"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Activity budget",
-                    "passed": false,
-                    "detail": "$51.00 > $50.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Activity budget"
-            ]
-        },
-        {
-            "name": "Jumbo Seafood",
+            "name": "L'Ami Louis",
             "type": "food",
             "category": "Restaurant",
-            "estimated_cost_sgd": 65.0,
-            "location": "30 Merchant Rd, #01-01/02 Riverside Point, Singapore 058282",
+            "estimated_cost_sgd": 150.0,
+            "location": "32 Rue du Vertbois, 75003 Paris",
             "environment": "Indoor",
-            "description": "Renowned seafood restaurant celebrated for its signature chili crab and black pepper crab dishes.",
+            "description": "Legendary traditional Parisian bistro famed for its old-school interior, generous portions of local French delicacies, and roasted meats.",
             "tags": [
                 "local",
-                "seafood",
-                "chili crab",
-                "dinner"
+                "bistro",
+                "gourmet",
+                "traditional"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -1403,7 +1909,7 @@
                 {
                     "label": "Meal budget",
                     "passed": false,
-                    "detail": "$65.00 > $25.00"
+                    "detail": "$150.00 > $100.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1419,22 +1925,22 @@
             ]
         },
         {
-            "name": "Sin Hoi Sai Seafood Restaurant",
+            "name": "Septime",
             "type": "food",
             "category": "Restaurant",
-            "estimated_cost_sgd": 45.0,
-            "location": "187 Tembeling Rd, Singapore 423680",
-            "environment": "Outdoor",
-            "description": "Late-night zi char restaurant serving a wide selection of local seafood, frog porridge, and stir-fried dishes.",
+            "estimated_cost_sgd": 120.0,
+            "location": "80 Rue de Tazar, 75011 Paris",
+            "environment": "Indoor",
+            "description": "Acclaimed contemporary neo-bistro serving inventive, seasonal dishes rooted in local French culinary traditions.",
             "tags": [
                 "local",
-                "zi char",
-                "seafood",
-                "late night"
+                "modern",
+                "bistro",
+                "gourmet"
             ],
             "transport_options": [
-                "transit",
-                "taxi"
+                "walk",
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -1446,7 +1952,7 @@
                 {
                     "label": "Meal budget",
                     "passed": false,
-                    "detail": "$45.00 > $25.00"
+                    "detail": "$120.00 > $100.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1462,22 +1968,65 @@
             ]
         },
         {
-            "name": "Burnt Ends",
+            "name": "Le Jules Verne",
+            "type": "food",
+            "category": "Fine Dining",
+            "estimated_cost_sgd": 350.0,
+            "location": "Eiffel Tower, 75007 Paris",
+            "environment": "Indoor",
+            "description": "Gastronomic restaurant located on the second floor of the Eiffel Tower, offering refined French cuisine and views over the city.",
+            "tags": [
+                "gourmet",
+                "fine dining",
+                "views",
+                "luxury"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Meal budget",
+                    "passed": false,
+                    "detail": "$350.00 > $100.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Meal budget"
+            ]
+        },
+        {
+            "name": "Le Train Bleu",
             "type": "food",
             "category": "Restaurant",
-            "estimated_cost_sgd": 180.0,
-            "location": "7 Dempsey Rd, #01-04, Singapore 249671",
+            "estimated_cost_sgd": 110.0,
+            "location": "Gare de Lyon, Pl. Louis-Armand, 75012 Paris",
             "environment": "Indoor",
-            "description": "Modern barbecue restaurant serving Australian-style smoked meats and grilled dishes from an open kitchen.",
+            "description": "Opulent Belle Époque restaurant located inside the Gare de Lyon railway station, serving classic French dishes under painted ceilings.",
             "tags": [
-                "barbecue",
-                "grill",
-                "modern",
+                "restaurant",
+                "historic",
+                "architecture",
                 "fine dining"
             ],
             "transport_options": [
-                "transit",
-                "taxi"
+                "walk",
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -1489,7 +2038,7 @@
                 {
                     "label": "Meal budget",
                     "passed": false,
-                    "detail": "$180.00 > $25.00"
+                    "detail": "$110.00 > $100.00"
                 },
                 {
                     "label": "Avoid list",
@@ -1505,590 +2054,17 @@
             ]
         },
         {
-            "name": "Odette",
-            "type": "food",
-            "category": "Restaurant",
-            "estimated_cost_sgd": 350.0,
-            "location": "1 St Andrew's Rd, #01-04 National Gallery Singapore, Singapore 178957",
-            "environment": "Indoor",
-            "description": "Multi-award-winning fine dining establishment offering refined modern French cuisine.",
-            "tags": [
-                "fine dining",
-                "french",
-                "luxury",
-                "michelin"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": false,
-                    "detail": "$350.00 > $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Meal budget"
-            ]
-        },
-        {
-            "name": "Native",
-            "type": "food",
-            "category": "Bar",
-            "estimated_cost_sgd": 30.0,
-            "location": "52A Amoy St, Singapore 069878",
-            "environment": "Indoor",
-            "description": "Cocktail bar focused on using regional ingredients, local spirits, and foraged botanicals.",
-            "tags": [
-                "bar",
-                "cocktails",
-                "nightlife",
-                "drinks"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": false,
-                    "detail": "$30.00 > $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Meal budget"
-            ]
-        },
-        {
-            "name": "Atlas Bar",
-            "type": "food",
-            "category": "Bar",
-            "estimated_cost_sgd": 40.0,
-            "location": "600 North Bridge Rd, Parkview Square, Singapore 188778",
-            "environment": "Indoor",
-            "description": "Grand Art Deco lobby bar known for its extensive gin collection and opulent interior design.",
-            "tags": [
-                "bar",
-                "gin",
-                "art deco",
-                "luxury",
-                "cocktails"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Meal budget",
-                    "passed": false,
-                    "detail": "$40.00 > $25.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Meal budget"
-            ]
-        },
-        {
-            "name": "Marina Bay Sands Hotel",
+            "name": "Hôtel Le Bristol Paris",
             "type": "accommodation",
             "category": "Hotel",
-            "estimated_cost_sgd": 650.0,
-            "location": "10 Bayfront Ave, Singapore 018956",
+            "estimated_cost_sgd": 1800.0,
+            "location": "112 Rue du Faubourg Saint-Honoré, 75008 Paris",
             "environment": "Indoor",
-            "description": "Iconic luxury hotel featuring the world's largest rooftop infinity pool and expansive views of the city.",
+            "description": "Luxury palace hotel featuring elegant 18th-century style rooms, a Michelin-starred restaurant, and a courtyard garden.",
             "tags": [
                 "hotel",
                 "luxury",
-                "infinity pool",
-                "landmark"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$650.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Raffles Hotel Singapore",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 950.0,
-            "location": "1 Beach Rd, Singapore 189673",
-            "environment": "Indoor",
-            "description": "Historic colonial-style luxury hotel renowned for its heritage architecture, high-end hospitality, and the birthplace of the Singapore Sling.",
-            "tags": [
-                "hotel",
-                "heritage",
-                "luxury",
-                "historic"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$950.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "The Fullerton Hotel Singapore",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 450.0,
-            "location": "1 Fullerton Sq, Singapore 049178",
-            "environment": "Indoor",
-            "description": "Five-star heritage hotel housed in a magnificent neoclassical building overlooking the Singapore River.",
-            "tags": [
-                "hotel",
-                "heritage",
-                "luxury",
-                "riverside"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$450.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Capella Singapore",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 900.0,
-            "location": "1 The Knolls, Sentosa Island, Singapore 098297",
-            "environment": "Indoor",
-            "description": "Resort hotel on Sentosa Island blending colonial manor buildings with modern architectural extensions surrounded by lush rainforest.",
-            "tags": [
-                "hotel",
-                "resort",
-                "luxury",
-                "island",
-                "nature"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$900.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "The Warehouse Hotel",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 380.0,
-            "location": "320 Havelock Rd, Singapore 169628",
-            "environment": "Indoor",
-            "description": "Boutique hotel housed in a restored 1895 godown warehouse along the Singapore River, featuring industrial-chic design.",
-            "tags": [
-                "hotel",
-                "boutique",
-                "design",
-                "industrial"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$380.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Lloyd's Inn",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 220.0,
-            "location": "2 Lloyd Rd, Singapore 239091",
-            "environment": "Indoor",
-            "description": "Minimalist boutique hotel offering a tranquil escape tucked away in a quiet residential street near Orchard Road.",
-            "tags": [
-                "hotel",
-                "boutique",
-                "minimalist",
-                "quiet"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$220.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Pan Pacific Singapore",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 350.0,
-            "location": "7 Raffles Blvd, Marina Square, Singapore 039595",
-            "environment": "Indoor",
-            "description": "Modern upscale hotel featuring a dramatic atrium and spacious rooms in the heart of Marina Centre.",
-            "tags": [
-                "hotel",
-                "upscale",
-                "atrium",
-                "business"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$350.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Hotel Mono",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 180.0,
-            "location": "18 Mosque St, Singapore 059498",
-            "environment": "Indoor",
-            "description": "Chic budget-design hotel located in Chinatown, featuring a striking monochromatic interior across conserved shophouses.",
-            "tags": [
-                "hotel",
-                "budget design",
-                "monochrome",
-                "chinatown"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$180.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Andaz Singapore",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 420.0,
-            "location": "5 Fraser St, Singapore 189354",
-            "environment": "Indoor",
-            "description": "Lifestyle hotel designed by Ole Scheeren, offering vibrant interiors, floor-to-ceiling windows, and panoramic views from Kampong Glam.",
-            "tags": [
-                "hotel",
-                "lifestyle",
-                "modern",
-                "design"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$420.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Oakwood Premier AMTD Singapore",
-            "type": "accommodation",
-            "category": "Serviced Apartment",
-            "estimated_cost_sgd": 300.0,
-            "location": "6 Shenton Way, OUE Downtown 1, Singapore 068809",
-            "environment": "Indoor",
-            "description": "Luxury serviced apartments in the Central Business District offering apartment-style living with hotel amenities.",
-            "tags": [
-                "serviced apartment",
-                "apartment",
-                "cbd",
-                "long stay"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$300.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Orchard Scotts Residences",
-            "type": "accommodation",
-            "category": "Serviced Apartment",
-            "estimated_cost_sgd": 350.0,
-            "location": "5 Anthony Rd, Singapore 229954",
-            "environment": "Indoor",
-            "description": "High-end serviced apartments featuring extensive outdoor gardens and recreational facilities near Orchard Road.",
-            "tags": [
-                "serviced apartment",
-                "orchard",
-                "residential",
+                "spa",
                 "pool"
             ],
             "transport_options": [
@@ -2106,7 +2082,7 @@
                 {
                     "label": "Accommodation budget",
                     "passed": false,
-                    "detail": "$350.00 > $150.00"
+                    "detail": "$1800.00 > $300.00"
                 },
                 {
                     "label": "Avoid list",
@@ -2122,18 +2098,18 @@
             ]
         },
         {
-            "name": "lyf Funan Singapore",
+            "name": "Le Meurice",
             "type": "accommodation",
             "category": "Hotel",
-            "estimated_cost_sgd": 190.0,
-            "location": "67 Hill St, Level 4 Funan, Singapore 179370",
+            "estimated_cost_sgd": 1600.0,
+            "location": "228 Rue de Rivoli, 75001 Paris",
             "environment": "Indoor",
-            "description": "Co-living hotel tailored for digital nomads and travelers seeking social community spaces.",
+            "description": "Palace hotel combining 18th-century opulence with contemporary surrealist design, overlooking the Tuileries Garden.",
             "tags": [
                 "hotel",
-                "co living",
-                "modern",
-                "tech"
+                "luxury",
+                "historic",
+                "art"
             ],
             "transport_options": [
                 "walk",
@@ -2150,7 +2126,7 @@
                 {
                     "label": "Accommodation budget",
                     "passed": false,
-                    "detail": "$190.00 > $150.00"
+                    "detail": "$1600.00 > $300.00"
                 },
                 {
                     "label": "Avoid list",
@@ -2166,22 +2142,327 @@
             ]
         },
         {
-            "name": "Chroma Serviced Apartments",
+            "name": "Hôtel Plaza Athénée",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1900.0,
+            "location": "25 Av. Montaigne, 75008 Paris",
+            "environment": "Indoor",
+            "description": "Renowned luxury hotel on Avenue Montaigne featuring haute couture decor, signature red awnings, and a courtyard.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "fashion",
+                "spa"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1900.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Mandarin Oriental Paris",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1500.0,
+            "location": "251 Rue Saint-Honoré, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Chic luxury hotel situated on a fashion-focused street near Place Vendôme, offering sleek modern rooms and a peaceful garden.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "modern",
+                "spa"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1500.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Hotel Lutetia",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1400.0,
+            "location": "45 Bd Raspail, 75006 Paris",
+            "environment": "Indoor",
+            "description": "Historic Art Deco luxury hotel located in the vibrant Saint-Germain-des-Prés district on the Left Bank.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "art deco",
+                "historic"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1400.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Shangri-La Paris",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 1700.0,
+            "location": "10 Av. d'Iéna, 75116 Paris",
+            "environment": "Indoor",
+            "description": "Former residence of Prince Roland Bonaparte turned luxury hotel, offering breathtaking views of the Eiffel Tower.",
+            "tags": [
+                "hotel",
+                "luxury",
+                "historic",
+                "views"
+            ],
+            "transport_options": [
+                "walk",
+                "transit",
+                "taxi"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$1700.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "The Hoxton Paris",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 380.0,
+            "location": "30-32 Rue du Sentier, 75002 Paris",
+            "environment": "Indoor",
+            "description": "Vibrant design-focused hotel housed in an 18th-century residence in the 2nd arrondissement, featuring multiple bars and a courtyard.",
+            "tags": [
+                "hotel",
+                "boutique",
+                "design",
+                "trendy"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$380.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Grand Hotel du Palais Royal",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 700.0,
+            "location": "4 Rue de Valois, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Boutique luxury hotel steps away from the Palais Royal gardens, offering refined, quiet rooms and personalized service.",
+            "tags": [
+                "hotel",
+                "boutique",
+                "luxury",
+                "quiet"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$700.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Hotel Regina Louvre",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 550.0,
+            "location": "2 Pl des Pyramides, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Traditional Belle Époque hotel facing the Louvre Museum and the Tuileries Garden, featuring classic antique-furnished rooms.",
+            "tags": [
+                "hotel",
+                "historic",
+                "traditional",
+                "classic"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$550.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Citadines Les Halles Paris",
             "type": "accommodation",
             "category": "Serviced Apartment",
-            "estimated_cost_sgd": 250.0,
-            "location": "38 Armenian St, Singapore 179942",
+            "estimated_cost_sgd": 320.0,
+            "location": "4 Rue des Innocents, 75001 Paris",
             "environment": "Indoor",
-            "description": "Comfortable apartment rentals centrally located within the arts and heritage district.",
+            "description": "Modern serviced apartments situated right above the Forum des Halles transport and shopping hub.",
             "tags": [
-                "serviced apartment",
-                "heritage",
-                "central"
+                "apartment",
+                "serviced",
+                "central",
+                "kitchenette"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "none"
@@ -2193,7 +2474,7 @@
                 {
                     "label": "Accommodation budget",
                     "passed": false,
-                    "detail": "$250.00 > $150.00"
+                    "detail": "$320.00 > $300.00"
                 },
                 {
                     "label": "Avoid list",
@@ -2209,222 +2490,118 @@
             ]
         },
         {
-            "name": "W Singapore - Sentosa Cove",
+            "name": "Hotel Caron de Beaumarchais",
             "type": "accommodation",
             "category": "Hotel",
-            "estimated_cost_sgd": 500.0,
-            "location": "21 Ocean Way, Sentosa Island, Singapore 098374",
+            "estimated_cost_sgd": 350.0,
+            "location": "12 Rue Vieille-du-Temple, 75004 Paris",
             "environment": "Indoor",
-            "description": "Vibrant luxury resort hotel located in the upscale marina residential enclave of Sentosa Cove.",
+            "description": "Quaint boutique hotel in the Marais decorated in an authentic 18th-century style inspired by the author of The Marriage of Figaro.",
             "tags": [
                 "hotel",
-                "resort",
-                "marina",
+                "boutique",
+                "historic",
+                "romantic"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$350.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Novotel Paris Les Halles",
+            "type": "accommodation",
+            "category": "Hotel",
+            "estimated_cost_sgd": 340.0,
+            "location": "Place Marguerite de Navarre, 75001 Paris",
+            "environment": "Indoor",
+            "description": "Comfortable, modern four-star hotel situated right in the center of Paris with direct access to major metro lines.",
+            "tags": [
+                "hotel",
+                "central",
+                "family friendly",
+                "modern"
+            ],
+            "transport_options": [
+                "walk",
+                "transit"
+            ],
+            "dietary_tags": [
+                "none"
+            ],
+            "shopping_types": [],
+            "shopping_interests": [],
+            "eligible": false,
+            "checks": [
+                {
+                    "label": "Accommodation budget",
+                    "passed": false,
+                    "detail": "$340.00 > $300.00"
+                },
+                {
+                    "label": "Avoid list",
+                    "passed": true,
+                    "detail": "No avoided match"
+                }
+            ],
+            "passed_rules": [
+                "Avoid list"
+            ],
+            "failed_rules": [
+                "Accommodation budget"
+            ]
+        },
+        {
+            "name": "Avenue Montaigne",
+            "type": "shopping",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 800.0,
+            "location": "Av. Montaigne, 75008 Paris",
+            "environment": "Outdoor",
+            "description": "Prestigious tree-lined avenue home to haute couture flagship fashion houses including Dior, Chanel, and Saint Laurent.",
+            "tags": [
+                "fashion",
+                "shopping street",
+                "haute couture",
                 "luxury"
             ],
             "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$500.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "Sofitel Singapore Sentosa Resort & Spa",
-            "type": "accommodation",
-            "category": "Hotel",
-            "estimated_cost_sgd": 480.0,
-            "location": "2 Bukit Manis Rd, Sentosa Island, Singapore 099891",
-            "environment": "Indoor",
-            "description": "Cliffside luxury resort blending French luxury with lush island greenery overlooking the South China Sea.",
-            "tags": [
-                "hotel",
-                "resort",
-                "spa",
-                "cliffside"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [],
-            "shopping_interests": [],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Accommodation budget",
-                    "passed": false,
-                    "detail": "$480.00 > $150.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Accommodation budget"
-            ]
-        },
-        {
-            "name": "ION Orchard",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 250.0,
-            "location": "2 Orchard Turn, Singapore 238801",
-            "environment": "Indoor",
-            "description": "Ultra-modern shopping mall at the gateway of Orchard Road featuring luxury flagship boutiques and high street fashion brands.",
-            "tags": [
-                "mall",
-                "fashion",
-                "luxury",
-                "shopping"
-            ],
-            "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "none"
             ],
             "shopping_types": [
-                "mall"
+                "shopping street"
             ],
             "shopping_interests": [
                 "fashion",
                 "luxury goods",
-                "cosmetics",
-                "watches"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$250.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Ngee Ann City",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 300.0,
-            "location": "391 Orchard Rd, Singapore 238872",
-            "environment": "Indoor",
-            "description": "Prominent shopping complex housing Takashimaya department store and numerous international fashion designer houses.",
-            "tags": [
-                "mall",
-                "department store",
-                "fashion",
-                "shopping"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall",
-                "department store"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "books",
-                "cosmetics",
-                "food"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$300.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Mandarin Gallery",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 400.0,
-            "location": "333 Orchard Rd, Singapore 238867",
-            "environment": "Indoor",
-            "description": "Upscale shopping mall focused on premium international fashion labels and bespoke tailoring.",
-            "tags": [
-                "mall",
-                "fashion",
-                "luxury",
-                "boutiques"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "designer clothing",
                 "accessories"
             ],
             "eligible": false,
@@ -2432,7 +2609,7 @@
                 {
                     "label": "Shopping budget",
                     "passed": false,
-                    "detail": "$400.00 > $100.00"
+                    "detail": "$800.00 > $500.00"
                 },
                 {
                     "label": "Avoid list",
@@ -2448,292 +2625,40 @@
             ]
         },
         {
-            "name": "Orchard Gateway",
+            "name": "Rue du Faubourg Saint-Honoré",
             "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 120.0,
-            "location": "277 Orchard Rd, Singapore 238858",
-            "environment": "Indoor",
-            "description": "Contemporary mall with a sleek glass tubular bridge, popular for trendy youth fashion and local apparel brands.",
+            "category": "Shopping Street",
+            "estimated_cost_sgd": 700.0,
+            "location": "Rue du Faubourg Saint-Honoré, 75008 Paris",
+            "environment": "Outdoor",
+            "description": "World-famous fashion street known for high-end designer boutiques, luxury leather goods, and high-fashion flagships.",
             "tags": [
-                "mall",
                 "fashion",
-                "youth",
-                "streetwear"
+                "shopping street",
+                "designer",
+                "luxury"
             ],
             "transport_options": [
                 "walk",
-                "transit",
-                "taxi"
+                "transit"
             ],
             "dietary_tags": [
                 "none"
             ],
             "shopping_types": [
-                "mall"
+                "shopping street"
             ],
             "shopping_interests": [
                 "fashion",
-                "streetwear",
-                "lifestyle"
+                "leather goods",
+                "shoes"
             ],
             "eligible": false,
             "checks": [
                 {
                     "label": "Shopping budget",
                     "passed": false,
-                    "detail": "$120.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Somerset 313",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 110.0,
-            "location": "313 Orchard Rd, Singapore 238895",
-            "environment": "Indoor",
-            "description": "Popular youth-centric shopping destination featuring accessible fast-fashion brands and trendy lifestyle stores.",
-            "tags": [
-                "mall",
-                "fashion",
-                "fast fashion",
-                "youth"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "shoes",
-                "accessories"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$110.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Wisma Atria",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 150.0,
-            "location": "435 Orchard Rd, Singapore 238877",
-            "environment": "Indoor",
-            "description": "Established shopping centre featuring a mix of international fast-fashion retailers and Japanese specialty stores.",
-            "tags": [
-                "mall",
-                "fashion",
-                "retail",
-                "shopping"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "watches",
-                "cosmetics"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$150.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "Queensway Shopping Centre",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 140.0,
-            "location": "1 Queensway, Singapore 149053",
-            "environment": "Indoor",
-            "description": "Iconic older mall famous for its concentration of sports equipment stores, sneaker shops, and jersey printing services.",
-            "tags": [
-                "mall",
-                "sports",
-                "sneakers",
-                "fashion"
-            ],
-            "transport_options": [
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "sports equipment",
-                "sneakers",
-                "sportswear"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$140.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "The Shoppes at Marina Bay Sands",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 500.0,
-            "location": "8 Bayfront Ave, Singapore 018955",
-            "environment": "Indoor",
-            "description": "Ultra-luxury shopping mall featuring high-end designer duplexes, canal boat rides, and premier dining options.",
-            "tags": [
-                "mall",
-                "luxury",
-                "fashion",
-                "high end"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "luxury goods",
-                "watches",
-                "jewelry"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$500.00 > $100.00"
-                },
-                {
-                    "label": "Avoid list",
-                    "passed": true,
-                    "detail": "No avoided match"
-                }
-            ],
-            "passed_rules": [
-                "Avoid list"
-            ],
-            "failed_rules": [
-                "Shopping budget"
-            ]
-        },
-        {
-            "name": "VivoCity",
-            "type": "shopping",
-            "category": "Shopping Mall",
-            "estimated_cost_sgd": 130.0,
-            "location": "1 HarbourFront Walk, Singapore 098585",
-            "environment": "Indoor",
-            "description": "Singapore's largest shopping mall featuring a wide range of retail outlets, rooftop spaces, and scenic waterfront views.",
-            "tags": [
-                "mall",
-                "retail",
-                "family",
-                "entertainment"
-            ],
-            "transport_options": [
-                "walk",
-                "transit",
-                "taxi"
-            ],
-            "dietary_tags": [
-                "none"
-            ],
-            "shopping_types": [
-                "mall"
-            ],
-            "shopping_interests": [
-                "fashion",
-                "electronics",
-                "books",
-                "cosmetics"
-            ],
-            "eligible": false,
-            "checks": [
-                {
-                    "label": "Shopping budget",
-                    "passed": false,
-                    "detail": "$130.00 > $100.00"
+                    "detail": "$700.00 > $500.00"
                 },
                 {
                     "label": "Avoid list",
