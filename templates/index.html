@@ -89,38 +89,39 @@
                 <span>03 · Rule checking</span>
             </div>
         </section>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="notice {{ category }}">
-                    {{ message }}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="notice {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if error %}
+            <section class="error-panel" role="alert">
+                <div class="error-icon">!</div>
+
+                <div>
+                    <h2>We couldn't complete your request</h2>
+                    <p>{{ error }}</p>
+
+                    {% if technical_error %}
+                        <details>
+                            <summary>Technical details</summary>
+                            <pre>{{ technical_error }}</pre>
+                        </details>
+                    {% endif %}
+
+                    <p class="preserved">
+                        Your form entries are still here.
+                        Correct the issue above and submit again.
+                    </p>
                 </div>
-            {% endfor %}
+            </section>
         {% endif %}
-    {% endwith %}
-
-    {% if error %}
-        <section class="error-panel" role="alert">
-            <div class="error-icon">!</div>
-
-            <div>
-                <h2>We couldn't complete your request</h2>
-                <p>{{ error }}</p>
-
-                {% if technical_error %}
-                    <details>
-                        <summary>Technical details</summary>
-                        <pre>{{ technical_error }}</pre>
-                    </details>
-                {% endif %}
-
-                <p class="preserved">
-                    Your form entries are still here.
-                    Correct the issue above and submit again.
-                </p>
-            </div>
-        </section>
-    {% endif %}
 
     {% if result %}
         <section class="results-head">
@@ -140,9 +141,24 @@
                 </small>
             </div>
         </section>
-    {% endif %}
-        <!-- Trip planner -->
-        <section id="trip-planner" class="form-panel">
+        <section class="summary-grid">
+            {% for label, value in [
+                ('Activity budget', result.requirements.max_activity_spend),
+                ('Meal budget', result.requirements.max_meal_spend),
+                ('Accommodation / night',
+                    result.requirements.max_accommodation_spend),
+                ('Shopping budget', result.requirements.max_shopping_spend)
+            ] %}
+                <article class="summary-card">
+                    <span>{{ label }}</span>
+                    <strong>S${{ '%.2f'|format(value) }}</strong>
+                </article>
+            {% endfor %}
+        </section>
+        {% else %}
+            <!-- Your existing trip planner form starts here -->
+            <section id="trip-planner" class="form-panel">
+
 
             <div class="form-title">
                 <div>
@@ -429,7 +445,7 @@
 
                 <!-- Generate button -->
                 <div class="form-actions">
-                    <button type="button" id="generate-button">
+                    <button type="submit" id="generate-button">
                         Generate recommendations
                         <span aria-hidden="true">→</span>
                     </button>
@@ -452,6 +468,49 @@
             </p>
         </div>
     </div>
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("travel-form");
+            const button = document.getElementById("generate-button");
+            const loadingScreen = document.getElementById("loading-screen");
+            const planner = document.getElementById("trip-planner");
+            const hero = document.querySelector(".hero");
+
+            if (!form || !button || !loadingScreen) {
+                console.error("Travel form or loading screen could not be found.");
+                return;
+            }
+
+            form.addEventListener("submit", function (event) {
+                // Check required fields and browser validation first.
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    form.reportValidity();
+                    return;
+                }
+
+                // Stop repeated submissions while the request is processing.
+                button.disabled = true;
+                button.textContent = "Generating recommendations...";
+
+                // Hide the form and introduction while the AI works.
+                if (planner) {
+                    planner.hidden = true;
+                }
+
+                if (hero) {
+                    hero.hidden = true;
+                }
+
+                // Show the loading screen.
+                loadingScreen.hidden = false;
+                loadingScreen.setAttribute("aria-live", "polite");
+
+                // Allow the browser to submit the form normally to Flask.
+                // Do not prevent the default submission here.
+            });
+        });
+    </script>
 
 </body>
 </html>
