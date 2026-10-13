@@ -797,6 +797,11 @@ def _display_recommendation(item, decision, index):
 
     if item.get("eligible", True):
         print("\n   STATUS: ELIGIBLE")
+        if item.get("top_pick"):
+            print(
+                "   TOP PICK: matches your preferences and costs "
+                "no more than half of your budget"
+            )
     else:
         print("\n   STATUS: REJECTED")
 
