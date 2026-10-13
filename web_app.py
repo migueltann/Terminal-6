@@ -76,6 +76,26 @@ def _result_file_path(result_key):
     )
 
 
+def _store_latest_result(result):
+    """Save the latest generated result on the server."""
+    os.makedirs(app.instance_path, exist_ok=True)
+
+    result_key = session.get("latest_result_key")
+
+    if not result_key or not _result_file_path(result_key):
+        result_key = uuid.uuid4().hex
+        session["latest_result_key"] = result_key
+
+    path = _result_file_path(result_key)
+
+    with open(path, "w", encoding="utf-8") as file:
+        json.dump(
+            result,
+            file,
+            indent=4,
+            ensure_ascii=False,
+            allow_nan=False,
+        )
 
 @app.get("/")
 def index():
