@@ -169,3 +169,10 @@ p {
     box-shadow: 0 12px 40px #1e35230a;
     margin: 12px 0 70px;
 }
+.form-title {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 25px;
+    border-bottom: 1px solid var(--line);
+}
