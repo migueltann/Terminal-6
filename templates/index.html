@@ -442,53 +442,7 @@
                     </div>
                 </div>
             </div>
-            <label for="preferred_activities">Preferred activities</label>
-            <input
-                id="preferred_activities"
-                name="preferred_activities"
-                value="{{ form_data.get('preferred_activities', '') }}"
-                placeholder="Museums, hiking, theme parks"
-            >
-
-            <small class="hint">
-                Separate multiple preferences with commas,
-                or leave blank for Any.
-            </small>
-                <div class="two-col">
-                    <div>
-                        <label for="max_activity_spend">
-                            Max spend per activity (SGD) <b>*</b>
-                        </label>
-
-                        <input
-                            type="number"
-                            id="max_activity_spend"
-                            name="max_activity_spend"
-                            min="0.01"
-                            step="0.01"
-                            value="{{ form_data.get('max_activity_spend', '50') }}"
-                            required
-                            aria-describedby="error-max_activity_spend"
-                        >
-
-                        <small class="field-error"
-                               id="error-max_activity_spend"></small>
-                    </div>
-                    <div>
-                        <label for="activity_environment">Environment</label>
-
-                        <select id="activity_environment"
-                                name="activity_environment">
-                            {% for opt in ['Any', 'Indoor', 'Outdoor'] %}
-                                <option value="{{ opt }}"
-                                    {{ 'selected' if form_data.get('activity_environment', 'Any') == opt else '' }}>
-                                    {{ opt }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
+            
             <!-- FOOD -->
             <div class="field-group">
                 <div class="group-heading">
@@ -719,6 +673,7 @@
 <!-- AI LOADING SCREEN -->
 <div id="loading-screen"
      class="loading-screen"
+     hidden
      aria-live="polite"
      aria-hidden="true">
 
@@ -967,7 +922,7 @@
             if (hero) {
                 hero.style.display = 'none';
             }
-
+            loading.hidden = false; 
             loading.classList.add('visible');
             loading.setAttribute('aria-hidden', 'false');
             document.body.classList.add('is-loading');
