@@ -907,7 +907,7 @@ def display_approved_recommendations(result):
     print(LINE)
     print(
         f"Approved: {result['summary']['approved_count']} | "
-        f"Filtered out: {result['summary']['filtered_out_count']}"
+        f"Filtered out: {result['summary'].get('filtered_out_count', 0)}"
     )
 
     _display_section("ACTIVITIES", result.get("activities", []))
