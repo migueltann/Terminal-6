@@ -279,7 +279,46 @@ SHOPPING: exactly 15 recommendations.
   related to those preferences and 5 general shopping choices.
 - Otherwise, generate 15 general shopping choices.
 
-PREFERENCE GUIDELINES:
+
+PREFERENCE INTERPRETATION AND VALIDATION:
+
+- Treat user preferences as free-text descriptions of their
+  interests, not as guaranteed valid category labels.
+
+- For each of the four recommendation categories,
+  independently assess whether its preferences express
+  meaningful, interpretable travel interests.
+
+- Accept natural language, informal wording, common
+  abbreviations, spelling mistakes, and niche interests
+  when the intended meaning can reasonably be understood.
+
+- Do not reject a preference merely because it is unusual,
+  uncommon, or unfamiliar.
+
+- If a preference is random characters, meaningless text,
+  or cannot reasonably be interpreted, ignore that
+  preference when generating recommendations.
+
+- If a category contains both meaningful and meaningless
+  preferences, use only the meaningful preferences.
+
+- If a category has no meaningful preferences remaining,
+  generate 15 varied general recommendations for that
+  category.
+
+- If meaningful preferences remain, aim for 10 related
+  recommendations and 5 varied general recommendations
+  for that category.
+
+- Never invent a meaning for unintelligible input.
+
+- Apply these rules independently to activities, food,
+  accommodation and shopping.
+
+- Do not include preference-validation decisions or
+  explanations in the output JSON.
+
 
 - Use preferences to guide discovery, not to filter or rank results.
 - If multiple preferences are provided, aim for variety across them.
@@ -331,13 +370,24 @@ Shopping Mall, Market or Shopping Street.
 
 "description": short, factual description of the recommendation.
 
-"tags": array of specific, descriptive lowercase keywords.
-- Describe the actual place or experience.
-- Include relevant activity themes such as culture, sports,
-  museums, nature, history, adventure or entertainment.
-- Use relevant keywords beyond these examples.
-- Do not add tags simply to match the user's preferences.
+"tags": array of accurate, descriptive lowercase keywords.
+- Apply these tagging rules to EVERY recommendation across
+  activities, food, accommodation and shopping.
+- Include specific features, activities, experiences or products
+  associated with the recommendation.
+- Include broader categories and related concepts that accurately
+  describe the recommendation.
+- Include relevant characteristics that travellers might want
+  to avoid, when supported by the recommendation's details.
+- Use commonly understood keywords at different levels of
+  specificity, so both specific and general terms are represented.
+- For example, an activity may have both a specific activity tag
+  and a broader category tag describing that activity.
+- Do not limit tags to the user's stated preferences.
+- Do not invent characteristics or include unrelated keywords.
+- Do not add tags merely to satisfy user restrictions.
 - Tags must accurately reflect the recommendation.
+
 
 "transport_options": array containing only:
 "walk", "transit", "taxi"
