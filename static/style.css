@@ -1114,3 +1114,17 @@ footer span:first-child {
     font-size: 11px !important;
     color: var(--muted) !important;
 }
+
+.saved-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.saved-search input {
+    flex: 1;
+}
+
+.saved-search .secondary {
+    flex-shrink: 0;
+}

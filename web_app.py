@@ -444,9 +444,18 @@ def saved_sets():
             "error",
         )
 
+        keyword = request.args.get("destination", "").strip().lower()
+
+    if keyword:
+        saved = [
+            item for item in saved
+            if keyword in str(item.get("destination", "")).lower()
+        ]
+
     return render_template(
         "saved.html",
         saved=saved,
+        keyword=keyword,
     )
 
 
