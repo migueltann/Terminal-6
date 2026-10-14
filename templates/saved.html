@@ -57,6 +57,20 @@
         {% endwith %}
 
         <!-- Saved Recommendation Sets -->
+        <!-- Filter saved sets by destination -->
+        <form class="saved-search" method="get"
+              action="{{ url_for('saved_sets') }}">
+            <input name="destination" value="{{ keyword or '' }}"
+                   placeholder="Filter by destination">
+            <button class="secondary" type="submit">Filter</button>
+
+            {% if keyword %}
+                <a class="secondary" href="{{ url_for('saved_sets') }}">
+                    Clear
+                </a>
+            {% endif %}
+        </form>
+
         {% if saved %}
 
             <div class="saved-list">
@@ -133,7 +147,11 @@
 
                 <div>
                     <h3>
-                        No saved recommendation sets yet.
+                        {% if keyword %}
+                            No saved sets match "{{ keyword }}".
+                        {% else %}
+                            No saved recommendation sets yet.
+                        {% endif %}
                     </h3>
 
                     <p>

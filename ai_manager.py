@@ -1,13 +1,14 @@
 import json
 import os
 import time
+from typing import Any, Callable, Optional
 
 import requests
 
 from dotenv import load_dotenv
 load_dotenv()
 
-def active_preferences(values):
+def active_preferences(values: Any) -> list[str]:
     """Remove empty and placeholder preferences."""
     if not isinstance(values, list):
         return []
@@ -18,8 +19,23 @@ def active_preferences(values):
         if str(value).strip().lower() not in {"", "any", "none"}
     ]
 
-def generate_recommendations(destination, user_inputs=None):
-    """Ask Gemini for general and preference-related recommendations."""
+def _notify(notify: Optional[Callable[[str, str], None]], level: str, message: str) -> None:
+    """Send a status message to the caller if a callback was given."""
+    if notify is not None:
+        notify(level, message)
+
+
+def generate_recommendations(
+    destination: str,
+    user_inputs: Optional[dict] = None,
+    notify: Optional[Callable[[str, str], None]] = None,
+    validator: Optional[Callable[[list[dict]], Any]] = None,
+) -> list[dict]:
+    """Ask Gemini for general and preference-related recommendations.
+
+    notify is an optional function(level, message). The caller decides how
+    status messages are shown, so this module never prints anything.
+    """
 
     # Read the Gemini API key from the .env file
     api_key = os.getenv("GEMINI_API_KEY")
@@ -38,7 +54,7 @@ def generate_recommendations(destination, user_inputs=None):
     last_error = None
 
     for model_name in models_to_try:
-        print(f"[INFO] Trying Gemini model: {model_name}")
+        _notify(notify, "info", f"Trying Gemini model: {model_name}")
 
         # Retry temporary errors before moving to the next model
         for attempt in range(3):
@@ -68,8 +84,36 @@ def generate_recommendations(destination, user_inputs=None):
 
             # Return the recommendations when the API call works
             if response.status_code == 200:
-                print(f"[INFO] Gemini succeeded using {model_name}.")
-                return parse_gemini_response(response)
+                try:
+                    recommendations = parse_gemini_response(response)
+                    # Output that passes the schema but has no usable
+                    # items counts as malformed too
+                    if validator is not None and not validator(recommendations):
+                        raise RuntimeError(
+                            "Gemini returned no usable recommendations."
+                        )
+                except RuntimeError as err:
+                    # Malformed output: retry, then try the next model
+                    last_error = err
+
+                    if attempt < 2:
+                        _notify(
+                            notify,
+                            "warning",
+                            f"{model_name} returned malformed output. "
+                            "Retrying...",
+                        )
+                        continue
+
+                    _notify(
+                        notify,
+                        "warning",
+                        f"{model_name} kept returning malformed output.",
+                    )
+                    break
+
+                _notify(notify, "info", f"Gemini succeeded using {model_name}.")
+                return recommendations
 
             # 429 and 5xx errors are usually temporary, so try again
             if response.status_code in {429, 500, 502, 503, 504}:
@@ -79,14 +123,16 @@ def generate_recommendations(destination, user_inputs=None):
 
                 if attempt < 2:
                     wait_time = 2 ** (attempt + 1)
-                    print(
-                        f"[WARNING] {model_name} is busy. "
-                        f"Retrying in {wait_time} seconds..."
+                    _notify(
+                        notify,
+                        "warning",
+                        f"{model_name} is busy. "
+                        f"Retrying in {wait_time} seconds...",
                     )
                     time.sleep(wait_time)
                     continue
 
-                print(f"[WARNING] {model_name} is still unavailable.")
+                _notify(notify, "warning", f"{model_name} is still unavailable.")
                 break
 
             # If a model is not available, move to the next one
@@ -94,7 +140,7 @@ def generate_recommendations(destination, user_inputs=None):
                 last_error = RuntimeError(
                     f"HTTP 404: {response.text[:300]}"
                 )
-                print(f"[WARNING] {model_name} is not available.")
+                _notify(notify, "warning", f"{model_name} is not available.")
                 break
 
             last_error = RuntimeError(
@@ -108,10 +154,17 @@ def generate_recommendations(destination, user_inputs=None):
         f"Last error: {last_error}"
     )
 
-def parse_gemini_response(response):
+def parse_gemini_response(response: Any) -> list[dict]:
     """Turn Gemini's JSON response into a Python list."""
 
-    response_data = response.json()
+    try:
+        response_data = response.json()
+    except ValueError as err:
+        raise RuntimeError(f"Gemini response was not valid JSON: {err}")
+
+    if not isinstance(response_data, dict):
+        raise RuntimeError("Gemini response format was unexpected.")
+
     candidates = response_data.get("candidates", [])
 
     if not candidates:
@@ -129,18 +182,32 @@ def parse_gemini_response(response):
 
     # Gemini normally returns the list directly
     if isinstance(parsed, list):
-        return parsed
+        return validate_response_schema(parsed)
 
     # Accept these wrapper names too in case Gemini adds one
     if isinstance(parsed, dict):
         for key in ("recommendations", "items"):
             if isinstance(parsed.get(key), list):
-                return parsed[key]
+                return validate_response_schema(parsed[key])
 
     raise RuntimeError("Gemini returned an unexpected JSON structure.")
 
+def validate_response_schema(items: Any) -> list[dict]:
+    """Check the shape of the AI output: a non-empty list of objects.
 
-def clean_json_response(content):
+    Field-level checks (types, costs, environments) are done later by
+    logic_manager.validate_ai_response.
+    """
+
+    if not items:
+        raise RuntimeError("Gemini returned an empty recommendation list.")
+
+    if not all(isinstance(item, dict) for item in items):
+        raise RuntimeError("Gemini returned items that are not JSON objects.")
+
+    return items
+
+def clean_json_response(content: str) -> str:
     """Remove ```json fences if Gemini adds them around the JSON."""
 
     content = content.strip()
@@ -154,7 +221,7 @@ def clean_json_response(content):
     return content
 
 
-def build_ai_prompt(destination, user_inputs=None):
+def build_ai_prompt(destination: str, user_inputs: Optional[dict] = None) -> str:
     """Generate a mix of general and preference-related recommendations."""
 
     user_inputs = user_inputs or {}
@@ -212,7 +279,46 @@ SHOPPING: exactly 15 recommendations.
   related to those preferences and 5 general shopping choices.
 - Otherwise, generate 15 general shopping choices.
 
-PREFERENCE GUIDELINES:
+
+PREFERENCE INTERPRETATION AND VALIDATION:
+
+- Treat user preferences as free-text descriptions of their
+  interests, not as guaranteed valid category labels.
+
+- For each of the four recommendation categories,
+  independently assess whether its preferences express
+  meaningful, interpretable travel interests.
+
+- Accept natural language, informal wording, common
+  abbreviations, spelling mistakes, and niche interests
+  when the intended meaning can reasonably be understood.
+
+- Do not reject a preference merely because it is unusual,
+  uncommon, or unfamiliar.
+
+- If a preference is random characters, meaningless text,
+  or cannot reasonably be interpreted, ignore that
+  preference when generating recommendations.
+
+- If a category contains both meaningful and meaningless
+  preferences, use only the meaningful preferences.
+
+- If a category has no meaningful preferences remaining,
+  generate 15 varied general recommendations for that
+  category.
+
+- If meaningful preferences remain, aim for 10 related
+  recommendations and 5 varied general recommendations
+  for that category.
+
+- Never invent a meaning for unintelligible input.
+
+- Apply these rules independently to activities, food,
+  accommodation and shopping.
+
+- Do not include preference-validation decisions or
+  explanations in the output JSON.
+
 
 - Use preferences to guide discovery, not to filter or rank results.
 - If multiple preferences are provided, aim for variety across them.
@@ -264,13 +370,24 @@ Shopping Mall, Market or Shopping Street.
 
 "description": short, factual description of the recommendation.
 
-"tags": array of specific, descriptive lowercase keywords.
-- Describe the actual place or experience.
-- Include relevant activity themes such as culture, sports,
-  museums, nature, history, adventure or entertainment.
-- Use relevant keywords beyond these examples.
-- Do not add tags simply to match the user's preferences.
+"tags": array of accurate, descriptive lowercase keywords.
+- Apply these tagging rules to EVERY recommendation across
+  activities, food, accommodation and shopping.
+- Include specific features, activities, experiences or products
+  associated with the recommendation.
+- Include broader categories and related concepts that accurately
+  describe the recommendation.
+- Include relevant characteristics that travellers might want
+  to avoid, when supported by the recommendation's details.
+- Use commonly understood keywords at different levels of
+  specificity, so both specific and general terms are represented.
+- For example, an activity may have both a specific activity tag
+  and a broader category tag describing that activity.
+- Do not limit tags to the user's stated preferences.
+- Do not invent characteristics or include unrelated keywords.
+- Do not add tags merely to satisfy user restrictions.
 - Tags must accurately reflect the recommendation.
+
 
 "transport_options": array containing only:
 "walk", "transit", "taxi"

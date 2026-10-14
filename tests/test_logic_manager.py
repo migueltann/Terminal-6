@@ -213,3 +213,93 @@ def test_validation_accepts_complete_item():
 
     assert len(validated) == 1
     assert validated[0]["type"] == "activity"
+
+def test_top_pick_needs_preference_and_low_cost():
+    requirements = make_requirements()
+    requirements["preferred_activities"] = ["museum"]
+
+    cheap = make_item(name="City Museum", estimated_cost_sgd=20)
+    pricey = make_item(name="City Museum", estimated_cost_sgd=80)
+    unrelated = make_item(name="Harbour Cruise", estimated_cost_sgd=20)
+
+    assert evaluate_recommendation(cheap, requirements)["top_pick"] is True
+    assert evaluate_recommendation(pricey, requirements)["top_pick"] is False
+    assert evaluate_recommendation(unrelated, requirements)["top_pick"] is False
+
+
+def test_rejected_item_is_never_a_top_pick():
+    requirements = make_requirements()
+    requirements["preferred_activities"] = ["museum"]
+
+    item = make_item(name="City Museum", estimated_cost_sgd=500)
+    decision = evaluate_recommendation(item, requirements)
+
+    assert decision["keep"] is False
+    assert decision["top_pick"] is False
+
+
+def test_hardcoded_ai_response_goes_through_the_whole_pipeline():
+    """Sample AI output (one valid, one malformed) -> validate -> filter."""
+    sample_ai_response = [
+        {
+            "name": "Gardens by the Bay",
+            "type": "activity",
+            "category": "Nature",
+            "estimated_cost_sgd": 28,
+            "location": "Marina Bay",
+            "environment": "Outdoor",
+            "description": "Large waterfront garden complex",
+            "tags": ["nature", "gardens"],
+            "transport_options": ["transit", "walk"],
+            "dietary_tags": ["none"],
+        },
+        {"name": "Broken record", "type": "activity"},
+    ]
+
+    valid = validate_ai_response(sample_ai_response)
+    assert len(valid) == 1
+
+    approved, rejected, _ = filter_recommendations(valid, make_requirements())
+    assert [item["name"] for item in approved] == ["Gardens by the Bay"]
+    assert rejected == []
+
+    
+
+def test_cheapest_items_are_top_picks_when_no_preferences():
+    requirements = make_requirements()
+    items = [
+        make_item(name=f"Activity {cost}", estimated_cost_sgd=cost)
+        for cost in (10, 20, 30, 40, 45)
+    ]
+
+    approved, _, _ = filter_recommendations(items, requirements)
+    picks = [item["name"] for item in approved if item["top_pick"]]
+
+    assert picks == ["Activity 10", "Activity 20", "Activity 30"]
+
+
+def test_cheapest_rule_skips_items_over_half_the_budget():
+    requirements = make_requirements()
+    items = [
+        make_item(name="Cheap", estimated_cost_sgd=20),
+        make_item(name="Expensive", estimated_cost_sgd=90),
+    ]
+
+    approved, _, _ = filter_recommendations(items, requirements)
+    picks = [item["name"] for item in approved if item["top_pick"]]
+
+    assert picks == ["Cheap"]
+
+
+def test_cheapest_rule_not_used_when_preferences_are_set():
+    requirements = make_requirements()
+    requirements["preferred_activities"] = ["museum"]
+    items = [
+        make_item(name="City Museum", estimated_cost_sgd=40),
+        make_item(name="Harbour Cruise", estimated_cost_sgd=10),
+    ]
+
+    approved, _, _ = filter_recommendations(items, requirements)
+    picks = [item["name"] for item in approved if item["top_pick"]]
+
+    assert picks == ["City Museum"]

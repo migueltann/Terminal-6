@@ -1099,3 +1099,32 @@ footer span:first-child {
         padding: 12px;
     }
 }
+
+.top-pick {
+    background: var(--green2);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 8px;
+    border-radius: 6px;
+    margin-right: 6px;
+}
+
+.top-pick-note {
+    font-size: 11px !important;
+    color: var(--muted) !important;
+}
+
+.saved-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.saved-search input {
+    flex: 1;
+}
+
+.saved-search .secondary {
+    flex-shrink: 0;
+}

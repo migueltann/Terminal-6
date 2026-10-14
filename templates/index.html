@@ -210,6 +210,13 @@
 
                                 <h3>{{ item.name }}</h3>
 
+                                {% if item.top_pick %}
+                                <p class="top-pick-note">
+                                    <span class="top-pick">★ Top pick</span>
+                                    {{ item.top_pick_reason }}
+                                </p>
+                                {% endif %}
+
                                 <p class="location">
                                     ⌖ {{ item.location or 'Location not provided' }}
                                 </p>

@@ -3,55 +3,55 @@
 Team Name: Terminal 6
 
 ## Problem Statement and Target Users
-1. Problem Statement and Target Users
-Planning a trip can be time-consuming because travellers need to consider attractions, activities, restaurants, cost, available time and travelling distance. It can be difficult to create an itinerary that fits within a fixed budget while matching the traveller's interests and preferences.
-The Travel Itinerary Assistant aims to solve this problem by using AI to generate personalised travel options and create a practical day-to-day itinerary. The system considers the user's budget, available time, interests, dietary requirements and travel preferences when selecting and arranging options. It also aims to reduce unnecessary travelling by grouping activities located near each other.
-The application is intended for individual travellers, students, families and small groups who want to create a personalised itinerary without manually comparing and arranging different travel options.
-Objectives: Generate personalised recommendations, keep the itinerary within budget, fit activities within available time, consider dietary requirements, reduce unnecessary travelling and produce a practical day-to-day itinerary.
+Planning a trip is time-consuming because travellers must compare activities, restaurants, accommodation and shopping against their budget and requirements. Researching many sources takes effort, and it is easy to pick options that break a budget or a dietary need.
+
+Terminal-6 is an AI-powered Travel Recommendation Assistant. It uses Google Gemini to discover destination-specific options in four categories: activities, food, accommodation and shopping. Python logic then checks every option against the user’s hard requirements and records why it passed or failed. The application runs in the terminal, has an optional Flask web interface, and runs in Docker.
+
+It is intended for individual travellers, students, families and small groups who want personalised recommendations without researching and comparing options manually.
+
+Objectives: generate personalised recommendations for a destination; keep results within the user’s budget for each category; respect environment, dietary, transport and avoid-list requirements; explain every pass or fail; and let users save, reopen, filter and delete recommendation sets.
 
 
 
 ## User Inputs
 2. User Inputs
-Users will provide the following information through the terminal:
-Trip details: Destination, trip start and end dates, number of travellers, travel budget, accommodation area, preferred start and end times.
+Users enter the following in the terminal, grouped by category:
 
-Travel preferences: Interests, preferred activities, must-visit spots, locations or activities to avoid, travelling pace, maximum acceptable travel time, and preferred transportation method.
+- Destination: a city, country, country code or “City, Country”.
+- Activities: preferred activities, maximum spend per activity (SGD), indoor/outdoor/any environment.
+- Food: cuisine preferences, maximum spend per meal (SGD), environment, dietary requirement.
+- Accommodation: accommodation preferences, maximum spend per night (SGD).
+- Shopping: shopping preferences, maximum shopping spend (SGD), environment.
+- Universal restrictions: preferred transport (walk, transit, taxi or any) and an avoid list.
 
-Personal requirements: Dietary requirements, accessibility requirements, medical conditions, age group (whether children or elderly travellers are included), and required rest periods.
-
-The application will validate the user's inputs before processing them. Invalid inputs will be rejected and the user will be asked to enter them again.
-
+Preferences can be left blank or entered as “Any” or “None”, which means no preference. Inputs are validated: destinations are checked against geonamescache with “Did you mean...?” suggestions, budgets must be positive numbers, and environment and transport must be one of the listed options. Invalid input is rejected and the user is asked again. Users can type back or exit, and can confirm, edit one input or restart from a summary screen.
 
 
 ## Use of AI
 3. Use of AI
-AI will be the main engine of the application, and every travel request will pass through the AI processing stage. The AI will use the user's destination, interests, activities and personal requirements to generate suitable attractions, activities and restaurants.
-The AI will return a structured JSON response containing information such as the recommendation name and category, reason, estimated cost and duration, location, suggested time, transport method, travelling time, dietary suitability and accessibility suitability.
-The AI will provide possible options rather than the final itinerary. The Logic Manager will filter and rank these options according to the user's requirements and business rules. AI responses will be validated to ensure that required fields are present and have the correct data types before they are used.
+The AI is the core engine: every request passes through Gemini, and without it the application has nothing to filter. The system sends the destination and the four category preferences, and asks for exactly 60 candidates (15 per category). When preferences exist for a category, about 10 candidates relate to them and 5 are general, so users still discover popular options. The AI does not create an itinerary and does not filter or rank. Hard restrictions are applied only in Python.
+
+Gemini returns a JSON array. Each item has its name, type, category, estimated cost in SGD, location, environment, description, tags, transport options and dietary tags (shopping items also have shopping types and interests).
+
+Responses are validated before use. The AI Manager checks the response is valid JSON in the expected shape. If the output is malformed, or none of the items are usable, it retries and falls back across three Gemini models, and temporary errors (HTTP 429 and 5xx) are retried with increasing waits. The Logic Manager then checks each item’s fields, types, cost and environment and discards invalid items.
 
 
 ## Business Rules
 4. Business Rules
-The Logic Manager will filter and rank AI-generated recommendations based on the user's requirements.
-Budget and Time
-Recommendations will be rejected when:
-The estimated cost exceeds the remaining budget;
-The activity does not fit within the available time;
-The activity overlaps with another scheduled activity; or
-A lower-cost suitable option is available.
-The number of activities selected will also consider the user's preferred travelling pace, with fewer activities selected for a relaxed pace.
-Location and Travel
-The system will prioritise activities located near each other to reduce unnecessary travelling. Recommendations will be rejected when the estimated travelling time exceeds the user's maximum acceptable travel time. The user's preferred transport method will also be considered when arranging the itinerary.
-Suitability
-Restaurants will only be selected when they meet the user's dietary requirements. Activities that do not meet accessibility requirements or are unsuitable for the travellers' age group will be rejected. This will also consider whether children or elderly travellers are included.
-Recommendation Ranking
-Suitable recommendations will be ranked based on factors such as matching the user's interests and preferred activities, fitting within the budget, meeting the maximum travelling time and being located near other selected activities.
-A multi-condition rule will increase a recommendation's priority when the recommendation matches the user's interests, fits within the remaining budget and is within the user's maximum acceptable travelling time.
-The highest-ranked suitable recommendations will then be arranged into the final day-by-day itinerary.
-Final Output
-The final output will contain selected activities, meal locations, estimated activity and travelling durations, estimated daily and total costs, recommended transport methods and reasons for the selected recommendations.
-If the user's requirements cannot all be satisfied, the system will identify the conflicting requirements and inform the user that the budget, schedule or preferences need to be adjusted.
+The Logic Manager marks a recommendation eligible only if it passes every rule that applies, and records PASS or FAIL with a reason for each.
+
+Category budget: cost must not exceed the budget for that category (activity, meal, accommodation per night, shopping).
+Environment: for activities, food and shopping, the environment must match the user’s choice unless it is “Any”.
+Avoid list: rejected if its name, category, description, location or tags match an avoided term.
+Dietary requirement: food must list the user’s dietary requirement in its dietary tags.
+Transport: the preferred transport must be among the item’s transport options unless it is “Any”.
+Top pick (multi-condition rule): an eligible item is flagged as a top pick when it matches one of the user’s preferences for its category and costs no more than half of that category’s budget. If the user gave no preferences for a category, the three cheapest eligible items within half the budget are flagged instead.
+
+Preferences guide discovery and the top-pick flag. They are not used as hard filters.
+
+Final Output: approved recommendations are grouped into the four categories with name, category, location, environment, estimated cost, description, tags, transport options, passed rules and any top-pick reason. Filtered-out items are shown separately with their failed rules. Users can save results as JSON and CSV and view, filter by destination or delete saved sets. If the AI fails or returns nothing usable, an error is shown and the user returns to the main menu.
+
+Code Repository URL: https://github.com/migueltann/Terminal-6.git (Dockerfile in the repository root)
 
 
 ## Code Repository URL

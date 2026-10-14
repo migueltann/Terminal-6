@@ -13,8 +13,10 @@ The application supports both a **terminal interface** and a **Flask web interfa
 - Python-based validation and filtering
 - Approved and rejected recommendations with filtering explanations
 - JSON saving and CSV exporting
-- Automated testing using pytest
+- Automated testing using pytest (works without a live API connection)
 - Continuous integration using GitHub Actions
+- Docker support
+- Transparent PASS/FAIL checks for every recommendation and a multi-condition "top pick" rule
 
 ## Setup
 
@@ -31,6 +33,31 @@ The application supports both a **terminal interface** and a **Flask web interfa
       GEMINI_API_KEY=your_actual_gemini_api_key
 
    Replace the placeholder with your Gemini API key. Do not upload `.env` to GitHub.
+
+## Running in Docker
+
+Build the image once:
+
+    docker build -t terminal-6 .
+
+The API key is passed from your `.env` file and saved results are kept in the local `data` folder:
+
+Run the **Terminal version:** application (interactive):
+
+    docker run -it --rm --env-file .env -v "$(pwd)/data:/app/data" terminal-6
+
+Run the **Flask web version:** application:
+
+    docker run --rm -p 5000:5000 --env-file .env -v "$(pwd)/data:/app/data" terminal-6 python -m flask --app web_app:app run --host=0.0.0.0 --port=5000
+
+
+On Windows PowerShell use `${PWD}` instead of `$(pwd)`.
+
+Run the automated tests inside the container (no API key or internet needed):
+
+    docker run --rm terminal-6 python -m pytest tests/ -v
+
+A template for the key file is provided as `.env.example`. Never commit your real `.env`.
 
 ## Running the Application
 
@@ -50,7 +77,7 @@ Run the automated tests from the main project folder:
 
 python -m pytest tests/ -v
 
-Terminal-6 includes **18 automated tests** covering recommendation validation and filtering. GitHub Actions automatically runs syntax checks and tests when code is pushed or a pull request is opened.
+Terminal-6 includes **24 automated tests** covering recommendation validation and filtering. GitHub Actions automatically runs syntax checks and tests when code is pushed or a pull request is opened.
 
 ## Data Storage
 

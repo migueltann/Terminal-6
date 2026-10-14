@@ -129,6 +129,14 @@ def _clear_latest_result():
     except OSError:
         app.logger.exception("Could not remove temporary result.")
 
+# status messages from ai_manager go to the Flask log, not the terminal
+def _log_ai_status(level, message):
+    """Send AI status messages to the Flask log."""
+    if level == "warning":
+        app.logger.warning(message)
+    else:
+        app.logger.info(message)
+
 # input helpers
 def _split_list(value):
     """Use the terminal's comma-separated list handling."""
@@ -181,6 +189,16 @@ def _error_message(err):
         return (
             "Could not connect to Gemini. "
             "Check your internet connection and try again."
+        )
+
+    if (
+        "no usable recommendations" in low
+        or "malformed" in low
+        or "invalid json" in low
+    ):
+        return (
+            "Gemini returned an answer the app could not use. "
+            "Please try again."
         )
 
     if (
@@ -347,6 +365,8 @@ def generate():
         raw_items = ai_manager.generate_recommendations(
             user_inputs["destination"],
             user_inputs,
+            notify=_log_ai_status,
+            validator=logic_manager.validate_ai_response,
         )
 
         # Validate the structure returned by the AI.
@@ -408,8 +428,12 @@ def generate():
             field_errors={},
         ), 502
 
+
 @app.get("/saved")
 def saved_sets():
+    # Get the search keyword before loading saved recommendations.
+    keyword = request.args.get("destination", "").strip().lower()
+
     try:
         saved = data_manager.get_saved_recommendations()
 
@@ -424,11 +448,20 @@ def saved_sets():
             "error",
         )
 
+    # Filter saved recommendations if a keyword was entered.
+    if keyword:
+        saved = [
+            item for item in saved
+            if keyword in str(
+                item.get("destination", "")
+            ).lower()
+        ]
+
     return render_template(
         "saved.html",
         saved=saved,
+        keyword=keyword,
     )
-
 
 @app.get("/saved/view/<path:filename>")
 def view_saved(filename):
