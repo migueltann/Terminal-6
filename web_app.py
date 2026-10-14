@@ -428,8 +428,12 @@ def generate():
             field_errors={},
         ), 502
 
+
 @app.get("/saved")
 def saved_sets():
+    # Get the search keyword before loading saved recommendations.
+    keyword = request.args.get("destination", "").strip().lower()
+
     try:
         saved = data_manager.get_saved_recommendations()
 
@@ -444,12 +448,13 @@ def saved_sets():
             "error",
         )
 
-        keyword = request.args.get("destination", "").strip().lower()
-
+    # Filter saved recommendations if a keyword was entered.
     if keyword:
         saved = [
             item for item in saved
-            if keyword in str(item.get("destination", "")).lower()
+            if keyword in str(
+                item.get("destination", "")
+            ).lower()
         ]
 
     return render_template(
@@ -457,7 +462,6 @@ def saved_sets():
         saved=saved,
         keyword=keyword,
     )
-
 
 @app.get("/saved/view/<path:filename>")
 def view_saved(filename):
