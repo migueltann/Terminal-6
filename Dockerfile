@@ -10,14 +10,17 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code and the tests
+# Copy application code, tests and web assets
 COPY *.py pytest.ini ./
 COPY tests/ tests/
 COPY templates/ templates/
 COPY static/ static/
 
-# Saved recommendation sets are written here (mount a volume to keep them)
-RUN mkdir -p /app/data
+# Directory for saved recommendation data
+RUN mkdir -p /app/data /app/instance
+
+# Document the Flask web port
+EXPOSE 5000
 
 # Default: run the terminal application
 CMD ["python", "main.py"]

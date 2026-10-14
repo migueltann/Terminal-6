@@ -40,15 +40,22 @@ Build the image once:
 
     docker build -t terminal-6 .
 
-Run the terminal application (interactive). The API key is passed from your `.env` file and saved results are kept in the local `data` folder:
+The API key is passed from your `.env` file and saved results are kept in the local `data` folder:
+
+Run the **Terminal version:** application (interactive):
 
     docker run -it --rm --env-file .env -v "$(pwd)/data:/app/data" terminal-6
+
+Run the **Flask web version:** application:
+
+    docker run --rm -p 5000:5000 --env-file .env -v "$(pwd)/data:/app/data" terminal-6 python -m flask --app web_app:app run --host=0.0.0.0 --port=5000
+
 
 On Windows PowerShell use `${PWD}` instead of `$(pwd)`.
 
 Run the automated tests inside the container (no API key or internet needed):
 
-    docker run --rm terminal-6 python -m pytest -v
+    docker run --rm terminal-6 python -m pytest tests/ -v
 
 A template for the key file is provided as `.env.example`. Never commit your real `.env`.
 
