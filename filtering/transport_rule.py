@@ -10,3 +10,8 @@ class TransportRule(Rule):
     # only check this rule if the user picked a transport
     def applies_to(self, item: Recommendation, requirements: UserRequirements) -> bool:
         return self.is_set(requirements.transport)
+    
+    # the actual transport check
+    def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
+         # Gets the user's preferred transport
+        transport = _normalise(requirements.transport)
