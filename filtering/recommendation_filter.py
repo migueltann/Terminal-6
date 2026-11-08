@@ -95,3 +95,9 @@ class RecommendationFilter:
                 result.add_item(item)
             else:
                 result.add_rejected(item)
+            
+        # select top picks from approved recommendations only
+        self._mark_top_picks(result.approved())
+
+        # returns the final recommendation results
+        return result
