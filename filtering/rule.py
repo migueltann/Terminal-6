@@ -9,3 +9,8 @@ NO_REQUIREMENT = {"", "any", "none"}
 class Rule(ABC):
     """A parent class for all recommendation rules."""
     label = "Rule"  
+    
+    # Checks whether this rule applies to the recommendation.
+    def applies_to(self, item: Recommendation, requirements: UserRequirements) -> bool:
+        """Checks whether this rule should be used."""
+        return True 
