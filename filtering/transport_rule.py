@@ -15,3 +15,10 @@ class TransportRule(Rule):
     def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
          # Gets the user's preferred transport
         transport = _normalise(requirements.transport)
+        
+        # Checks whether the preferred transport is available.   
+        return self.result(
+            transport in item.transport_options,
+            f"{transport} available",
+            f"{transport} not listed"
+        )
