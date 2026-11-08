@@ -6,3 +6,7 @@ from .rule import Rule  # the parent class this rule is based on
 class TransportRule(Rule):
     """Checks whether the recommendation supports the user's preferred transport."""
     label = "Transport preference"
+    
+    # only check this rule if the user picked a transport
+    def applies_to(self, item: Recommendation, requirements: UserRequirements) -> bool:
+        return self.is_set(requirements.transport)
