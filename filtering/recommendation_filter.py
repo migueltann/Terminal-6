@@ -75,3 +75,13 @@ class RecommendationFilter:
                 )
                 for item in affordable[:CHEAPEST_TOP_PICK_COUNT]:  # take only the cheapest few (3)
                     item.mark_top_pick(CHEAPEST_REASON)  # mark it as a top pick and save the reason
+
+    # filters all recommendations and returns the final results
+    def filter(self, items: list[Recommendation], destination: Optional[str] = None) -> RecommendationSet:
+        """Separates approved and rejected recommendations and selects top picks."""
+
+        # creates an empty result set using the given destination or the user's destination
+        result = RecommendationSet(
+            destination or self.requirements.destination,
+            self.requirements
+        )
