@@ -18,4 +18,12 @@ class Rule(ABC):
     @abstractmethod
     def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
         """Checks the recommendation and explains whether it passes or fails."""
-    
+
+    # Runs the rule to check one recommendation.
+    def check(self, item: Recommendation, requirements: UserRequirements) -> Optional[RuleResult]:
+        """Checks the recommendation or skips it if the rule does not apply."""
+
+        if not self.applies_to(item, requirements):  # Check if this rule applies.
+            return None  # Skip the rule if it does not apply.
+
+        return self.evaluate(item, requirements)  # Check if the recommendation passes or fails.
