@@ -27,3 +27,8 @@ class Rule(ABC):
             return None  # Skip the rule if it does not apply.
 
         return self.evaluate(item, requirements)  # Check if the recommendation passes or fails.
+    
+    # Creates a result in the same format for every rule.
+    def result(self, passed: bool, pass_text: str, fail_text: str, label: Optional[str] = None) -> RuleResult:
+        """Creates a result showing whether the recommendation passed or failed."""
+        return RuleResult(label or self.label, passed, pass_text if passed else fail_text)
