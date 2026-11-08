@@ -13,4 +13,9 @@ class Rule(ABC):
     # Checks whether this rule applies to the recommendation.
     def applies_to(self, item: Recommendation, requirements: UserRequirements) -> bool:
         """Checks whether this rule should be used."""
-        return True 
+        return True
+
+    @abstractmethod
+    def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
+        """Checks the recommendation and explains whether it passes or fails."""
+    
