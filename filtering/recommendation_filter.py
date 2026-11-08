@@ -41,3 +41,9 @@ class RecommendationFilter:
     # checks if the item costs half the budget or less
     def _within_half_budget(self, item: Recommendation) -> bool:
         return item.cost_sgd <= 0.5 * BudgetRule.limit_for(item, self.requirements)
+
+    # checks if the item matches at least one of the user's preferences
+    def _matches_preference(self, item: Recommendation) -> bool:
+        item_data = item.to_dict()  # turn the item into a dict so we can search its text
+        # any() is True if at least one preference is found in the item
+        return any(_contains_term(item_data, pref) for pref in self._preferences(item.item_type))
