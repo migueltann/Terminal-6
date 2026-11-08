@@ -59,3 +59,11 @@ class RecommendationFilter:
                 item for item in approved
                 if item.item_type == item_type
             ]
+            
+            # checks whether the user has preferences for this category
+            if self._preferences(item_type):
+
+                # selects affordable recommendations that match the user's preferences
+                for item in in_category:
+                    if self._within_half_budget(item) and self._matches_preference(item):
+                        item.mark_top_pick(PREFERENCE_REASON)
