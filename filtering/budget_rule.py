@@ -9,3 +9,7 @@ BUDGET_LABELS = {
     "accommodation": "Accommodation budget",
     "shopping": "Shopping budget",
 }
+
+class BudgetRule(Rule):
+    """Checks whether the item's cost is within the user's budget."""
+    label = "Budget"
