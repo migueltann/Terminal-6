@@ -25,3 +25,23 @@ class BudgetRule(Rule):
             return math.inf  # treat it as no spending limit
         # returns infinity if the budget is invalid or negative
         return math.inf if math.isnan(limit) or limit < 0 else limit
+
+    # Checks whether the recommendation is within the user's budget
+    def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
+        # Gets the item's cost and the user's budget
+        cost = item.cost_sgd 
+        limit = self.limit_for(item, requirements) 
+        
+        # Creates the message to show when the recommendation passes
+        pass_text = (
+            "No budget limit set" if math.isinf(limit)
+            else f"${cost:.2f} <= ${limit:.2f}"
+        )
+        
+        # Checks whether the cost is within the budget
+        return self.result(
+            cost <= limit,
+            pass_text,
+            f"${cost:.2f} > ${limit:.2f}",
+            label=BUDGET_LABELS.get(item.item_type, self.label)
+        )
