@@ -67,3 +67,9 @@ class RecommendationFilter:
                 for item in in_category:
                     if self._within_half_budget(item) and self._matches_preference(item):
                         item.mark_top_pick(PREFERENCE_REASON)
+            else:
+                # Gets affordable recommendations and sorts them by price.
+                affordable = sorted(
+                    (item for item in in_category if self._within_half_budget(item)),
+                    key=lambda item: item.cost_sgd
+                )
