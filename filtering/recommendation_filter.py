@@ -7,3 +7,7 @@ from .environment_rule import EnvironmentRule
 from .avoid_list_rule import AvoidListRule
 from .dietary_rule import DietaryRule
 from .transport_rule import TransportRule
+
+# reasons shown to the user when an item is marked as a top pick
+PREFERENCE_REASON = "matches your preferences and costs no more than half of your budget"
+CHEAPEST_REASON = "one of the cheapest options and within half of your budget"
