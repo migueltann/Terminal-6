@@ -73,3 +73,5 @@ class RecommendationFilter:
                     (item for item in in_category if self._within_half_budget(item)),
                     key=lambda item: item.cost_sgd
                 )
+                for item in affordable[:CHEAPEST_TOP_PICK_COUNT]:  # take only the cheapest few (3)
+                    item.mark_top_pick(CHEAPEST_REASON)  # mark it as a top pick and save the reason
