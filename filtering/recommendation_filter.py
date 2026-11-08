@@ -85,3 +85,7 @@ class RecommendationFilter:
             destination or self.requirements.destination,
             self.requirements
         )
+        
+        # checks each recommendation using all the rules
+        for item in items:
+            self.evaluate(item)
