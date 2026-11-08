@@ -15,3 +15,11 @@ CHEAPEST_REASON = "one of the cheapest options and within half of your budget"
 # this class runs all the rules on every recommendation
 class RecommendationFilter:
     """Applies every rule to each recommendation and builds a RecommendationSet."""
+    
+     # Runs when a RecommendationFilter object is created
+    def __init__(self, requirements: UserRequirements, rules: Optional[list[Rule]] = None):
+        self.requirements = requirements  # save the user's requirements
+        # use the rules given, or if none were given, use all 5 rules by default
+        self.rules = rules if rules is not None else [
+            BudgetRule(), EnvironmentRule(), AvoidListRule(), DietaryRule(), TransportRule(),
+        ]
