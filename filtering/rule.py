@@ -32,3 +32,11 @@ class Rule(ABC):
     def result(self, passed: bool, pass_text: str, fail_text: str, label: Optional[str] = None) -> RuleResult:
         """Creates a result showing whether the recommendation passed or failed."""
         return RuleResult(label or self.label, passed, pass_text if passed else fail_text)
+
+    # Checks whether the user has selected a requirement.
+    @staticmethod  # Does not need self because it does not use the rule's data.
+    def is_set(value) -> bool:
+        """Checks whether the user entered a requirement."""
+
+        # Removes extra spaces and checks that the value is not empty, Any or None.
+        return _normalise(value) not in NO_REQUIREMENT
