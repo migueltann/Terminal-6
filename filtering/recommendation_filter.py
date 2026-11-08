@@ -38,3 +38,6 @@ class RecommendationFilter:
     def _preferences(self, item_type: str) -> list[str]:
         return _active_preferences(self.requirements.preferences_for(item_type))
 
+    # checks if the item costs half the budget or less
+    def _within_half_budget(self, item: Recommendation) -> bool:
+        return item.cost_sgd <= 0.5 * BudgetRule.limit_for(item, self.requirements)
