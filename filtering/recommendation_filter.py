@@ -11,3 +11,7 @@ from .transport_rule import TransportRule
 # reasons shown to the user when an item is marked as a top pick
 PREFERENCE_REASON = "matches your preferences and costs no more than half of your budget"
 CHEAPEST_REASON = "one of the cheapest options and within half of your budget"
+
+# this class runs all the rules on every recommendation
+class RecommendationFilter:
+    """Applies every rule to each recommendation and builds a RecommendationSet."""
