@@ -87,17 +87,17 @@ class RecommendationFilter:
         )
         
         # checks each recommendation using all the rules
-        for item in items:
-            self.evaluate(item)
+        for item in items:  # go through each recommendation
+            self.evaluate(item)  # run all the rules on it
             
             # add the recommendation to the approved or rejected list
-            if item.is_eligible():
-                result.add_item(item)
+            if item.is_eligible(): # it passed every rule
+                result.add_item(item) # put it in the approved list
             else:
-                result.add_rejected(item)
+                result.add_rejected(item) # put it in the filtered-out list
             
-        # select top picks from approved recommendations only
+        # pick the top picks from the approved items only
         self._mark_top_picks(result.approved())
 
-        # returns the final recommendation results
+        # give back the final set of approved and rejected items
         return result
