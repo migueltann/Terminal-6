@@ -33,3 +33,8 @@ class RecommendationFilter:
             if result is not None:  # None means the rule did not apply, so skip it
                 item.results.append(result)  # save the pass/fail result on the item
         return item  # give back the item with its results
+    
+    # Gets the user's preferences for a recommendation category
+    def _preferences(self, item_type: str) -> list[str]:
+        return _active_preferences(self.requirements.preferences_for(item_type))
+
