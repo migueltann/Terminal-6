@@ -89,3 +89,9 @@ class RecommendationFilter:
         # checks each recommendation using all the rules
         for item in items:
             self.evaluate(item)
+            
+            # add the recommendation to the approved or rejected list
+            if item.is_eligible():
+                result.add_item(item)
+            else:
+                result.add_rejected(item)
