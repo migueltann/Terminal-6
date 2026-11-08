@@ -47,3 +47,15 @@ class RecommendationFilter:
         item_data = item.to_dict()  # turn the item into a dict so we can search its text
         # any() is True if at least one preference is found in the item
         return any(_contains_term(item_data, pref) for pref in self._preferences(item.item_type))
+    
+    # selects the best recommendations from each category
+    def _mark_top_picks(self, approved: list[Recommendation]) -> None:
+
+        # goes through each recommendation category
+        for item_type in ("activity", "food", "accommodation", "shopping"):
+
+            #gets recommendations belonging to this category
+            in_category = [
+                item for item in approved
+                if item.item_type == item_type
+            ]
