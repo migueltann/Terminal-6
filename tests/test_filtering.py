@@ -80,3 +80,12 @@ def test_budget_missing_means_no_limit():
     result = BudgetRule().check(item, make_requirements(max_activity_spend=None))
     assert result.passed is True
     assert result.detail == "No budget limit set"
+    
+# ---------- EnvironmentRule ----------
+
+# user wants outdoor activities, so an indoor activity should fail
+def test_environment_mismatch_fails():
+    item = make_item(environment="Indoor")
+    result = EnvironmentRule().check(item, make_requirements())
+    assert result.passed is False
+    assert result.detail == "Indoor does not match Outdoor"
