@@ -184,7 +184,7 @@ class JsonCsvRepository(RecommendationRepository):
 
                     writer.writerow(row)
 
-    @abstractmethod
+
     def save(self, result: RecommendationSet) -> str:
         """Save JSON and CSV files and return the JSON filename."""
         entries = self._read_index()
@@ -228,3 +228,5 @@ class JsonCsvRepository(RecommendationRepository):
         )
 
         self._write_index(entries)
+
+        return os.path.basename(json_path)
