@@ -6,7 +6,6 @@ import os
 
 from datetime import datetime
 from typing import Any, Optional
-from unittest import result
 from models import RecommendationSet
 from storage.recommendation_repository import RecommendationRepository
 
