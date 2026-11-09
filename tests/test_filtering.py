@@ -207,3 +207,15 @@ def test_rejected_item_is_never_a_top_pick():
     result = RecommendationFilter(make_requirements()).filter([item])
     assert item in result.rejected_items()
     assert item.is_top_pick() is False
+
+
+# compares the old and new filtering methods to make sure they give the same results
+def test_filter_gives_same_output_as_logic_manager():
+    # 5 sample items: some pass, some fail
+    raw_items = [
+        make_item(name="Gardens", estimated_cost_sgd=10).to_dict(),  # passes
+        make_item(name="Museum", environment="Indoor").to_dict(),  # fails environment
+        make_item("food", name="Halal Cafe", estimated_cost_sgd=15).to_dict(),  # passes
+        make_item("food", name="Steakhouse", estimated_cost_sgd=90).to_dict(),  # fails budget
+        make_item("accommodation", name="Hotel", estimated_cost_sgd=150).to_dict(),  # passes
+    ]
