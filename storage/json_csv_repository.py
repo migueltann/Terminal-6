@@ -159,3 +159,11 @@ def _write_csv(
             "passed_rules",
             "failed_rules",
     )
+
+    with open(
+            path, "w", newline="", encoding="utf-8"
+    ) as file:
+        writer = csv.DictWriter(
+            file, fieldnames=fieldnames
+        )
+        writer.writeheader()
