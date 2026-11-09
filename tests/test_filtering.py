@@ -224,3 +224,7 @@ def test_filter_gives_same_output_as_logic_manager():
             "environment", "description", "tags", "transport_options", "dietary_tags")
     raw_items = [{key: item[key] for key in keep} for item in raw_items]
     user_inputs = make_requirements().to_dict()  # the old functions use a plain dict
+
+    # old logic_manager functions
+    approved, rejected, _ = filter_recommendations([dict(i) for i in raw_items], user_inputs)
+    old = build_processed_result("Singapore", user_inputs, approved, rejected)
