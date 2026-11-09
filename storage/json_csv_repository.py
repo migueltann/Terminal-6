@@ -187,3 +187,18 @@ class JsonCsvRepository(RecommendationRepository):
             """Save JSON and CSV files and return the JSON filename."""
             entries = self._read_index()
             self._ensure_storage_directory()
+
+            timestamp = datetime.now().strftime(
+            "%Y%m%d_%H%M%S_%f"
+        )
+        destination_name = self._safe_name(
+            result.destination
+        )
+        base_name = f"{destination_name}_{timestamp}"
+
+        json_path = os.path.join(
+            self._data_dir, base_name + ".json"
+        )
+        csv_path = os.path.join(
+            self._data_dir, base_name + ".csv"
+        )
