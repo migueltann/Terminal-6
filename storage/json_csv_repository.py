@@ -98,3 +98,35 @@ class JsonCsvRepository(RecommendationRepository):
             raise ValueError(
                 "The saved recommendation set has an invalid structure."
             ) from exc
+
+    def delete(self, identifier: str) -> bool:
+        """Delete a saved recommendation set using its JSON filename."""
+        entries = self._read_index()
+
+        entry = next(
+            (
+                entry
+                for entry in entries
+                if os.path.basename(
+                    entry.get("json_path", "")
+                ) == identifier
+            ),
+            None,
+        )
+
+        if entry is None:
+            return False
+
+        for path_key in ("json_path", "csv_path"):
+            path = entry.get(path_key)
+
+            if path:
+                try:
+                    os.remove(path)
+                except FileNotFoundError:
+                    pass
+
+        entries.remove(entry)
+        self._write_index(entries)
+
+        return True
