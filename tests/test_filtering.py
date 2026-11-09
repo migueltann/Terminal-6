@@ -169,3 +169,11 @@ def test_filter_records_failed_rule_on_item():
     RecommendationFilter(make_requirements()).evaluate(item)
     failed = [r.label for r in item.results if not r.passed]  # list the failed rules
     assert failed == ["Activity budget"]
+
+
+# if we only give the filter the TransportRule, it should not check the budget
+def test_filter_uses_only_the_rules_given():
+    item = make_item(estimated_cost_sgd=500)  # over budget
+    only_transport = RecommendationFilter(make_requirements(), rules=[TransportRule()])
+    result = only_transport.filter([item])
+    assert len(result.approved()) == 1  # budget rule was not used, so it is approved
