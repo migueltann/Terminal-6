@@ -128,3 +128,9 @@ def test_dietary_mismatch_fails_for_food():
     result = DietaryRule().check(item, make_requirements())
     assert result.passed is False
     assert result.detail == "halal not listed"
+
+
+# the diet only matters for food, so it should be skipped for an activity (None)
+def test_dietary_skipped_for_activities():
+    item = make_item(dietary_tags=[])
+    assert DietaryRule().check(item, make_requirements()) is None
