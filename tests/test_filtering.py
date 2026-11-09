@@ -219,3 +219,8 @@ def test_filter_gives_same_output_as_logic_manager():
         make_item("food", name="Steakhouse", estimated_cost_sgd=90).to_dict(),  # fails budget
         make_item("accommodation", name="Hotel", estimated_cost_sgd=150).to_dict(),  # passes
     ]
+    # keep only the normal fields, like what the AI would send
+    keep = ("name", "type", "category", "estimated_cost_sgd", "location",
+            "environment", "description", "tags", "transport_options", "dietary_tags")
+    raw_items = [{key: item[key] for key in keep} for item in raw_items]
+    user_inputs = make_requirements().to_dict()  # the old functions use a plain dict
