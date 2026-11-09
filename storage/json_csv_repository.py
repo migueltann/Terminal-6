@@ -167,3 +167,18 @@ def _write_csv(
             file, fieldnames=fieldnames
         )
         writer.writeheader()
+
+        for item in result.approved():
+                item_data = item.to_dict()
+
+                row = {
+                    field: item_data.get(field, "")
+                    for field in fieldnames
+                }
+
+                for field in list_fields:
+                    row[field] = ", ".join(
+                        item_data.get(field, [])
+                    )
+
+                writer.writerow(row)
