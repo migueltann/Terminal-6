@@ -350,3 +350,11 @@ class DataManager:
                 entry.get("destination", "")
             ).lower()
         ]
+
+    def load(
+        self, identifier: str
+    ) -> RecommendationSet | None:
+        try:
+            return self._repository.load(identifier)
+        except (OSError, ValueError):
+            return None
