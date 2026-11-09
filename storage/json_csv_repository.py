@@ -6,7 +6,7 @@ import os
 
 from .recommendation_repository import RecommendationRepository
 from models import RecommendationSet
-
+from datetime import datetime
 
 class JsonCsvRepository(RecommendationRepository):
     """File-based implementation of recommendation storage."""
@@ -182,3 +182,8 @@ class JsonCsvRepository(RecommendationRepository):
                         )
 
                     writer.writerow(row)
+
+        def save(self, result: RecommendationSet) -> str:
+            """Save JSON and CSV files and return the JSON filename."""
+            entries = self._read_index()
+            self._ensure_storage_directory()
