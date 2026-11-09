@@ -334,17 +334,17 @@ class DataManager:
     def __init__(
         self, repository: RecommendationRepository
     ) -> None:
-        self._repository = repository
+        self.__repository = repository
 
     def save(self, result: RecommendationSet) -> str:
-        return self._repository.save(result)
+        return self.__repository.save(result)
 
     def find(self, keyword: str = "") -> list[dict]:
         keyword = keyword.strip().lower()
 
         return [
             entry
-            for entry in self._repository.load_all()
+            for entry in self.__repository.load_all()
             if keyword in str(
                 entry.get("destination", "")
             ).lower()
@@ -354,9 +354,9 @@ class DataManager:
         self, identifier: str
     ) -> RecommendationSet | None:
         try:
-            return self._repository.load(identifier)
+            return self.__repository.load(identifier)
         except (OSError, ValueError):
             return None
 
     def delete(self, identifier: str) -> bool:
-        return self._repository.delete(identifier)
+        return self.__repository.delete(identifier)
