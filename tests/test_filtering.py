@@ -232,3 +232,9 @@ def test_filter_gives_same_output_as_logic_manager():
     # new RecommendationFilter class
     items = [Recommendation.from_dict(i) for i in raw_items]
     new = RecommendationFilter(make_requirements()).filter(items, "Singapore").to_dict()
+
+    # both must have the same counts, items, top picks and pass/fail messages
+    assert new["summary"] == old["summary"]
+    for key in ("activities", "food", "accommodation", "shopping", "filtered_out"):
+        assert ([(x["name"], x["top_pick"], x["checks"]) for x in new[key]]
+                == [(x["name"], x["top_pick"], x["checks"]) for x in old[key]])
