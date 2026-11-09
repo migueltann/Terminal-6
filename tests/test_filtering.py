@@ -63,3 +63,12 @@ def test_budget_within_limit_passes():
     assert result.passed is True
     assert result.label == "Activity budget"  # label changes based on the item type
     assert result.detail == "$30.00 <= $100.00"  # message shows both amounts
+
+
+# a $50 meal with a $40 meal budget should fail
+def test_budget_over_limit_fails():
+    item = make_item("food", estimated_cost_sgd=50)
+    result = BudgetRule().check(item, make_requirements())
+    assert result.passed is False
+    assert result.label == "Meal budget"
+    assert result.detail == "$50.00 > $40.00"
