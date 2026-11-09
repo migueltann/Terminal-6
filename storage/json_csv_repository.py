@@ -202,3 +202,14 @@ class JsonCsvRepository(RecommendationRepository):
         csv_path = os.path.join(
             self._data_dir, base_name + ".csv"
         )
+
+        with open(
+            json_path, "x", encoding="utf-8"
+        ) as file:
+            json.dump(
+                result.to_dict(),
+                file,
+                indent=4,
+                ensure_ascii=False,
+            )
+
