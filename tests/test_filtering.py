@@ -144,3 +144,10 @@ def test_transport_mismatch_fails():
     result = TransportRule().check(item, make_requirements())
     assert result.passed is False
     assert result.detail == "transit not listed"
+
+
+# if the user picked "Any" transport, the rule should be skipped (None)
+def test_transport_skipped_when_any():
+    item = make_item(transport_options=["taxi"])
+    requirements = make_requirements(preferred_transport="Any")
+    assert TransportRule().check(item, requirements) is None
