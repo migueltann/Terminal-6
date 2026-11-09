@@ -213,3 +213,6 @@ class JsonCsvRepository(RecommendationRepository):
                 ensure_ascii=False,
             )
 
+        self._write_csv(result, csv_path)
+
+        
