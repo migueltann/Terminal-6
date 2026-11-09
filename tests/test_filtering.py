@@ -12,7 +12,7 @@ from filtering import (  # all my classes from the filtering package
     RecommendationFilter,
 )
 
-# Creates a sample recommendation for testing
+# Creates the default requirements for testing
 def make_requirements(**changes):
     data = {
         "destination": "Singapore",
@@ -29,3 +29,22 @@ def make_requirements(**changes):
     }
     data.update(changes)  # replace any values the test wants to change
     return UserRequirements.from_dict(data)  # turn the dict into a UserRequirements object
+
+# Creates a sample recommendation for testing
+def make_item(item_type="activity", **changes):
+    data = {
+        "name": "Test Recommendation",
+        "type": item_type,  # activity, food, accommodation or shopping
+        "category": "General",
+        "estimated_cost_sgd": 30,  # $30, which is within every budget above
+        "location": "Singapore",
+        # activities are outdoor and everything else is indoor, to match the user above
+        "environment": "Outdoor" if item_type == "activity" else "Indoor",
+        "description": "A sample recommendation",
+        "tags": [],
+        "transport_options": ["transit", "walk"],  # can be reached by transit
+        "dietary_tags": ["halal"],  # serves halal food
+    }
+    data.update(changes)  # replace any values the test wants to change
+    return Recommendation.from_dict(data)  # turn the dict into a Recommendation object
+
