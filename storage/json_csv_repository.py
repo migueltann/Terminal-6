@@ -47,3 +47,13 @@ class JsonCsvRepository(RecommendationRepository):
             self._index_file, "w", encoding="utf-8"
         ) as file:
             json.dump(entries, file, indent=4)
+
+    @staticmethod
+    def _safe_name(value: str) -> str:
+        """Convert a destination into a filename component."""
+        name = "".join(
+            character.lower() if character.isalnum() else "_"
+            for character in value
+        ).strip("_")
+
+        return name or "trip"
