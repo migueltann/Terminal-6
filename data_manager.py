@@ -3,8 +3,11 @@
 import csv
 import json
 import os
+
 from datetime import datetime
 from typing import Any, Optional
+from models import RecommendationSet
+from storage.recommendation_repository import RecommendationRepository
 
 DATA_DIR = "data"
 INDEX_FILE = os.path.join(DATA_DIR, "recommendation_sets.json")
@@ -325,3 +328,10 @@ def delete_saved_recommendation(filename: str) -> bool:
 
     return False
 
+class DataManager:
+    """Coordinates recommendation storage and searching."""
+
+    def __init__(
+        self, repository: RecommendationRepository
+    ) -> None:
+        self._repository = repository
