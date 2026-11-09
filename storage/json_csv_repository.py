@@ -19,3 +19,22 @@ class JsonCsvRepository(RecommendationRepository):
     def _ensure_storage_directory(self) -> None:
         """Create the storage directory if needed."""
         os.makedirs(self._data_dir, exist_ok=True)
+
+    def _read_index(self) -> list[dict]:
+        """Read saved-set metadata from the index."""
+        try:
+            with open(
+                self._index_file, "r", encoding="utf-8"
+            ) as file:
+                entries = json.load(file)
+        except FileNotFoundError:
+            return []
+
+        if not isinstance(entries, list) or not all(
+            isinstance(entry, dict) for entry in entries
+        ):
+            raise ValueError(
+                "The storage index must contain a list of dictionaries."
+            )
+
+        return entries
