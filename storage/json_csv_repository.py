@@ -38,3 +38,12 @@ class JsonCsvRepository(RecommendationRepository):
             )
 
         return entries
+
+    def _write_index(self, entries: list[dict]) -> None:
+        """Write saved-set metadata to the index."""
+        self._ensure_storage_directory()
+
+        with open(
+            self._index_file, "w", encoding="utf-8"
+        ) as file:
+            json.dump(entries, file, indent=4)
