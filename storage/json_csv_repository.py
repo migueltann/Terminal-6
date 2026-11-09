@@ -70,3 +70,31 @@ class JsonCsvRepository(RecommendationRepository):
             }
             for entry in self._read_index()
         ]
+
+    def load(self, identifier: str) -> RecommendationSet:
+        """Load a recommendation set using its JSON filename."""
+        entry = next(
+            (
+                entry
+                for entry in self.load_all()
+                if entry["filename"] == identifier
+            ),
+            None,
+        )
+
+        if entry is None:
+            raise FileNotFoundError(
+                f"Saved recommendation set not found: {identifier}"
+            )
+
+        with open(
+            entry["json_path"], "r", encoding="utf-8"
+        ) as file:
+            data = json.load(file)
+
+        try:
+            return RecommendationSet.from_dict(data)
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError(
+                "The saved recommendation set has an invalid structure."
+            ) from exc
