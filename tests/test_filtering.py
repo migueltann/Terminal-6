@@ -54,3 +54,12 @@ def make_item(item_type="activity", **changes):
 def test_rule_cannot_be_created_directly():
     with pytest.raises(TypeError):  # this test passes only if a TypeError happens
         Rule()
+
+# ---------- BudgetRule ----------
+
+# a $30 activity with a $100 budget should pass
+def test_budget_within_limit_passes():
+    result = BudgetRule().check(make_item(), make_requirements())
+    assert result.passed is True
+    assert result.label == "Activity budget"  # label changes based on the item type
+    assert result.detail == "$30.00 <= $100.00"  # message shows both amounts
