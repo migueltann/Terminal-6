@@ -58,7 +58,7 @@ class RecommendationSet:
             for item_data in data.get(category) or []:
                 result.add_item(Recommendation.from_dict(item_data))
 
-        for item_data in data.get("filtered_out" or []):
+        for item_data in data.get("filtered_out") or []:
             result.add_rejected(
                 Recommendation.from_dict(item_data))
         
