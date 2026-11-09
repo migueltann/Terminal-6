@@ -119,3 +119,12 @@ def test_avoid_list_no_match_passes():
     result = AvoidListRule().check(item, make_requirements(avoid_list=["museum"]))
     assert result.passed is True
 
+
+# ---------- DietaryRule ----------
+
+# user needs halal, but this food is only vegetarian, so it should fail
+def test_dietary_mismatch_fails_for_food():
+    item = make_item("food", dietary_tags=["vegetarian"])
+    result = DietaryRule().check(item, make_requirements())
+    assert result.passed is False
+    assert result.detail == "halal not listed"
