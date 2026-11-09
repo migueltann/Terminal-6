@@ -48,3 +48,9 @@ def make_item(item_type="activity", **changes):
     data.update(changes)  # replace any values the test wants to change
     return Recommendation.from_dict(data)  # turn the dict into a Recommendation object
 
+# ---------- Rule (abstract class) ----------
+
+# Checks that Rule cannot be created directly because it is an abstract class
+def test_rule_cannot_be_created_directly():
+    with pytest.raises(TypeError):  # this test passes only if a TypeError happens
+        Rule()
