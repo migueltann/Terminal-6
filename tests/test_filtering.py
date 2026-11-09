@@ -95,3 +95,10 @@ def test_environment_mismatch_fails():
 def test_environment_skipped_for_accommodation():
     item = make_item("accommodation", environment="Outdoor")
     assert EnvironmentRule().check(item, make_requirements()) is None
+
+
+# if the user picked "Any", the rule should be skipped (None)
+def test_environment_skipped_when_any():
+    item = make_item(environment="Indoor")
+    requirements = make_requirements(activity_environment="Any")
+    assert EnvironmentRule().check(item, requirements) is None
