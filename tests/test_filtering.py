@@ -72,3 +72,11 @@ def test_budget_over_limit_fails():
     assert result.passed is False
     assert result.label == "Meal budget"
     assert result.detail == "$50.00 > $40.00"
+
+
+# if the user left the budget empty, even a $9999 item should pass
+def test_budget_missing_means_no_limit():
+    item = make_item(estimated_cost_sgd=9999)
+    result = BudgetRule().check(item, make_requirements(max_activity_spend=None))
+    assert result.passed is True
+    assert result.detail == "No budget limit set"
