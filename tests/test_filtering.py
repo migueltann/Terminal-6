@@ -199,3 +199,11 @@ def test_cheapest_three_are_top_picks_without_preferences():
     RecommendationFilter(make_requirements()).filter(items)
     picks = sorted(item.cost_sgd for item in items if item.is_top_pick())  # costs of the top picks
     assert picks == [10, 20, 30]  # 60 is over half the budget, 40 is 4th cheapest
+
+
+# an item that failed a rule should never be a top pick, even if it is very cheap
+def test_rejected_item_is_never_a_top_pick():
+    item = make_item(estimated_cost_sgd=5, transport_options=["taxi"])  # cheap but wrong transport
+    result = RecommendationFilter(make_requirements()).filter([item])
+    assert item in result.rejected_items()
+    assert item.is_top_pick() is False
