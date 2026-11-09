@@ -134,3 +134,13 @@ def test_dietary_mismatch_fails_for_food():
 def test_dietary_skipped_for_activities():
     item = make_item(dietary_tags=[])
     assert DietaryRule().check(item, make_requirements()) is None
+
+
+# ---------- TransportRule ----------
+
+# user wants transit, but this place can only be reached by taxi, so it should fail
+def test_transport_mismatch_fails():
+    item = make_item(transport_options=["taxi"])
+    result = TransportRule().check(item, make_requirements())
+    assert result.passed is False
+    assert result.detail == "transit not listed"
