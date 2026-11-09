@@ -16,4 +16,6 @@ class JsonCsvRepository(RecommendationRepository):
             "recommendation_sets.json",
         )
 
-    
+    def _ensure_storage_directory(self) -> None:
+        """Create the storage directory if needed."""
+        os.makedirs(self._data_dir, exist_ok=True)
