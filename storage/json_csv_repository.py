@@ -1,5 +1,6 @@
 """Stores recommendation sets using JSON and CSV files."""
 
+from abc import abstractmethod
 import csv
 import json
 import os
@@ -183,13 +184,14 @@ class JsonCsvRepository(RecommendationRepository):
 
                     writer.writerow(row)
 
-        def save(self, result: RecommendationSet) -> str:
-            """Save JSON and CSV files and return the JSON filename."""
-            entries = self._read_index()
-            self._ensure_storage_directory()
+    @abstractmethod
+    def save(self, result: RecommendationSet) -> str:
+        """Save JSON and CSV files and return the JSON filename."""
+        entries = self._read_index()
+        self._ensure_storage_directory()
 
-            timestamp = datetime.now().strftime(
-            "%Y%m%d_%H%M%S_%f"
+        timestamp = datetime.now().strftime(
+        "%Y%m%d_%H%M%S_%f"
         )
         destination_name = self._safe_name(
             result.destination
@@ -215,4 +217,14 @@ class JsonCsvRepository(RecommendationRepository):
 
         self._write_csv(result, csv_path)
 
-        
+        entries.append(
+            {
+                "destination": result.destination,
+                "approved_count": len(result.approved()),
+                "json_path": json_path,
+                "csv_path": csv_path,
+                "saved_at": timestamp,
+            }
+        )
+
+        self._write_index(entries)
