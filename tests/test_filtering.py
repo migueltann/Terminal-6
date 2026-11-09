@@ -228,3 +228,7 @@ def test_filter_gives_same_output_as_logic_manager():
     # old logic_manager functions
     approved, rejected, _ = filter_recommendations([dict(i) for i in raw_items], user_inputs)
     old = build_processed_result("Singapore", user_inputs, approved, rejected)
+
+    # new RecommendationFilter class
+    items = [Recommendation.from_dict(i) for i in raw_items]
+    new = RecommendationFilter(make_requirements()).filter(items, "Singapore").to_dict()
