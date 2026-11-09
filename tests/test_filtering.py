@@ -177,3 +177,15 @@ def test_filter_uses_only_the_rules_given():
     only_transport = RecommendationFilter(make_requirements(), rules=[TransportRule()])
     result = only_transport.filter([item])
     assert len(result.approved()) == 1  # budget rule was not used, so it is approved
+
+
+# with preferences, a top pick must match a preference and cost half the budget or less
+def test_top_pick_needs_preference_and_half_budget():
+    requirements = make_requirements(preferred_activities=["hiking"])
+    cheap_match = make_item(name="Hiking Trail", estimated_cost_sgd=20)  # matches + cheap = top pick
+    pricey_match = make_item(name="Hiking Tour", estimated_cost_sgd=80)  # matches but over $50 = not
+    cheap_no_match = make_item(name="Zoo", estimated_cost_sgd=10)  # cheap but not hiking = not
+    RecommendationFilter(requirements).filter([cheap_match, pricey_match, cheap_no_match])
+    assert cheap_match.is_top_pick() is True
+    assert pricey_match.is_top_pick() is False
+    assert cheap_no_match.is_top_pick() is False
