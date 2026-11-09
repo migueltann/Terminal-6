@@ -151,3 +151,13 @@ def test_transport_skipped_when_any():
     item = make_item(transport_options=["taxi"])
     requirements = make_requirements(preferred_transport="Any")
     assert TransportRule().check(item, requirements) is None
+
+# ---------- RecommendationFilter ----------
+
+# a good item should go to approved and an over-budget item should go to rejected
+def test_filter_separates_approved_and_rejected():
+    good = make_item(name="Good")
+    bad = make_item(name="Too Expensive", estimated_cost_sgd=500)
+    result = RecommendationFilter(make_requirements()).filter([good, bad])
+    assert [item.name for item in result.approved()] == ["Good"]
+    assert [item.name for item in result.rejected_items()] == ["Too Expensive"]
