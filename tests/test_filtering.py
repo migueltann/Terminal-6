@@ -102,3 +102,12 @@ def test_environment_skipped_when_any():
     item = make_item(environment="Indoor")
     requirements = make_requirements(activity_environment="Any")
     assert EnvironmentRule().check(item, requirements) is None
+
+# ---------- AvoidListRule ----------
+
+# user wants to avoid museums, so "National Museum" should fail
+def test_avoid_list_match_fails():
+    item = make_item(name="National Museum")
+    result = AvoidListRule().check(item, make_requirements(avoid_list=["museum"]))
+    assert result.passed is False
+    assert result.detail == "Matched: museum"  # message says which word matched
