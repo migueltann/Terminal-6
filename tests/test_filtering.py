@@ -89,3 +89,9 @@ def test_environment_mismatch_fails():
     result = EnvironmentRule().check(item, make_requirements())
     assert result.passed is False
     assert result.detail == "Indoor does not match Outdoor"
+
+
+# hotels have no indoor/outdoor setting, so the rule should be skipped (None)
+def test_environment_skipped_for_accommodation():
+    item = make_item("accommodation", environment="Outdoor")
+    assert EnvironmentRule().check(item, make_requirements()) is None
