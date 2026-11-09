@@ -4,6 +4,7 @@ import json
 import os
 
 from .recommendation_repository import RecommendationRepository
+from models import RecommendationSet
 
 
 class JsonCsvRepository(RecommendationRepository):
