@@ -151,3 +151,11 @@ def _write_csv(
         "passed_rules",
         "failed_rules",
     ]
+
+    list_fields = (
+            "tags",
+            "transport_options",
+            "dietary_tags",
+            "passed_rules",
+            "failed_rules",
+    )
