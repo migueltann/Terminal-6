@@ -161,3 +161,11 @@ def test_filter_separates_approved_and_rejected():
     result = RecommendationFilter(make_requirements()).filter([good, bad])
     assert [item.name for item in result.approved()] == ["Good"]
     assert [item.name for item in result.rejected_items()] == ["Too Expensive"]
+
+
+# after checking, the item should remember which rule it failed
+def test_filter_records_failed_rule_on_item():
+    item = make_item(estimated_cost_sgd=500)  # only breaks the budget
+    RecommendationFilter(make_requirements()).evaluate(item)
+    failed = [r.label for r in item.results if not r.passed]  # list the failed rules
+    assert failed == ["Activity budget"]
