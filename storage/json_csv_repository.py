@@ -132,53 +132,53 @@ class JsonCsvRepository(RecommendationRepository):
 
         return True
 
-def _write_csv(
-    self, result: RecommendationSet, path: str
-) -> None:
-    """Write approved recommendations to a CSV file."""
-    fieldnames = [
-        "type",
-        "name",
-        "category",
-        "estimated_cost_sgd",
-        "location",
-        "environment",
-        "description",
-        "tags",
-        "transport_options",
-        "dietary_tags",
-        "eligible",
-        "passed_rules",
-        "failed_rules",
-    ]
-
-    list_fields = (
+    def _write_csv(
+        self, result: RecommendationSet, path: str
+    ) -> None:
+        """Write approved recommendations to a CSV file."""
+        fieldnames = [
+            "type",
+            "name",
+            "category",
+            "estimated_cost_sgd",
+            "location",
+            "environment",
+            "description",
             "tags",
             "transport_options",
             "dietary_tags",
+            "eligible",
             "passed_rules",
             "failed_rules",
-    )
+        ]
 
-    with open(
-            path, "w", newline="", encoding="utf-8"
-    ) as file:
-        writer = csv.DictWriter(
-            file, fieldnames=fieldnames
+        list_fields = (
+                "tags",
+                "transport_options",
+                "dietary_tags",
+                "passed_rules",
+                "failed_rules",
         )
-        writer.writeheader()
 
-        for item in result.approved():
-                item_data = item.to_dict()
+        with open(
+                path, "w", newline="", encoding="utf-8"
+        ) as file:
+            writer = csv.DictWriter(
+                file, fieldnames=fieldnames
+            )
+            writer.writeheader()
 
-                row = {
-                    field: item_data.get(field, "")
-                    for field in fieldnames
-                }
+            for item in result.approved():
+                    item_data = item.to_dict()
 
-                for field in list_fields:
-                    row[field] = ", ".join(
-                        item_data.get(field, [])
-                    )
+                    row = {
+                        field: item_data.get(field, "")
+                        for field in fieldnames
+                    }
 
-                writer.writerow(row)
+                    for field in list_fields:
+                        row[field] = ", ".join(
+                            item_data.get(field, [])
+                        )
+
+                    writer.writerow(row)
