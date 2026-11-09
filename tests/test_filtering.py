@@ -111,3 +111,11 @@ def test_avoid_list_match_fails():
     result = AvoidListRule().check(item, make_requirements(avoid_list=["museum"]))
     assert result.passed is False
     assert result.detail == "Matched: museum"  # message says which word matched
+
+
+# "Night Safari" has nothing to do with museums, so it should pass
+def test_avoid_list_no_match_passes():
+    item = make_item(name="Night Safari")
+    result = AvoidListRule().check(item, make_requirements(avoid_list=["museum"]))
+    assert result.passed is True
+
