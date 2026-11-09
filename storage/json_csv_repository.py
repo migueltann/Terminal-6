@@ -57,3 +57,15 @@ class JsonCsvRepository(RecommendationRepository):
         ).strip("_")
 
         return name or "trip"
+
+    def load_all(self) -> list[dict]:
+        """Return metadata for all saved recommendation sets."""
+        return [
+            {
+                **entry,
+                "filename": os.path.basename(
+                    entry.get("json_path", "")
+                ),
+            }
+            for entry in self._read_index()
+        ]
