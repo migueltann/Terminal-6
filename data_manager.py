@@ -358,3 +358,6 @@ class DataManager:
             return self._repository.load(identifier)
         except (OSError, ValueError):
             return None
+
+    def delete(self, identifier: str) -> bool:
+        return self._repository.delete(identifier)
