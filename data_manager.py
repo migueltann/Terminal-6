@@ -340,4 +340,13 @@ class DataManager:
     def save(self, result: RecommendationSet) -> str:
         return self._repository.save(result)
 
-    
+    def find(self, keyword: str = "") -> list[dict]:
+        keyword = keyword.strip().lower()
+
+        return [
+            entry
+            for entry in self._repository.load_all()
+            if keyword in str(
+                entry.get("destination", "")
+            ).lower()
+        ]
