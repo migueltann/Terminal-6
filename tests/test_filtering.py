@@ -189,3 +189,13 @@ def test_top_pick_needs_preference_and_half_budget():
     assert cheap_match.is_top_pick() is True
     assert pricey_match.is_top_pick() is False
     assert cheap_no_match.is_top_pick() is False
+
+
+# with no preferences, the 3 cheapest items within half the budget become top picks
+def test_cheapest_three_are_top_picks_without_preferences():
+    # makes 5 places costing $40, $10, $30, $20 and $60
+    items = [make_item(name=f"Place {cost}", estimated_cost_sgd=cost)
+             for cost in (40, 10, 30, 20, 60)]
+    RecommendationFilter(make_requirements()).filter(items)
+    picks = sorted(item.cost_sgd for item in items if item.is_top_pick())  # costs of the top picks
+    assert picks == [10, 20, 30]  # 60 is over half the budget, 40 is 4th cheapest
