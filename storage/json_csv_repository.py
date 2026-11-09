@@ -1,5 +1,6 @@
 """Stores recommendation sets using JSON and CSV files."""
 
+import csv
 import json
 import os
 
@@ -130,3 +131,23 @@ class JsonCsvRepository(RecommendationRepository):
         self._write_index(entries)
 
         return True
+
+def _write_csv(
+    self, result: RecommendationSet, path: str
+) -> None:
+    """Write approved recommendations to a CSV file."""
+    fieldnames = [
+        "type",
+        "name",
+        "category",
+        "estimated_cost_sgd",
+        "location",
+        "environment",
+        "description",
+        "tags",
+        "transport_options",
+        "dietary_tags",
+        "eligible",
+        "passed_rules",
+        "failed_rules",
+    ]
