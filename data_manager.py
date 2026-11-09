@@ -6,6 +6,7 @@ import os
 
 from datetime import datetime
 from typing import Any, Optional
+from unittest import result
 from models import RecommendationSet
 from storage.recommendation_repository import RecommendationRepository
 
@@ -335,3 +336,8 @@ class DataManager:
         self, repository: RecommendationRepository
     ) -> None:
         self._repository = repository
+
+    def save(self, result: RecommendationSet) -> str:
+        return self._repository.save(result)
+
+    
