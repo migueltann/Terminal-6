@@ -166,3 +166,43 @@ def test_menu_rejects_invalid_choice(monkeypatch, io, capsys):
 def test_saved_set_actions(monkeypatch, io, typed, expected):
     fake_input(monkeypatch, typed)
     assert io.ask_saved_action() == expected
+
+def make_item(name, item_type="activity", passed=True):
+    item = Recommendation(
+        name=name, item_type=item_type, category="Museum", cost_sgd=20.0,
+        location="Tokyo", environment="Indoor", description="A nice place",
+    )
+    item.results.append(RuleResult("Budget", passed, "$20.00 <= $80.00"))
+    return item
+
+
+# ---------- showing results ----------
+
+def test_show_recommendations_lists_kept_and_rejected(io, capsys):
+    reqs = UserRequirements.from_dict({"destination": "Japan", "max_activity_spend": 80})
+    result = RecommendationSet("Japan", reqs)
+    kept = make_item("Tokyo Museum")
+    kept.mark_top_pick("matches your preferences")
+    result.add_item(kept)
+    result.add_rejected(make_item("Expensive Tour", passed=False))
+
+    io.show_recommendations(result)
+    out = capsys.readouterr().out
+
+    assert "Tokyo Museum" in out and "STATUS: ELIGIBLE" in out
+    assert "TOP PICK: matches your preferences" in out
+    assert "Expensive Tour" in out and "STATUS: REJECTED" in out
+    assert "Eligible Activities: 1" in out
+    assert "Filtered Out: 1" in out
+
+
+def test_show_audit_shows_keep_and_filter_out(io, capsys):
+    reqs = UserRequirements.from_dict({"destination": "Japan"})
+    result = RecommendationSet("Japan", reqs)
+    result.add_item(make_item("Kept Place"))
+    result.add_rejected(make_item("Dropped Place", passed=False))
+
+    io.show_audit(result)
+    out = capsys.readouterr().out
+    assert "[PASS] Budget" in out and "KEEP" in out
+    assert "[FAIL] Budget" in out and "FILTER OUT" in out
