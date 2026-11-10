@@ -1,0 +1,494 @@
+"""IO Manager: every terminal input and output shown to the user."""
+
+from typing import Any, Optional
+
+from models import Recommendation, RecommendationSet, UserRequirements
+from user_io.destination_validator import DestinationValidator
+
+
+class IOManager:
+    """Collects and validates user input, and displays results in the terminal."""
+
+    EXIT_COMMANDS = {"exit", "e"}
+    BACK_COMMANDS = {"back", "b"}
+    LINE = "=" * 70
+    DIVIDER = "-" * 70
+
+    # Returned by the ask methods when the user types 'back'
+    _BACK = object()
+
+    # Order the questions are asked in.
+    # (data key, label in the edit menu, kind of question, heading shown before it)
+    _STEPS = [
+        ("destination", "Destination", "destination", "DESTINATION"),
+        ("preferred_activities", "Activity preferences", "list", "ACTIVITIES"),
+        ("max_activity_spend", "Activity budget", "money", None),
+        ("activity_environment", "Activity environment", "environment", None),
+        ("food_preferences", "Cuisine preferences", "list", "FOOD"),
+        ("max_meal_spend", "Meal budget", "money", None),
+        ("food_environment", "Food environment", "environment", None),
+        ("dietary", "Dietary requirement", "dietary", None),
+        ("accommodation_preferences", "Accommodation preferences", "list", "ACCOMMODATION"),
+        ("max_accommodation_spend", "Accommodation budget", "money", None),
+        ("shopping_preferences", "Shopping preferences", "list", "SHOPPING"),
+        ("max_shopping_spend", "Shopping budget", "money", None),
+        ("shopping_environment", "Shopping environment", "environment", None),
+        ("preferred_transport", "Universal transport", "transport", "UNIVERSAL RESTRICTIONS"),
+        ("avoid_list", "Places to avoid", "list", None),
+    ]
+
+    # Prompt text and hint lines for each question
+    _PROMPTS = {
+        "preferred_activities": ("Preferred activities (comma-separated) [Any]: ", [
+            "Preferred activities are specific activity types.",
+            "Examples: museums, hiking, theme parks, water activities, nightlife, food tours."]),
+        "food_preferences": ("Cuisine preferences (comma-separated) [Any]: ", [
+            "What types of food do you enjoy?",
+            "Examples: Japanese, Korean, Italian, Thai, Local food."]),
+        "accommodation_preferences": ("Accommodation preferences (comma-separated) [Any]: ", [
+            "Accommodation preferences are the type of stay you want.",
+            "Examples: hotel, hostel, budget motel, guesthouse, serviced apartment, near MRT."]),
+        "shopping_preferences": ("Shopping preferences (comma-separated) [Any]: ", [
+            "Shopping preferences are the things or places you like to shop.",
+            "Examples: fashion, electronics, souvenirs, malls, street markets, local crafts."]),
+        "avoid_list": ("Avoid list (comma-separated) [None]: ", [
+            "The avoid list is types of activities or places you do not want recommended.",
+            "Examples: nightlife, theme parks, water activities, shopping malls, hiking."]),
+        "max_activity_spend": ("Max spend per activity (SGD): ", []),
+        "max_meal_spend": ("Max spend per meal (SGD): ", []),
+        "max_accommodation_spend": ("Max spend per night for accommodation (SGD): ", []),
+        "max_shopping_spend": ("Max shopping spend (SGD): ", []),
+        "activity_environment": ("Activity environment (Indoor/Outdoor/Any) [Any]: ", []),
+        "food_environment": ("Food environment (Indoor/Outdoor/Any) [Any]: ", []),
+        "shopping_environment": ("Shopping environment (Indoor/Outdoor/Any) [Any]: ", []),
+    }
+
+    _LIST_DEFAULTS = {
+        "preferred_activities": "Any", "food_preferences": "Any",
+        "accommodation_preferences": "Any", "shopping_preferences": "Any",
+        "avoid_list": "None",
+    }
+
+    def __init__(self) -> None:
+        # Composition: the IOManager creates and owns its validator
+        self.__validator = DestinationValidator()
+
+    def show_welcome(self) -> None:
+        """Show the title when the program starts."""
+        print(self.LINE)
+        print("              TRAVEL RECOMMENDATION ASSISTANT")
+        print("     AI discovers places; Python checks your requirements")
+        print(self.LINE)
+        print("Press Enter to use the default shown in [ ] at the end of a prompt.\n")
+        print("Type 'back' or 'b' at an input prompt to return to the previous input.\n")
+        print("Type 'exit' or 'e' at an input prompt to return to the main menu.\n")
+
+    def show_menu(self) -> str:
+        """Show the main menu and return the user's choice: '1', '2' or '3'."""
+        print("\nMAIN MENU")
+        print("1. Generate Recommendations")
+        print("2. View / Delete Saved Recommendation Sets")
+        print("3. Exit")
+        while True:
+            choice = input("\nEnter choice (1-3): ").strip().lower()
+            if choice in {"1", "2", "3"}:
+                return choice
+            if choice in self.EXIT_COMMANDS:
+                return "3"
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
+    def show_message(self, message: str) -> None:
+        """Show a normal information message."""
+        print(f"\n[INFO] {message}")
+
+    def show_error(self, message: str) -> None:
+        """Show an error message."""
+        print(f"\n[ERROR] {message}")
+
+    def show_status(self, level: str, message: str) -> None:
+        """Show an INFO or WARNING line sent by another manager (used as the AI notifier)."""
+        print(f"\n[{str(level).upper()}] {message}")
+
+    @classmethod
+    def _is_exit(cls, value: str) -> bool:
+        return str(value).strip().lower() in cls.EXIT_COMMANDS
+
+    @classmethod
+    def _is_back(cls, value: str) -> bool:
+        return str(value).strip().lower() in cls.BACK_COMMANDS
+
+    def _ask_text(self, prompt: str, default: str = "", allow_back: bool = False) -> Any:
+        """Ask for optional text. Returns the default if blank, None on exit, _BACK on back."""
+        value = input(prompt).strip()
+        if self._is_exit(value):
+            return None
+        if allow_back and self._is_back(value):
+            return self._BACK
+        return value if value else default
+
+    def _ask_positive_float(self, prompt: str, allow_back: bool = False) -> Any:
+        """Ask for an amount greater than 0. Keeps asking until it is valid."""
+        while True:
+            value = input(prompt).strip()
+            if self._is_exit(value):
+                return None
+            if allow_back and self._is_back(value):
+                return self._BACK
+            try:
+                number = float(value)
+                if number > 0 and number != float("inf"):
+                    return number
+            except ValueError:
+                pass
+            print("Please enter a valid positive amount.")
+
+    def _ask_choice(self, prompt: str, choices: list[str], default: str, allow_back: bool = False) -> Any:
+        """Ask the user to pick from a fixed list. Blank uses the default."""
+        lowered = [choice.lower() for choice in choices]
+        while True:
+            value = input(prompt).strip()
+            if self._is_exit(value):
+                return None
+            if allow_back and self._is_back(value):
+                return self._BACK
+            if not value:
+                return default
+            if value.lower() in lowered:
+                return choices[lowered.index(value.lower())]
+            print("Invalid choice. Options: " + ", ".join(choices))
+
+    def _ask_list(self, prompt: str, hints: list[str], allow_back: bool = False) -> Any:
+        """Show the hint lines, then ask for a comma-separated list."""
+        for line in hints:
+            print(line)
+        value = self._ask_text(prompt, allow_back=allow_back)
+        if value is None or value is self._BACK:
+            return value
+        return [part.strip() for part in value.split(",") if part.strip()]
+
+    def ask_yes_no(self, prompt: str) -> Optional[bool]:
+        """Ask a yes/no question. Returns None if the user types exit."""
+        while True:
+            value = input(prompt).strip().lower()
+            if self._is_exit(value):
+                return None
+            if value in {"y", "yes"}:
+                return True
+            if value in {"n", "no"}:
+                return False
+            print("Please enter y or n.")
+
+    def _ask_destination(self, allow_back: bool = False) -> Any:
+        """Ask for a destination and keep asking until the validator accepts it."""
+        print("Enter a city and country, e.g. Paris, France.")
+        print("A country on its own (e.g. Japan), a short code (e.g. SG) or a city also works.")
+        while True:
+            value = input("Destination (City, Country): ").strip()
+            if self._is_exit(value):
+                return None
+            if allow_back and self._is_back(value):
+                return self._BACK
+            if not value:
+                print("This field cannot be empty.")
+                continue
+            destination, error = self.__validator.validate(value)
+            if destination:
+                if destination.lower() != value.lower():
+                    print(f"Understood as: {destination}")
+                return destination
+            print(error)
+
+    def _ask_step(self, key: str, allow_back: bool = False) -> Any:
+        """Ask the question for one data key, using the right kind of input."""
+        kind = next(step[2] for step in self._STEPS if step[0] == key)
+        print()
+
+        if kind == "destination":
+            return self._ask_destination(allow_back)
+        if kind == "list":
+            prompt, hints = self._PROMPTS[key]
+            return self._ask_list(prompt, hints, allow_back)
+        if kind == "money":
+            return self._ask_positive_float(self._PROMPTS[key][0], allow_back)
+        if kind == "environment":
+            return self._ask_choice(self._PROMPTS[key][0], ["Indoor", "Outdoor", "Any"], "Any", allow_back)
+        if kind == "transport":
+            return self._ask_choice("Preferred transport (Walk/Transit/Taxi/Any) [Any]: ",
+                                    ["Walk", "Transit", "Taxi", "Any"], "Any", allow_back)
+        # dietary
+        print("Examples: halal, vegetarian, vegan, no beef, gluten-free.")
+        value = self._ask_text("Dietary requirement [None]: ", "None", allow_back)
+        if value is None or value is self._BACK:
+            return value
+        if value.lower() in {"none", "no", "nil", "na", "n/a", "-"}:
+            return "None"
+        if value.lower() in {"halal", "vegetarian", "vegan"}:
+            return value.title()
+        return value
+
+    @classmethod
+    def _format_value(cls, key: str, value: Any) -> str:
+        """Turn a stored answer into text for summaries and the 'current value' line."""
+        if key in cls._LIST_DEFAULTS:
+            return ", ".join(value or []) or cls._LIST_DEFAULTS[key]
+        if key.startswith("max_"):
+            return f"SGD ${float(value):.2f}" if value is not None else "Not set"
+        return str(value)
+
+    def _show_summary(self, data: dict) -> None:
+        """Show the user's requirements grouped by category."""
+        print("\n" + self.LINE)
+        print("FINAL USER REQUIREMENTS")
+        print(self.LINE)
+        print(f"Destination: {data['destination']}")
+
+        print("\n--- ACTIVITIES ---")
+        print(f"Preferred Activities: {self._format_value('preferred_activities', data['preferred_activities'])}")
+        print(f"Max Spend: {self._format_value('max_activity_spend', data['max_activity_spend'])}")
+        print(f"Environment: {data['activity_environment']}")
+
+        print("\n--- FOOD ---")
+        print(f"Cuisine Preferences: {self._format_value('food_preferences', data['food_preferences'])}")
+        print(f"Max Spend per Meal: {self._format_value('max_meal_spend', data['max_meal_spend'])}")
+        print(f"Environment: {data['food_environment']}")
+        print(f"Dietary Requirement: {data['dietary']}")
+
+        print("\n--- ACCOMMODATION ---")
+        print("Accommodation Preferences: "
+              f"{self._format_value('accommodation_preferences', data['accommodation_preferences'])}")
+        print(f"Max Spend per Night: {self._format_value('max_accommodation_spend', data['max_accommodation_spend'])}")
+
+        print("\n--- SHOPPING ---")
+        print(f"Shopping Preferences: {self._format_value('shopping_preferences', data['shopping_preferences'])}")
+        print(f"Max Spend: {self._format_value('max_shopping_spend', data['max_shopping_spend'])}")
+        print(f"Environment: {data['shopping_environment']}")
+
+        print("\n--- UNIVERSAL RESTRICTIONS ---")
+        print(f"Preferred Transport: {data['preferred_transport']}")
+        print(f"Places to Avoid: {self._format_value('avoid_list', data['avoid_list'])}")
+        print(self.LINE)
+
+    def _clean_inputs(self, data: dict) -> dict:
+        """Turn 'Any' / 'None' / blank answers into the default values."""
+        cleaned = dict(data)
+        for key in self._LIST_DEFAULTS:
+            values = [str(v).strip() for v in cleaned.get(key) or [] if str(v).strip()]
+            if any(v.lower() in {"any", "none"} for v in values):
+                values = []
+            cleaned[key] = values
+        for key, default in (("dietary", "None"), ("preferred_transport", "Any"),
+                             ("activity_environment", "Any"), ("food_environment", "Any"),
+                             ("shopping_environment", "Any")):
+            text = str(cleaned.get(key) or "").strip()
+            cleaned[key] = default if text.lower() in {"", "any", "none"} else text
+        return cleaned
+
+    def collect_requirements(self) -> Optional[UserRequirements]:
+        """Ask every question in order. Returns None if the user types exit."""
+        print("\n" + self.LINE)
+        print("USER INPUTS")
+        print(self.LINE)
+        print("Type 'back' to return to the previous input, or 'exit' to return to the main menu.")
+
+        data: dict[str, Any] = {}
+        index = 0
+
+        while index < len(self._STEPS):
+            key, _, _, heading = self._STEPS[index]
+            if heading:
+                print(f"\n--- {heading} ---")
+
+            # The first question has nothing before it, so 'back' is off there
+            value = self._ask_step(key, allow_back=index > 0)
+
+            if value is None:  # user typed exit
+                return None
+
+            if value is self._BACK:
+                index -= 1
+                previous_key = self._STEPS[index][0]
+                print("\nGoing back. Previous answer: "
+                      f"{self._format_value(previous_key, data[previous_key])}")
+                continue
+
+            data[key] = value
+            index += 1
+
+        return UserRequirements.from_dict(self._clean_inputs(data))
+
+    def _edit_one(self, data: dict) -> Optional[dict]:
+        """Edit only the input the user picks. Returns the updated data, or None on exit."""
+        fields = {str(number): step for number, step in enumerate(self._STEPS, start=1)}
+        back_choice = str(len(fields) + 1)
+
+        while True:
+            print("\n" + self.LINE)
+            print("EDIT INPUT")
+            print(self.LINE)
+            for number, (_, label, _, _) in fields.items():
+                print(f"{number}. {label}")
+            print(f"{back_choice}. Back")
+
+            choice = input("Choose what to edit: ").strip().lower()
+            if self._is_exit(choice):
+                return None
+            if choice == back_choice:
+                return data
+            if choice in fields:
+                key, label, _, _ = fields[choice]
+                print(f"\nCurrent {label}: {self._format_value(key, data[key])}")
+                print("Enter the new value below (type 'exit' to cancel this edit).")
+                value = self._ask_step(key)
+                if value is not None:
+                    data[key] = value
+                return self._clean_inputs(data)
+            print("Invalid choice.")
+
+    def confirm_or_edit(self, reqs: UserRequirements) -> Optional[UserRequirements]:
+        """Let the user confirm, edit one input, or start again. None means exit."""
+        data = reqs.to_dict()
+
+        while True:
+            self._show_summary(data)
+            print("\nIs this correct?")
+            print("1. Yes, continue")
+            print("2. Edit one input")
+            print("3. Start the inputs again")
+
+            choice = input("Choose [1]: ").strip()
+
+            if self._is_exit(choice):
+                return None
+            if not choice or choice == "1":
+                return UserRequirements.from_dict(data)
+            if choice == "2":
+                edited = self._edit_one(data)
+                if edited is None:
+                    return None
+                data = edited
+                continue
+            if choice == "3":
+                print("\nRestarting the user inputs...")
+                restarted = self.collect_requirements()
+                if restarted is None:
+                    return None
+                data = restarted.to_dict()
+                continue
+
+            print("Please choose 1, 2, or 3.")
+
+    def _show_item(self, item: Recommendation, index: int) -> None:
+        """Show one recommendation with the result of every rule check."""
+        print(f"\n#{index} {item.name}")
+        print(f"   Category: {item.category or item.item_type}")
+        print(f"   Location: {item.location or 'Not provided'}")
+        print(f"   Environment: {item.environment or 'Not provided'}")
+        cost_note = " per night" if item.item_type == "accommodation" else ""
+        print(f"   Estimated Spend: SGD ${item.cost_sgd:.2f}{cost_note}")
+        if item.description:
+            print(f"   Description: {item.description}")
+        print()
+
+        for check in item.results:
+            status = "PASS" if check.passed else "FAIL"
+            print(f"   [{status}] {check.label}: {check.detail}")
+
+        if item.is_eligible():
+            print("\n   STATUS: ELIGIBLE")
+            if item.is_top_pick():
+                print(f"   TOP PICK: {item.top_pick_reason or 'recommended'}")
+        else:
+            print("\n   STATUS: REJECTED")
+        print(self.DIVIDER)
+
+    def show_recommendations(self, result: RecommendationSet) -> None:
+        """Show eligible recommendations by category, filtered-out ones, and a summary."""
+        reqs = result.requirements
+
+        print("\n" + self.LINE)
+        print("TERMINAL-6 | PERSONALISED TRAVEL RECOMMENDATIONS")
+        print(self.LINE)
+        print(f"Destination: {result.destination}")
+        print(f"Preferred Activities: {', '.join(reqs.preferences_for('activity')) or 'Any'}")
+        print(f"Cuisine Preferences: {', '.join(reqs.preferences_for('food')) or 'Any'}")
+        print(f"Accommodation Preferences: {', '.join(reqs.preferences_for('accommodation')) or 'Any'}")
+        print(f"Shopping Preferences: {', '.join(reqs.preferences_for('shopping')) or 'Any'}")
+
+        grouped = result.by_category()
+        titles = {"activities": "ACTIVITIES", "food": "FOOD",
+                  "accommodation": "ACCOMMODATION", "shopping": "SHOPPING"}
+
+        print("\nRECOMMENDED FOR YOU")
+        print(self.LINE)
+        for number, (category, title) in enumerate(titles.items(), start=1):
+            print(f"\n[{number}] {title}")
+            print(self.DIVIDER)
+            items = grouped.get(category, [])
+            if not items:
+                print("No eligible recommendations.")
+                continue
+            for index, item in enumerate(items, start=1):
+                self._show_item(item, index)
+
+        print("\nFILTERED-OUT RECOMMENDATIONS")
+        print(self.LINE)
+        rejected = result.rejected_items()
+        if not rejected:
+            print("No recommendations were filtered out.")
+        for index, item in enumerate(rejected, start=1):
+            self._show_item(item, index)
+
+        print("\nSUMMARY")
+        print(self.LINE)
+        for category, title in titles.items():
+            print(f"Eligible {title.title()}: {len(grouped.get(category, []))}")
+        print(f"Filtered Out: {len(rejected)}")
+        print(self.LINE)
+
+    def show_audit(self, result: RecommendationSet) -> None:
+        """Show why each recommendation was kept or filtered out."""
+        print("\n" + self.LINE)
+        print("AI RECOMMENDATIONS -> PYTHON LOGIC CHECK")
+        print(self.LINE)
+
+        for item in result.approved() + result.rejected_items():
+            print("\n" + self.DIVIDER)
+            print(item.name)
+            print(f"Type: {item.item_type}")
+            for check in item.results:
+                status = "PASS" if check.passed else "FAIL"
+                print(f"[{status}] {check.label}: {check.detail}")
+            print("KEEP" if item.is_eligible() else "FILTER OUT")
+
+        print(self.LINE)
+
+    def show_saved_sets(self, saved: list[dict], keyword: str = "") -> None:
+        """Show the list of saved recommendation sets."""
+        print("\n" + self.LINE)
+        print("SAVED RECOMMENDATION SETS")
+        print(self.LINE)
+        if keyword:
+            print(f"Filter: destination contains '{keyword}'")
+        for index, entry in enumerate(saved, start=1):
+            print(f"{index}. {entry.get('destination', 'Unknown')} | "
+                  f"Approved: {entry.get('approved_count', 0)} | "
+                  f"{entry.get('saved_at', '')}")
+
+    def ask_saved_action(self) -> tuple[str, str]:
+        """Ask what to do in the saved sets menu.
+
+        Returns (action, value):
+        ("view", "2"), ("filter", "paris"), ("delete", "3"), ("back", "") or ("invalid", text)
+        """
+        print("\nEnter a number to view, F to filter by destination, D to delete, or B to go back.")
+        choice = input("Choice: ").strip().lower()
+
+        if choice in self.BACK_COMMANDS or self._is_exit(choice):
+            return "back", ""
+        if choice == "f":
+            return "filter", input("Destination to search for (blank shows all): ").strip()
+        if choice == "d":
+            return "delete", input("Number to delete: ").strip()
+        if choice.isdigit():
+            return "view", choice
+        return "invalid", choice
