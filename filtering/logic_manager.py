@@ -38,3 +38,14 @@ class LogicManager:
         for item in items:
             if not isinstance(item, Recommendation):
                 raise TypeError("every item must be a Recommendation object")
+
+    def process(self, reqs: UserRequirements, items: list[Recommendation]) -> RecommendationSet:
+        """Run every rule on every item and return approved and rejected items.
+
+        A new RecommendationFilter is made for each request because the filter
+        needs this request's requirements. Fresh rule objects are passed into it
+        (aggregation), and top picks are marked inside the filter.
+        """
+        self._check_inputs(reqs, items)
+        self.__filter = RecommendationFilter(reqs, self._default_rules())
+        return self.__filter.filter(items, reqs.destination)
