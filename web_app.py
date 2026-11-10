@@ -412,13 +412,15 @@ def generate():
         ), 502
 
 
+
 @app.get("/saved")
 def saved_sets():
-    # Get the search keyword before loading saved recommendations.
+    """Display saved recommendation sets using OOP."""
     keyword = request.args.get("destination", "").strip().lower()
 
     try:
-        saved = data_manager.get_saved_recommendations()
+        manager = DataManager(JsonCsvRepository())
+        saved = manager.find(keyword)
 
     except Exception as exc:
         app.logger.exception(
@@ -430,15 +432,6 @@ def saved_sets():
             f"Could not load saved sets: {exc}",
             "error",
         )
-
-    # Filter saved recommendations if a keyword was entered.
-    if keyword:
-        saved = [
-            item for item in saved
-            if keyword in str(
-                item.get("destination", "")
-            ).lower()
-        ]
 
     return render_template(
         "saved.html",
