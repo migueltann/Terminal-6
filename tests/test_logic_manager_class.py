@@ -58,3 +58,27 @@ def test_logic_manager_uses_all_five_rules(logic):
     labels = [rule.label for rule in logic._default_rules()]
     assert labels == ["Budget", "Environment", "Avoid list",
                       "Dietary requirement", "Transport preference"]
+
+# ---------- processing ----------
+
+def test_process_returns_a_recommendation_set(logic):
+    result = logic.process(make_requirements(), [make_item()])
+    assert isinstance(result, RecommendationSet)
+    assert result.destination == "Singapore"
+
+
+def test_process_separates_approved_and_rejected(logic):
+    cheap = make_item(name="Cheap Walk")
+    pricey = make_item(name="Pricey Tour", estimated_cost_sgd=500)
+
+    result = logic.process(make_requirements(), [cheap, pricey])
+
+    assert [item.name for item in result.approved()] == ["Cheap Walk"]
+    assert [item.name for item in result.rejected_items()] == ["Pricey Tour"]
+
+
+def test_process_records_every_rule_check_on_the_item(logic):
+    result = logic.process(make_requirements(), [make_item("food")])
+    labels = [check.label for check in result.approved()[0].results]
+    assert "Meal budget" in labels
+    assert "Dietary requirement" in labels
