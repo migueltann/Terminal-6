@@ -315,3 +315,64 @@ class IOManager:
             index += 1
 
         return UserRequirements.from_dict(self._clean_inputs(data))
+
+    def _edit_one(self, data: dict) -> Optional[dict]:
+        """Edit only the input the user picks. Returns the updated data, or None on exit."""
+        fields = {str(number): step for number, step in enumerate(self._STEPS, start=1)}
+        back_choice = str(len(fields) + 1)
+
+        while True:
+            print("\n" + self.LINE)
+            print("EDIT INPUT")
+            print(self.LINE)
+            for number, (_, label, _, _) in fields.items():
+                print(f"{number}. {label}")
+            print(f"{back_choice}. Back")
+
+            choice = input("Choose what to edit: ").strip().lower()
+            if self._is_exit(choice):
+                return None
+            if choice == back_choice:
+                return data
+            if choice in fields:
+                key, label, _, _ = fields[choice]
+                print(f"\nCurrent {label}: {self._format_value(key, data[key])}")
+                print("Enter the new value below (type 'exit' to cancel this edit).")
+                value = self._ask_step(key)
+                if value is not None:
+                    data[key] = value
+                return self._clean_inputs(data)
+            print("Invalid choice.")
+
+    def confirm_or_edit(self, reqs: UserRequirements) -> Optional[UserRequirements]:
+        """Let the user confirm, edit one input, or start again. None means exit."""
+        data = reqs.to_dict()
+
+        while True:
+            self._show_summary(data)
+            print("\nIs this correct?")
+            print("1. Yes, continue")
+            print("2. Edit one input")
+            print("3. Start the inputs again")
+
+            choice = input("Choose [1]: ").strip()
+
+            if self._is_exit(choice):
+                return None
+            if not choice or choice == "1":
+                return UserRequirements.from_dict(data)
+            if choice == "2":
+                edited = self._edit_one(data)
+                if edited is None:
+                    return None
+                data = edited
+                continue
+            if choice == "3":
+                print("\nRestarting the user inputs...")
+                restarted = self.collect_requirements()
+                if restarted is None:
+                    return None
+                data = restarted.to_dict()
+                continue
+
+            print("Please choose 1, 2, or 3.")
