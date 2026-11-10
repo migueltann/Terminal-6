@@ -19,16 +19,12 @@ from flask import (
 
 from dotenv import load_dotenv
 
-import ai_manager
-import data_manager
-import io_manager
-import logic_manager
-
 from travel_assistant import TravelAssistant
 from models import UserRequirements
 from data_manager import DataManager
 from storage.json_csv_repository import JsonCsvRepository
 from models import RecommendationSet
+from user_io.destination_validator import DestinationValidator
 
 load_dotenv()
 
@@ -143,10 +139,24 @@ def _log_ai_status(level, message):
     else:
         app.logger.info(message)
 
+def _normalise_optional_text(value):
+    """Clean optional text input."""
+    text = str(value or "").strip()
+    return None if text.lower() in {"", "any", "none"} else text
+
 # input helpers
 def _split_list(value):
-    """Use the terminal's comma-separated list handling."""
-    return io_manager.normalise_optional_list(value or "")
+    """Convert comma-separated form input into a clean list."""
+    values = [
+        part.strip()
+        for part in (value or "").split(",")
+        if part.strip()
+    ]
+
+    if any(part.lower() in {"any", "none"} for part in values):
+        return []
+
+    return values
 
 
 def _error_message(err):
@@ -234,7 +244,7 @@ def _collect_inputs(form):
     destination_raw = (form.get("destination") or "").strip()
 
     destination, destination_error = (
-        io_manager.validate_destination(destination_raw)
+        DestinationValidator().validate(destination_raw)
     )
 
     errors = []
@@ -306,7 +316,7 @@ def _collect_inputs(form):
 
     # Normalise dietary preferences.
     dietary = (
-        io_manager.normalise_optional_text(
+        _normalise_optional_text(
             form.get("dietary")
         )
         or "None"
@@ -314,7 +324,7 @@ def _collect_inputs(form):
 
     if dietary == "Other":
         dietary = (
-            io_manager.normalise_optional_text(
+            _normalise_optional_text(
                 form.get("dietary_custom")
             )
             or "None"
