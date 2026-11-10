@@ -28,3 +28,13 @@ class LogicManager:
     def _default_rules() -> list[Rule]:
         """Create the five filtering rules, in the order they are checked."""
         return [BudgetRule(), EnvironmentRule(), AvoidListRule(), DietaryRule(), TransportRule()]
+
+    def _check_inputs(self, reqs: UserRequirements, items: list[Recommendation]) -> None:
+        """Stop early with a clear error if the inputs are the wrong type."""
+        if not isinstance(reqs, UserRequirements):
+            raise TypeError("reqs must be a UserRequirements object")
+        if not isinstance(items, list):
+            raise TypeError("items must be a list of Recommendation objects")
+        for item in items:
+            if not isinstance(item, Recommendation):
+                raise TypeError("every item must be a Recommendation object")
