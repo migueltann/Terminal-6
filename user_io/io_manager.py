@@ -225,3 +225,45 @@ class IOManager:
         if value.lower() in {"halal", "vegetarian", "vegan"}:
             return value.title()
         return value
+
+    @classmethod
+    def _format_value(cls, key: str, value: Any) -> str:
+        """Turn a stored answer into text for summaries and the 'current value' line."""
+        if key in cls._LIST_DEFAULTS:
+            return ", ".join(value or []) or cls._LIST_DEFAULTS[key]
+        if key.startswith("max_"):
+            return f"SGD ${float(value):.2f}" if value is not None else "Not set"
+        return str(value)
+
+    def _show_summary(self, data: dict) -> None:
+        """Show the user's requirements grouped by category."""
+        print("\n" + self.LINE)
+        print("FINAL USER REQUIREMENTS")
+        print(self.LINE)
+        print(f"Destination: {data['destination']}")
+
+        print("\n--- ACTIVITIES ---")
+        print(f"Preferred Activities: {self._format_value('preferred_activities', data['preferred_activities'])}")
+        print(f"Max Spend: {self._format_value('max_activity_spend', data['max_activity_spend'])}")
+        print(f"Environment: {data['activity_environment']}")
+
+        print("\n--- FOOD ---")
+        print(f"Cuisine Preferences: {self._format_value('food_preferences', data['food_preferences'])}")
+        print(f"Max Spend per Meal: {self._format_value('max_meal_spend', data['max_meal_spend'])}")
+        print(f"Environment: {data['food_environment']}")
+        print(f"Dietary Requirement: {data['dietary']}")
+
+        print("\n--- ACCOMMODATION ---")
+        print("Accommodation Preferences: "
+              f"{self._format_value('accommodation_preferences', data['accommodation_preferences'])}")
+        print(f"Max Spend per Night: {self._format_value('max_accommodation_spend', data['max_accommodation_spend'])}")
+
+        print("\n--- SHOPPING ---")
+        print(f"Shopping Preferences: {self._format_value('shopping_preferences', data['shopping_preferences'])}")
+        print(f"Max Spend: {self._format_value('max_shopping_spend', data['max_shopping_spend'])}")
+        print(f"Environment: {data['shopping_environment']}")
+
+        print("\n--- UNIVERSAL RESTRICTIONS ---")
+        print(f"Preferred Transport: {data['preferred_transport']}")
+        print(f"Places to Avoid: {self._format_value('avoid_list', data['avoid_list'])}")
+        print(self.LINE)
