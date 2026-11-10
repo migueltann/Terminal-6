@@ -82,3 +82,25 @@ def test_process_records_every_rule_check_on_the_item(logic):
     labels = [check.label for check in result.approved()[0].results]
     assert "Meal budget" in labels
     assert "Dietary requirement" in labels
+
+def test_process_marks_top_picks(logic):
+    # no preferences given, so the cheapest items within half the budget are top picks
+    result = logic.process(make_requirements(), [make_item(estimated_cost_sgd=20)])
+    assert result.approved()[0].is_top_pick()
+
+
+def test_rejected_item_is_never_a_top_pick(logic):
+    result = logic.process(make_requirements(), [make_item(estimated_cost_sgd=500)])
+    assert not result.rejected_items()[0].is_top_pick()
+
+
+def test_empty_list_gives_empty_result(logic):
+    result = logic.process(make_requirements(), [])
+    assert result.approved() == [] and result.rejected_items() == []
+
+
+def test_same_logic_manager_can_be_reused(logic):
+    # a second request with different requirements must not reuse the first one's budget
+    logic.process(make_requirements(max_activity_spend=10), [make_item()])
+    result = logic.process(make_requirements(max_activity_spend=100), [make_item()])
+    assert len(result.approved()) == 1
