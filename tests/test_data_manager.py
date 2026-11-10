@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from data_manager import DataManager
+from storage.data_manager import DataManager
 from models import RecommendationSet
 from storage.json_csv_repository import JsonCsvRepository
 from storage.recommendation_repository import RecommendationRepository

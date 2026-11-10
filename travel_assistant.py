@@ -4,7 +4,7 @@ from typing import Optional
 from user_io.io_manager import IOManager
 from ai.ai_manager import AIManager
 from filtering.logic_manager import LogicManager
-from data_manager import DataManager
+from storage.data_manager import DataManager
 from storage.json_csv_repository import JsonCsvRepository
 from models import Recommendation, RecommendationSet, UserRequirements
 

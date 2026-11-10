@@ -120,3 +120,21 @@ def test_items_must_be_a_list(logic):
 def test_items_must_be_recommendations(logic):
     with pytest.raises(TypeError):
         logic.process(make_requirements(), [{"name": "not a Recommendation"}])
+
+
+def test_process_groups_recommendations_by_category(logic):
+    items = [
+        make_item("activity"),
+        make_item("food"),
+        make_item("accommodation"),
+        make_item("shopping"),
+    ]
+
+    result = logic.process(make_requirements(), items)
+    data = result.to_dict()
+
+    assert len(data["activities"]) == 1
+    assert len(data["food"]) == 1
+    assert len(data["accommodation"]) == 1
+    assert len(data["shopping"]) == 1
+    assert data["summary"]["approved_count"] == 4

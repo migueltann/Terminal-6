@@ -189,7 +189,7 @@ class TestTravelAssistant(unittest.TestCase):
         import os
         import tempfile
 
-        from data_manager import DataManager
+        from storage.data_manager import DataManager
         from storage.json_csv_repository import JsonCsvRepository
         from filtering.logic_manager import LogicManager
 

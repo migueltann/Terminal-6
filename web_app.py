@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 
 from travel_assistant import TravelAssistant
 from models import UserRequirements
-from data_manager import DataManager
+from storage.data_manager import DataManager
 from storage.json_csv_repository import JsonCsvRepository
 from models import RecommendationSet
 from user_io.destination_validator import DestinationValidator
