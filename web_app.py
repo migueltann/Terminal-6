@@ -24,6 +24,12 @@ import data_manager
 import io_manager
 import logic_manager
 
+from travel_assistant import TravelAssistant
+from models import UserRequirements
+from data_manager import DataManager
+from storage.json_csv_repository import JsonCsvRepository
+from models import RecommendationSet
+
 load_dotenv()
 
 
@@ -358,44 +364,22 @@ def generate():
                 "Please correct the highlighted fields and try again."
             ),
             field_errors=field_errors,
-        ), 400
+        ), 400  
 
     try:
-        # Generate recommendations using the existing AI manager.
-        raw_items = ai_manager.generate_recommendations(
-            user_inputs["destination"],
-            user_inputs,
+        # Convert Flask form data into an OOP requirements object.
+        requirements = UserRequirements.from_dict(user_inputs)
+
+        # Generate and filter recommendations through the OOP application.
+        assistant = TravelAssistant()
+
+        recommendation_set = assistant.generate_trip(
+            requirements,
             notify=_log_ai_status,
-            validator=logic_manager.validate_ai_response,
         )
 
-        # Validate the structure returned by the AI.
-        valid_items = logic_manager.validate_ai_response(
-            raw_items
-        )
-
-        if not valid_items:
-            raise ValueError(
-                "AI returned no valid recommendations. "
-                "Please retry; if this repeats, check the AI prompt "
-                "and response fields."
-            )
-
-        # Apply the existing recommendation filtering logic.
-        approved, rejected, audit = (
-            logic_manager.filter_recommendations(
-                valid_items,
-                user_inputs,
-            )
-        )
-
-        # Build the final processed result.
-        result = logic_manager.build_processed_result(
-            user_inputs["destination"],
-            user_inputs,
-            approved,
-            rejected,
-        )
+        # Convert the OOP result into the dictionary expected by Flask.
+        result = recommendation_set.to_dict()
 
         # Store the full result on the server, not in the cookie.
         _store_latest_result(result)
@@ -409,7 +393,6 @@ def generate():
             result=result,
             error=None,
             field_errors={},
-            audit=audit,
         )
 
     except Exception as exc:
