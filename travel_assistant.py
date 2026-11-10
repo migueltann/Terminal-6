@@ -1,7 +1,6 @@
 
 from typing import Optional
 
-import io_manager
 from user_io.io_manager import IOManager
 from ai.ai_manager import AIManager
 from filtering.logic_manager import LogicManager
