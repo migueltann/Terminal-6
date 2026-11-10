@@ -129,3 +129,40 @@ def test_any_in_a_list_means_no_preference(io):
     assert cleaned["avoid_list"] == []
     assert cleaned["dietary"] == "None"
     assert cleaned["preferred_transport"] == "Any"
+
+def test_confirm_keeps_requirements(monkeypatch, io):
+    fake_input(monkeypatch, FULL_ANSWERS)
+    reqs = io.collect_requirements()
+    fake_input(monkeypatch, [""])  # Enter = "1. Yes, continue"
+    confirmed = io.confirm_or_edit(reqs)
+    assert confirmed.to_dict() == reqs.to_dict()
+
+
+def test_edit_one_input(monkeypatch, io):
+    fake_input(monkeypatch, FULL_ANSWERS)
+    reqs = io.collect_requirements()
+    # 2 = edit, 3 = activity budget, new value 150, then 1 = confirm
+    fake_input(monkeypatch, ["2", "3", "150", "1"])
+    edited = io.confirm_or_edit(reqs)
+    assert edited.budget_for("activity") == 150.0
+    assert edited.destination == "Japan"
+
+
+# ---------- menus ----------
+
+def test_menu_rejects_invalid_choice(monkeypatch, io, capsys):
+    fake_input(monkeypatch, ["9", "2"])
+    assert io.show_menu() == "2"
+    assert "Invalid choice" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("typed, expected", [
+    (["2"], ("view", "2")),
+    (["f", "paris"], ("filter", "paris")),
+    (["d", "1"], ("delete", "1")),
+    (["b"], ("back", "")),
+    (["xyz"], ("invalid", "xyz")),
+])
+def test_saved_set_actions(monkeypatch, io, typed, expected):
+    fake_input(monkeypatch, typed)
+    assert io.ask_saved_action() == expected
