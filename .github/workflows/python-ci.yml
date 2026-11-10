@@ -19,25 +19,25 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: python -m pip install -r requirements.txt
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install pytest
 
       - name: Check Python syntax
         run: |
-          python -m py_compile \
+          python -m compileall -q \
             main.py \
-            ai_manager.py \
-            logic_manager.py \
-            io_manager.py \
-            data_manager.py
+            travel_assistant.py \
+            web_app.py \
+            ai \
+            filtering \
+            user_io \
+            storage \
+            models \
+            tests
 
-      - name: Check there are no class definitions (procedural only)
-        run: |
-          if grep -nE "^\s*class " *.py tests/*.py; then
-            echo "Class definitions found"; exit 1
-          fi
-          
       - name: Run unit tests
-        run: python -m pytest -v
+        run: python -m pytest tests/ -v
 
   docker:
     runs-on: ubuntu-latest
@@ -51,4 +51,4 @@ jobs:
         run: docker build -t terminal-6 .
 
       - name: Run tests inside the container
-        run: docker run --rm terminal-6 python -m pytest -v
+        run: docker run --rm terminal-6 python -m pytest tests/ -v
