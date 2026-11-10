@@ -79,3 +79,31 @@ class DestinationValidator:
                     else next(iter(cities[guess].values()))[1])
             message += f" Did you mean {name}?"
         return None, message
+
+    def __validate_city_country(self, city_text: str, country_text: str) -> tuple[Optional[str], Optional[str]]:
+        """City + country: the country (last part) and the city must both be real."""
+        names, countries, cities = self.__country_names, self.__country_lookup, self.__city_lookup
+        country_key = self._normalise(country_text)
+
+        if country_key not in countries:
+            message = f"'{country_text}' is not a recognised country."
+            guess = self.__suggest(country_key, list(countries))
+            if guess:
+                message += f" Did you mean {names[countries[guess]]}?"
+            return None, message
+
+        code = countries[country_key]
+        country = names[code]
+        city_key = self._normalise(city_text)
+
+        if city_key == self._normalise(country):
+            return country, None
+        if city_key in cities and code in cities[city_key]:
+            return f"{cities[city_key][code][1]}, {country}", None
+
+        message = f"Could not find '{city_text}' in {country}."
+        in_country = [key for key, value in cities.items() if code in value]
+        guess = self.__suggest(city_key, in_country)
+        if guess:
+            message += f" Did you mean {cities[guess][code][1]}?"
+        return None, message
