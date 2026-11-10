@@ -1,0 +1,30 @@
+"""Logic Manager: applies the Python rules to the AI's recommendations."""
+
+from typing import Optional
+
+from models import Recommendation, RecommendationSet, UserRequirements
+from .rule import Rule
+from .budget_rule import BudgetRule
+from .environment_rule import EnvironmentRule
+from .avoid_list_rule import AvoidListRule
+from .dietary_rule import DietaryRule
+from .transport_rule import TransportRule
+from .recommendation_filter import RecommendationFilter
+
+
+class LogicManager:
+    """Checks every AI recommendation against the user's requirements.
+
+    It never calls the AI, reads files or prints: it only receives objects
+    from the other managers and returns a RecommendationSet.
+    """
+
+    def __init__(self) -> None:
+        # Composition: the LogicManager creates and owns its filter.
+        # It is made in process(), because the filter needs that request's requirements.
+        self.__filter: Optional[RecommendationFilter] = None
+
+    @staticmethod
+    def _default_rules() -> list[Rule]:
+        """Create the five filtering rules, in the order they are checked."""
+        return [BudgetRule(), EnvironmentRule(), AvoidListRule(), DietaryRule(), TransportRule()]
