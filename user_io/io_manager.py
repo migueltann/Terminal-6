@@ -461,3 +461,34 @@ class IOManager:
             print("KEEP" if item.is_eligible() else "FILTER OUT")
 
         print(self.LINE)
+
+    def show_saved_sets(self, saved: list[dict], keyword: str = "") -> None:
+        """Show the list of saved recommendation sets."""
+        print("\n" + self.LINE)
+        print("SAVED RECOMMENDATION SETS")
+        print(self.LINE)
+        if keyword:
+            print(f"Filter: destination contains '{keyword}'")
+        for index, entry in enumerate(saved, start=1):
+            print(f"{index}. {entry.get('destination', 'Unknown')} | "
+                  f"Approved: {entry.get('approved_count', 0)} | "
+                  f"{entry.get('saved_at', '')}")
+
+    def ask_saved_action(self) -> tuple[str, str]:
+        """Ask what to do in the saved sets menu.
+
+        Returns (action, value):
+        ("view", "2"), ("filter", "paris"), ("delete", "3"), ("back", "") or ("invalid", text)
+        """
+        print("\nEnter a number to view, F to filter by destination, D to delete, or B to go back.")
+        choice = input("Choice: ").strip().lower()
+
+        if choice in self.BACK_COMMANDS or self._is_exit(choice):
+            return "back", ""
+        if choice == "f":
+            return "filter", input("Destination to search for (blank shows all): ").strip()
+        if choice == "d":
+            return "delete", input("Number to delete: ").strip()
+        if choice.isdigit():
+            return "view", choice
+        return "invalid", choice
