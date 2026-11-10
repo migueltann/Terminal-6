@@ -165,3 +165,16 @@ class IOManager:
         if value is None or value is self._BACK:
             return value
         return [part.strip() for part in value.split(",") if part.strip()]
+
+    def ask_yes_no(self, prompt: str) -> Optional[bool]:
+        """Ask a yes/no question. Returns None if the user types exit."""
+        while True:
+            value = input(prompt).strip().lower()
+            if self._is_exit(value):
+                return None
+            if value in {"y", "yes"}:
+                return True
+            if value in {"n", "no"}:
+                return False
+            print("Please enter y or n.")
+
