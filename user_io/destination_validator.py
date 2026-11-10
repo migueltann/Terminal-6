@@ -107,3 +107,21 @@ class DestinationValidator:
         if guess:
             message += f" Did you mean {cities[guess][code][1]}?"
         return None, message
+
+    def validate(self, text: str) -> tuple[Optional[str], Optional[str]]:
+        """Check a destination. Returns (clean_destination, error_message).
+
+        Accepted examples: "Japan", "SG", "Paris" or "City, Country".
+        Exactly one of the two returned values is None.
+        """
+        parts = [part.strip() for part in str(text).split(",") if part.strip()]
+        if not parts:
+            return None, "Please enter a destination."
+
+        if not self.__country_lookup:
+            # Library not installed: accept the text rather than crash.
+            return ", ".join(parts), None
+
+        if len(parts) == 1:
+            return self.__validate_single(parts[0])
+        return self.__validate_city_country(", ".join(parts[:-1]), parts[-1])
