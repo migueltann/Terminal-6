@@ -178,3 +178,50 @@ class IOManager:
                 return False
             print("Please enter y or n.")
 
+    def _ask_destination(self, allow_back: bool = False) -> Any:
+        """Ask for a destination and keep asking until the validator accepts it."""
+        print("Enter a city and country, e.g. Paris, France.")
+        print("A country on its own (e.g. Japan), a short code (e.g. SG) or a city also works.")
+        while True:
+            value = input("Destination (City, Country): ").strip()
+            if self._is_exit(value):
+                return None
+            if allow_back and self._is_back(value):
+                return self._BACK
+            if not value:
+                print("This field cannot be empty.")
+                continue
+            destination, error = self.__validator.validate(value)
+            if destination:
+                if destination.lower() != value.lower():
+                    print(f"Understood as: {destination}")
+                return destination
+            print(error)
+
+    def _ask_step(self, key: str, allow_back: bool = False) -> Any:
+        """Ask the question for one data key, using the right kind of input."""
+        kind = next(step[2] for step in self._STEPS if step[0] == key)
+        print()
+
+        if kind == "destination":
+            return self._ask_destination(allow_back)
+        if kind == "list":
+            prompt, hints = self._PROMPTS[key]
+            return self._ask_list(prompt, hints, allow_back)
+        if kind == "money":
+            return self._ask_positive_float(self._PROMPTS[key][0], allow_back)
+        if kind == "environment":
+            return self._ask_choice(self._PROMPTS[key][0], ["Indoor", "Outdoor", "Any"], "Any", allow_back)
+        if kind == "transport":
+            return self._ask_choice("Preferred transport (Walk/Transit/Taxi/Any) [Any]: ",
+                                    ["Walk", "Transit", "Taxi", "Any"], "Any", allow_back)
+        # dietary
+        print("Examples: halal, vegetarian, vegan, no beef, gluten-free.")
+        value = self._ask_text("Dietary requirement [None]: ", "None", allow_back)
+        if value is None or value is self._BACK:
+            return value
+        if value.lower() in {"none", "no", "nil", "na", "n/a", "-"}:
+            return "None"
+        if value.lower() in {"halal", "vegetarian", "vegan"}:
+            return value.title()
+        return value
