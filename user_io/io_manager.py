@@ -267,3 +267,51 @@ class IOManager:
         print(f"Preferred Transport: {data['preferred_transport']}")
         print(f"Places to Avoid: {self._format_value('avoid_list', data['avoid_list'])}")
         print(self.LINE)
+
+    def _clean_inputs(self, data: dict) -> dict:
+        """Turn 'Any' / 'None' / blank answers into the default values."""
+        cleaned = dict(data)
+        for key in self._LIST_DEFAULTS:
+            values = [str(v).strip() for v in cleaned.get(key) or [] if str(v).strip()]
+            if any(v.lower() in {"any", "none"} for v in values):
+                values = []
+            cleaned[key] = values
+        for key, default in (("dietary", "None"), ("preferred_transport", "Any"),
+                             ("activity_environment", "Any"), ("food_environment", "Any"),
+                             ("shopping_environment", "Any")):
+            text = str(cleaned.get(key) or "").strip()
+            cleaned[key] = default if text.lower() in {"", "any", "none"} else text
+        return cleaned
+
+    def collect_requirements(self) -> Optional[UserRequirements]:
+        """Ask every question in order. Returns None if the user types exit."""
+        print("\n" + self.LINE)
+        print("USER INPUTS")
+        print(self.LINE)
+        print("Type 'back' to return to the previous input, or 'exit' to return to the main menu.")
+
+        data: dict[str, Any] = {}
+        index = 0
+
+        while index < len(self._STEPS):
+            key, _, _, heading = self._STEPS[index]
+            if heading:
+                print(f"\n--- {heading} ---")
+
+            # The first question has nothing before it, so 'back' is off there
+            value = self._ask_step(key, allow_back=index > 0)
+
+            if value is None:  # user typed exit
+                return None
+
+            if value is self._BACK:
+                index -= 1
+                previous_key = self._STEPS[index][0]
+                print("\nGoing back. Previous answer: "
+                      f"{self._format_value(previous_key, data[previous_key])}")
+                continue
+
+            data[key] = value
+            index += 1
+
+        return UserRequirements.from_dict(self._clean_inputs(data))
