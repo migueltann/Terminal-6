@@ -104,3 +104,19 @@ def test_same_logic_manager_can_be_reused(logic):
     logic.process(make_requirements(max_activity_spend=10), [make_item()])
     result = logic.process(make_requirements(max_activity_spend=100), [make_item()])
     assert len(result.approved()) == 1
+
+# ---------- bad input ----------
+
+def test_wrong_requirements_type_raises(logic):
+    with pytest.raises(TypeError):
+        logic.process({"destination": "Singapore"}, [make_item()])
+
+
+def test_items_must_be_a_list(logic):
+    with pytest.raises(TypeError):
+        logic.process(make_requirements(), make_item())
+
+
+def test_items_must_be_recommendations(logic):
+    with pytest.raises(TypeError):
+        logic.process(make_requirements(), [{"name": "not a Recommendation"}])
