@@ -50,3 +50,32 @@ class DestinationValidator:
             code = city["countrycode"]
             if code not in by_country or city["population"] > by_country[code][0]:
                 by_country[code] = (city["population"], city["name"])
+
+    @staticmethod
+    def __suggest(key: str, pool: list[str]) -> Optional[str]:
+        """Return the closest known name to a mistyped one, or None."""
+        matches = difflib.get_close_matches(key, pool, n=1, cutoff=0.75)
+        return matches[0] if matches else None
+
+    def __validate_single(self, text: str) -> tuple[Optional[str], Optional[str]]:
+        """One part only: it must be a country (name or code) or a city."""
+        names, countries, cities = self.__country_names, self.__country_lookup, self.__city_lookup
+        key = self._normalise(text)
+
+        if key in countries:
+            return names[countries[key]], None
+
+        if key in cities:
+            # If several countries have this city, use the most populous one.
+            code, (_, city) = max(cities[key].items(), key=lambda item: item[1][0])
+            if self._normalise(city) == self._normalise(names[code]):
+                return city, None
+            return f"{city}, {names[code]}", None
+
+        message = f"'{text}' is not a valid country or city. Please enter a valid country or city."
+        guess = self.__suggest(key, list(countries) + list(cities))
+        if guess:
+            name = (names[countries[guess]] if guess in countries
+                    else next(iter(cities[guess].values()))[1])
+            message += f" Did you mean {name}?"
+        return None, message
