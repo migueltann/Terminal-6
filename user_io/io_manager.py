@@ -444,3 +444,20 @@ class IOManager:
             print(f"Eligible {title.title()}: {len(grouped.get(category, []))}")
         print(f"Filtered Out: {len(rejected)}")
         print(self.LINE)
+
+    def show_audit(self, result: RecommendationSet) -> None:
+        """Show why each recommendation was kept or filtered out."""
+        print("\n" + self.LINE)
+        print("AI RECOMMENDATIONS -> PYTHON LOGIC CHECK")
+        print(self.LINE)
+
+        for item in result.approved() + result.rejected_items():
+            print("\n" + self.DIVIDER)
+            print(item.name)
+            print(f"Type: {item.item_type}")
+            for check in item.results:
+                status = "PASS" if check.passed else "FAIL"
+                print(f"[{status}] {check.label}: {check.detail}")
+            print("KEEP" if item.is_eligible() else "FILTER OUT")
+
+        print(self.LINE)
