@@ -72,3 +72,39 @@ class IOManager:
     def __init__(self) -> None:
         # Composition: the IOManager creates and owns its validator
         self.__validator = DestinationValidator()
+
+    def show_welcome(self) -> None:
+        """Show the title when the program starts."""
+        print(self.LINE)
+        print("              TRAVEL RECOMMENDATION ASSISTANT")
+        print("     AI discovers places; Python checks your requirements")
+        print(self.LINE)
+        print("Press Enter to use the default shown in [ ] at the end of a prompt.\n")
+        print("Type 'back' or 'b' at an input prompt to return to the previous input.\n")
+        print("Type 'exit' or 'e' at an input prompt to return to the main menu.\n")
+
+    def show_menu(self) -> str:
+        """Show the main menu and return the user's choice: '1', '2' or '3'."""
+        print("\nMAIN MENU")
+        print("1. Generate Recommendations")
+        print("2. View / Delete Saved Recommendation Sets")
+        print("3. Exit")
+        while True:
+            choice = input("\nEnter choice (1-3): ").strip().lower()
+            if choice in {"1", "2", "3"}:
+                return choice
+            if choice in self.EXIT_COMMANDS:
+                return "3"
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
+    def show_message(self, message: str) -> None:
+        """Show a normal information message."""
+        print(f"\n[INFO] {message}")
+
+    def show_error(self, message: str) -> None:
+        """Show an error message."""
+        print(f"\n[ERROR] {message}")
+
+    def show_status(self, level: str, message: str) -> None:
+        """Show an INFO or WARNING line sent by another manager (used as the AI notifier)."""
+        print(f"\n[{str(level).upper()}] {message}")
