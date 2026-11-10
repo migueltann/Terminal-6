@@ -1,6 +1,5 @@
 import pytest 
 
-from logic_manager import filter_recommendations, build_processed_result  # the old functions, used to compare
 from models import Recommendation, UserRequirements  # the shared data classes
 from filtering import (  # all my classes from the filtering package
     Rule,
@@ -80,8 +79,50 @@ def test_budget_missing_means_no_limit():
     result = BudgetRule().check(item, make_requirements(max_activity_spend=None))
     assert result.passed is True
     assert result.detail == "No budget limit set"
+
+
+def test_activity_over_budget_fails():
+    item = make_item("activity", estimated_cost_sgd=150)
+    result = BudgetRule().check(item, make_requirements())
+
+    assert result.passed is False
+    assert result.label == "Activity budget"
+
+
+def test_accommodation_over_budget_fails():
+    item = make_item("accommodation", estimated_cost_sgd=250)
+    result = BudgetRule().check(item, make_requirements())
+
+    assert result.passed is False
+    assert result.label == "Accommodation budget"
+
+
+def test_shopping_over_budget_fails():
+    item = make_item("shopping", estimated_cost_sgd=90)
+    result = BudgetRule().check(item, make_requirements())
+
+    assert result.passed is False
+    assert result.label == "Shopping budget"
+
+
+def test_food_environment_mismatch_fails():
+    item = make_item("food", environment="Outdoor")
+    result = EnvironmentRule().check(item, make_requirements())
+
+    assert result.passed is False
+    assert result.label == "Environment"
+
     
 # ---------- EnvironmentRule ----------
+
+
+def test_shopping_environment_mismatch_fails():
+    item = make_item("shopping", environment="Outdoor")
+    result = EnvironmentRule().check(item, make_requirements())
+
+    assert result.passed is False
+    assert result.label == "Environment"
+
 
 # user wants outdoor activities, so an indoor activity should fail
 def test_environment_mismatch_fails():
@@ -209,32 +250,81 @@ def test_rejected_item_is_never_a_top_pick():
     assert item.is_top_pick() is False
 
 
-# compares the old and new filtering methods to make sure they give the same results
-def test_filter_gives_same_output_as_logic_manager():
-    # 5 sample items: some pass, some fail
-    raw_items = [
-        make_item(name="Gardens", estimated_cost_sgd=10).to_dict(),  # passes
-        make_item(name="Museum", environment="Indoor").to_dict(),  # fails environment
-        make_item("food", name="Halal Cafe", estimated_cost_sgd=15).to_dict(),  # passes
-        make_item("food", name="Steakhouse", estimated_cost_sgd=90).to_dict(),  # fails budget
-        make_item("accommodation", name="Hotel", estimated_cost_sgd=150).to_dict(),  # passes
+
+def test_logic_manager_processes_recommendations():
+    """Check that the OOP LogicManager filters recommendations correctly."""
+    from filtering.logic_manager import LogicManager
+
+    requirements = make_requirements()
+
+    items = [
+        make_item(name="Gardens", estimated_cost_sgd=10),
+        make_item(name="Museum", environment="Indoor"),
+        make_item("food", name="Halal Cafe", estimated_cost_sgd=15),
+        make_item("food", name="Steakhouse", estimated_cost_sgd=90),
+        make_item("accommodation", name="Hotel", estimated_cost_sgd=150),
     ]
-    # keep only the normal fields, like what the AI would send
-    keep = ("name", "type", "category", "estimated_cost_sgd", "location",
-            "environment", "description", "tags", "transport_options", "dietary_tags")
-    raw_items = [{key: item[key] for key in keep} for item in raw_items]
-    user_inputs = make_requirements().to_dict()  # the old functions use a plain dict
 
-    # old logic_manager functions
-    approved, rejected, _ = filter_recommendations([dict(i) for i in raw_items], user_inputs)
-    old = build_processed_result("Singapore", user_inputs, approved, rejected)
+    result = LogicManager().process(requirements, items)
 
-    # new RecommendationFilter class
-    items = [Recommendation.from_dict(i) for i in raw_items]
-    new = RecommendationFilter(make_requirements()).filter(items, "Singapore").to_dict()
+    result_dict = result.to_dict()
 
-    # both must have the same counts, items, top picks and pass/fail messages
-    assert new["summary"] == old["summary"]
-    for key in ("activities", "food", "accommodation", "shopping", "filtered_out"):
-        assert ([(x["name"], x["top_pick"], x["checks"]) for x in new[key]]
-                == [(x["name"], x["top_pick"], x["checks"]) for x in old[key]])
+    approved_names = {
+        item["name"]
+        for category in ("activities", "food", "accommodation", "shopping")
+        for item in result_dict[category]
+    }
+
+    rejected_names = {
+        item["name"]
+        for item in result_dict["filtered_out"]
+    }
+
+    assert approved_names == {
+        "Gardens",
+        "Halal Cafe",
+        "Hotel",
+    }
+
+    assert rejected_names == {
+        "Museum",
+        "Steakhouse",
+    }
+
+
+def test_top_pick_skips_items_over_half_budget():
+    items = [
+        make_item(name="Cheap", estimated_cost_sgd=20),
+        make_item(name="Expensive", estimated_cost_sgd=90),
+    ]
+
+    result = RecommendationFilter(make_requirements()).filter(items)
+
+    picks = [
+        item.name
+        for item in result.approved()
+        if item.is_top_pick()
+    ]
+
+    assert picks == ["Cheap"]
+
+
+def test_preferences_override_cheapest_fallback():
+    requirements = make_requirements(
+        preferred_activities=["museum"]
+    )
+
+    items = [
+        make_item(name="City Museum", estimated_cost_sgd=40),
+        make_item(name="Harbour Cruise", estimated_cost_sgd=10),
+    ]
+
+    result = RecommendationFilter(requirements).filter(items)
+
+    picks = [
+        item.name
+        for item in result.approved()
+        if item.is_top_pick()
+    ]
+
+    assert picks == ["City Museum"]

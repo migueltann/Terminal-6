@@ -19,10 +19,12 @@ from flask import (
 
 from dotenv import load_dotenv
 
-import ai_manager
-import data_manager
-import io_manager
-import logic_manager
+from travel_assistant import TravelAssistant
+from models import UserRequirements
+from storage.data_manager import DataManager
+from storage.json_csv_repository import JsonCsvRepository
+from models import RecommendationSet
+from user_io.destination_validator import DestinationValidator
 
 load_dotenv()
 
@@ -137,10 +139,24 @@ def _log_ai_status(level, message):
     else:
         app.logger.info(message)
 
+def _normalise_optional_text(value):
+    """Clean optional text input."""
+    text = str(value or "").strip()
+    return None if text.lower() in {"", "any", "none"} else text
+
 # input helpers
 def _split_list(value):
-    """Use the terminal's comma-separated list handling."""
-    return io_manager.normalise_optional_list(value or "")
+    """Convert comma-separated form input into a clean list."""
+    values = [
+        part.strip()
+        for part in (value or "").split(",")
+        if part.strip()
+    ]
+
+    if any(part.lower() in {"any", "none"} for part in values):
+        return []
+
+    return values
 
 
 def _error_message(err):
@@ -228,7 +244,7 @@ def _collect_inputs(form):
     destination_raw = (form.get("destination") or "").strip()
 
     destination, destination_error = (
-        io_manager.validate_destination(destination_raw)
+        DestinationValidator().validate(destination_raw)
     )
 
     errors = []
@@ -300,7 +316,7 @@ def _collect_inputs(form):
 
     # Normalise dietary preferences.
     dietary = (
-        io_manager.normalise_optional_text(
+        _normalise_optional_text(
             form.get("dietary")
         )
         or "None"
@@ -308,7 +324,7 @@ def _collect_inputs(form):
 
     if dietary == "Other":
         dietary = (
-            io_manager.normalise_optional_text(
+            _normalise_optional_text(
                 form.get("dietary_custom")
             )
             or "None"
@@ -358,44 +374,22 @@ def generate():
                 "Please correct the highlighted fields and try again."
             ),
             field_errors=field_errors,
-        ), 400
+        ), 400  
 
     try:
-        # Generate recommendations using the existing AI manager.
-        raw_items = ai_manager.generate_recommendations(
-            user_inputs["destination"],
-            user_inputs,
+        # Convert Flask form data into an OOP requirements object.
+        requirements = UserRequirements.from_dict(user_inputs)
+
+        # Generate and filter recommendations through the OOP application.
+        assistant = TravelAssistant()
+
+        recommendation_set = assistant.generate_trip(
+            requirements,
             notify=_log_ai_status,
-            validator=logic_manager.validate_ai_response,
         )
 
-        # Validate the structure returned by the AI.
-        valid_items = logic_manager.validate_ai_response(
-            raw_items
-        )
-
-        if not valid_items:
-            raise ValueError(
-                "AI returned no valid recommendations. "
-                "Please retry; if this repeats, check the AI prompt "
-                "and response fields."
-            )
-
-        # Apply the existing recommendation filtering logic.
-        approved, rejected, audit = (
-            logic_manager.filter_recommendations(
-                valid_items,
-                user_inputs,
-            )
-        )
-
-        # Build the final processed result.
-        result = logic_manager.build_processed_result(
-            user_inputs["destination"],
-            user_inputs,
-            approved,
-            rejected,
-        )
+        # Convert the OOP result into the dictionary expected by Flask.
+        result = recommendation_set.to_dict()
 
         # Store the full result on the server, not in the cookie.
         _store_latest_result(result)
@@ -409,7 +403,6 @@ def generate():
             result=result,
             error=None,
             field_errors={},
-            audit=audit,
         )
 
     except Exception as exc:
@@ -429,13 +422,15 @@ def generate():
         ), 502
 
 
+
 @app.get("/saved")
 def saved_sets():
-    # Get the search keyword before loading saved recommendations.
+    """Display saved recommendation sets using OOP."""
     keyword = request.args.get("destination", "").strip().lower()
 
     try:
-        saved = data_manager.get_saved_recommendations()
+        manager = DataManager(JsonCsvRepository())
+        saved = manager.find(keyword)
 
     except Exception as exc:
         app.logger.exception(
@@ -448,55 +443,31 @@ def saved_sets():
             "error",
         )
 
-    # Filter saved recommendations if a keyword was entered.
-    if keyword:
-        saved = [
-            item for item in saved
-            if keyword in str(
-                item.get("destination", "")
-            ).lower()
-        ]
-
     return render_template(
         "saved.html",
         saved=saved,
         keyword=keyword,
     )
 
+
 @app.get("/saved/view/<path:filename>")
 def view_saved(filename):
-    """Display a saved recommendation set."""
-    # Only open files registered by the data manager.
-    entry = next(
-        (
-            item
-            for item in data_manager.get_saved_recommendations()
-            if os.path.basename(
-                item.get("json_path", "")
-            ) == filename
-        ),
-        None,
+    """Display a saved recommendation set using OOP."""
+    manager = DataManager(JsonCsvRepository())
+
+    recommendation_set = manager.load(
+        os.path.basename(filename)
     )
 
-    if not entry:
+    if recommendation_set is None:
         flash(
-            "That saved recommendation set was not found.",
+            "That saved recommendation set could not be found or read.",
             "error",
         )
         return redirect(url_for("saved_sets"))
 
-    result = data_manager.load_result(
-        entry["json_path"]
-    )
+    result = recommendation_set.to_dict()
 
-    if not result:
-        flash(
-            "The saved JSON file could not be read.",
-            "error",
-        )
-        return redirect(url_for("saved_sets"))
-
-    # Make this result available to the Save and Download buttons.
     _store_latest_result(result)
 
     return render_template(
@@ -507,17 +478,16 @@ def view_saved(filename):
         field_errors={},
     )
 
-
 @app.post("/saved/delete/<path:filename>")
 def delete_saved(filename):
-    if data_manager.delete_saved_recommendation(
-        os.path.basename(filename)
-    ):
+    """Delete a saved recommendation set using OOP."""
+    manager = DataManager(JsonCsvRepository())
+
+    if manager.delete(os.path.basename(filename)):
         flash(
             "Saved recommendation set deleted.",
             "success",
         )
-
     else:
         flash(
             "Could not delete that saved recommendation set.",
@@ -525,6 +495,7 @@ def delete_saved(filename):
         )
 
     return redirect(url_for("saved_sets"))
+
 
 @app.post("/download/json")
 def download_json():
@@ -595,9 +566,10 @@ def download_json():
 
         return redirect(url_for("index"))
 
+
 @app.post("/save")
 def save():
-    """Save the current recommendation result using data_manager."""
+    """Save the current recommendation result using the OOP DataManager."""
     result = _get_latest_result()
 
     if not result:
@@ -609,24 +581,20 @@ def save():
         return redirect(url_for("index"))
 
     try:
-        paths = data_manager.save_processed_recommendations(
-            result
-        )
+        # Convert the Flask dictionary back into an OOP object.
+        recommendation_set = RecommendationSet.from_dict(result)
 
-        if not paths or len(paths) < 2:
-            raise OSError(
-                "The data manager did not return both JSON and CSV paths."
-            )
+        # Save through the OOP DataManager.
+        manager = DataManager(JsonCsvRepository())
+        filename = manager.save(recommendation_set)
 
         flash(
-            f"Saved JSON: {paths[0]} | Saved CSV: {paths[1]}",
+            f"Recommendations saved successfully: {filename}",
             "success",
         )
 
     except Exception as exc:
-        app.logger.exception(
-            "Saving recommendations failed"
-        )
+        app.logger.exception("Saving recommendations failed")
 
         flash(
             f"Could not save recommendations: {exc}",
@@ -634,6 +602,7 @@ def save():
         )
 
     return redirect(url_for("index"))
+
 
 
 @app.get("/reset")

@@ -6,6 +6,28 @@ from unittest.mock import Mock, patch
 from ai.gemini_client import GeminiClient
 
 
+def make_valid_items():
+    """Create 60 valid recommendations for testing GeminiClient."""
+    return [
+        {
+            "name": f"{category}-{i}",
+            "type": category,
+            "category": "General",
+            "estimated_cost_sgd": 30,
+            "location": "Singapore",
+            "environment": "Indoor",
+            "description": "A sample recommendation",
+            "tags": [],
+            "transport_options": ["transit"],
+            "dietary_tags": ["halal"],
+        }
+        for category in (
+            "activity", "food", "accommodation", "shopping"
+        )
+        for i in range(15)
+    ]
+
+
 class TestGeminiClient(unittest.TestCase):
 
     @patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"})
@@ -14,13 +36,7 @@ class TestGeminiClient(unittest.TestCase):
     def test_retry_then_success(self, mock_post, mock_sleep):
         """Retry a temporary error, then accept a valid response."""
 
-        items = [
-            {"type": category, "name": f"{category}-{i}"}
-            for category in (
-                "activity", "food", "accommodation", "shopping"
-            )
-            for i in range(15)
-        ]
+        items = make_valid_items()
 
         busy_response = Mock()
         busy_response.status_code = 429
@@ -60,13 +76,7 @@ class TestGeminiClient(unittest.TestCase):
 
         import json
 
-        items = [
-            {"type": category, "name": f"{category}-{i}"}
-            for category in (
-                "activity", "food", "accommodation", "shopping"
-            )
-            for i in range(15)
-        ]
+        items = make_valid_items()
 
         unavailable_response = Mock()
         unavailable_response.status_code = 404
@@ -123,13 +133,7 @@ class TestGeminiClient(unittest.TestCase):
             {"name": "Tokyo Tower", "type": "activity"}
         ]
 
-        valid_items = [
-            {"type": category, "name": f"{category}-{i}"}
-            for category in (
-                "activity", "food", "accommodation", "shopping"
-            )
-            for i in range(15)
-        ]
+        valid_items = make_valid_items()
 
         def make_response(items):
             response = Mock()

@@ -70,8 +70,30 @@ class AIResponseValidator:
                     f"instead of {expected_count}."
                 )
 
-        # 6. Return the validated recommendations
+        
+        # 6. Check that every recommendation has the required fields
+        required_fields = {
+            "name",
+            "type",
+            "category",
+            "estimated_cost_sgd",
+            "location",
+            "environment",
+            "description",
+        }
+
+        for index, item in enumerate(items, start=1):
+            missing_fields = required_fields - item.keys()
+
+            if missing_fields:
+                raise RuntimeError(
+                    f"Recommendation {index} is missing required fields: "
+                    f"{', '.join(sorted(missing_fields))}"
+                )
+
+        # 7. Return the validated recommendations
         return items
+
 
 
 
