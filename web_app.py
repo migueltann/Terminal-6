@@ -578,9 +578,10 @@ def download_json():
 
         return redirect(url_for("index"))
 
+
 @app.post("/save")
 def save():
-    """Save the current recommendation result using data_manager."""
+    """Save the current recommendation result using the OOP DataManager."""
     result = _get_latest_result()
 
     if not result:
@@ -592,24 +593,20 @@ def save():
         return redirect(url_for("index"))
 
     try:
-        paths = data_manager.save_processed_recommendations(
-            result
-        )
+        # Convert the Flask dictionary back into an OOP object.
+        recommendation_set = RecommendationSet.from_dict(result)
 
-        if not paths or len(paths) < 2:
-            raise OSError(
-                "The data manager did not return both JSON and CSV paths."
-            )
+        # Save through the OOP DataManager.
+        manager = DataManager(JsonCsvRepository())
+        filename = manager.save(recommendation_set)
 
         flash(
-            f"Saved JSON: {paths[0]} | Saved CSV: {paths[1]}",
+            f"Recommendations saved successfully: {filename}",
             "success",
         )
 
     except Exception as exc:
-        app.logger.exception(
-            "Saving recommendations failed"
-        )
+        app.logger.exception("Saving recommendations failed")
 
         flash(
             f"Could not save recommendations: {exc}",
@@ -617,6 +614,7 @@ def save():
         )
 
     return redirect(url_for("index"))
+
 
 
 @app.get("/reset")
