@@ -108,3 +108,60 @@ class IOManager:
     def show_status(self, level: str, message: str) -> None:
         """Show an INFO or WARNING line sent by another manager (used as the AI notifier)."""
         print(f"\n[{str(level).upper()}] {message}")
+
+    @classmethod
+    def _is_exit(cls, value: str) -> bool:
+        return str(value).strip().lower() in cls.EXIT_COMMANDS
+
+    @classmethod
+    def _is_back(cls, value: str) -> bool:
+        return str(value).strip().lower() in cls.BACK_COMMANDS
+
+    def _ask_text(self, prompt: str, default: str = "", allow_back: bool = False) -> Any:
+        """Ask for optional text. Returns the default if blank, None on exit, _BACK on back."""
+        value = input(prompt).strip()
+        if self._is_exit(value):
+            return None
+        if allow_back and self._is_back(value):
+            return self._BACK
+        return value if value else default
+
+    def _ask_positive_float(self, prompt: str, allow_back: bool = False) -> Any:
+        """Ask for an amount greater than 0. Keeps asking until it is valid."""
+        while True:
+            value = input(prompt).strip()
+            if self._is_exit(value):
+                return None
+            if allow_back and self._is_back(value):
+                return self._BACK
+            try:
+                number = float(value)
+                if number > 0 and number != float("inf"):
+                    return number
+            except ValueError:
+                pass
+            print("Please enter a valid positive amount.")
+
+    def _ask_choice(self, prompt: str, choices: list[str], default: str, allow_back: bool = False) -> Any:
+        """Ask the user to pick from a fixed list. Blank uses the default."""
+        lowered = [choice.lower() for choice in choices]
+        while True:
+            value = input(prompt).strip()
+            if self._is_exit(value):
+                return None
+            if allow_back and self._is_back(value):
+                return self._BACK
+            if not value:
+                return default
+            if value.lower() in lowered:
+                return choices[lowered.index(value.lower())]
+            print("Invalid choice. Options: " + ", ".join(choices))
+
+    def _ask_list(self, prompt: str, hints: list[str], allow_back: bool = False) -> Any:
+        """Show the hint lines, then ask for a comma-separated list."""
+        for line in hints:
+            print(line)
+        value = self._ask_text(prompt, allow_back=allow_back)
+        if value is None or value is self._BACK:
+            return value
+        return [part.strip() for part in value.split(",") if part.strip()]
