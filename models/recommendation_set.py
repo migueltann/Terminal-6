@@ -37,3 +37,29 @@ class RecommendationSet:
                 "summary": self.summary(),
                 **{key: [item.to_dict() for item in values] for key, values in grouped.items()},
                 "filtered_out": [item.to_dict() for item in self.rejected]}
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "RecommendationSet":
+        if not isinstance(data, dict):
+            raise TypeError("Saved result must be a dictionary")
+
+        destination = str(data["destination"])
+
+        requirements_data = dict(data.get("requirements") or {})
+        requirements_data.setdefault("destination", destination)
+
+        result = cls(
+            destination=destination,
+            requirements=UserRequirements.from_dict(requirements_data),
+            )
+
+        for category in ("activities", "food", "accommodation", "shopping"):
+
+            for item_data in data.get(category) or []:
+                result.add_item(Recommendation.from_dict(item_data))
+
+        for item_data in data.get("filtered_out") or []:
+            result.add_rejected(
+                Recommendation.from_dict(item_data))
+        
+        return result

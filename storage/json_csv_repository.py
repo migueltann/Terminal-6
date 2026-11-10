@@ -1,0 +1,232 @@
+"""Stores recommendation sets using JSON and CSV files."""
+
+from abc import abstractmethod
+import csv
+import json
+import os
+
+from .recommendation_repository import RecommendationRepository
+from models import RecommendationSet
+from datetime import datetime
+
+class JsonCsvRepository(RecommendationRepository):
+    """File-based implementation of recommendation storage."""
+
+    def __init__(self, data_dir: str = "data"):
+        self.__data_dir = data_dir
+        self.__index_file = os.path.join(
+            data_dir,
+            "recommendation_sets.json",
+        )
+
+    def _ensure_storage_directory(self) -> None:
+        """Create the storage directory if needed."""
+        os.makedirs(self.__data_dir, exist_ok=True)
+
+    def _read_index(self) -> list[dict]:
+        """Read saved-set metadata from the index."""
+        try:
+            with open(
+                self.__index_file, "r", encoding="utf-8"
+            ) as file:
+                entries = json.load(file)
+        except FileNotFoundError:
+            return []
+
+        if not isinstance(entries, list) or not all(
+            isinstance(entry, dict) for entry in entries
+        ):
+            raise ValueError(
+                "The storage index must contain a list of dictionaries."
+            )
+
+        return entries
+
+    def _write_index(self, entries: list[dict]) -> None:
+        """Write saved-set metadata to the index."""
+        self._ensure_storage_directory()
+
+        with open(
+            self.__index_file, "w", encoding="utf-8"
+        ) as file:
+            json.dump(entries, file, indent=4)
+
+    @staticmethod
+    def _safe_name(value: str) -> str:
+        """Convert a destination into a filename component."""
+        name = "".join(
+            character.lower() if character.isalnum() else "_"
+            for character in value
+        ).strip("_")
+
+        return name or "trip"
+
+    def load_all(self) -> list[dict]:
+        """Return metadata for all saved recommendation sets."""
+        return [
+            {
+                **entry,
+                "filename": os.path.basename(
+                    entry.get("json_path", "")
+                ),
+            }
+            for entry in self._read_index()
+        ]
+
+    def load(self, identifier: str) -> RecommendationSet:
+        """Load a recommendation set using its JSON filename."""
+        entry = next(
+            (
+                entry
+                for entry in self.load_all()
+                if entry["filename"] == identifier
+            ),
+            None,
+        )
+
+        if entry is None:
+            raise FileNotFoundError(
+                f"Saved recommendation set not found: {identifier}"
+            )
+
+        with open(
+            entry["json_path"], "r", encoding="utf-8"
+        ) as file:
+            data = json.load(file)
+
+        try:
+            return RecommendationSet.from_dict(data)
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError(
+                "The saved recommendation set has an invalid structure."
+            ) from exc
+
+    def delete(self, identifier: str) -> bool:
+        """Delete a saved recommendation set using its JSON filename."""
+        entries = self._read_index()
+
+        entry = next(
+            (
+                entry
+                for entry in entries
+                if os.path.basename(
+                    entry.get("json_path", "")
+                ) == identifier
+            ),
+            None,
+        )
+
+        if entry is None:
+            return False
+
+        for path_key in ("json_path", "csv_path"):
+            path = entry.get(path_key)
+
+            if path:
+                try:
+                    os.remove(path)
+                except FileNotFoundError:
+                    pass
+
+        entries.remove(entry)
+        self._write_index(entries)
+
+        return True
+
+    def _write_csv(
+        self, result: RecommendationSet, path: str
+    ) -> None:
+        """Write approved recommendations to a CSV file."""
+        fieldnames = [
+            "type",
+            "name",
+            "category",
+            "estimated_cost_sgd",
+            "location",
+            "environment",
+            "description",
+            "tags",
+            "transport_options",
+            "dietary_tags",
+            "eligible",
+            "passed_rules",
+            "failed_rules",
+        ]
+
+        list_fields = (
+                "tags",
+                "transport_options",
+                "dietary_tags",
+                "passed_rules",
+                "failed_rules",
+        )
+
+        with open(
+                path, "w", newline="", encoding="utf-8"
+        ) as file:
+            writer = csv.DictWriter(
+                file, fieldnames=fieldnames
+            )
+            writer.writeheader()
+
+            for item in result.approved():
+                    item_data = item.to_dict()
+
+                    row = {
+                        field: item_data.get(field, "")
+                        for field in fieldnames
+                    }
+
+                    for field in list_fields:
+                        row[field] = ", ".join(
+                            item_data.get(field, [])
+                        )
+
+                    writer.writerow(row)
+
+
+    def save(self, result: RecommendationSet) -> str:
+        """Save JSON and CSV files and return the JSON filename."""
+        entries = self._read_index()
+        self._ensure_storage_directory()
+
+        timestamp = datetime.now().strftime(
+        "%Y%m%d_%H%M%S_%f"
+        )
+        destination_name = self._safe_name(
+            result.destination
+        )
+        base_name = f"{destination_name}_{timestamp}"
+
+        json_path = os.path.join(
+            self.__data_dir, base_name + ".json"
+        )
+        csv_path = os.path.join(
+            self.__data_dir, base_name + ".csv"
+        )
+
+        with open(
+            json_path, "x", encoding="utf-8"
+        ) as file:
+            json.dump(
+                result.to_dict(),
+                file,
+                indent=4,
+                ensure_ascii=False,
+            )
+
+        self._write_csv(result, csv_path)
+
+        entries.append(
+            {
+                "destination": result.destination,
+                "approved_count": len(result.approved()),
+                "json_path": json_path,
+                "csv_path": csv_path,
+                "saved_at": timestamp,
+            }
+        )
+
+        self._write_index(entries)
+
+        return os.path.basename(json_path)
