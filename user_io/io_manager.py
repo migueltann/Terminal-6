@@ -376,3 +376,71 @@ class IOManager:
                 continue
 
             print("Please choose 1, 2, or 3.")
+
+    def _show_item(self, item: Recommendation, index: int) -> None:
+        """Show one recommendation with the result of every rule check."""
+        print(f"\n#{index} {item.name}")
+        print(f"   Category: {item.category or item.item_type}")
+        print(f"   Location: {item.location or 'Not provided'}")
+        print(f"   Environment: {item.environment or 'Not provided'}")
+        cost_note = " per night" if item.item_type == "accommodation" else ""
+        print(f"   Estimated Spend: SGD ${item.cost_sgd:.2f}{cost_note}")
+        if item.description:
+            print(f"   Description: {item.description}")
+        print()
+
+        for check in item.results:
+            status = "PASS" if check.passed else "FAIL"
+            print(f"   [{status}] {check.label}: {check.detail}")
+
+        if item.is_eligible():
+            print("\n   STATUS: ELIGIBLE")
+            if item.is_top_pick():
+                print(f"   TOP PICK: {item.top_pick_reason or 'recommended'}")
+        else:
+            print("\n   STATUS: REJECTED")
+        print(self.DIVIDER)
+
+    def show_recommendations(self, result: RecommendationSet) -> None:
+        """Show eligible recommendations by category, filtered-out ones, and a summary."""
+        reqs = result.requirements
+
+        print("\n" + self.LINE)
+        print("TERMINAL-6 | PERSONALISED TRAVEL RECOMMENDATIONS")
+        print(self.LINE)
+        print(f"Destination: {result.destination}")
+        print(f"Preferred Activities: {', '.join(reqs.preferences_for('activity')) or 'Any'}")
+        print(f"Cuisine Preferences: {', '.join(reqs.preferences_for('food')) or 'Any'}")
+        print(f"Accommodation Preferences: {', '.join(reqs.preferences_for('accommodation')) or 'Any'}")
+        print(f"Shopping Preferences: {', '.join(reqs.preferences_for('shopping')) or 'Any'}")
+
+        grouped = result.by_category()
+        titles = {"activities": "ACTIVITIES", "food": "FOOD",
+                  "accommodation": "ACCOMMODATION", "shopping": "SHOPPING"}
+
+        print("\nRECOMMENDED FOR YOU")
+        print(self.LINE)
+        for number, (category, title) in enumerate(titles.items(), start=1):
+            print(f"\n[{number}] {title}")
+            print(self.DIVIDER)
+            items = grouped.get(category, [])
+            if not items:
+                print("No eligible recommendations.")
+                continue
+            for index, item in enumerate(items, start=1):
+                self._show_item(item, index)
+
+        print("\nFILTERED-OUT RECOMMENDATIONS")
+        print(self.LINE)
+        rejected = result.rejected_items()
+        if not rejected:
+            print("No recommendations were filtered out.")
+        for index, item in enumerate(rejected, start=1):
+            self._show_item(item, index)
+
+        print("\nSUMMARY")
+        print(self.LINE)
+        for category, title in titles.items():
+            print(f"Eligible {title.title()}: {len(grouped.get(category, []))}")
+        print(f"Filtered Out: {len(rejected)}")
+        print(self.LINE)
