@@ -53,3 +53,40 @@ class DayPlanner:
         end = start + self._duration(item)
         return ScheduledStop(self._clock(start), self._period(start), label, item,
                              self._clock(end))
+
+    @staticmethod
+    def _timed_label(item: ItineraryItem) -> str:
+        """Label for food the user placed themselves."""
+        # Only food gets a meal label
+        if item.item_type != "food":
+            return ""
+
+        # Use the meal the user picked if there is one
+        if item.meal:
+            return item.meal.title()
+
+        # no meal chosen so go by the time
+        hour = item.minutes() // 60
+        if hour < 11:
+            return "Breakfast"
+        return "Lunch" if hour < 16 else "Dinner"
+
+    @staticmethod
+    def _pick_meals(meals: list[ItineraryItem], lunch_taken: bool, dinner_taken: bool):
+        """Decides which unplaced food is lunch, dinner or an extra meal."""
+        # Separate the food based on what the user picked in the dropdown
+        lunches = [item for item in meals if item.meal == "lunch"]
+        dinners = [item for item in meals if item.meal == "dinner"]
+        auto = [item for item in meals if item.meal == ""]
+
+        # auto ones fill lunch first then dinner (unless the user already placed one)
+        if not lunches and auto and not lunch_taken:
+            lunches.append(auto.pop(0))
+        if not dinners and auto and not dinner_taken:
+            dinners.append(auto.pop(0))
+
+        # Take the first lunch and dinner, the rest become extra meals
+        lunch: Optional[ItineraryItem] = lunches[0] if lunches else None
+        dinner: Optional[ItineraryItem] = dinners[0] if dinners else None
+        extras = lunches[1:] + dinners[1:] + auto
+        return lunch, dinner, extras
