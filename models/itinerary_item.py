@@ -46,3 +46,30 @@ class ItineraryItem:
         if self.item_type == "accommodation":
             self.time = ""
             self.duration = 0 
+            
+    @staticmethod
+    def _valid_time(text: str) -> bool:
+        # checks for HH:MM format, blank is also ok
+        if text == "":
+            return True
+
+        # Split the time into hours and minutes
+        hours, _, minutes = text.partition(":")
+
+        # Both parts must be 2 digits and be a real time
+        return (len(hours) == 2 and len(minutes) == 2
+                and hours.isdigit() and minutes.isdigit()
+                and int(hours) < 24 and int(minutes) < 60)
+
+    def minutes(self) -> int:
+        """Start time in minutes from midnight, easier to compare."""
+        hours, minutes = self.time.split(":")
+        return int(hours) * 60 + int(minutes)
+
+    def to_dict(self) -> dict:
+        # Convert the item into a dictionary so it can be saved as JSON
+        return {"name": self.name, "type": self.item_type,
+                "cost_sgd": self.cost_sgd, "location": self.location,
+                "category": self.category, "description": self.description,
+                "top_pick": self.top_pick, "meal": self.meal, "time": self.time,
+                "duration": self.duration}
