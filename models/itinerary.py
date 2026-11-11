@@ -56,3 +56,16 @@ class Itinerary:
                 self.start_date = date.fromisoformat(self.start_date).isoformat()
             except ValueError as exc:
                 raise ValueError("The start date must be a valid date.") from exc
+
+    # ---------- dates and schedule ----------
+
+    def date_for(self, day_index: int) -> Optional[date]:
+        """Date of the day (day_index starts at 0). None if there's no start date."""
+        if not self.start_date:
+            return None
+        # Add the number of days to the start date
+        return date.fromisoformat(self.start_date) + timedelta(days=day_index)
+
+    def schedule(self, day_index: int) -> list[ScheduledStop]:
+        """The day's stops with their times."""
+        return DayPlanner().plan(self.days[day_index])
