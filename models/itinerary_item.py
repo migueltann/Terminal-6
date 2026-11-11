@@ -73,3 +73,17 @@ class ItineraryItem:
                 "category": self.category, "description": self.description,
                 "top_pick": self.top_pick, "meal": self.meal, "time": self.time,
                 "duration": self.duration}
+        
+    @classmethod
+    def from_dict(cls, data: dict) -> "ItineraryItem":
+        # Rebuild the item from the saved dictionary
+        # uses blanks for missing fields so older saved itineraries still load
+        return cls(name=str(data["name"]), item_type=str(data["type"]),
+                   cost_sgd=float(data["cost_sgd"]),
+                   location=str(data.get("location") or ""),
+                   category=str(data.get("category") or ""),
+                   description=str(data.get("description") or ""),
+                   top_pick=bool(data.get("top_pick", False)),
+                   meal=str(data.get("meal") or ""),
+                   time=str(data.get("time") or ""),
+                   duration=int(data.get("duration") or 0))
