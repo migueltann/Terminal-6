@@ -175,3 +175,34 @@ class Itinerary:
                  for item in day
                  if (item.name, item.item_type) in positions]
                 for day in self.days]
+
+    # ---------- saving / loading ----------
+
+    def to_dict(self) -> dict:
+        # totals are saved too so the list page can show them
+        return {
+            "title": self.title,
+            "destination": self.destination,
+            "source_id": self.source_id,
+            "daily_budget": self.daily_budget,
+            "start_date": self.start_date,
+            "days": [[item.to_dict() for item in day] for day in self.days],
+            "trip_total": self.trip_total(),
+            "over_budget_days": self.over_budget_days(),
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Itinerary":
+        # Check the saved data is a dictionary
+        if not isinstance(data, dict):
+            raise TypeError("Saved itinerary must be a dictionary")
+
+        # Rebuild the itinerary from the saved data
+        return cls(
+            title=str(data.get("title") or ""),
+            destination=str(data["destination"]),
+            source_id=str(data.get("source_id") or ""),
+            daily_budget=float(data["daily_budget"]),
+            days=[[ItineraryItem.from_dict(item) for item in day] for day in data["days"]],
+            start_date=str(data.get("start_date") or ""),
+        )
