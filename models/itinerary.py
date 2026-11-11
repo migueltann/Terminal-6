@@ -95,3 +95,13 @@ class Itinerary:
     def item_count(self) -> int:
         # Count how many places are in the whole trip
         return sum(len(day) for day in self.days)
+
+    # ---------- editing ----------
+
+    def add_item(self, day_index: int, item: ItineraryItem) -> None:
+        # Add a place to the end of the day
+        self.days[day_index].append(item)
+
+    def remove_item(self, day_index: int, position: int) -> ItineraryItem:
+        # Remove a place from the day and return it
+        return self.days[day_index].pop(position)
