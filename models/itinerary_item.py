@@ -22,3 +22,27 @@ class ItineraryItem:
     # Allowed meal choices and the longest something can last
     MEALS: ClassVar[tuple[str, ...]] = ("", "lunch", "dinner")
     MAX_DURATION: ClassVar[int] = 24 * 60
+
+    def __post_init__(self) -> None:
+        # validate the values when the item is created
+
+        # Check the meal is one of the allowed choices
+        if self.meal not in self.MEALS:
+            raise ValueError("A meal must be lunch, dinner or left blank.")
+        if self.item_type != "food":
+            self.meal = ""      # only food can be a meal
+
+        # Check the time is in the right format
+        if not isinstance(self.time, str) or not self._valid_time(self.time):
+            raise ValueError("A time must look like 09:00, or be left blank.")
+
+        # Check the duration is a whole number between 0 and 24 hours
+        # True/False would pass as int so block them too
+        if isinstance(self.duration, bool) or not isinstance(self.duration, int) \
+                or not 0 <= self.duration <= self.MAX_DURATION:
+            raise ValueError("A duration must be between 0 and 24 hours.")
+
+        # hotels are just the overnight stay so they don't get a time
+        if self.item_type == "accommodation":
+            self.time = ""
+            self.duration = 0 
