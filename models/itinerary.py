@@ -161,3 +161,17 @@ class Itinerary:
         return cls(title=title, destination=recommendation_set.destination,
                    source_id=str(source_id), daily_budget=daily_budget, days=days,
                    start_date=start_date)
+
+    def selection_for(self, recommendation_set: RecommendationSet) -> list[list[dict]]:
+        """Opposite of from_selection, used to reopen a saved itinerary in the
+        builder. Items that aren't in the set anymore are skipped."""
+        # map each recommendation to its position in the list
+        positions = {(item.name, item.item_type): index
+                     for index, item in enumerate(recommendation_set.approved())}
+
+        # Get the position and the user's choices for every place on every day
+        return [[{"index": positions[(item.name, item.item_type)],
+                  "meal": item.meal, "time": item.time, "duration": item.duration}
+                 for item in day
+                 if (item.name, item.item_type) in positions]
+                for day in self.days]
