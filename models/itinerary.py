@@ -105,3 +105,59 @@ class Itinerary:
     def remove_item(self, day_index: int, position: int) -> ItineraryItem:
         # Remove a place from the day and return it
         return self.days[day_index].pop(position)
+
+    # ---------- building from the builder page ----------
+
+    @classmethod
+    def from_selection(cls, recommendation_set: RecommendationSet, source_id: str,
+                       daily_budget: float, selection: list[list],
+                       title: str = "", start_date: str = "") -> "Itinerary":
+        """Builds the itinerary from what the builder page sends.
+
+        Each day is a list of positions in the approved list, either just the
+        number or a dict with the meal, time and duration the user picked.
+        We get the names and prices from the saved set instead of the browser
+        so the user can't change the price by editing the request.
+        """
+        # Check the plan is a list of days
+        if not isinstance(selection, list) or not all(isinstance(day, list) for day in selection):
+            raise ValueError("The plan must be a list of days.")
+
+        # Get the approved recommendations the user could pick from
+        approved = recommendation_set.approved()
+        days = []
+
+        # Go through each day and each place the user picked
+        for day in selection:
+            items = []
+            for entry in day:
+                # Get the position and the user's choices
+                if isinstance(entry, dict):
+                    position = entry.get("index")
+                    meal, time = entry.get("meal", ""), entry.get("time", "")
+                    duration = entry.get("duration", 0)
+                else:
+                    position, meal, time, duration = entry, "", "", 0
+
+                # True/False would pass as int so block them too
+                if isinstance(position, bool) or not isinstance(position, int) \
+                        or not 0 <= position < len(approved):
+                    raise ValueError("The plan refers to a recommendation that does not exist.")
+                if not isinstance(meal, str):
+                    raise ValueError("A meal must be lunch, dinner or left blank.")
+
+                # Copy the details from the saved recommendation
+                chosen = approved[position]
+                items.append(ItineraryItem(
+                    name=chosen.name, item_type=chosen.item_type,
+                    cost_sgd=chosen.cost_sgd, location=chosen.location,
+                    category=chosen.category, description=chosen.description,
+                    top_pick=chosen.is_top_pick(), meal=meal, time=time,
+                    duration=duration,
+                ))
+            days.append(items)
+
+        # Create the itinerary with all the days
+        return cls(title=title, destination=recommendation_set.destination,
+                   source_id=str(source_id), daily_budget=daily_budget, days=days,
+                   start_date=start_date)
