@@ -69,3 +69,29 @@ class Itinerary:
     def schedule(self, day_index: int) -> list[ScheduledStop]:
         """The day's stops with their times."""
         return DayPlanner().plan(self.days[day_index])
+
+    # ---------- budget ----------
+
+    def day_total(self, day_index: int) -> float:
+        # Add up the cost of everything on the day
+        return sum(item.cost_sgd for item in self.days[day_index])
+
+    def trip_total(self) -> float:
+        # Add up the cost of every day
+        return sum(self.day_total(index) for index in range(len(self.days)))
+
+    def trip_budget(self) -> float:
+        # Budget for the whole trip
+        return self.daily_budget * len(self.days)
+
+    def is_over_budget(self, day_index: int) -> bool:
+        # Check if the day costs more than the daily budget
+        return self.day_total(day_index) > self.daily_budget
+
+    def over_budget_days(self) -> list[int]:
+        """Day numbers that are over budget (starting from 1)."""
+        return [index + 1 for index in range(len(self.days)) if self.is_over_budget(index)]
+
+    def item_count(self) -> int:
+        # Count how many places are in the whole trip
+        return sum(len(day) for day in self.days)
