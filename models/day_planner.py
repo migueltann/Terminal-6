@@ -90,3 +90,16 @@ class DayPlanner:
         dinner: Optional[ItineraryItem] = dinners[0] if dinners else None
         extras = lunches[1:] + dinners[1:] + auto
         return lunch, dinner, extras
+
+    def _next_free(self, clock: int, length: int, busy: list[tuple[int, int]]) -> int:
+        """Finds the next time that doesn't clash with the user's placed items."""
+        # Keep checking until the time doesn't overlap anything
+        moved = True
+        while moved:
+            moved = False
+            for start, end in busy:
+                if clock < end and clock + length > start:   # overlaps
+                    # Move to after the busy time and check again
+                    clock = end
+                    moved = True
+        return clock
