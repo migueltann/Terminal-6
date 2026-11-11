@@ -103,3 +103,62 @@ class DayPlanner:
                     clock = end
                     moved = True
         return clock
+
+    def plan(self, items: list[ItineraryItem]) -> list[ScheduledStop]:
+        # Separate the hotels from everything else
+        stays = [item for item in items if item.item_type == "accommodation"]
+        others = [item for item in items if item.item_type != "accommodation"]
+
+        # Separate the places the user placed on the timeline from the ones they didn't
+        timed = [item for item in others if item.time]
+        untimed = [item for item in others if not item.time]
+
+        # placed items keep their time
+        timeline = [(item.minutes(), self._stop(item.minutes(), self._timed_label(item), item))
+                    for item in timed]
+
+        # Keep track of which times are already taken
+        busy = [(item.minutes(), item.minutes() + self._duration(item) + self.TRAVEL)
+                for item in timed]
+
+        # Check if the user already placed a lunch or dinner
+        labels = {stop.label for _, stop in timeline}
+
+        # the rest get an automatic time
+        meals = [item for item in untimed if item.item_type == "food"]
+        visits = [item for item in untimed if item.item_type != "food"]
+        lunch, dinner, extras = self._pick_meals(
+            meals, "Lunch" in labels, "Dinner" in labels)
+
+        # half the visits before lunch, the rest after, then dinner
+        half = (len(visits) + 1) // 2
+        sequence = [(item, "") for item in visits[:half]]
+        if lunch:
+            sequence.append((lunch, "Lunch"))
+        sequence += [(item, "") for item in visits[half:]]
+        if dinner:
+            sequence.append((dinner, "Dinner"))
+        sequence += [(item, "Extra meal") for item in extras]
+
+        # Start the day at 9am and go through each place in order
+        clock = self.DAY_START
+        for item, label in sequence:
+            # Make sure lunch and dinner aren't too early
+            if label == "Lunch":
+                clock = max(clock, self.LUNCH)
+            elif label == "Dinner":
+                clock = max(clock, self.DINNER)
+
+            # Find a free time for this place and add it to the timeline
+            length = self._duration(item) + self.TRAVEL
+            clock = self._next_free(clock, length, busy)
+            timeline.append((clock, self._stop(clock, label, item)))
+
+            # Move the clock forward to after this place
+            clock += length
+
+        # sort by time and add the hotel at the end
+        timeline.sort(key=lambda entry: entry[0])
+        stops = [stop for _, stop in timeline]
+        stops += [ScheduledStop("", "Overnight", "Stay", item) for item in stays]
+        return stops
