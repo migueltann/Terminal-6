@@ -13,3 +13,11 @@ class ItineraryManager:
     def __init__(self, repository: ItineraryRepository) -> None:
         # Keep the repository private
         self.__repository = repository
+
+    @staticmethod
+    def build(recommendation_set: RecommendationSet, source_id: str,
+              daily_budget: float, selection: list[list[int]],
+              title: str = "", start_date: str = "") -> Itinerary:
+        """Makes an Itinerary from what the user picked in the builder."""
+        return Itinerary.from_selection(recommendation_set, source_id,
+                                        daily_budget, selection, title, start_date)
