@@ -36,3 +36,121 @@ def trip():
 
 def names(day):
     return [item.name for item in day]
+
+
+# ---------- model: building and budget logic ----------
+
+def test_from_selection_uses_prices_from_the_saved_set(trip):
+    plan = Itinerary.from_selection(trip, "set-1", 200, [[0, 1], [2], []])
+
+    assert plan.title == "Singapore"
+    assert names(plan.days[0]) == ["Gardens by the Bay", "Maxwell Food Centre"]
+    assert plan.day_total(0) == 36
+    assert plan.day_total(2) == 0
+    assert plan.trip_total() == 166
+    assert plan.trip_budget() == 600
+
+
+def test_same_item_can_be_added_on_several_days(trip):
+    plan = Itinerary.from_selection(trip, "set-1", 200, [[2], [2], [2]])
+
+    assert plan.trip_total() == 390
+
+
+def test_over_budget_days_are_numbered_from_one(trip):
+    plan = Itinerary.from_selection(trip, "set-1", 100, [[0], [2], [2, 3]])
+
+    assert plan.over_budget_days() == [2, 3]
+    assert not plan.is_over_budget(0)
+
+
+def test_exactly_on_budget_is_not_over(trip):
+    plan = Itinerary.from_selection(trip, "set-1", 36, [[0, 1]])
+
+    assert plan.over_budget_days() == []
+
+
+@pytest.mark.parametrize("selection", [
+    [[99]], [[-1]], [["0"]], [[True]], [[1.0]], "not a list", [1, 2],
+])
+def test_invalid_selection_is_rejected(trip, selection):
+    with pytest.raises(ValueError):
+        Itinerary.from_selection(trip, "set-1", 200, selection)
+
+
+@pytest.mark.parametrize("days, budget", [
+    ([], 200),                       # no days
+    ([[]] * 15, 200),                # too many days
+    ([[]], -1),                      # negative budget
+    ([[]], float("nan")),            # not a number
+    ([[]], float("inf")),
+    ([[ItineraryItem("x", "food", 1)] * 31], 200),   # too many items in a day
+])
+def test_invalid_itinerary_is_rejected(days, budget):
+    with pytest.raises(ValueError):
+        Itinerary("Trip", "Singapore", "set-1", budget, days)
+
+
+def test_blank_title_falls_back_to_destination():
+    assert Itinerary("   ", "Tokyo", "set-1", 100, [[]]).title == "Tokyo"
+
+
+def test_add_and_remove_item():
+    plan = Itinerary("Trip", "Singapore", "set-1", 100, [[], []])
+    plan.add_item(1, ItineraryItem("Lau Pa Sat", "food", 15))
+
+    assert plan.day_total(1) == 15
+    assert plan.remove_item(1, 0).name == "Lau Pa Sat"
+    assert plan.trip_total() == 0
+
+
+def test_dict_round_trip(trip):
+    # day 1 = 28 + 40 = 68, day 2 = 130 (over a 100 budget)
+    plan = Itinerary.from_selection(trip, "set-1", 100, [[0, 3], [2]], "Weekend")
+    copy = Itinerary.from_dict(json.loads(json.dumps(plan.to_dict())))
+
+    assert copy == plan
+    assert plan.to_dict()["over_budget_days"] == [2]
+
+
+def test_selection_for_maps_items_back_to_positions(trip):
+    plan = Itinerary.from_selection(trip, "set-1", 200, [[3, 0], [], [1]])
+
+    assert plan.selection_for(trip) == [
+        [{"index": 3, "meal": "", "time": "", "duration": 0}, {"index": 0, "meal": "", "time": "", "duration": 0}],
+        [],
+        [{"index": 1, "meal": "", "time": "", "duration": 0}],
+    ]
+
+
+def test_meal_choice_is_kept_and_reopens_in_the_builder(trip):
+    # position 1 is Maxwell Food Centre (food)
+    plan = Itinerary.from_selection(trip, "set-1", 200, [[0, {"index": 1, "meal": "dinner", "time": "", "duration": 0}]])
+    copy = Itinerary.from_dict(json.loads(json.dumps(plan.to_dict())))
+
+    assert copy.days[0][1].meal == "dinner"
+    assert copy.selection_for(trip) == [[{"index": 0, "meal": "", "time": "", "duration": 0},
+                                         {"index": 1, "meal": "dinner", "time": "", "duration": 0}]]
+
+
+@pytest.mark.parametrize("entry", [
+    {"index": 1, "meal": "breakfast", "time": "", "duration": 0}, {"index": 1, "meal": None}, {"meal": "lunch"},
+])
+def test_invalid_meal_choice_is_rejected(trip, entry):
+    with pytest.raises(ValueError):
+        Itinerary.from_selection(trip, "set-1", 200, [[entry]])
+
+
+def test_meal_is_ignored_for_non_food_items(trip):
+    # position 0 is an activity, so a meal choice makes no sense
+    plan = Itinerary.from_selection(trip, "set-1", 200, [[{"index": 0, "meal": "lunch", "time": "", "duration": 0}]])
+
+    assert plan.days[0][0].meal == ""
+
+
+def test_selection_for_skips_items_no_longer_in_the_set(trip):
+    plan = Itinerary("Trip", "Singapore", "set-1", 200,
+                     [[ItineraryItem("Gone", "food", 5),
+                       ItineraryItem("Maxwell Food Centre", "food", 8)]])
+
+    assert plan.selection_for(trip) == [[{"index": 1, "meal": "", "time": "", "duration": 0}]]
