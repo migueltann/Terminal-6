@@ -89,3 +89,12 @@ class JsonItineraryRepository(ItineraryRepository):
     def _find(entries: list[dict], identifier: str) -> Optional[dict]:
         # Find the itinerary with this id, None if it's not there
         return next((entry for entry in entries if entry.get("id") == identifier), None)
+
+    def save(self, itinerary: Itinerary) -> str:
+        entries = self._read()
+        identifier = uuid.uuid4().hex        # random unique id
+
+        # Add the new itinerary with its id and saved time
+        entries.append({"id": identifier, **itinerary.to_dict(), "saved_at": _now()})
+        self._write(entries)
+        return identifier
