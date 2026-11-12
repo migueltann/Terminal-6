@@ -133,6 +133,44 @@ class JsonCsvRepository(RecommendationRepository):
 
         return True
 
+    def update(
+        self, identifier: str, result: RecommendationSet
+    ) -> bool:
+        """Overwrite a saved set's JSON/CSV files and refresh its index entry."""
+        entries = self._read_index()
+
+        entry = next(
+            (
+                entry
+                for entry in entries
+                if os.path.basename(
+                    entry.get("json_path", "")
+                ) == identifier
+            ),
+            None,
+        )
+
+        if entry is None:
+            return False
+
+        with open(
+            entry["json_path"], "w", encoding="utf-8"
+        ) as file:
+            json.dump(
+                result.to_dict(),
+                file,
+                indent=4,
+                ensure_ascii=False,
+            )
+
+        self._write_csv(result, entry["csv_path"])
+
+        entry["destination"] = result.destination
+        entry["approved_count"] = len(result.approved())
+        self._write_index(entries)
+
+        return True
+
     def _write_csv(
         self, result: RecommendationSet, path: str
     ) -> None:
