@@ -460,6 +460,83 @@
             // Highlight it if it's been tapped
             if (picked === item) { node.classList.add("picked"); }
         }
+
+        // the place name, tapping it selects it (tap again to unselect)
+        function pickButton(item, text) {
+            var name = el("button", "chip-name", text);
+            name.type = "button";
+            name.title = "Drag onto an hour, or tap here then tap an hour";
+            name.setAttribute("aria-pressed", picked === item ? "true" : "false");
+            name.addEventListener("click", function (event) {
+                event.stopPropagation();
+                // Select it, or unselect it if it was already selected
+                picked = picked === item ? null : item;
+                render();
+            });
+            return name;
+        }
+
+        // duration dropdown, only shows lengths that fit before the next item
+        function durationPicker(day, item) {
+            var select = el("select", "meal-select duration-select");
+            select.setAttribute("aria-label", "How long at " + item.name);
+            // Longest duration that still fits
+            var most = roomFrom(day, startHour(item), item);
+            // Add an option for each number of hours
+            for (var hours = 1; hours <= most; hours += 1) {
+                var option = el("option", "", hours + (hours === 1 ? " hr" : " hrs"));
+                option.value = String(hours);
+                select.appendChild(option);
+            }
+            // Show the current duration
+            select.value = String(spanHours(item));
+            select.addEventListener("click", function (event) { event.stopPropagation(); });
+            select.addEventListener("keydown", function (event) { event.stopPropagation(); });
+            select.addEventListener("change", function () {
+                // Save the duration in minutes
+                item.duration = parseInt(select.value, 10) * 60;
+                render();
+            });
+            // focus it straight after dropping so the user can pick the duration
+            if (justPlaced === item) {
+                justPlaced = null;
+                setTimeout(function () { select.focus(); }, 0);
+            }
+            return select;
+        }
+
+        // a place in the Your picks list
+        function pickChip(dayIndex, item, untimed) {
+            var chip = el("div", "pick chip type-" + item.type);
+            var isStay = item.type === "accommodation";
+
+            if (isStay) {
+                // hotels can't be dragged
+                chip.appendChild(el("span", "chip-name",
+                    item.name + " · " + money(item.cost) + " (overnight stay)"));
+            } else {
+                makeDraggable(chip, item);
+                chip.appendChild(pickButton(item, item.name + " · " + money(item.cost)));
+            }
+
+            var tools = el("span", "pick-tools");
+            // Food gets the meal dropdown
+            if (item.type === "food") { tools.appendChild(mealPicker(item)); }
+            // Only show the up / down buttons if it can move
+            var spot = untimed.indexOf(item);
+            if (spot > 0) {
+                tools.appendChild(smallButton("↑", "Move " + item.name + " up",
+                    function () { moveUntimed(dayIndex, item, -1); }));
+            }
+            if (spot < untimed.length - 1) {
+                tools.appendChild(smallButton("↓", "Move " + item.name + " down",
+                    function () { moveUntimed(dayIndex, item, 1); }));
+            }
+            tools.appendChild(smallButton("×", "Remove " + item.name,
+                function () { removeItem(dayIndex, item); }));
+            chip.appendChild(tools);
+            return chip;
+        }
     })();
     </script>
 </body>
