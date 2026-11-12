@@ -44,3 +44,17 @@ class ItineraryManager:
             return self.__repository.load(identifier)
         except (OSError, ValueError):
             return None
+
+    def update(self, identifier: str, itinerary: Itinerary) -> bool:
+        """Update. Returns False if not found or the file can't be written."""
+        try:
+            return self.__repository.update(identifier, itinerary)
+        except (OSError, ValueError):
+            return False
+
+    def delete(self, identifier: str) -> bool:
+        """Delete. Returns False if not found or the file can't be written."""
+        try:
+            return self.__repository.delete(identifier)
+        except (OSError, ValueError):
+            return False
