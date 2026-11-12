@@ -1128,3 +1128,110 @@ footer span:first-child {
 .saved-search .secondary {
     flex-shrink: 0;
 }
+
+/* ========================================
+   ITINERARY BUILDER
+======================================== */
+
+.topbar-links {
+    display: flex;
+    gap: 8px;
+}
+
+.builder {
+    display: grid;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.builder-pool {
+    background: #fbfaf6;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px;
+}
+
+.builder-pool-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.builder-pool-head h2 {
+    font-size: 15px;
+    margin: 0;
+}
+
+.type-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.chip-pool,
+.day-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip,
+.chip-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 7px 11px;
+    font: inherit;
+    font-size: 13px;
+    line-height: 1.2;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.chip-tag {
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-size: 12px;
+}
+
+button.chip {
+    cursor: pointer;
+    text-align: left;
+}
+
+button.chip:hover {
+    filter: brightness(0.96);
+}
+
+button.chip:focus-visible,
+.chip-remove:focus-visible,
+.day-card:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+}
+
+.type-activity      { background: #fbeeea; border-color: #dc9a8e; color: #8a3a2e; }
+.type-food          { background: #fbf2e3; border-color: #ddb069; color: #7a5216; }
+.type-shopping      { background: #e6f4ec; border-color: #78b597; color: #1f5a40; }
+.type-accommodation { background: #efedfb; border-color: #a49bdc; color: #463b8f; }
+
+.chip-remove {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0 2px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.chip-remove:hover {
+    opacity: 1;
+}
