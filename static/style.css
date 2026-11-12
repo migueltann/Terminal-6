@@ -1235,3 +1235,147 @@ button.chip:focus-visible,
 .chip-remove:hover {
     opacity: 1;
 }
+
+/* ---------- builder timeline ---------- */
+
+.chip-name {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+.chip.draggable {
+    cursor: grab;
+}
+
+.chip.dragging {
+    opacity: 0.4;
+}
+
+.chip.picked {
+    box-shadow: 0 0 0 2px #2c64a8;
+}
+
+/* Day being edited: "Your picks" on the left, hours on the right */
+.planner {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.picks {
+    display: grid;
+    gap: 8px;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 120px;
+    align-content: start;
+}
+
+.picks-title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 14px;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 6px;
+}
+
+.picks-note {
+    margin: 0;
+    font-size: 12px;
+}
+
+.picks.drop-hover {
+    background: #eef4fc;
+}
+
+.pick,
+.block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.pick-tools {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.timeline-hint {
+    margin: 0 0 8px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.timeline-hint.active {
+    color: #2c64a8;
+    font-weight: 600;
+}
+
+.timeline {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    grid-auto-rows: minmax(44px, auto);
+    column-gap: 10px;
+    row-gap: 4px;
+}
+
+.slot-time {
+    grid-column: 1;
+    padding-top: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.slot {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    font-size: 12px;
+    color: #a0a9a2;
+}
+
+.slot.can-drop {
+    cursor: pointer;
+}
+
+.slot.can-drop:hover,
+.slot.drop-hover {
+    background: #eef4fc;
+    border-color: #6f9fd8;
+    color: #2c64a8;
+}
+
+.block {
+    grid-column: 2;
+    align-content: flex-start;
+    border-left-width: 4px;
+}
+
+.block-time {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+    .planner {
+        grid-template-columns: 1fr;
+    }
+}
