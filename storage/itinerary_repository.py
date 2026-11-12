@@ -56,3 +56,36 @@ class ItineraryRepository(ABC):
     @abstractmethod
     def delete(self, identifier: str) -> bool:
         """Delete: removes an itinerary, False if the id doesn't exist."""
+
+
+class JsonItineraryRepository(ItineraryRepository):
+    """Saves all itineraries in one JSON file as a list."""
+
+    def __init__(self, data_dir: str = "data") -> None:
+        # Set up the folder and the file path
+        self.__data_dir = data_dir
+        self.__path = os.path.join(data_dir, "itineraries.json")
+
+    def _read(self) -> list[dict]:
+        # Read all the itineraries from the file
+        try:
+            with open(self.__path, "r", encoding="utf-8") as file:
+                entries = json.load(file)
+        except FileNotFoundError:
+            return []           # nothing saved yet
+        except json.JSONDecodeError as exc:
+            raise ValueError("The itineraries file is damaged.") from exc
+        return entries if isinstance(entries, list) else []
+
+    def _write(self, entries: list[dict]) -> None:
+        # Create the folder if it doesn't exist
+        os.makedirs(self.__data_dir, exist_ok=True)
+
+        # Save all the itineraries back into the file
+        with open(self.__path, "w", encoding="utf-8") as file:
+            json.dump(entries, file, indent=4, ensure_ascii=False)
+
+    @staticmethod
+    def _find(entries: list[dict], identifier: str) -> Optional[dict]:
+        # Find the itinerary with this id, None if it's not there
+        return next((entry for entry in entries if entry.get("id") == identifier), None)
