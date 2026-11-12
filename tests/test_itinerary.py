@@ -366,3 +366,133 @@ def test_invalid_start_date_is_rejected(web):
     })
 
     assert plans.find() == []
+
+
+# ---------- day planner: turning picks into a timed schedule ----------
+
+def item(name, item_type, meal=""):
+    return ItineraryItem(name, item_type, 10, meal=meal)
+
+
+def timeline(stops):
+    return [(stop.time, stop.label, stop.item.name) for stop in stops]
+
+
+def test_planner_builds_a_realistic_day():
+    stops = DayPlanner().plan([
+        item("Hotel", "accommodation"),
+        item("Museum", "activity"),
+        item("Hawker", "food"),
+        item("Garden", "activity"),
+        item("Mall", "shopping"),
+        item("Restaurant", "food"),
+    ])
+
+    assert timeline(stops) == [
+        ("09:00", "", "Museum"),          # 2h + 30 min travel
+        ("11:30", "", "Garden"),          # first half of visits = morning
+        ("14:00", "Lunch", "Hawker"),     # already past 12:00
+        ("15:30", "", "Mall"),
+        ("18:30", "Dinner", "Restaurant"),
+        ("", "Stay", "Hotel"),            # accommodation goes last
+    ]
+    assert [stop.period for stop in stops] == [
+        "Morning", "Morning", "Afternoon", "Afternoon", "Evening", "Overnight"]
+
+
+def test_lunch_waits_until_noon():
+    stops = DayPlanner().plan([item("Museum", "activity"), item("Cafe", "food")])
+
+    assert timeline(stops) == [("09:00", "", "Museum"), ("12:00", "Lunch", "Cafe")]
+
+
+def test_extra_meals_come_after_dinner():
+    stops = DayPlanner().plan([item("A", "food"), item("B", "food"), item("C", "food")])
+
+    assert [stop.label for stop in stops] == ["Lunch", "Dinner", "Extra meal"]
+    assert stops[2].time == "20:00"
+
+
+def test_day_can_skip_lunch_and_only_have_dinner():
+    stops = DayPlanner().plan([item("Museum", "activity"),
+                               item("Steakhouse", "food", "dinner")])
+
+    assert timeline(stops) == [("09:00", "", "Museum"), ("18:30", "Dinner", "Steakhouse")]
+
+
+def test_marked_meals_override_the_order_they_were_added():
+    stops = DayPlanner().plan([item("Steakhouse", "food", "dinner"),
+                               item("Hawker", "food", "lunch")])
+
+    assert timeline(stops) == [("12:00", "Lunch", "Hawker"),
+                               ("18:30", "Dinner", "Steakhouse")]
+
+
+def test_auto_food_fills_the_slot_that_is_still_empty():
+    stops = DayPlanner().plan([item("Cafe", "food"), item("Hawker", "food", "lunch")])
+
+    assert timeline(stops) == [("12:00", "Lunch", "Hawker"), ("18:30", "Dinner", "Cafe")]
+
+
+def timed(name, item_type, time, meal=""):
+    return ItineraryItem(name, item_type, 10, meal=meal, time=time)
+
+
+def test_places_on_the_timeline_keep_their_time():
+    stops = DayPlanner().plan([timed("Night market", "shopping", "20:00"),
+                               timed("Zoo", "activity", "08:00")])
+
+    assert timeline(stops) == [("08:00", "", "Zoo"), ("20:00", "", "Night market")]
+    assert [stop.period for stop in stops] == ["Morning", "Evening"]
+
+
+def test_untimed_places_are_fitted_around_timed_ones():
+    # The zoo is 09:00-11:30 (2h + travel), so the museum has to wait until 11:30.
+    stops = DayPlanner().plan([item("Museum", "activity"),
+                               timed("Zoo", "activity", "09:00")])
+
+    assert timeline(stops) == [("09:00", "", "Zoo"), ("11:30", "", "Museum")]
+
+
+def test_timed_food_is_labelled_by_time_of_day():
+    stops = DayPlanner().plan([timed("Kaya toast", "food", "08:00"),
+                               timed("Hawker", "food", "13:00"),
+                               timed("Steakhouse", "food", "19:00")])
+
+    assert [stop.label for stop in stops] == ["Breakfast", "Lunch", "Dinner"]
+
+
+def test_timed_lunch_means_auto_food_becomes_dinner():
+    stops = DayPlanner().plan([item("Cafe", "food"), timed("Hawker", "food", "12:00")])
+
+    assert timeline(stops) == [("12:00", "Lunch", "Hawker"), ("18:30", "Dinner", "Cafe")]
+
+
+@pytest.mark.parametrize("bad_time", ["9:00", "24:00", "12:60", "noon", "12-00"])
+def test_invalid_time_is_rejected(bad_time):
+    with pytest.raises(ValueError):
+        ItineraryItem("Zoo", "activity", 10, time=bad_time)
+
+
+def test_a_stay_ignores_any_time():
+    assert ItineraryItem("Hotel", "accommodation", 100, time="15:00").time == ""
+
+
+def test_chosen_duration_sets_the_end_time_and_blocks_that_time():
+    # Bugis Street 09:00 for 3 hours, so the museum can't start until 12:30.
+    stops = DayPlanner().plan([
+        item("Museum", "activity"),
+        ItineraryItem("Bugis Street", "shopping", 10, time="09:00", duration=180),
+    ])
+
+    assert [(stop.time, stop.end, stop.item.name) for stop in stops] == [
+        ("09:00", "12:00", "Bugis Street"),
+        ("12:30", "14:30", "Museum"),     # usual 2 hours for an activity
+    ]
+
+
+@pytest.mark.parametrize("bad_duration", [-60, 24 * 60 + 1, 1.5, "60", True])
+def test_invalid_duration_is_rejected(bad_duration):
+    with pytest.raises(ValueError):
+        ItineraryItem("Zoo", "activity", 10, time="09:00", duration=bad_duration)
+
