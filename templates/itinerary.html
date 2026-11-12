@@ -210,6 +210,68 @@
         var totalEl = document.getElementById("trip-total");
         var tripBudgetEl = document.getElementById("trip-budget");
 
+        // ---------- helpers ----------
+
+        function money(value) {
+            // Round to 2 decimal places and add the $ sign
+            var rounded = Math.round(value * 100) / 100;
+            return "$" + (Number.isInteger(rounded) ? rounded : rounded.toFixed(2));
+        }
+
+        // daily budget from the input box (0 if it's empty or invalid)
+        function budget() {
+            var value = parseFloat(budgetEl.value);
+            return isFinite(value) && value >= 0 ? value : 0;
+        }
+
+        function dayTotal(day) {
+            // Add up the cost of every place on the day
+            return day.reduce(function (sum, item) { return sum + item.cost; }, 0);
+        }
+
+        // hour number to "HH:00"
+        function hourLabel(hour) {
+            return (hour < 10 ? "0" : "") + hour + ":00";
+        }
+
+        // creates an element, uses textContent instead of innerHTML for safety
+        function el(tag, className, text) {
+            var node = document.createElement(tag);
+            if (className) { node.className = className; }
+            if (text !== undefined) { node.textContent = text; }
+            return node;
+        }
+
+        // small icon button (×, ↑, ↓ etc)
+        function smallButton(text, label, onClick) {
+            var button = el("button", "chip-remove", text);
+            button.type = "button";
+            button.setAttribute("aria-label", label);
+            button.addEventListener("click", function (event) {
+                event.stopPropagation();   // so it doesn't also click the day card
+                onClick();
+            });
+            return button;
+        }
+
+        // Auto / Lunch / Dinner dropdown for food
+        function mealPicker(item) {
+            var select = el("select", "meal-select");
+            select.setAttribute("aria-label", "Meal for " + item.name);
+            // Add the three options to the dropdown
+            [["", "Auto"], ["lunch", "Lunch"], ["dinner", "Dinner"]].forEach(function (option) {
+                var node = el("option", "", option[1]);
+                node.value = option[0];
+                select.appendChild(node);
+            });
+            // Show the meal the user picked before
+            select.value = item.meal || "";
+            select.addEventListener("click", function (event) { event.stopPropagation(); });
+            select.addEventListener("keydown", function (event) { event.stopPropagation(); });
+            // Save the new choice when the user changes it
+            select.addEventListener("change", function () { item.meal = select.value; });
+            return select;
+        }
     })();
     </script>
 </body>
