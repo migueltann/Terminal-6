@@ -37,3 +37,10 @@ class ItineraryManager:
             if keyword in str(entry.get("title", "")).lower()
             or keyword in str(entry.get("destination", "")).lower()
         ]
+
+    def load(self, identifier: str) -> Optional[Itinerary]:
+        """Read one itinerary, returns None if it's missing or can't be read."""
+        try:
+            return self.__repository.load(identifier)
+        except (OSError, ValueError):
+            return None
