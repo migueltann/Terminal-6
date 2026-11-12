@@ -132,7 +132,7 @@ class TravelAssistant:
 
 
     def show_saved_menu(self) -> None:
-        """Allow users to view, search and delete saved trips."""
+        """Allow users to view, search, rename and delete saved trips."""
 
         keyword = ""
 
@@ -156,7 +156,7 @@ class TravelAssistant:
                 keyword = value
                 continue
 
-            if action not in {"view", "delete"}:
+            if action not in {"view", "delete", "rename"}:
                 self._io_manager.show_error("Invalid choice.")
                 continue
 
@@ -187,6 +187,22 @@ class TravelAssistant:
                     )
                 else:
                     self._io_manager.show_recommendations(result)
+
+            elif action == "rename":
+                new_name = self._io_manager.ask_new_name(
+                    saved[index].get("destination", "")
+                )
+
+                if not new_name:
+                    self._io_manager.show_message("Rename cancelled.")
+                elif self._data_manager.rename(filename, new_name):
+                    self._io_manager.show_message(
+                        f"Recommendation set renamed to '{new_name}'."
+                    )
+                else:
+                    self._io_manager.show_error(
+                        "Unable to rename recommendation set."
+                    )
 
             elif action == "delete":
                 confirm = self._io_manager.ask_yes_no(
