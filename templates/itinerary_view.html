@@ -31,5 +31,49 @@
         </nav>
     </header>
 
+    <main class="shell iv">
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }} no-print">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Trip cover -->
+        <section class="iv-cover">
+            <p class="eyebrow">YOUR ITINERARY · {{ itinerary.destination | upper }}</p>
+
+            <h1>{{ itinerary.title }}</h1>
+
+            <p class="iv-subtitle">
+                {{ itinerary.days | length }}-day trip to {{ itinerary.destination }}
+                {% if date_range %} · {{ date_range }}{% endif %}
+            </p>
+
+            <!-- Trip stats -->
+            <dl class="iv-stats">
+                <div>
+                    <dt>Days</dt>
+                    <dd>{{ itinerary.days | length }}</dd>
+                </div>
+                <div>
+                    <dt>Stops</dt>
+                    <dd>{{ itinerary.item_count() }}</dd>
+                </div>
+                <div>
+                    <dt>Estimated total</dt>
+                    <dd>${{ '%.2f' | format(itinerary.trip_total()) }}</dd>
+                </div>
+                <div>
+                    <dt>Budget</dt>
+                    <dd>${{ '%.2f' | format(itinerary.trip_budget()) }}</dd>
+                </div>
+            </dl>
+
+        </section>
+    </main>
 </body>
 </html>
