@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ itinerary.title }} · Itinerary · Terminal 6</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="topbar no-print">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">T6</span>
+
+            <span>
+                TERMINAL 6
+                <small>TRAVEL RECOMMENDATION ASSISTANT</small>
+            </span>
+        </a>
+
+        <nav class="topbar-links">
+            <a class="secondary" href="{{ url_for('saved_sets') }}">Saved trips</a>
+            <a class="secondary" href="{{ url_for('itineraries') }}">Itineraries</a>
+        </nav>
+    </header>
+
+</body>
+</html>
