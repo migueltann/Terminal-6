@@ -96,6 +96,32 @@
             </nav>
         </section>
 
+        <!-- One sheet per day -->
+        {% for day in days %}
+            <section class="iv-day" id="day-{{ day.number }}">
+                <!-- Day heading and total cost -->
+                <header class="iv-day-head">
+                    <div>
+                        <p class="eyebrow">DAY {{ day.number }}</p>
+                        <h2>{{ day.date or 'Day ' ~ day.number }}</h2>
+                    </div>
+
+                    <span class="iv-spend {{ 'over' if day.over }}">
+                        ${{ '%.2f' | format(day.total) }}
+                        <small>of ${{ '%.2f' | format(itinerary.daily_budget) }}</small>
+                    </span>
+                </header>
+
+                <!-- Warning if the day is over budget -->
+                {% if day.over %}
+                    <p class="iv-warning">
+                        This day is ${{ '%.2f' | format(day.total - itinerary.daily_budget) }}
+                        over your daily budget.
+                    </p>
+                {% endif %}
+
+            </section>
+        {% endfor %}
     </main>
 </body>
 </html>
