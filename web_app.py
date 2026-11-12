@@ -501,6 +501,28 @@ def delete_saved(filename):
     return redirect(url_for("saved_sets"))
 
 
+@app.post("/saved/rename/<path:filename>")
+def rename_saved(filename):
+    """Rename a saved recommendation set."""
+    new_name = request.form.get("new_name", "").strip()
+
+    if not new_name:
+        flash("Please enter a new name.", "error")
+        return redirect(url_for("saved_sets"))
+
+    if len(new_name) > 100:
+        flash("The new name must be 100 characters or fewer.", "error")
+        return redirect(url_for("saved_sets"))
+
+    manager = DataManager(JsonCsvRepository())
+
+    if manager.rename(os.path.basename(filename), new_name):
+        flash(f"Saved set renamed to '{new_name}'.", "success")
+    else:
+        flash("Could not rename that saved recommendation set.", "error")
+
+    return redirect(url_for("saved_sets"))
+
 
 # ========================================
 # ITINERARY BUILDER
