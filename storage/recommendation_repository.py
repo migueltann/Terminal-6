@@ -22,6 +22,11 @@ class RecommendationRepository(ABC):
         pass
 
     @abstractmethod
+    def update(self, identifier: str, result: RecommendationSet) -> bool:
+        """Replace a saved set; return False if its identifier is unknown."""
+        pass
+
+    @abstractmethod
     def delete(self, identifier: str) -> bool:
         """Delete a saved set; return False if its identifier is unknown."""
         pass
