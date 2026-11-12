@@ -128,6 +128,29 @@
                             </a>
 
                             <form
+                                class="rename-form"
+                                method="post"
+                                action="{{ url_for(
+                                    'rename_saved',
+                                    filename=item.filename
+                                ) }}"
+                            >
+                                <input
+                                    name="new_name"
+                                    value="{{ item.destination }}"
+                                    maxlength="100"
+                                    required
+                                    aria-label="New name for {{ item.destination }}"
+                                >
+                                <button
+                                    class="secondary"
+                                    type="submit"
+                                >
+                                    Rename
+                                </button>
+                            </form>
+
+                            <form
                                 method="post"
                                 action="{{ url_for(
                                     'delete_saved',

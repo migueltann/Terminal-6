@@ -832,6 +832,16 @@ textarea.invalid-field:focus {
     margin: 0;
 }
 
+.saved-actions .rename-form {
+    display: flex;
+    gap: 6px;
+}
+
+.saved-actions .rename-form input {
+    width: 160px;
+    min-width: 0;
+}
+
 .saved-actions .primary,
 .saved-actions .secondary {
     padding: 10px 13px;
