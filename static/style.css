@@ -1495,3 +1495,162 @@ select.meal-select {
     }
 }
 
+
+/* ========================================
+   ITINERARY VIEW (the finished, followable plan)
+======================================== */
+
+.optional {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.builder-tip {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.builder-footer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.iv {
+    max-width: 880px;
+}
+
+.iv-cover {
+    padding: 44px 0 26px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 26px;
+}
+
+.iv-cover h1 {
+    font-size: clamp(32px, 6vw, 52px);
+    line-height: 1.05;
+    margin: 6px 0 10px;
+    overflow-wrap: anywhere;
+}
+
+.iv-subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0 0 22px;
+}
+
+.iv-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 0 0 22px;
+}
+
+.iv-stats div {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.iv-stats dt {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.iv-stats dd {
+    margin: 4px 0 0;
+    font-size: 20px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.iv-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.iv-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.iv-jump a {
+    display: inline-flex;
+    flex-direction: column;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.iv-jump a span {
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.iv-jump a.over {
+    border-color: var(--red);
+}
+
+.iv-day {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 20px;
+    scroll-margin-top: 16px;
+}
+
+.iv-day-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.iv-day-head h2 {
+    margin: 2px 0 0;
+    font-size: 22px;
+}
+
+.iv-spend {
+    text-align: right;
+    font-weight: 700;
+    font-size: 18px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.iv-spend small {
+    display: block;
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.iv-spend.over {
+    color: var(--red);
+}
+
+.iv-warning {
+    background: #fdf1ee;
+    color: var(--red);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin: -6px 0 18px;
+}
