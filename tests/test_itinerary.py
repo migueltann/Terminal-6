@@ -496,3 +496,59 @@ def test_invalid_duration_is_rejected(bad_duration):
     with pytest.raises(ValueError):
         ItineraryItem("Zoo", "activity", 10, time="09:00", duration=bad_duration)
 
+
+def test_web_builder_saves_the_chosen_time(web):
+    client, set_id, plans, _ = web
+    client.post("/itineraries/save", data={
+        "set_id": set_id, "title": "Timed", "daily_budget": "200",
+        "plan": json.dumps([[{"index": 0, "meal": "", "time": "15:00", "duration": 120}]]),
+    })
+
+    saved = plans.load(plans.find()[0]["id"])
+    assert saved.days[0][0].time == "15:00"
+    assert saved.days[0][0].duration == 120
+    assert (saved.schedule(0)[0].time, saved.schedule(0)[0].end) == ("15:00", "17:00")
+
+
+def test_web_builder_saves_the_meal_choice(web):
+    client, set_id, plans, _ = web
+    client.post("/itineraries/save", data={
+        "set_id": set_id, "title": "Dinner only", "daily_budget": "200",
+        "plan": json.dumps([[{"index": 1, "meal": "dinner", "time": "", "duration": 0}]]),
+    })
+
+    saved = plans.load(plans.find()[0]["id"])
+    assert saved.days[0][0].meal == "dinner"
+
+
+def test_empty_day_has_no_stops():
+    assert DayPlanner().plan([]) == []
+
+
+def test_dates_follow_the_start_date(trip):
+    plan = Itinerary.from_selection(trip, "set-1", 200, [[], [], []],
+                                    start_date="2026-12-31")
+
+    assert str(plan.date_for(0)) == "2026-12-31"
+    assert str(plan.date_for(2)) == "2027-01-02"
+    assert Itinerary("x", "y", "z", 1, [[]]).date_for(0) is None
+
+
+def test_snapshot_keeps_description_and_category(trip):
+    plan = Itinerary.from_selection(trip, "set-1", 200, [[0]])
+    copy = Itinerary.from_dict(plan.to_dict())
+
+    assert copy.days[0][0].description == "A test item"
+    assert copy.days[0][0].category == "Test"
+
+
+def test_older_saved_itineraries_still_load():
+    """Itineraries saved before descriptions and dates were added."""
+    plan = Itinerary.from_dict({
+        "title": "Old", "destination": "Tokyo", "source_id": "s",
+        "daily_budget": 100,
+        "days": [[{"name": "Shrine", "type": "activity", "cost_sgd": 0, "location": ""}]],
+    })
+
+    assert plan.start_date == ""
+    assert plan.days[0][0].description == ""
