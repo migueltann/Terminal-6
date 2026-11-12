@@ -118,6 +118,17 @@
                     </article>
                 {% endfor %}
             </div>
+        {% else %}
+            <!-- No itineraries found -->
+            <section class="recommendation-card">
+                {% if keyword %}
+                    <p>No itineraries match "{{ keyword }}".</p>
+                {% else %}
+                    <p>No itineraries yet. Open a saved trip and choose
+                       <strong>Plan itinerary</strong> to make one.</p>
+                {% endif %}
+                <a class="primary" href="{{ url_for('saved_sets') }}">Go to saved trips</a>
+            </section>
         {% endif %}
     </main>
 </body>
