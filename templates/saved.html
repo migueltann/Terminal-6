@@ -25,9 +25,14 @@
             </span>
         </a>
 
-        <a class="secondary" href="{{ url_for('index') }}">
-            ← Plan a trip
-        </a>
+        <nav class="topbar-links">
+            <a class="secondary" href="{{ url_for('itineraries') }}">
+                Itineraries
+            </a>
+            <a class="secondary" href="{{ url_for('index') }}">
+                ← Plan a trip
+            </a>
+        </nav>
     </header>
 
     <!-- Main Content -->
@@ -110,6 +115,16 @@
                                 ) }}"
                             >
                                 View results ↗
+                            </a>
+
+                            <a
+                                class="primary"
+                                href="{{ url_for(
+                                    'new_itinerary',
+                                    set_id=item.filename
+                                ) }}"
+                            >
+                                Plan itinerary
                             </a>
 
                             <form
