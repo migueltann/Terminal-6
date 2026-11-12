@@ -115,6 +115,29 @@ def test_missing_identifier_is_handled(manager):
     assert manager.delete("missing.json") is False
 
 
+def test_rename_rewrites_files_and_index(manager, sample_result):
+    identifier = manager.save(sample_result)
+
+    assert manager.rename(identifier, "Singapore Weekend") is True
+
+    entry = manager.find()[0]
+    assert entry["filename"] == identifier
+    assert entry["destination"] == "Singapore Weekend"
+    assert manager.load(identifier).destination == "Singapore Weekend"
+
+
+def test_update_unknown_identifier_returns_false(manager, sample_result):
+    assert manager.update("missing.json", sample_result) is False
+    assert manager.rename("missing.json", "New name") is False
+
+
+def test_rename_rejects_blank_name(manager, sample_result):
+    identifier = manager.save(sample_result)
+
+    with pytest.raises(ValueError):
+        manager.rename(identifier, "   ")
+
+
 def test_two_saves_create_separate_sets(manager, sample_result):
     first = manager.save(sample_result)
     second = manager.save(sample_result)
