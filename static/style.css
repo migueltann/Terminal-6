@@ -1869,3 +1869,91 @@ select.meal-select {
     line-height: 1.5;
     margin-top: 12px;
 }
+
+@media (max-width: 700px) {
+    .builder-controls {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* keep the top bar inside a phone screen */
+    .topbar {
+        padding: 0 16px;
+        gap: 10px;
+    }
+
+    .brand small {
+        display: none;
+    }
+
+    .topbar-links {
+        gap: 6px;
+    }
+
+    .topbar-links .secondary {
+        padding: 9px 10px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .shell {
+        padding: 0 16px;
+    }
+
+    .iv-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .iv-day {
+        padding: 18px 14px;
+    }
+
+    .iv-stop {
+        grid-template-columns: 52px 14px 1fr;
+        gap: 8px;
+    }
+
+    .iv-stop::before {
+        left: 65px;
+    }
+
+    .iv-time strong {
+        font-size: 14px;
+    }
+
+    .iv-stay {
+        grid-template-columns: auto 1fr;
+    }
+
+    .iv-stay-side {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+/* Print / Save as PDF: just the plan, one day per page where possible */
+@media print {
+    .no-print,
+    .topbar {
+        display: none !important;
+    }
+
+    body {
+        background: #fff;
+    }
+
+    .iv-cover {
+        padding-top: 0;
+    }
+
+    .iv-day {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border-color: #ccc;
+    }
+
+    .iv-card-foot a,
+    .iv-stay-side a {
+        display: none;
+    }
+}
