@@ -478,17 +478,25 @@ class IOManager:
         """Ask what to do in the saved sets menu.
 
         Returns (action, value):
-        ("view", "2"), ("filter", "paris"), ("delete", "3"), ("back", "") or ("invalid", text)
+        ("view", "2"), ("filter", "paris"), ("rename", "1"), ("delete", "3"),
+        ("back", "") or ("invalid", text)
         """
-        print("\nEnter a number to view, F to filter by destination, D to delete, or B to go back.")
+        print("\nEnter a number to view, F to filter by destination, R to rename, "
+              "D to delete, or B to go back.")
         choice = input("Choice: ").strip().lower()
 
         if choice in self.BACK_COMMANDS or self._is_exit(choice):
             return "back", ""
         if choice == "f":
             return "filter", input("Destination to search for (blank shows all): ").strip()
+        if choice == "r":
+            return "rename", input("Number to rename: ").strip()
         if choice == "d":
             return "delete", input("Number to delete: ").strip()
         if choice.isdigit():
             return "view", choice
         return "invalid", choice
+
+    def ask_new_name(self, current: str = "") -> str:
+        """Ask for a new name for a saved set (blank cancels)."""
+        return input(f"New name for '{current}' (blank to cancel): ").strip()
