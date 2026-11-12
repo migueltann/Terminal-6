@@ -1654,3 +1654,218 @@ select.meal-select {
     font-size: 13px;
     margin: -6px 0 18px;
 }
+
+.iv-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.iv-stop {
+    display: grid;
+    grid-template-columns: 74px 18px 1fr;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 18px;
+}
+
+/* the vertical line joining the dots */
+.iv-stop::before {
+    content: "";
+    position: absolute;
+    left: 94px;
+    top: 18px;
+    bottom: -2px;
+    width: 2px;
+    background: var(--line);
+}
+
+.iv-stop:last-child::before {
+    display: none;
+}
+
+.iv-time {
+    text-align: right;
+    padding-top: 2px;
+}
+
+.iv-time strong {
+    display: block;
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+}
+
+.iv-time span {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.iv-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid;
+    margin-top: 5px;
+    position: relative;
+    z-index: 1;
+}
+
+.iv-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: #fcfcfa;
+    min-width: 0;
+}
+
+.iv-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin: 0 0 6px;
+}
+
+.iv-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green);
+}
+
+.iv-top {
+    font-size: 12px;
+    color: #8a6a10;
+    font-weight: 700;
+}
+
+.iv-card h3,
+.iv-stay h3 {
+    margin: 0 0 4px;
+    font-size: 17px;
+    overflow-wrap: anywhere;
+}
+
+.iv-meta {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+}
+
+.iv-desc {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.iv-card-foot,
+.iv-stay-side {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    align-items: center;
+    margin: 10px 0 0;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+.iv-card-foot a,
+.iv-stay-side a {
+    color: var(--green);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.iv-card-foot a:hover,
+.iv-stay-side a:hover {
+    text-decoration: underline;
+}
+
+.iv-free {
+    color: var(--muted);
+    font-style: italic;
+    margin: 0 0 6px;
+}
+
+.iv-stay {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+    margin-top: 6px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #efedfb;
+    border: 1px solid #d6d1f3;
+}
+
+.iv-stay + .iv-stay {
+    margin-top: 10px;
+}
+
+.iv-stay-icon {
+    width: 28px;
+    height: 28px;
+    color: #463b8f;
+}
+
+.iv-stay-side {
+    margin: 0;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.iv-summary {
+    margin: 30px 0 50px;
+}
+
+.iv-summary h2 {
+    font-size: 20px;
+}
+
+.iv-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.iv-summary table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+.iv-summary th,
+.iv-summary td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+}
+
+.iv-summary td small {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.iv-summary tr.over td {
+    color: var(--red);
+}
+
+.iv-summary tfoot th,
+.iv-summary tfoot td {
+    font-weight: 700;
+    border-bottom: 0;
+}
+
+.iv-note {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 12px;
+}
