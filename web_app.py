@@ -4,6 +4,7 @@ import math
 import os
 import traceback
 import uuid
+from urllib.parse import quote_plus
 
 from flask import (
     Flask, 
@@ -23,6 +24,9 @@ from travel_assistant import TravelAssistant
 from models import UserRequirements
 from storage.data_manager import DataManager
 from storage.json_csv_repository import JsonCsvRepository
+from storage.itinerary_repository import JsonItineraryRepository
+from storage.itinerary_manager import ItineraryManager
+from models import Itinerary
 from models import RecommendationSet
 from user_io.destination_validator import DestinationValidator
 
@@ -495,6 +499,331 @@ def delete_saved(filename):
         )
 
     return redirect(url_for("saved_sets"))
+
+
+@app.post("/saved/rename/<path:filename>")
+def rename_saved(filename):
+    """Rename a saved recommendation set."""
+    new_name = request.form.get("new_name", "").strip()
+
+    if not new_name:
+        flash("Please enter a new name.", "error")
+        return redirect(url_for("saved_sets"))
+
+    if len(new_name) > 100:
+        flash("The new name must be 100 characters or fewer.", "error")
+        return redirect(url_for("saved_sets"))
+
+    manager = DataManager(JsonCsvRepository())
+
+    if manager.rename(os.path.basename(filename), new_name):
+        flash(f"Saved set renamed to '{new_name}'.", "success")
+    else:
+        flash("Could not rename that saved recommendation set.", "error")
+
+    return redirect(url_for("saved_sets"))
+
+
+# ========================================
+# ITINERARY BUILDER
+# ========================================
+
+DEFAULT_DAYS = 3
+DEFAULT_DAILY_BUDGET = 200
+
+
+def _data_manager():
+    return DataManager(JsonCsvRepository())
+
+
+def _itinerary_manager():
+    return ItineraryManager(JsonItineraryRepository())
+
+
+def _catalog(recommendation_set):
+    """The approved recommendations the builder can place on days."""
+    return [
+        {
+            "index": index,
+            "name": item.name,
+            "type": item.item_type,
+            "cost": item.cost_sgd,
+            "location": item.location,
+        }
+        for index, item in enumerate(recommendation_set.approved())
+    ]
+
+
+def _render_builder(set_id, recommendation_set,
+                    itinerary=None, itinerary_id=""):
+    """Show the builder for a new itinerary, or reopen a saved one."""
+    catalog = _catalog(recommendation_set)
+
+    if itinerary is None:
+        days = [[] for _ in range(DEFAULT_DAYS)]
+    else:
+        # Map saved items back onto the catalog so they can still be edited.
+        # Each placed item is its own copy, so its meal choice stays with that day.
+        days = [
+            [dict(catalog[entry["index"]], meal=entry["meal"], time=entry["time"],
+                  duration=entry["duration"])
+             for entry in day]
+            for day in itinerary.selection_for(recommendation_set)
+        ]
+
+    return render_template(
+        "itinerary.html",
+        catalog=catalog,
+        days=days,
+        set_id=set_id,
+        itinerary_id=itinerary_id,
+        title=itinerary.title if itinerary else recommendation_set.destination,
+        destination=recommendation_set.destination,
+        daily_budget=(
+            itinerary.daily_budget if itinerary else DEFAULT_DAILY_BUDGET
+        ),
+        start_date=itinerary.start_date if itinerary else "",
+        max_days=Itinerary.MAX_DAYS,
+        max_items=Itinerary.MAX_ITEMS_PER_DAY,
+    )
+
+
+TYPE_LABELS = {
+    "activity": "Activity",
+    "food": "Food",
+    "shopping": "Shopping",
+    "accommodation": "Stay",
+}
+
+
+def _maps_link(item, destination):
+    """A Google Maps search link for a stop (name + address + city)."""
+    query = ", ".join(
+        part for part in (item.name, item.location, destination) if part
+    )
+    return "https://www.google.com/maps/search/?api=1&query=" + quote_plus(query)
+
+
+def _itinerary_view_days(itinerary):
+    """Everything the itinerary page needs for each day."""
+    view_days = []
+
+    for index in range(len(itinerary.days)):
+        day_date = itinerary.date_for(index)
+        stops = [
+            {
+                "time": stop.time,
+                "end": stop.end,
+                "period": stop.period,
+                "label": stop.label,
+                "type": stop.item.item_type,
+                "type_label": TYPE_LABELS.get(stop.item.item_type, "Stop"),
+                "name": stop.item.name,
+                "category": stop.item.category,
+                "location": stop.item.location,
+                "description": stop.item.description,
+                "cost": stop.item.cost_sgd,
+                "top_pick": stop.item.top_pick,
+                "maps": _maps_link(stop.item, itinerary.destination),
+            }
+            for stop in itinerary.schedule(index)
+        ]
+
+        view_days.append({
+            "number": index + 1,
+            "date": day_date.strftime("%A, %d %B %Y") if day_date else "",
+            "stops": stops,
+            "visits": [stop for stop in stops if stop["period"] != "Overnight"],
+            "stays": [stop for stop in stops if stop["period"] == "Overnight"],
+            "total": itinerary.day_total(index),
+            "over": itinerary.is_over_budget(index),
+        })
+
+    return view_days
+
+
+@app.get("/itineraries")
+def itineraries():
+    """List saved itineraries."""
+    keyword = request.args.get("q", "").strip()
+
+    try:
+        saved = _itinerary_manager().find(keyword)
+    except Exception as exc:
+        app.logger.exception("Could not load itineraries")
+        saved = []
+        flash(f"Could not load itineraries: {exc}", "error")
+
+    return render_template(
+        "itineraries.html",
+        itineraries=saved,
+        keyword=keyword,
+    )
+
+
+@app.get("/itineraries/new/<path:set_id>")
+def new_itinerary(set_id):
+    """Open the builder for a saved recommendation set."""
+    set_id = os.path.basename(set_id)
+    recommendation_set = _data_manager().load(set_id)
+
+    if recommendation_set is None:
+        flash("That saved recommendation set could not be found.", "error")
+        return redirect(url_for("saved_sets"))
+
+    if not recommendation_set.approved():
+        flash("That saved set has no approved recommendations to plan with.", "error")
+        return redirect(url_for("saved_sets"))
+
+    return _render_builder(set_id, recommendation_set)
+
+
+@app.get("/itineraries/<itinerary_id>")
+def edit_itinerary(itinerary_id):
+    """Reopen a saved itinerary in the builder."""
+    itinerary = _itinerary_manager().load(itinerary_id)
+
+    if itinerary is None:
+        flash("That itinerary could not be found.", "error")
+        return redirect(url_for("itineraries"))
+
+    recommendation_set = _data_manager().load(itinerary.source_id)
+
+    if recommendation_set is None:
+        flash(
+            "The saved recommendation set this itinerary was built from "
+            "has been deleted, so it can no longer be edited.",
+            "error",
+        )
+        return redirect(url_for("view_itinerary", itinerary_id=itinerary_id))
+
+    return _render_builder(
+        itinerary.source_id, recommendation_set, itinerary, itinerary_id
+    )
+
+
+@app.get("/itineraries/<itinerary_id>/view")
+def view_itinerary(itinerary_id):
+    """Show a saved itinerary as a day-by-day plan that can be followed or printed."""
+    itinerary = _itinerary_manager().load(itinerary_id)
+
+    if itinerary is None:
+        flash("That itinerary could not be found.", "error")
+        return redirect(url_for("itineraries"))
+
+    first_date = itinerary.date_for(0)
+    last_date = itinerary.date_for(len(itinerary.days) - 1)
+
+    return render_template(
+        "itinerary_view.html",
+        itinerary=itinerary,
+        itinerary_id=itinerary_id,
+        days=_itinerary_view_days(itinerary),
+        date_range=(
+            f"{first_date:%d %b} – {last_date:%d %b %Y}" if first_date else ""
+        ),
+        can_edit=_data_manager().load(itinerary.source_id) is not None,
+    )
+
+
+@app.post("/itineraries/save")
+def save_itinerary():
+    """Create a new itinerary or update an existing one."""
+    set_id = os.path.basename(request.form.get("set_id", ""))
+    itinerary_id = request.form.get("itinerary_id", "").strip()
+
+    back = (
+        url_for("edit_itinerary", itinerary_id=itinerary_id)
+        if itinerary_id
+        else url_for("new_itinerary", set_id=set_id or "missing")
+    )
+
+    try:
+        selection = json.loads(request.form.get("plan", ""))
+        daily_budget = float(request.form.get("daily_budget", ""))
+    except (TypeError, ValueError):
+        flash("The itinerary could not be read. Please try again.", "error")
+        return redirect(back)
+
+    recommendation_set = _data_manager().load(set_id)
+
+    if recommendation_set is None:
+        flash("The saved recommendation set could not be found.", "error")
+        return redirect(url_for("itineraries"))
+
+    manager = _itinerary_manager()
+
+    try:
+        itinerary = manager.build(
+            recommendation_set,
+            set_id,
+            daily_budget,
+            selection,
+            request.form.get("title", ""),
+            request.form.get("start_date", ""),
+        )
+    except (TypeError, ValueError) as exc:
+        flash(str(exc), "error")
+        return redirect(back)
+
+    try:
+        if itinerary_id:
+            if not manager.update(itinerary_id, itinerary):
+                flash("Could not update that itinerary.", "error")
+                return redirect(url_for("itineraries"))
+            message = "Itinerary updated."
+        else:
+            itinerary_id = manager.save(itinerary)
+            message = "Itinerary saved."
+    except Exception as exc:
+        app.logger.exception("Saving itinerary failed")
+        flash(f"Could not save the itinerary: {exc}", "error")
+        return redirect(back)
+
+    flash(message, "success")
+
+    over = itinerary.over_budget_days()
+    if over:
+        flash(
+            "Over the daily budget on day "
+            + ", ".join(str(day) for day in over)
+            + ".",
+            "error",
+        )
+
+    # Show the finished itinerary straight after saving.
+    return redirect(url_for("view_itinerary", itinerary_id=itinerary_id))
+
+
+@app.post("/itineraries/<itinerary_id>/delete")
+def delete_itinerary(itinerary_id):
+    """Delete a saved itinerary."""
+    if _itinerary_manager().delete(itinerary_id):
+        flash("Itinerary deleted.", "success")
+    else:
+        flash("Could not delete that itinerary.", "error")
+
+    return redirect(url_for("itineraries"))
+
+
+@app.post("/itineraries/plan-latest")
+def plan_latest():
+    """Save the results just generated, then open the builder for them."""
+    result = _get_latest_result()
+
+    if not result:
+        flash("Generate recommendations first.", "error")
+        return redirect(url_for("index"))
+
+    try:
+        set_id = _data_manager().save(RecommendationSet.from_dict(result))
+    except Exception as exc:
+        app.logger.exception("Saving before planning failed")
+        flash(f"Could not save the recommendations: {exc}", "error")
+        return redirect(url_for("index"))
+
+    flash("Recommendations saved. Now plan your days.", "success")
+    return redirect(url_for("new_itinerary", set_id=set_id))
 
 
 @app.post("/download/json")

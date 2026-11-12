@@ -25,9 +25,14 @@
             </span>
         </a>
 
-        <a class="secondary" href="{{ url_for('index') }}">
-            ← Plan a trip
-        </a>
+        <nav class="topbar-links">
+            <a class="secondary" href="{{ url_for('itineraries') }}">
+                Itineraries
+            </a>
+            <a class="secondary" href="{{ url_for('index') }}">
+                ← Plan a trip
+            </a>
+        </nav>
     </header>
 
     <!-- Main Content -->
@@ -111,6 +116,39 @@
                             >
                                 View results ↗
                             </a>
+
+                            <a
+                                class="primary"
+                                href="{{ url_for(
+                                    'new_itinerary',
+                                    set_id=item.filename
+                                ) }}"
+                            >
+                                Plan itinerary
+                            </a>
+
+                            <form
+                                class="rename-form"
+                                method="post"
+                                action="{{ url_for(
+                                    'rename_saved',
+                                    filename=item.filename
+                                ) }}"
+                            >
+                                <input
+                                    name="new_name"
+                                    value="{{ item.destination }}"
+                                    maxlength="100"
+                                    required
+                                    aria-label="New name for {{ item.destination }}"
+                                >
+                                <button
+                                    class="secondary"
+                                    type="submit"
+                                >
+                                    Rename
+                                </button>
+                            </form>
 
                             <form
                                 method="post"
