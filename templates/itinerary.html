@@ -272,6 +272,50 @@
             select.addEventListener("change", function () { item.meal = select.value; });
             return select;
         }
+
+        // ---------- changing the plan ----------
+
+        // adds a recommendation to the current day (goes into Your picks first)
+        function addItem(item) {
+            // Stop if the day is already full
+            if (days[active].length >= data.maxItems) {
+                alert("A day can hold at most " + data.maxItems + " items.");
+                return;
+            }
+            // copy it so the same place on different days can have different times
+            days[active].push(Object.assign({}, item, { meal: "", time: "", duration: 0 }));
+            render();
+        }
+
+        function removeItem(dayIndex, item) {
+            var day = days[dayIndex];
+            // Remove the place from the day
+            day.splice(day.indexOf(item), 1);
+            if (picked === item) { picked = null; }
+            render();
+        }
+
+        // ↑ ↓ buttons in Your picks, skips over places that are already on the timeline
+        function moveUntimed(dayIndex, item, step) {
+            var day = days[dayIndex];
+            var from = day.indexOf(item);
+            var to = from + step;
+            // Skip over places that are already on the timeline
+            while (to >= 0 && to < day.length && day[to].time) { to += step; }
+            // Stop if it's already at the top or bottom
+            if (to < 0 || to >= day.length) { return; }
+            // Swap the two places
+            day[from] = day[to];
+            day[to] = item;
+            render();
+        }
+
+        function setActive(dayIndex) {
+            if (active === dayIndex) { return; }
+            active = dayIndex;
+            picked = null;
+            render();
+        }
     })();
     </script>
 </body>
