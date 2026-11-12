@@ -4,6 +4,7 @@ import math
 import os
 import traceback
 import uuid
+from urllib.parse import quote_plus
 
 from flask import (
     Flask, 
@@ -23,6 +24,9 @@ from travel_assistant import TravelAssistant
 from models import UserRequirements
 from storage.data_manager import DataManager
 from storage.json_csv_repository import JsonCsvRepository
+from storage.itinerary_repository import JsonItineraryRepository
+from storage.itinerary_manager import ItineraryManager
+from models import Itinerary
 from models import RecommendationSet
 from user_io.destination_validator import DestinationValidator
 
@@ -495,6 +499,72 @@ def delete_saved(filename):
         )
 
     return redirect(url_for("saved_sets"))
+
+
+
+# ========================================
+# ITINERARY BUILDER
+# ========================================
+
+DEFAULT_DAYS = 3
+DEFAULT_DAILY_BUDGET = 200
+
+
+def _data_manager():
+    return DataManager(JsonCsvRepository())
+
+
+def _itinerary_manager():
+    return ItineraryManager(JsonItineraryRepository())
+
+
+def _catalog(recommendation_set):
+    """The approved recommendations the builder can place on days."""
+    return [
+        {
+            "index": index,
+            "name": item.name,
+            "type": item.item_type,
+            "cost": item.cost_sgd,
+            "location": item.location,
+        }
+        for index, item in enumerate(recommendation_set.approved())
+    ]
+
+
+def _render_builder(set_id, recommendation_set,
+                    itinerary=None, itinerary_id=""):
+    """Show the builder for a new itinerary, or reopen a saved one."""
+    catalog = _catalog(recommendation_set)
+
+    if itinerary is None:
+        days = [[] for _ in range(DEFAULT_DAYS)]
+    else:
+        # Map saved items back onto the catalog so they can still be edited.
+        # Each placed item is its own copy, so its meal choice stays with that day.
+        days = [
+            [dict(catalog[entry["index"]], meal=entry["meal"], time=entry["time"],
+                  duration=entry["duration"])
+             for entry in day]
+            for day in itinerary.selection_for(recommendation_set)
+        ]
+
+    return render_template(
+        "itinerary.html",
+        catalog=catalog,
+        days=days,
+        set_id=set_id,
+        itinerary_id=itinerary_id,
+        title=itinerary.title if itinerary else recommendation_set.destination,
+        destination=recommendation_set.destination,
+        daily_budget=(
+            itinerary.daily_budget if itinerary else DEFAULT_DAILY_BUDGET
+        ),
+        start_date=itinerary.start_date if itinerary else "",
+        max_days=Itinerary.MAX_DAYS,
+        max_items=Itinerary.MAX_ITEMS_PER_DAY,
+    )
+
 
 
 @app.post("/download/json")
