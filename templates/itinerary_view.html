@@ -73,7 +73,29 @@
                 </div>
             </dl>
 
+            <div class="iv-actions no-print">
+                {% if can_edit %}
+                    <a class="primary" href="{{ url_for('edit_itinerary', itinerary_id=itinerary_id) }}">
+                        Edit plan
+                    </a>
+                {% endif %}
+                <button class="secondary" type="button" onclick="window.print()">
+                    Print / save as PDF
+                </button>
+                <a class="secondary" href="{{ url_for('itineraries') }}">All itineraries</a>
+            </div>
+
+            <!-- Jump to a day -->
+            <nav class="iv-jump no-print" aria-label="Days">
+                {% for day in days %}
+                    <a href="#day-{{ day.number }}" class="{{ 'over' if day.over }}">
+                        Day {{ day.number }}
+                        <span>{{ day.stops | length }} stop{{ '' if day.stops | length == 1 else 's' }}</span>
+                    </a>
+                {% endfor %}
+            </nav>
         </section>
+
     </main>
 </body>
 </html>
