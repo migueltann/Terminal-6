@@ -66,6 +66,40 @@
             {% endif %}
         </form>
 
+        {% if itineraries %}
+            <div class="saved-list">
+                <!-- Itinerary cards (newest first) -->
+                {% for plan in itineraries | reverse %}
+                    <article class="recommendation-card saved-card">
+                        <div>
+                            <p class="eyebrow">{{ plan.destination | upper }}</p>
+
+                            <h3>{{ plan.title }}</h3>
+
+                            <!-- Number of days, places and total cost -->
+                            <p class="muted">
+                                {{ plan.day_count }} day{{ '' if plan.day_count == 1 else 's' }}
+                                · {{ plan.item_count }} item{{ '' if plan.item_count == 1 else 's' }}
+                                · ${{ '%.2f' | format(plan.trip_total) }}
+                                of ${{ '%.2f' | format(plan.daily_budget * plan.day_count) }} budget
+                            </p>
+
+                            <!-- Show which days are over budget -->
+                            {% if plan.over_budget_days %}
+                                <p class="over-budget-note">
+                                    Over budget on day {{ plan.over_budget_days | join(', ') }}
+                                </p>
+                            {% endif %}
+
+                            <p class="muted">
+                                Saved {{ plan.saved_at }}
+                                {% if plan.updated_at %} · edited {{ plan.updated_at }}{% endif %}
+                            </p>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
     </main>
 </body>
 </html>
