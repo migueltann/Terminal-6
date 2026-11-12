@@ -773,6 +773,36 @@ def save_itinerary():
     return redirect(url_for("view_itinerary", itinerary_id=itinerary_id))
 
 
+@app.post("/itineraries/<itinerary_id>/delete")
+def delete_itinerary(itinerary_id):
+    """Delete a saved itinerary."""
+    if _itinerary_manager().delete(itinerary_id):
+        flash("Itinerary deleted.", "success")
+    else:
+        flash("Could not delete that itinerary.", "error")
+
+    return redirect(url_for("itineraries"))
+
+
+@app.post("/itineraries/plan-latest")
+def plan_latest():
+    """Save the results just generated, then open the builder for them."""
+    result = _get_latest_result()
+
+    if not result:
+        flash("Generate recommendations first.", "error")
+        return redirect(url_for("index"))
+
+    try:
+        set_id = _data_manager().save(RecommendationSet.from_dict(result))
+    except Exception as exc:
+        app.logger.exception("Saving before planning failed")
+        flash(f"Could not save the recommendations: {exc}", "error")
+        return redirect(url_for("index"))
+
+    flash("Recommendations saved. Now plan your days.", "success")
+    return redirect(url_for("new_itinerary", set_id=set_id))
+
 
 @app.post("/download/json")
 def download_json():
