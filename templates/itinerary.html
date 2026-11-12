@@ -681,6 +681,52 @@
             renderPool();
             renderDays();
         }
+
+        // adds or removes days when the Days number changes
+        function changeDayCount() {
+            var wanted = parseInt(dayCountEl.value, 10);
+            if (!isFinite(wanted)) { return; }
+            // Keep it between 1 and 14 days
+            wanted = Math.min(Math.max(wanted, 1), data.maxDays);
+
+            if (wanted < days.length) {
+                // ask first if the days being removed have stuff on them
+                var dropped = days.slice(wanted).some(function (day) { return day.length > 0; });
+                if (dropped && !confirm("Remove the last days and everything planned on them?")) {
+                    dayCountEl.value = days.length;
+                    return;
+                }
+                days = days.slice(0, wanted);
+            }
+            // Add empty days if there are more days now
+            while (days.length < wanted) { days.push([]); }
+
+            dayCountEl.value = wanted;
+            // Make sure the day being edited still exists
+            active = Math.min(active, days.length - 1);
+            picked = null;
+            render();
+        }
+
+        // Update the page when the days or budget change
+        dayCountEl.addEventListener("change", changeDayCount);
+        budgetEl.addEventListener("input", renderDays);
+
+        // before submitting, put the plan into the hidden field
+        // (only the index and the user's choices are sent, the server gets the prices itself)
+        document.getElementById("itinerary-form").addEventListener("submit", function () {
+            document.getElementById("plan-field").value = JSON.stringify(
+                days.map(function (day) {
+                    return day.map(function (item) {
+                        return { index: item.index, meal: item.meal || "",
+                                 time: item.time || "", duration: item.duration || 0 };
+                    });
+                })
+            );
+        });
+
+        // Draw the page for the first time
+        render();
     })();
     </script>
 </body>
