@@ -174,5 +174,43 @@
         {% endif %}
     </main>
 
+    <!-- Data for the builder. tojson escapes <, > and & so this is safe. -->
+    <script type="application/json" id="builder-data">
+        {{ {
+            "catalog": catalog,
+            "days": days,
+            "maxDays": max_days,
+            "maxItems": max_items
+        } | tojson }}
+    </script>
+
+    <script>
+    // Itinerary builder script.
+    // The whole plan is kept in `days`. Whenever something changes we update
+    // `days` and call render() to redraw the page. On submit the plan is
+    // turned into JSON and put in the hidden "plan" field.
+    (function () {
+        "use strict";
+
+        // Get the data that Flask passed into the page
+        var data = JSON.parse(document.getElementById("builder-data").textContent);
+        var days = data.days;          // list of places for each day
+        var active = 0;                // the day currently being edited
+        var picked = null;             // for phones: place that was tapped, waiting for an hour
+        var dragged = null;            // place being dragged right now
+
+        var FIRST_HOUR = 6;            // timeline goes from 6am
+        var LAST_HOUR = 23;            // to 11pm
+
+        // Parts of the page that get updated
+        var poolEl = document.getElementById("pool");
+        var daysEl = document.getElementById("days");
+        var dayCountEl = document.getElementById("day-count");
+        var budgetEl = document.getElementById("daily-budget");
+        var totalEl = document.getElementById("trip-total");
+        var tripBudgetEl = document.getElementById("trip-budget");
+
+    })();
+    </script>
 </body>
 </html>
