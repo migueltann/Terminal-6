@@ -704,6 +704,75 @@ def view_itinerary(itinerary_id):
     )
 
 
+@app.post("/itineraries/save")
+def save_itinerary():
+    """Create a new itinerary or update an existing one."""
+    set_id = os.path.basename(request.form.get("set_id", ""))
+    itinerary_id = request.form.get("itinerary_id", "").strip()
+
+    back = (
+        url_for("edit_itinerary", itinerary_id=itinerary_id)
+        if itinerary_id
+        else url_for("new_itinerary", set_id=set_id or "missing")
+    )
+
+    try:
+        selection = json.loads(request.form.get("plan", ""))
+        daily_budget = float(request.form.get("daily_budget", ""))
+    except (TypeError, ValueError):
+        flash("The itinerary could not be read. Please try again.", "error")
+        return redirect(back)
+
+    recommendation_set = _data_manager().load(set_id)
+
+    if recommendation_set is None:
+        flash("The saved recommendation set could not be found.", "error")
+        return redirect(url_for("itineraries"))
+
+    manager = _itinerary_manager()
+
+    try:
+        itinerary = manager.build(
+            recommendation_set,
+            set_id,
+            daily_budget,
+            selection,
+            request.form.get("title", ""),
+            request.form.get("start_date", ""),
+        )
+    except (TypeError, ValueError) as exc:
+        flash(str(exc), "error")
+        return redirect(back)
+
+    try:
+        if itinerary_id:
+            if not manager.update(itinerary_id, itinerary):
+                flash("Could not update that itinerary.", "error")
+                return redirect(url_for("itineraries"))
+            message = "Itinerary updated."
+        else:
+            itinerary_id = manager.save(itinerary)
+            message = "Itinerary saved."
+    except Exception as exc:
+        app.logger.exception("Saving itinerary failed")
+        flash(f"Could not save the itinerary: {exc}", "error")
+        return redirect(back)
+
+    flash(message, "success")
+
+    over = itinerary.over_budget_days()
+    if over:
+        flash(
+            "Over the daily budget on day "
+            + ", ".join(str(day) for day in over)
+            + ".",
+            "error",
+        )
+
+    # Show the finished itinerary straight after saving.
+    return redirect(url_for("view_itinerary", itinerary_id=itinerary_id))
+
+
 
 @app.post("/download/json")
 def download_json():
