@@ -48,6 +48,43 @@
             </p>
         </section>
 
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <form
+            id="itinerary-form"
+            class="builder"
+            method="post"
+            action="{{ url_for('save_itinerary') }}"
+        >
+            <!-- hidden fields, plan gets filled in by the script before submitting -->
+            <input type="hidden" name="set_id" value="{{ set_id }}">
+            <input type="hidden" name="itinerary_id" value="{{ itinerary_id }}">
+            <input type="hidden" name="plan" id="plan-field">
+
+            <!-- Saved recommendations to choose from -->
+            <section class="builder-pool">
+                <div class="builder-pool-head">
+                    <h2>Saved recommendations · {{ destination }}</h2>
+
+                    <div class="type-legend">
+                        <span class="chip-tag type-activity">Activity</span>
+                        <span class="chip-tag type-food">Food</span>
+                        <span class="chip-tag type-shopping">Shopping</span>
+                        <span class="chip-tag type-accommodation">Stay</span>
+                    </div>
+                </div>
+
+                <div class="chip-pool" id="pool"></div>
+            </section>
+
+        </form>
     </main>
 </body>
 </html>
