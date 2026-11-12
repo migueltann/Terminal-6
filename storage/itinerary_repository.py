@@ -114,3 +114,31 @@ class JsonItineraryRepository(ItineraryRepository):
     def load_all(self) -> list[dict]:
         # Get a summary of every saved itinerary
         return [_summary(entry["id"], entry) for entry in self._read() if "id" in entry]
+
+    def update(self, identifier: str, itinerary: Itinerary) -> bool:
+        # Look for the itinerary in the file
+        entries = self._read()
+        entry = self._find(entries, identifier)
+        if entry is None:
+            return False
+
+        saved_at = entry.get("saved_at", "")     # keep the original saved date
+
+        # Replace the old itinerary with the new one
+        entry.clear()
+        entry.update({"id": identifier, **itinerary.to_dict(),
+                      "saved_at": saved_at, "updated_at": _now()})
+        self._write(entries)
+        return True
+
+    def delete(self, identifier: str) -> bool:
+        # Look for the itinerary in the file
+        entries = self._read()
+        entry = self._find(entries, identifier)
+        if entry is None:
+            return False
+
+        # Remove it and save the file again
+        entries.remove(entry)
+        self._write(entries)
+        return True
