@@ -120,6 +120,62 @@
                     </p>
                 {% endif %}
 
+                <!-- Day timeline -->
+                {% if day.visits %}
+                    <ol class="iv-timeline">
+                        {% for stop in day.visits %}
+                            <li class="iv-stop">
+                                <!-- Start time, end time and part of the day -->
+                                <div class="iv-time">
+                                    <strong>{{ stop.time }}</strong>
+                                    {% if stop.end %}<span>to {{ stop.end }}</span>{% endif %}
+                                    <span>{{ stop.period }}</span>
+                                </div>
+
+                                <span class="iv-dot type-{{ stop.type }}" aria-hidden="true"></span>
+
+                                <!-- Details of the place -->
+                                <article class="iv-card">
+                                    <p class="iv-tags">
+                                        {% if stop.label %}
+                                            <span class="iv-label">{{ stop.label }}</span>
+                                        {% endif %}
+                                        <span class="chip-tag type-{{ stop.type }}">{{ stop.type_label }}</span>
+                                        {% if stop.top_pick %}
+                                            <span class="iv-top">★ Top pick</span>
+                                        {% endif %}
+                                    </p>
+
+                                    <h3>{{ stop.name }}</h3>
+
+                                    <p class="iv-meta">
+                                        {{ stop.category }}
+                                        {% if stop.category and stop.location %} · {% endif %}
+                                        {{ stop.location }}
+                                    </p>
+
+                                    {% if stop.description %}
+                                        <p class="iv-desc">{{ stop.description }}</p>
+                                    {% endif %}
+
+                                    <!-- Price and Google Maps link -->
+                                    <p class="iv-card-foot">
+                                        <span>Est. ${{ '%.2f' | format(stop.cost) }}</span>
+                                        <a href="{{ stop.maps }}" target="_blank" rel="noopener noreferrer">
+                                            Directions ↗
+                                        </a>
+                                    </p>
+                                </article>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                <!-- Nothing planned on this day -->
+                {% elif not day.stays %}
+                    <p class="iv-free">
+                        Free day. Nothing is planned, so explore at your own pace.
+                    </p>
+                {% endif %}
+
             </section>
         {% endfor %}
     </main>
