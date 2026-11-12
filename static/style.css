@@ -1379,3 +1379,119 @@ button.chip:focus-visible,
         grid-template-columns: 1fr;
     }
 }
+
+/* Small Auto / Lunch / Dinner menu inside a food chip */
+select.meal-select {
+    width: auto;
+    height: 22px;
+    padding: 0 4px;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.builder-controls {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 0.8fr 1fr;
+    gap: 12px;
+}
+
+.builder-controls label {
+    display: grid;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.day-list {
+    display: grid;
+    gap: 12px;
+}
+
+.day-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 16px;
+}
+
+.day-card[role="button"] {
+    cursor: pointer;
+}
+
+.day-card.active {
+    border-color: #6f9fd8;
+    box-shadow: 0 0 0 2px #d9e7f8;
+}
+
+.day-card.over {
+    border-color: var(--red);
+    background: #fdf5f3;
+}
+
+.day-card.over .day-total {
+    color: var(--red);
+    font-weight: 700;
+}
+
+.day-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.adding-here {
+    color: #2c64a8;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.day-total {
+    color: var(--muted);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.day-empty {
+    margin: 0;
+}
+
+.builder-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.builder-footer p {
+    margin: 0;
+}
+
+.builder-delete {
+    margin-bottom: 40px;
+}
+
+.over-budget-note {
+    color: var(--red);
+    font-weight: 700;
+}
+
+@media (max-width: 700px) {
+    .builder-controls {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .builder-controls label:first-child {
+        grid-column: 1 / -1;
+    }
+
+    .topbar-links .secondary {
+        padding: 10px 12px;
+    }
+}
+
