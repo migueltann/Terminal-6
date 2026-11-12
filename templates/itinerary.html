@@ -139,7 +139,40 @@
                 night's accommodation.
             </p>
 
+            <!-- Day cards (filled by the script below) -->
+            <div class="day-list" id="days" aria-live="polite"></div>
+
+            <div class="builder-footer">
+                <p>
+                    Trip total: <strong id="trip-total">$0</strong>
+                    <span class="muted" id="trip-budget"></span>
+                </p>
+
+                <div class="builder-footer-actions">
+                    {% if itinerary_id %}
+                        <a class="secondary" href="{{ url_for('view_itinerary', itinerary_id=itinerary_id) }}">
+                            View itinerary
+                        </a>
+                    {% endif %}
+                    <button class="primary" type="submit">
+                        {{ 'Update itinerary' if itinerary_id else 'Create itinerary' }} →
+                    </button>
+                </div>
+            </div>
         </form>
+
+        <!-- Delete button (only when editing a saved itinerary) -->
+        {% if itinerary_id %}
+            <form
+                class="builder-delete"
+                method="post"
+                action="{{ url_for('delete_itinerary', itinerary_id=itinerary_id) }}"
+                onsubmit="return confirm('Delete this itinerary?')"
+            >
+                <button class="secondary" type="submit">Delete itinerary</button>
+            </form>
+        {% endif %}
     </main>
+
 </body>
 </html>
