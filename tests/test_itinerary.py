@@ -154,3 +154,66 @@ def test_selection_for_skips_items_no_longer_in_the_set(trip):
                        ItineraryItem("Maxwell Food Centre", "food", 8)]])
 
     assert plan.selection_for(trip) == [[{"index": 1, "meal": "", "time": "", "duration": 0}]]
+
+
+# ---------- storage (JSON file in pytest's temporary folder) ----------
+
+@pytest.fixture
+def manager(tmp_path):
+    return ItineraryManager(JsonItineraryRepository(str(tmp_path)))
+
+
+def test_damaged_file_is_handled(tmp_path):
+    (tmp_path / "itineraries.json").write_text("{not json", encoding="utf-8")
+    manager = ItineraryManager(JsonItineraryRepository(str(tmp_path)))
+
+    assert manager.load("anything") is None
+    assert manager.delete("anything") is False
+    with pytest.raises(ValueError):
+        manager.find()
+
+
+def test_crud(manager, trip):
+    plan = manager.build(trip, "set-1", 200, [[0], [1, 2]], "SG trip")
+
+    identifier = manager.save(plan)                               # Create
+    assert manager.load(identifier) == plan                       # Read one
+
+    entries = manager.find()                                      # Read all
+    assert len(entries) == 1
+    assert entries[0]["id"] == identifier
+    assert entries[0]["title"] == "SG trip"
+    assert entries[0]["day_count"] == 2
+    assert entries[0]["item_count"] == 3
+    assert entries[0]["trip_total"] == 166
+    assert entries[0]["saved_at"]
+
+    changed = manager.build(trip, "set-1", 100, [[2]], "SG short")
+    assert manager.update(identifier, changed) is True            # Update
+    assert manager.load(identifier).title == "SG short"
+    entry = manager.find()[0]
+    assert entry["over_budget_days"] == [1]
+    assert entry["saved_at"] == entries[0]["saved_at"]
+    assert entry["updated_at"]
+
+    assert manager.delete(identifier) is True                     # Delete
+    assert manager.load(identifier) is None
+    assert manager.find() == []
+
+
+def test_find_matches_title_or_destination(manager, trip):
+    manager.save(manager.build(trip, "set-1", 200, [[0]], "Honeymoon"))
+
+    assert len(manager.find("honey")) == 1
+    assert len(manager.find("SINGA")) == 1
+    assert manager.find("tokyo") == []
+
+
+@pytest.mark.parametrize("identifier", ["", "nope", "6731a8f2c4e5d6b7a8f9e0d1"])
+def test_unknown_identifier(manager, trip, identifier):
+    plan = manager.build(trip, "set-1", 200, [[0]])
+
+    assert manager.load(identifier) is None
+    assert manager.update(identifier, plan) is False
+    assert manager.delete(identifier) is False
+
