@@ -316,6 +316,40 @@
             picked = null;
             render();
         }
+
+        // ---------- drawing ----------
+
+        // the recommendation buttons at the top
+        function renderPool() {
+            // Clear the old buttons first
+            poolEl.textContent = "";
+            data.catalog.forEach(function (item) {
+                var chip = el("button", "chip type-" + item.type,
+                              "+ " + item.name + " · " + money(item.cost));
+                chip.type = "button";
+                chip.title = item.location ? item.location : item.name;
+                // Add the place to the day when clicked
+                chip.addEventListener("click", function () { addItem(item); });
+                poolEl.appendChild(chip);
+            });
+        }
+
+        // days that aren't being edited just show a simple list
+        function renderSummary(card, day, dayIndex) {
+            var list = el("div", "day-items");
+            day.forEach(function (item) {
+                var pill = el("span", "chip type-" + item.type);
+                // Show the time if it's on the timeline
+                var when = item.time
+                    ? hourLabel(startHour(item)) + "–" + hourLabel((startHour(item) + spanHours(item)) % 24) + " · "
+                    : "";
+                pill.appendChild(el("span", "", when + item.name + " · " + money(item.cost)));
+                pill.appendChild(smallButton("×", "Remove " + item.name,
+                    function () { removeItem(dayIndex, item); }));
+                list.appendChild(pill);
+            });
+            card.appendChild(list);
+        }
     })();
     </script>
 </body>
