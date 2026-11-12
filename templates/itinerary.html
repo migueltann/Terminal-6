@@ -622,6 +622,65 @@
             planner.appendChild(right);
             card.appendChild(planner);
         }
+
+        function renderDays() {
+            // Clear the old day cards first
+            daysEl.textContent = "";
+            var limit = budget();
+
+            days.forEach(function (day, dayIndex) {
+                var total = dayTotal(day);
+                var isActive = dayIndex === active;
+                var card = el("div", "day-card");
+                if (isActive) { card.classList.add("active"); }
+                if (total > limit) { card.classList.add("over"); }    // red if over budget
+
+                // click (or Enter / Space) on another day to edit it
+                if (!isActive) {
+                    card.tabIndex = 0;
+                    card.setAttribute("role", "button");
+                    card.setAttribute("aria-label", "Edit day " + (dayIndex + 1));
+                    card.addEventListener("click", function () { setActive(dayIndex); });
+                    card.addEventListener("keydown", function (event) {
+                        if (event.target === card && (event.key === "Enter" || event.key === " ")) {
+                            event.preventDefault();
+                            setActive(dayIndex);
+                        }
+                    });
+                }
+
+                // Day number and how much it costs
+                var head = el("div", "day-head");
+                var name = el("strong", "", "Day " + (dayIndex + 1));
+                name.appendChild(el("span", "adding-here",
+                    isActive ? " · editing" : " · tap to edit"));
+                head.appendChild(name);
+                head.appendChild(el("span", "day-total",
+                                    money(total) + " / " + money(limit)));
+                card.appendChild(head);
+
+                // Show the timeline for the day being edited
+                if (isActive) {
+                    renderTimeline(card, day, dayIndex);
+                } else if (day.length === 0) {
+                    card.appendChild(el("p", "muted day-empty", "Nothing planned yet"));
+                } else {
+                    renderSummary(card, day, dayIndex);
+                }
+
+                daysEl.appendChild(card);
+            });
+
+            // Update the trip total at the bottom
+            var tripTotal = days.reduce(function (sum, day) { return sum + dayTotal(day); }, 0);
+            totalEl.textContent = money(tripTotal);
+            tripBudgetEl.textContent = " of " + money(limit * days.length) + " budget";
+        }
+
+        function render() {
+            renderPool();
+            renderDays();
+        }
     })();
     </script>
 </body>
