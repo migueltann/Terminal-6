@@ -217,3 +217,152 @@ def test_unknown_identifier(manager, trip, identifier):
     assert manager.update(identifier, plan) is False
     assert manager.delete(identifier) is False
 
+
+# ---------- web pages ----------
+
+@pytest.fixture
+def web(monkeypatch, tmp_path, trip):
+    """A Flask test client that stores everything in a temporary folder."""
+    sets = JsonCsvRepository(str(tmp_path))
+    plans = JsonItineraryRepository(str(tmp_path))
+    monkeypatch.setattr(web_app, "JsonCsvRepository", lambda: sets)
+    monkeypatch.setattr(web_app, "JsonItineraryRepository", lambda: plans)
+    set_id = sets.save(trip)
+    web_app.app.config["TESTING"] = True
+    return web_app.app.test_client(), set_id, ItineraryManager(plans), sets
+
+
+def test_builder_page_lists_approved_items(web):
+    client, set_id, _, _ = web
+
+    page = client.get(f"/itineraries/new/{set_id}").get_data(as_text=True)
+
+    assert "Gardens by the Bay" in page
+    assert "Champion Hotel" in page
+    assert "Create itinerary" in page
+
+
+def test_builder_for_unknown_set_redirects(web):
+    client, _, _, _ = web
+
+    response = client.get("/itineraries/new/does-not-exist")
+
+    assert response.status_code == 302
+
+
+def test_save_then_reopen_then_update(web):
+    client, set_id, plans, _ = web
+
+    response = client.post("/itineraries/save", data={
+        "set_id": set_id, "title": "My trip", "daily_budget": "100",
+        "plan": json.dumps([[0, 1], [2]]),
+    }, follow_redirects=True)
+    page = response.get_data(as_text=True)
+
+    assert response.status_code == 200
+    assert "Itinerary saved." in page
+    assert "Over the daily budget on day 2." in page
+
+    saved = plans.find()
+    assert len(saved) == 1
+    assert saved[0]["trip_total"] == 166
+    identifier = saved[0]["id"]
+
+    page = client.get(f"/itineraries/{identifier}").get_data(as_text=True)
+    assert "Update itinerary" in page
+
+    client.post("/itineraries/save", data={
+        "set_id": set_id, "itinerary_id": identifier, "title": "Renamed",
+        "daily_budget": "300", "plan": json.dumps([[2]]),
+    })
+
+    assert plans.find()[0]["title"] == "Renamed"
+    assert len(plans.find()) == 1
+
+
+@pytest.mark.parametrize("form", [
+    {"plan": "not json", "daily_budget": "100"},
+    {"plan": "[[99]]", "daily_budget": "100"},
+    {"plan": "[[0]]", "daily_budget": "-5"},
+    {"plan": "[[0]]", "daily_budget": "abc"},
+])
+def test_bad_submissions_are_rejected(web, form):
+    client, set_id, plans, _ = web
+
+    response = client.post("/itineraries/save",
+                           data={"set_id": set_id, "title": "x", **form})
+
+    assert response.status_code == 302
+    assert plans.find() == []
+
+
+def test_list_and_delete(web):
+    client, set_id, plans, _ = web
+    identifier = plans.save(plans.build(
+        DataManager(web[3]).load(set_id), set_id, 200, [[0]], "Listed trip"))
+
+    assert "Listed trip" in client.get("/itineraries").get_data(as_text=True)
+
+    client.post(f"/itineraries/{identifier}/delete")
+
+    assert plans.find() == []
+
+
+def test_itinerary_can_still_be_viewed_after_its_set_is_deleted(web):
+    client, set_id, plans, sets = web
+    identifier = plans.save(plans.build(
+        DataManager(sets).load(set_id), set_id, 200, [[0]], "Orphan"))
+    sets.delete(set_id)
+
+    # Editing is no longer possible, so the user is sent to the view page.
+    response = client.get(f"/itineraries/{identifier}", follow_redirects=True)
+    page = response.get_data(as_text=True)
+
+    assert "can no longer be edited" in page
+    assert "Gardens by the Bay" in page
+    assert "Edit plan" not in page
+    assert "Update itinerary" not in page
+
+
+def test_saving_opens_the_finished_itinerary(web):
+    client, set_id, plans, _ = web
+
+    response = client.post("/itineraries/save", data={
+        "set_id": set_id, "title": "Weekend", "daily_budget": "200",
+        "start_date": "2026-12-14",
+        # day 1: Gardens (activity), Maxwell (food), Champion Hotel (stay)
+        "plan": json.dumps([[0, 1, 2], []]),
+    })
+
+    identifier = plans.find()[0]["id"]
+    assert response.headers["Location"].endswith(f"/itineraries/{identifier}/view")
+
+    page = client.get(response.headers["Location"]).get_data(as_text=True)
+
+    assert "2-day trip to Singapore" in page
+    assert "14 Dec – 15 Dec 2026" in page
+    assert "Monday, 14 December 2026" in page
+    assert "09:00" in page and "Lunch" in page and "12:00" in page
+    assert "TONIGHT" in page and "Champion Hotel" in page
+    assert "Free day" in page                                   # day 2 is empty
+    assert "A test item" in page                                # description shown
+    assert "google.com/maps/search/?api=1&amp;query=Gardens+by+the+Bay" in page
+    assert "Budget summary" in page
+    assert "Edit plan" in page
+
+
+def test_view_of_unknown_itinerary_redirects(web):
+    client, _, _, _ = web
+
+    assert client.get("/itineraries/nope/view").status_code == 302
+
+
+def test_invalid_start_date_is_rejected(web):
+    client, set_id, plans, _ = web
+
+    client.post("/itineraries/save", data={
+        "set_id": set_id, "title": "x", "daily_budget": "100",
+        "start_date": "2026-02-30", "plan": "[[0]]",
+    })
+
+    assert plans.find() == []
