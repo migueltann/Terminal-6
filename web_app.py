@@ -620,6 +620,42 @@ def _itinerary_view_days(itinerary):
     return view_days
 
 
+@app.get("/itineraries")
+def itineraries():
+    """List saved itineraries."""
+    keyword = request.args.get("q", "").strip()
+
+    try:
+        saved = _itinerary_manager().find(keyword)
+    except Exception as exc:
+        app.logger.exception("Could not load itineraries")
+        saved = []
+        flash(f"Could not load itineraries: {exc}", "error")
+
+    return render_template(
+        "itineraries.html",
+        itineraries=saved,
+        keyword=keyword,
+    )
+
+
+@app.get("/itineraries/new/<path:set_id>")
+def new_itinerary(set_id):
+    """Open the builder for a saved recommendation set."""
+    set_id = os.path.basename(set_id)
+    recommendation_set = _data_manager().load(set_id)
+
+    if recommendation_set is None:
+        flash("That saved recommendation set could not be found.", "error")
+        return redirect(url_for("saved_sets"))
+
+    if not recommendation_set.approved():
+        flash("That saved set has no approved recommendations to plan with.", "error")
+        return redirect(url_for("saved_sets"))
+
+    return _render_builder(set_id, recommendation_set)
+
+
 
 @app.post("/download/json")
 def download_json():
