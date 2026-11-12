@@ -358,5 +358,29 @@ class DataManager:
         except (OSError, ValueError):
             return None
 
+    def update(
+        self, identifier: str, result: RecommendationSet
+    ) -> bool:
+        """Replace a saved set; False if it does not exist or cannot be written."""
+        try:
+            return self.__repository.update(identifier, result)
+        except OSError:
+            return False
+
+    def rename(self, identifier: str, new_name: str) -> bool:
+        """Change the destination name shown for a saved set."""
+        new_name = str(new_name).strip()
+
+        if not new_name:
+            raise ValueError("The new name cannot be empty.")
+
+        result = self.load(identifier)
+
+        if result is None:
+            return False
+
+        result.destination = new_name
+        return self.update(identifier, result)
+
     def delete(self, identifier: str) -> bool:
         return self.__repository.delete(identifier)
