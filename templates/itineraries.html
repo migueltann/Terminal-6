@@ -56,6 +56,16 @@
             {% endfor %}
         {% endwith %}
 
+        <!-- Search Bar -->
+        <form class="saved-search" method="get" action="{{ url_for('itineraries') }}">
+            <input name="q" value="{{ keyword or '' }}" placeholder="Search by name or destination">
+            <button class="secondary" type="submit">Search</button>
+
+            {% if keyword %}
+                <a class="secondary" href="{{ url_for('itineraries') }}">Clear</a>
+            {% endif %}
+        </form>
+
     </main>
 </body>
 </html>
