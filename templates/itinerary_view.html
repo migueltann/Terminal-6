@@ -207,6 +207,63 @@
             </section>
         {% endfor %}
 
+        <!-- Budget summary -->
+        <section class="iv-summary">
+            <h2>Budget summary</h2>
+
+            <div class="iv-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Day</th>
+                            <th scope="col">Stops</th>
+                            <th scope="col">Spent</th>
+                            <th scope="col">Budget</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for day in days %}
+                            <tr class="{{ 'over' if day.over }}">
+                                <td>
+                                    Day {{ day.number }}
+                                    {% if day.date %}<small>{{ day.date }}</small>{% endif %}
+                                </td>
+                                <td>{{ day.stops | length }}</td>
+                                <td>${{ '%.2f' | format(day.total) }}</td>
+                                <td>${{ '%.2f' | format(itinerary.daily_budget) }}</td>
+                                <td>{{ 'Over budget' if day.over else 'Within budget' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <!-- Total for the whole trip -->
+                    <tfoot>
+                        <tr>
+                            <th scope="row">Total</th>
+                            <td>{{ itinerary.item_count() }}</td>
+                            <td>${{ '%.2f' | format(itinerary.trip_total()) }}</td>
+                            <td>${{ '%.2f' | format(itinerary.trip_budget()) }}</td>
+                            <td>
+                                {% if itinerary.over_budget_days() %}
+                                    Over on day {{ itinerary.over_budget_days() | join(', ') }}
+                                {% else %}
+                                    Within budget
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <p class="iv-note">
+                Times are suggestions: about 2 hours per activity, 1½ hours for
+                shopping and 1 hour per meal, with 30 minutes to travel between
+                stops. Places you put on the timeline keep the time you chose;
+                the rest are fitted around them, with lunch from 12:00 and
+                dinner from 18:30.
+                Prices are AI estimates in SGD, so check opening hours and book ahead where needed.
+            </p>
+        </section>
     </main>
 </body>
 </html>
