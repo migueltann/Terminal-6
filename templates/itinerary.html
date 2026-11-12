@@ -537,6 +537,91 @@
             chip.appendChild(tools);
             return chip;
         }
+
+        // a place on the timeline, the block is as tall as its duration
+        function blockFor(day, dayIndex, item) {
+            var block = el("div", "block chip type-" + item.type);
+            makeDraggable(block, item);
+
+            var end = startHour(item) + spanHours(item);
+            block.appendChild(el("span", "block-time",
+                hourLabel(startHour(item)) + " – " + hourLabel(end % 24)));
+            block.appendChild(pickButton(item, item.name + " · " + money(item.cost)));
+
+            var tools = el("span", "pick-tools");
+            // Duration, meal, back and remove buttons
+            tools.appendChild(durationPicker(day, item));
+            if (item.type === "food") { tools.appendChild(mealPicker(item)); }
+            tools.appendChild(smallButton("⤺", "Take " + item.name + " off the timeline",
+                function () { placeItem(item, ""); }));
+            tools.appendChild(smallButton("×", "Remove " + item.name,
+                function () { removeItem(dayIndex, item); }));
+            block.appendChild(tools);
+            return block;
+        }
+
+        // the day being edited, Your picks on the left and the hours on the right
+        function renderTimeline(card, day, dayIndex) {
+            // Places that aren't on the timeline yet
+            var untimed = day.filter(function (item) { return !item.time; });
+            var planner = el("div", "planner");
+
+            // Your picks
+            var picks = el("div", "picks");
+            picks.appendChild(el("p", "picks-title", "Your picks"));
+            untimed.forEach(function (item) {
+                picks.appendChild(pickChip(dayIndex, item, untimed));
+            });
+            picks.appendChild(el("p", "muted picks-note", untimed.length
+                ? "Drag a place onto an hour. Anything left here gets a time for you."
+                : "Tap a recommendation above to add it here."));
+            // Dropping back here takes it off the timeline
+            makeDropZone(picks, "");
+            planner.appendChild(picks);
+
+            // timeline
+            var right = el("div", "");
+            right.appendChild(el("p", "timeline-hint" + (picked ? " active" : ""),
+                picked ? "Now tap an hour for " + picked.name + "."
+                       : "Drop a place on an hour, then choose how long it takes."));
+
+            var timeline = el("div", "timeline");
+            // which item is at each hour
+            var owner = {};
+            day.forEach(function (item) {
+                if (!item.time) { return; }
+                for (var h = startHour(item); h < startHour(item) + spanHours(item); h += 1) {
+                    if (owner[h] === undefined) { owner[h] = item; }
+                }
+            });
+
+            // Draw each hour of the day
+            for (var hour = FIRST_HOUR; hour <= LAST_HOUR; hour += 1) {
+                var row = hour - FIRST_HOUR + 1;
+                // Time label on the left
+                var label = el("span", "slot-time", hourLabel(hour));
+                label.style.gridRow = String(row);
+                timeline.appendChild(label);
+
+                var item = owner[hour];
+                if (item && startHour(item) === hour) {
+                    // item starts here, stretch the block over its hours
+                    var block = blockFor(day, dayIndex, item);
+                    block.style.gridRow = row + " / span " + spanHours(item);
+                    timeline.appendChild(block);
+                } else if (!item) {
+                    // empty hour
+                    var slot = el("div", "slot" + (picked ? " can-drop" : ""), "Drop here");
+                    slot.style.gridRow = String(row);
+                    slot.setAttribute("aria-label", "Drop at " + hourLabel(hour));
+                    makeDropZone(slot, hourLabel(hour));
+                    timeline.appendChild(slot);
+                }
+            }
+            right.appendChild(timeline);
+            planner.appendChild(right);
+            card.appendChild(planner);
+        }
     })();
     </script>
 </body>
