@@ -98,3 +98,19 @@ class JsonItineraryRepository(ItineraryRepository):
         entries.append({"id": identifier, **itinerary.to_dict(), "saved_at": _now()})
         self._write(entries)
         return identifier
+
+    def load(self, identifier: str) -> Itinerary:
+        # Look for the itinerary in the file
+        entry = self._find(self._read(), identifier)
+        if entry is None:
+            raise FileNotFoundError(f"Itinerary not found: {identifier}")
+
+        # Convert the saved data back into an Itinerary
+        try:
+            return Itinerary.from_dict(entry)
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError("The saved itinerary has an invalid structure.") from exc
+
+    def load_all(self) -> list[dict]:
+        # Get a summary of every saved itinerary
+        return [_summary(entry["id"], entry) for entry in self._read() if "id" in entry]
