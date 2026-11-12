@@ -160,6 +160,7 @@ def test_menu_rejects_invalid_choice(monkeypatch, io, capsys):
     (["2"], ("view", "2")),
     (["f", "paris"], ("filter", "paris")),
     (["d", "1"], ("delete", "1")),
+    (["r", "1"], ("rename", "1")),
     (["b"], ("back", "")),
     (["xyz"], ("invalid", "xyz")),
 ])
