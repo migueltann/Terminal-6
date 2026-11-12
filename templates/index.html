@@ -64,6 +64,7 @@
         <i></i>
         AI discovery · Python-checked &nbsp;
         <a href="{{ url_for('saved_sets') }}">Saved trips ↗</a>
+        &nbsp;<a href="{{ url_for('itineraries') }}">Itineraries ↗</a>
     </span>
 </header>
 
@@ -335,6 +336,12 @@
             <form method="post" action="{{ url_for('save') }}">
                 <button class="primary" type="submit">
                     Save approved results to JSON + CSV
+                </button>
+            </form>
+
+            <form method="post" action="{{ url_for('plan_latest') }}">
+                <button class="primary" type="submit">
+                    Save &amp; plan itinerary →
                 </button>
             </form>
 
