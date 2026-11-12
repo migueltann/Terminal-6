@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ itinerary.title }} · Itinerary · Terminal 6</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="topbar no-print">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">T6</span>
+
+            <span>
+                TERMINAL 6
+                <small>TRAVEL RECOMMENDATION ASSISTANT</small>
+            </span>
+        </a>
+
+        <nav class="topbar-links">
+            <a class="secondary" href="{{ url_for('saved_sets') }}">Saved trips</a>
+            <a class="secondary" href="{{ url_for('itineraries') }}">Itineraries</a>
+        </nav>
+    </header>
+
+    <main class="shell iv">
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }} no-print">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Trip cover -->
+        <section class="iv-cover">
+            <p class="eyebrow">YOUR ITINERARY · {{ itinerary.destination | upper }}</p>
+
+            <h1>{{ itinerary.title }}</h1>
+
+            <p class="iv-subtitle">
+                {{ itinerary.days | length }}-day trip to {{ itinerary.destination }}
+                {% if date_range %} · {{ date_range }}{% endif %}
+            </p>
+
+            <!-- Trip stats -->
+            <dl class="iv-stats">
+                <div>
+                    <dt>Days</dt>
+                    <dd>{{ itinerary.days | length }}</dd>
+                </div>
+                <div>
+                    <dt>Stops</dt>
+                    <dd>{{ itinerary.item_count() }}</dd>
+                </div>
+                <div>
+                    <dt>Estimated total</dt>
+                    <dd>${{ '%.2f' | format(itinerary.trip_total()) }}</dd>
+                </div>
+                <div>
+                    <dt>Budget</dt>
+                    <dd>${{ '%.2f' | format(itinerary.trip_budget()) }}</dd>
+                </div>
+            </dl>
+
+            <div class="iv-actions no-print">
+                {% if can_edit %}
+                    <a class="primary" href="{{ url_for('edit_itinerary', itinerary_id=itinerary_id) }}">
+                        Edit plan
+                    </a>
+                {% endif %}
+                <button class="secondary" type="button" onclick="window.print()">
+                    Print / save as PDF
+                </button>
+                <a class="secondary" href="{{ url_for('itineraries') }}">All itineraries</a>
+            </div>
+
+            <!-- Jump to a day -->
+            <nav class="iv-jump no-print" aria-label="Days">
+                {% for day in days %}
+                    <a href="#day-{{ day.number }}" class="{{ 'over' if day.over }}">
+                        Day {{ day.number }}
+                        <span>{{ day.stops | length }} stop{{ '' if day.stops | length == 1 else 's' }}</span>
+                    </a>
+                {% endfor %}
+            </nav>
+        </section>
+
+        <!-- One sheet per day -->
+        {% for day in days %}
+            <section class="iv-day" id="day-{{ day.number }}">
+                <!-- Day heading and total cost -->
+                <header class="iv-day-head">
+                    <div>
+                        <p class="eyebrow">DAY {{ day.number }}</p>
+                        <h2>{{ day.date or 'Day ' ~ day.number }}</h2>
+                    </div>
+
+                    <span class="iv-spend {{ 'over' if day.over }}">
+                        ${{ '%.2f' | format(day.total) }}
+                        <small>of ${{ '%.2f' | format(itinerary.daily_budget) }}</small>
+                    </span>
+                </header>
+
+                <!-- Warning if the day is over budget -->
+                {% if day.over %}
+                    <p class="iv-warning">
+                        This day is ${{ '%.2f' | format(day.total - itinerary.daily_budget) }}
+                        over your daily budget.
+                    </p>
+                {% endif %}
+
+                <!-- Day timeline -->
+                {% if day.visits %}
+                    <ol class="iv-timeline">
+                        {% for stop in day.visits %}
+                            <li class="iv-stop">
+                                <!-- Start time, end time and part of the day -->
+                                <div class="iv-time">
+                                    <strong>{{ stop.time }}</strong>
+                                    {% if stop.end %}<span>to {{ stop.end }}</span>{% endif %}
+                                    <span>{{ stop.period }}</span>
+                                </div>
+
+                                <span class="iv-dot type-{{ stop.type }}" aria-hidden="true"></span>
+
+                                <!-- Details of the place -->
+                                <article class="iv-card">
+                                    <p class="iv-tags">
+                                        {% if stop.label %}
+                                            <span class="iv-label">{{ stop.label }}</span>
+                                        {% endif %}
+                                        <span class="chip-tag type-{{ stop.type }}">{{ stop.type_label }}</span>
+                                        {% if stop.top_pick %}
+                                            <span class="iv-top">★ Top pick</span>
+                                        {% endif %}
+                                    </p>
+
+                                    <h3>{{ stop.name }}</h3>
+
+                                    <p class="iv-meta">
+                                        {{ stop.category }}
+                                        {% if stop.category and stop.location %} · {% endif %}
+                                        {{ stop.location }}
+                                    </p>
+
+                                    {% if stop.description %}
+                                        <p class="iv-desc">{{ stop.description }}</p>
+                                    {% endif %}
+
+                                    <!-- Price and Google Maps link -->
+                                    <p class="iv-card-foot">
+                                        <span>Est. ${{ '%.2f' | format(stop.cost) }}</span>
+                                        <a href="{{ stop.maps }}" target="_blank" rel="noopener noreferrer">
+                                            Directions ↗
+                                        </a>
+                                    </p>
+                                </article>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                <!-- Nothing planned on this day -->
+                {% elif not day.stays %}
+                    <p class="iv-free">
+                        Free day. Nothing is planned, so explore at your own pace.
+                    </p>
+                {% endif %}
+
+                <!-- Hotel for the night -->
+                {% for stay in day.stays %}
+                    <div class="iv-stay">
+                        <svg class="iv-stay-icon" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="1.8"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 18V6"/>
+                            <path d="M3 14h18v4"/>
+                            <path d="M21 14v-2a3 3 0 0 0-3-3h-7v5"/>
+                            <circle cx="7" cy="11" r="2"/>
+                        </svg>
+                        <div>
+                            <p class="eyebrow">TONIGHT</p>
+                            <h3>{{ stay.name }}</h3>
+                            <p class="iv-meta">
+                                {{ stay.category }}
+                                {% if stay.category and stay.location %} · {% endif %}
+                                {{ stay.location }}
+                            </p>
+                        </div>
+                        <p class="iv-stay-side">
+                            <span>Est. ${{ '%.2f' | format(stay.cost) }}</span>
+                            <a href="{{ stay.maps }}" target="_blank" rel="noopener noreferrer">
+                                Directions ↗
+                            </a>
+                        </p>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endfor %}
+
+        <!-- Budget summary -->
+        <section class="iv-summary">
+            <h2>Budget summary</h2>
+
+            <div class="iv-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Day</th>
+                            <th scope="col">Stops</th>
+                            <th scope="col">Spent</th>
+                            <th scope="col">Budget</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for day in days %}
+                            <tr class="{{ 'over' if day.over }}">
+                                <td>
+                                    Day {{ day.number }}
+                                    {% if day.date %}<small>{{ day.date }}</small>{% endif %}
+                                </td>
+                                <td>{{ day.stops | length }}</td>
+                                <td>${{ '%.2f' | format(day.total) }}</td>
+                                <td>${{ '%.2f' | format(itinerary.daily_budget) }}</td>
+                                <td>{{ 'Over budget' if day.over else 'Within budget' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <!-- Total for the whole trip -->
+                    <tfoot>
+                        <tr>
+                            <th scope="row">Total</th>
+                            <td>{{ itinerary.item_count() }}</td>
+                            <td>${{ '%.2f' | format(itinerary.trip_total()) }}</td>
+                            <td>${{ '%.2f' | format(itinerary.trip_budget()) }}</td>
+                            <td>
+                                {% if itinerary.over_budget_days() %}
+                                    Over on day {{ itinerary.over_budget_days() | join(', ') }}
+                                {% else %}
+                                    Within budget
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <p class="iv-note">
+                Times are suggestions: about 2 hours per activity, 1½ hours for
+                shopping and 1 hour per meal, with 30 minutes to travel between
+                stops. Places you put on the timeline keep the time you chose;
+                the rest are fitted around them, with lunch from 12:00 and
+                dinner from 18:30.
+                Prices are AI estimates in SGD, so check opening hours and book ahead where needed.
+            </p>
+        </section>
+    </main>
+</body>
+</html>

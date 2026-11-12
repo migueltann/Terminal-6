@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Itineraries · Terminal 6</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">T6</span>
+
+            <span>
+                TERMINAL 6
+                <small>TRAVEL RECOMMENDATION ASSISTANT</small>
+            </span>
+        </a>
+
+        <nav class="topbar-links">
+            <a class="secondary" href="{{ url_for('saved_sets') }}">Saved trips</a>
+            <a class="secondary" href="{{ url_for('index') }}">← Plan a trip</a>
+        </nav>
+    </header>
+
+    <main class="shell">
+
+        <!-- Page Introduction -->
+        <section class="hero">
+            <p class="eyebrow">YOUR PLANS</p>
+
+            <h1>
+                Saved <em>itineraries.</em>
+            </h1>
+
+            <p class="hero-copy">
+                Open an itinerary to keep planning, or start a new one
+                from a saved trip.
+            </p>
+        </section>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="notice {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Search Bar -->
+        <form class="saved-search" method="get" action="{{ url_for('itineraries') }}">
+            <input name="q" value="{{ keyword or '' }}" placeholder="Search by name or destination">
+            <button class="secondary" type="submit">Search</button>
+
+            {% if keyword %}
+                <a class="secondary" href="{{ url_for('itineraries') }}">Clear</a>
+            {% endif %}
+        </form>
+
+        {% if itineraries %}
+            <div class="saved-list">
+                <!-- Itinerary cards (newest first) -->
+                {% for plan in itineraries | reverse %}
+                    <article class="recommendation-card saved-card">
+                        <div>
+                            <p class="eyebrow">{{ plan.destination | upper }}</p>
+
+                            <h3>{{ plan.title }}</h3>
+
+                            <!-- Number of days, places and total cost -->
+                            <p class="muted">
+                                {{ plan.day_count }} day{{ '' if plan.day_count == 1 else 's' }}
+                                · {{ plan.item_count }} item{{ '' if plan.item_count == 1 else 's' }}
+                                · ${{ '%.2f' | format(plan.trip_total) }}
+                                of ${{ '%.2f' | format(plan.daily_budget * plan.day_count) }} budget
+                            </p>
+
+                            <!-- Show which days are over budget -->
+                            {% if plan.over_budget_days %}
+                                <p class="over-budget-note">
+                                    Over budget on day {{ plan.over_budget_days | join(', ') }}
+                                </p>
+                            {% endif %}
+
+                            <p class="muted">
+                                Saved {{ plan.saved_at }}
+                                {% if plan.updated_at %} · edited {{ plan.updated_at }}{% endif %}
+                            </p>
+                        </div>
+
+                        <!-- View / Edit / Delete -->
+                        <div class="saved-actions">
+                            <a class="primary" href="{{ url_for('view_itinerary', itinerary_id=plan.id) }}">
+                                View itinerary ↗
+                            </a>
+
+                            <a class="secondary" href="{{ url_for('edit_itinerary', itinerary_id=plan.id) }}">
+                                Edit
+                            </a>
+
+                            <form
+                                method="post"
+                                action="{{ url_for('delete_itinerary', itinerary_id=plan.id) }}"
+                                onsubmit="return confirm('Delete this itinerary?')"
+                            >
+                                <button class="secondary" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- No itineraries found -->
+            <section class="recommendation-card">
+                {% if keyword %}
+                    <p>No itineraries match "{{ keyword }}".</p>
+                {% else %}
+                    <p>No itineraries yet. Open a saved trip and choose
+                       <strong>Plan itinerary</strong> to make one.</p>
+                {% endif %}
+                <a class="primary" href="{{ url_for('saved_sets') }}">Go to saved trips</a>
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>
