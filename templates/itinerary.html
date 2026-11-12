@@ -350,6 +350,116 @@
             });
             card.appendChild(list);
         }
+
+        // ---------- timeline ----------
+
+        var DEFAULT_HOURS = { activity: 2, shopping: 2, food: 1 };
+        var justPlaced = null;         // so we can focus the duration dropdown after dropping
+
+        function startHour(item) {
+            return Math.max(parseInt(item.time.slice(0, 2), 10), FIRST_HOUR);
+        }
+
+        // how many hours (rows) the item takes up on the timeline
+        function spanHours(item) {
+            var hours = item.duration ? Math.ceil(item.duration / 60)
+                                      : (DEFAULT_HOURS[item.type] || 1);
+            return Math.max(1, Math.min(hours, LAST_HOUR + 1 - startHour(item)));
+        }
+
+        // free hours from this hour until the next placed item (or end of day)
+        function roomFrom(day, hour, ignore) {
+            // Start with the hours left in the day
+            var room = LAST_HOUR + 1 - hour;
+            day.forEach(function (other) {
+                if (other === ignore || !other.time) { return; }
+                var start = startHour(other);
+                // If another place starts later, there's only room until then
+                if (start > hour) { room = Math.min(room, start - hour); }
+            });
+            return room;
+        }
+
+        function hourIsFree(day, hour, ignore) {
+            return day.every(function (other) {
+                if (other === ignore || !other.time) { return true; }
+                var start = startHour(other);
+                // Free if the hour is before or after the other place
+                return hour < start || hour >= start + spanHours(other);
+            });
+        }
+
+        // puts an item at a time on the timeline, blank time sends it back to Your picks
+        function placeItem(item, time) {
+            picked = null;
+            // Send it back to Your picks
+            if (!time) {
+                item.time = "";
+                item.duration = 0;
+                render();
+                return;
+            }
+            var day = days[active];
+            var hour = parseInt(time, 10);
+            // Can't drop on an hour that's taken
+            if (!hourIsFree(day, hour, item)) { render(); return; }
+
+            // keep the old length if moving it, then cut it short if it hits the next item
+            var wanted = item.time ? spanHours(item) : (DEFAULT_HOURS[item.type] || 1);
+            var hours = Math.min(wanted, roomFrom(day, hour, item));
+            item.time = time;
+            item.duration = hours * 60;
+            // Remember it so the duration dropdown gets focused
+            justPlaced = item;
+            render();
+        }
+
+        // lets an area accept drops (empty hours and the Your picks box)
+        function makeDropZone(zone, time) {
+            zone.addEventListener("dragover", function (event) {
+                if (!dragged) { return; }
+                event.preventDefault();     // needed to allow dropping
+                zone.classList.add("drop-hover");
+            });
+            // Remove the highlight when the drag leaves
+            zone.addEventListener("dragleave", function () {
+                zone.classList.remove("drop-hover");
+            });
+            // Place the item when it's dropped here
+            zone.addEventListener("drop", function (event) {
+                event.preventDefault();
+                zone.classList.remove("drop-hover");
+                if (dragged) {
+                    var item = dragged;
+                    dragged = null;   // the dragged chip gets redrawn so clear it here
+                    placeItem(item, time);
+                }
+            });
+            // for phones: tap a place then tap an hour
+            zone.addEventListener("click", function (event) {
+                event.stopPropagation();
+                if (picked) { placeItem(picked, time); }
+            });
+        }
+
+        function makeDraggable(node, item) {
+            node.draggable = true;
+            node.classList.add("draggable");
+            // Remember which place is being dragged
+            node.addEventListener("dragstart", function (event) {
+                dragged = item;
+                event.dataTransfer.effectAllowed = "move";
+                event.dataTransfer.setData("text/plain", item.name);
+                node.classList.add("dragging");
+            });
+            // Clear it when the drag finishes
+            node.addEventListener("dragend", function () {
+                dragged = null;
+                node.classList.remove("dragging");
+            });
+            // Highlight it if it's been tapped
+            if (picked === item) { node.classList.add("picked"); }
+        }
     })();
     </script>
 </body>
