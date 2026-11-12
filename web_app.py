@@ -566,6 +566,60 @@ def _render_builder(set_id, recommendation_set,
     )
 
 
+TYPE_LABELS = {
+    "activity": "Activity",
+    "food": "Food",
+    "shopping": "Shopping",
+    "accommodation": "Stay",
+}
+
+
+def _maps_link(item, destination):
+    """A Google Maps search link for a stop (name + address + city)."""
+    query = ", ".join(
+        part for part in (item.name, item.location, destination) if part
+    )
+    return "https://www.google.com/maps/search/?api=1&query=" + quote_plus(query)
+
+
+def _itinerary_view_days(itinerary):
+    """Everything the itinerary page needs for each day."""
+    view_days = []
+
+    for index in range(len(itinerary.days)):
+        day_date = itinerary.date_for(index)
+        stops = [
+            {
+                "time": stop.time,
+                "end": stop.end,
+                "period": stop.period,
+                "label": stop.label,
+                "type": stop.item.item_type,
+                "type_label": TYPE_LABELS.get(stop.item.item_type, "Stop"),
+                "name": stop.item.name,
+                "category": stop.item.category,
+                "location": stop.item.location,
+                "description": stop.item.description,
+                "cost": stop.item.cost_sgd,
+                "top_pick": stop.item.top_pick,
+                "maps": _maps_link(stop.item, itinerary.destination),
+            }
+            for stop in itinerary.schedule(index)
+        ]
+
+        view_days.append({
+            "number": index + 1,
+            "date": day_date.strftime("%A, %d %B %Y") if day_date else "",
+            "stops": stops,
+            "visits": [stop for stop in stops if stop["period"] != "Overnight"],
+            "stays": [stop for stop in stops if stop["period"] == "Overnight"],
+            "total": itinerary.day_total(index),
+            "over": itinerary.is_over_budget(index),
+        })
+
+    return view_days
+
+
 
 @app.post("/download/json")
 def download_json():
