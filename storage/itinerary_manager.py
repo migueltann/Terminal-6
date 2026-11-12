@@ -21,3 +21,19 @@ class ItineraryManager:
         """Makes an Itinerary from what the user picked in the builder."""
         return Itinerary.from_selection(recommendation_set, source_id,
                                         daily_budget, selection, title, start_date)
+
+    def save(self, itinerary: Itinerary) -> str:
+        """Create. File errors are passed on so the web app can show a message."""
+        return self.__repository.save(itinerary)
+
+    def find(self, keyword: str = "") -> list[dict]:
+        """Read. Searches by title or destination (blank keyword returns all)."""
+        # Remove extra spaces and ignore upper/lower case
+        keyword = str(keyword).strip().lower()
+
+        # Keep the itineraries where the title or destination matches
+        return [
+            entry for entry in self.__repository.load_all()
+            if keyword in str(entry.get("title", "")).lower()
+            or keyword in str(entry.get("destination", "")).lower()
+        ]
