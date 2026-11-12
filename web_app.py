@@ -656,6 +656,54 @@ def new_itinerary(set_id):
     return _render_builder(set_id, recommendation_set)
 
 
+@app.get("/itineraries/<itinerary_id>")
+def edit_itinerary(itinerary_id):
+    """Reopen a saved itinerary in the builder."""
+    itinerary = _itinerary_manager().load(itinerary_id)
+
+    if itinerary is None:
+        flash("That itinerary could not be found.", "error")
+        return redirect(url_for("itineraries"))
+
+    recommendation_set = _data_manager().load(itinerary.source_id)
+
+    if recommendation_set is None:
+        flash(
+            "The saved recommendation set this itinerary was built from "
+            "has been deleted, so it can no longer be edited.",
+            "error",
+        )
+        return redirect(url_for("view_itinerary", itinerary_id=itinerary_id))
+
+    return _render_builder(
+        itinerary.source_id, recommendation_set, itinerary, itinerary_id
+    )
+
+
+@app.get("/itineraries/<itinerary_id>/view")
+def view_itinerary(itinerary_id):
+    """Show a saved itinerary as a day-by-day plan that can be followed or printed."""
+    itinerary = _itinerary_manager().load(itinerary_id)
+
+    if itinerary is None:
+        flash("That itinerary could not be found.", "error")
+        return redirect(url_for("itineraries"))
+
+    first_date = itinerary.date_for(0)
+    last_date = itinerary.date_for(len(itinerary.days) - 1)
+
+    return render_template(
+        "itinerary_view.html",
+        itinerary=itinerary,
+        itinerary_id=itinerary_id,
+        days=_itinerary_view_days(itinerary),
+        date_range=(
+            f"{first_date:%d %b} – {last_date:%d %b %Y}" if first_date else ""
+        ),
+        can_edit=_data_manager().load(itinerary.source_id) is not None,
+    )
+
+
 
 @app.post("/download/json")
 def download_json():
