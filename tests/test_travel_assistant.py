@@ -414,6 +414,67 @@ class TestTravelAssistant(unittest.TestCase):
             "Recommendation set deleted."
         )
 
+    def test_rename_saved_recommendations(self):
+        """Test renaming a saved trip."""
+
+        mock_io = Mock()
+        mock_data = Mock()
+
+        mock_data.find.return_value = [{
+            "filename": "japan.json",
+            "destination": "Japan",
+        }]
+
+        mock_io.ask_saved_action.side_effect = [
+            ("rename", "1"),
+            ("back", ""),
+        ]
+
+        mock_io.ask_new_name.return_value = "Japan Spring Trip"
+        mock_data.rename.return_value = True
+
+        assistant = TravelAssistant(
+            data_manager=mock_data,
+            io_manager=mock_io,
+        )
+
+        assistant.show_saved_menu()
+
+        mock_data.rename.assert_called_once_with(
+            "japan.json", "Japan Spring Trip"
+        )
+        mock_io.show_message.assert_any_call(
+            "Recommendation set renamed to 'Japan Spring Trip'."
+        )
+
+    def test_rename_cancelled_with_blank_name(self):
+        """A blank name cancels the rename without touching storage."""
+
+        mock_io = Mock()
+        mock_data = Mock()
+
+        mock_data.find.return_value = [{
+            "filename": "japan.json",
+            "destination": "Japan",
+        }]
+
+        mock_io.ask_saved_action.side_effect = [
+            ("rename", "1"),
+            ("back", ""),
+        ]
+
+        mock_io.ask_new_name.return_value = ""
+
+        assistant = TravelAssistant(
+            data_manager=mock_data,
+            io_manager=mock_io,
+        )
+
+        assistant.show_saved_menu()
+
+        mock_data.rename.assert_not_called()
+        mock_io.show_message.assert_any_call("Rename cancelled.")
+
     
     def test_terminal_save_recommendations(self):
         """Test saving recommendations when the user chooses Yes."""
