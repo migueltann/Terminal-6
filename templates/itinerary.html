@@ -84,6 +84,61 @@
                 <div class="chip-pool" id="pool"></div>
             </section>
 
+            <!-- Trip settings -->
+            <div class="builder-controls">
+                <label>
+                    Trip name
+                    <input
+                        name="title"
+                        value="{{ title }}"
+                        maxlength="100"
+                        required
+                    >
+                </label>
+
+                <label>
+                    <span>Start date <span class="optional">(optional)</span></span>
+                    <input
+                        name="start_date"
+                        type="date"
+                        value="{{ start_date }}"
+                    >
+                </label>
+
+                <label>
+                    Days
+                    <input
+                        id="day-count"
+                        type="number"
+                        min="1"
+                        max="{{ max_days }}"
+                        value="{{ days | length }}"
+                    >
+                </label>
+
+                <label>
+                    Daily budget (SGD)
+                    <input
+                        id="daily-budget"
+                        name="daily_budget"
+                        type="number"
+                        min="0"
+                        max="100000"
+                        step="any"
+                        value="{{ '%g' | format(daily_budget | round(2)) }}"
+                        required
+                    >
+                </label>
+            </div>
+
+            <p class="builder-tip">
+                Tip: drag a place from "Your picks" onto an hour, then choose
+                how long it takes (on a phone, tap it and then tap an hour).
+                Anything you leave in "Your picks" gets a time for you, fitted
+                around the places you set. A stay is always shown as that
+                night's accommodation.
+            </p>
+
         </form>
     </main>
 </body>
