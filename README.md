@@ -34,6 +34,12 @@ The application supports both a **terminal interface** and a **Flask web interfa
 
    Replace the placeholder with your Gemini API key. Do not upload `.env` to GitHub.
 
+4. (Optional, recommended) Add a free Groq API key as a backup. When every Gemini model is busy (HTTP 503), the app switches to Groq automatically:
+      GROQ_API_KEY=your_actual_groq_api_key
+
+   Create a key at https://console.groq.com. Without it the app still works using Gemini only. Groq retires models often; if the default models (`openai/gpt-oss-120b`, `openai/gpt-oss-20b`) stop working, set your own list in `.env`:
+      GROQ_MODELS=model-one,model-two
+
 ## Running in Docker
 
 Build the image once:
