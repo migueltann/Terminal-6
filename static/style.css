@@ -1873,6 +1873,18 @@ select.meal-select {
     line-height: 1.5;
 }
 
+/* "Usually an evening place..." warning on a stop */
+.iv-note {
+    margin: 10px 0 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #fff6e8;
+    border: 1px solid #f0d3a4;
+    color: #8a5a14;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
 .iv-card-foot,
 .iv-stay-side {
     display: flex;

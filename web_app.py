@@ -690,6 +690,7 @@ def _itinerary_view_days(itinerary):
                 "cost": stop.item.cost_sgd,
                 "top_pick": stop.item.top_pick,
                 "maps": _maps_link(stop.item, itinerary.destination),
+                "note": stop.note,
             }
             for stop in itinerary.schedule(index)
         ]

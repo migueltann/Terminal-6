@@ -158,6 +158,11 @@
                                         <p class="iv-desc">{{ stop.description }}</p>
                                     {% endif %}
 
+                                    <!-- Warning when the time looks wrong for this place -->
+                                    {% if stop.note %}
+                                        <p class="iv-note" role="note">⚠ {{ stop.note }}</p>
+                                    {% endif %}
+
                                     <!-- Price and Google Maps link -->
                                     <p class="iv-card-foot">
                                         <span>Est. ${{ '%.2f' | format(stop.cost) }}</span>
