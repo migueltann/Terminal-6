@@ -17,6 +17,7 @@ class GeminiClient:
         validator: Optional[AIResponseValidator] = None,
         models: Optional[list[str]] = None,
         max_attempts: int = 3,
+        request_timeout: float = 45,
     ):
         load_dotenv()
 
@@ -32,6 +33,14 @@ class GeminiClient:
             raise ValueError("max_attempts must be at least 1.")
 
         self._max_attempts = max_attempts
+
+        if request_timeout <= 0:
+            raise ValueError("request_timeout must be greater than 0.")
+
+        # A 15-item reply normally arrives in under 20 seconds. If Gemini
+        # has not answered by this point it has usually stalled, so give
+        # up and try the next model instead of waiting.
+        self._request_timeout = request_timeout
 
     def _notify(
         self,
@@ -49,8 +58,13 @@ class GeminiClient:
         prompt: str,
         notify: Optional[Callable[[str, str], None]] = None,
         validator: Optional[Callable[[list[dict]], bool]] = None,
+        category: Optional[str] = None,
     ) -> list[dict]:
-        """Generate and validate recommendations using Gemini."""
+        """Generate and validate recommendations using Gemini.
+
+        Pass category when the prompt asks for one recommendation type
+        only, so the response is checked for 15 items instead of 60.
+        """
 
         api_key = os.getenv("GEMINI_API_KEY")
 
@@ -89,17 +103,34 @@ class GeminiClient:
                                 "response_mime_type": "application/json"
                             },
                         },
-                        timeout=100,
+                        timeout=self._request_timeout,
                     )
+
+                except requests.Timeout as err:
+                    last_error = err
+                    self._notify(
+                        notify,
+                        "warning",
+                        f"{model_name} did not respond within "
+                        f"{self._request_timeout:g} seconds.",
+                    )
+                    break
 
                 except requests.RequestException as err:
                     last_error = err
+                    self._notify(
+                        notify,
+                        "warning",
+                        f"{model_name} request failed: {err}",
+                    )
                     break
 
                 if response.status_code == 200:
                     try:
                         recommendations = (
-                            self._validator.parse_gemini_response(response)
+                            self._validator.parse_gemini_response(
+                                response, category
+                            )
                         )
 
                         if (
