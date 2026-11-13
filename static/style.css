@@ -323,6 +323,20 @@ input::placeholder {
     display: block;
 }
 
+
+/* "Taken as Singapore" under the destination field */
+.field-note {
+    display: none;
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.field-note.shown {
+    display: block;
+}
+
 input.invalid-field,
 select.invalid-field,
 textarea.invalid-field {

@@ -392,6 +392,7 @@
                     required
                     aria-describedby="error-destination"
                 >
+                <small class="field-note" id="destination-note" aria-live="polite"></small>
                 <small class="field-error" id="error-destination"></small>
 
                 <small class="hint">
@@ -1005,6 +1006,10 @@
 
         event.preventDefault();
 
+        if (field.id === 'destination') {
+            checkDestination();
+        }
+
         const fields = visibleFields();
         const next = fields[fields.indexOf(field) + 1];
 
@@ -1014,6 +1019,50 @@
         } else {
             button.focus();
         }
+    });
+
+    // ---------- "Taken as Singapore" ----------
+    // Ask Python how it understood the destination as soon as the user
+    // leaves the field, so "sg" shows "Taken as Singapore" straight away.
+    const destinationField = document.getElementById('destination');
+    const destinationNote = document.getElementById('destination-note');
+    const checkDestinationUrl = "{{ url_for('check_destination') }}";
+    let lastChecked = '';
+
+    async function checkDestination() {
+        const typed = destinationField.value.trim();
+        if (!typed || typed === lastChecked) return;
+        lastChecked = typed;
+
+        try {
+            const response = await fetch(
+                checkDestinationUrl + '?destination=' + encodeURIComponent(typed),
+                { headers: { 'Accept': 'application/json' } }
+            );
+            if (!response.ok) return;
+            const result = await response.json();
+
+            // The user may have typed something else while we waited.
+            if (destinationField.value.trim() !== typed) return;
+
+            if (result.valid) {
+                destinationNote.textContent = '✓ Taken as ' + result.destination;
+                destinationNote.classList.add('shown');
+            } else if (result.error) {
+                destinationNote.textContent = '';
+                destinationNote.classList.remove('shown');
+                showError('destination', result.error);
+            }
+        } catch (error) {
+            // Not important: the full check still runs when generating.
+        }
+    }
+
+    destinationField.addEventListener('blur', checkDestination);
+    destinationField.addEventListener('input', () => {
+        lastChecked = '';
+        destinationNote.textContent = '';
+        destinationNote.classList.remove('shown');
     });
 
     // Clear an individual error when the user edits that field.
