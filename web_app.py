@@ -29,6 +29,7 @@ from storage.itinerary_manager import ItineraryManager
 from models import Itinerary
 from models import RecommendationSet
 from user_io.destination_validator import DestinationValidator
+from user_io.generation_progress import GenerationProgress
 
 load_dotenv()
 
@@ -63,6 +64,9 @@ BUDGET_FIELDS = (
 
 ENVIRONMENTS = ("Indoor", "Outdoor", "Any")
 TRANSPORTS = ("Walk", "Transit", "Taxi", "Any")
+
+# Live progress of each /generate request, polled by the loading screen.
+progress_tracker = GenerationProgress()
 
 #server-side storage
 #store generated results as files rather than large cookies.
@@ -379,6 +383,8 @@ def index():
 def generate():
     form_data = request.form.to_dict()
 
+    form_data.pop("progress_id", None)   # only used by the loading screen
+
     user_inputs, errors, field_errors = _collect_inputs(
         request.form
     )
@@ -395,6 +401,15 @@ def generate():
             field_errors=field_errors,
         ), 400  
 
+    # The loading screen sends a random id so it can ask how the AI is doing.
+    progress_id = request.form.get("progress_id", "")
+    notify = _log_ai_status
+
+    if GenerationProgress.valid_id(progress_id):
+        progress_tracker.start(progress_id)
+        # Still logs every message, and also records it for /progress/<id>.
+        notify = progress_tracker.notifier(progress_id, also=_log_ai_status)
+
     try:
         # Convert Flask form data into an OOP requirements object.
         requirements = UserRequirements.from_dict(user_inputs)
@@ -404,7 +419,7 @@ def generate():
 
         recommendation_set = assistant.generate_trip(
             requirements,
-            notify=_log_ai_status,
+            notify=notify,
         )
 
         # Convert the OOP result into the dictionary expected by Flask.
@@ -440,6 +455,19 @@ def generate():
             field_errors={},
         ), 502
 
+    finally:
+        progress_tracker.finish(progress_id)
+
+
+@app.get("/progress/<progress_id>")
+def generation_progress(progress_id):
+    """How far the AI has got, for the loading screen (polled every second)."""
+    snapshot = progress_tracker.snapshot(progress_id)
+
+    if snapshot is None:
+        return jsonify({"error": "Unknown progress id."}), 404
+
+    return jsonify(snapshot)
 
 
 @app.get("/saved")
