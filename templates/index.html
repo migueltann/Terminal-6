@@ -988,6 +988,34 @@
         }
     }
 
+    // ---------- Enter moves to the next field ----------
+    // Pressing Enter in a field used to submit the whole form straight away.
+    // Now it moves to the next field, like Tab. On the last field it moves
+    // to the Generate button, so a second Enter there still generates.
+    function visibleFields() {
+        return Array.from(form.querySelectorAll('input, select'))
+            .filter(field => field.type !== 'hidden' && !field.disabled &&
+                             field.offsetParent !== null);
+    }
+
+    form.addEventListener('keydown', event => {
+        const field = event.target;
+        if (event.key !== 'Enter' || event.isComposing) return;
+        if (!field.matches('input, select')) return;   // buttons keep normal Enter
+
+        event.preventDefault();
+
+        const fields = visibleFields();
+        const next = fields[fields.indexOf(field) + 1];
+
+        if (next) {
+            next.focus();
+            if (next.select && next.tagName === 'INPUT') next.select();
+        } else {
+            button.focus();
+        }
+    });
+
     // Clear an individual error when the user edits that field.
     form.querySelectorAll('input, select').forEach(input => {
         input.addEventListener('input', () => {
