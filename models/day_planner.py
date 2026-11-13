@@ -113,9 +113,28 @@ class DayPlanner:
         timed = [item for item in others if item.time]
         untimed = [item for item in others if not item.time]
 
-        # placed items keep their time
-        timeline = [(item.minutes(), self._stop(item.minutes(), self._timed_label(item), item))
-                    for item in timed]
+        
+        # Check manually timed items for scheduling conflicts.
+        timed.sort(key=lambda item: item.minutes())
+
+        for previous, current in zip(timed, timed[1:]):
+            previous_end = previous.minutes() + self._duration(previous)
+
+            if current.minutes() < previous_end:
+                raise ValueError(
+                    f"Scheduling conflict: {previous.name} and "
+                    f"{current.name} have overlapping times."
+                )
+
+        # Manually placed items keep their chosen times.
+        timeline = [
+            (
+                item.minutes(),
+                self._stop(item.minutes(), self._timed_label(item), item)
+            )
+            for item in timed
+        ]
+
 
         # Keep track of which times are already taken
         busy = [(item.minutes(), item.minutes() + self._duration(item) + self.TRAVEL)

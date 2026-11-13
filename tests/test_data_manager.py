@@ -146,3 +146,50 @@ def test_two_saves_create_separate_sets(manager, sample_result):
     assert len(manager.find()) == 2
     assert manager.load(first) is not None
     assert manager.load(second) is not None
+
+def test_corrupted_index_raises_clear_error(tmp_path):
+    """Corrupted index data should raise an error without being overwritten."""
+
+    repository = JsonCsvRepository(str(tmp_path))
+
+    index_file = tmp_path / "recommendation_sets.json"
+    index_file.write_text("{invalid json", encoding="utf-8")
+
+    with pytest.raises(
+        ValueError,
+        match="The storage index contains invalid JSON",
+    ):
+        repository.load_all()
+
+    assert index_file.read_text(encoding="utf-8") == "{invalid json"
+
+
+def test_corrupted_recommendation_file_raises_clear_error(
+    manager, sample_result, tmp_path
+):
+    """Corrupted recommendation JSON should raise a clear error."""
+
+    # Save a valid recommendation set first.
+    identifier = manager.save(sample_result)
+
+    # Locate the saved JSON file through the repository index.
+    repository = JsonCsvRepository(str(tmp_path))
+    entries = repository.load_all()
+    saved_entry = next(
+        entry for entry in entries
+        if entry["filename"] == identifier
+    )
+
+    json_file = Path(saved_entry["json_path"])
+
+    # Simulate a corrupted file.
+    json_file.write_text("{invalid json", encoding="utf-8")
+
+    with pytest.raises(
+        ValueError,
+        match="The saved recommendation file contains invalid JSON",
+    ):
+        repository.load(identifier)
+
+    # Confirm the corrupted file was not overwritten.
+    assert json_file.read_text(encoding="utf-8") == "{invalid json"

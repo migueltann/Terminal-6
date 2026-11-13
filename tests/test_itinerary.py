@@ -552,3 +552,62 @@ def test_older_saved_itineraries_still_load():
 
     assert plan.start_date == ""
     assert plan.days[0][0].description == ""
+
+
+def test_overlapping_manual_times_are_rejected():
+    """Two manually scheduled activities must not overlap."""
+
+    items = [
+        ItineraryItem(
+            "Bugis Street", "shopping", 10,
+            time="09:00", duration=180
+        ),
+        ItineraryItem(
+            "Museum", "activity", 20,
+            time="10:00", duration=120
+        ),
+    ]
+
+    with pytest.raises(ValueError, match="Scheduling conflict"):
+        DayPlanner().plan(items)
+
+
+def test_overlapping_activities_are_rejected_by_flask(web):
+    """Flask must reject overlapping activities before saving."""
+
+    client, set_id, plans, _ = web
+
+    # Two activities on the same day with overlapping times.
+    selection = [[
+        {"index": 0, "time": "09:00", "duration": 180},
+        {"index": 3, "time": "10:00", "duration": 120},
+    ]]
+
+    response = client.post(
+        "/itineraries/save",
+        data={
+            "set_id": set_id,
+            "title": "Overlapping trip",
+            "daily_budget": "200",
+            "plan": json.dumps(selection),
+        },
+    )
+
+    # Flask should redirect instead of crashing.
+    assert response.status_code == 302
+
+    # The invalid itinerary must not be saved.
+    assert plans.find() == []
+
+    # The error should be displayed to the user.
+    with client.session_transaction() as session:
+        messages = session.get("_flashes", [])
+
+    assert any(
+        "Scheduling conflict" in message
+        for category, message in messages
+    )
+    assert any(
+        "Day 1" in message
+        for category, message in messages
+    )

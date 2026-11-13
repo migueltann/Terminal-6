@@ -128,3 +128,80 @@ def test_validator_rejects_unknown_category():
         AIResponseValidator().validate_response_schema(
             make_valid_items(), category="nightlife"
         )
+
+@pytest.mark.parametrize(
+    "cost",
+    [-10, "unknown", None, float("inf"), float("-inf"), float("nan")]
+)
+def test_validator_rejects_invalid_cost_full_response(cost):
+    items = make_valid_items()
+    items[0]["estimated_cost_sgd"] = cost
+
+    with pytest.raises(RuntimeError, match="invalid estimated_cost_sgd"):
+        AIResponseValidator().validate_response_schema(items)
+
+
+@pytest.mark.parametrize("cost", [0, 20.50, "15.50"])
+def test_validator_accepts_valid_cost_full_response(cost):
+    items = make_valid_items()
+    items[0]["estimated_cost_sgd"] = cost
+
+    result = AIResponseValidator().validate_response_schema(items)
+
+    assert len(result) == 60
+
+
+def test_validator_rejects_missing_cost_full_response():
+    items = make_valid_items()
+    del items[0]["estimated_cost_sgd"]
+
+    with pytest.raises(RuntimeError, match="missing required fields"):
+        AIResponseValidator().validate_response_schema(items)
+
+
+@pytest.mark.parametrize(
+    "cost",
+    [-10, "unknown", None, float("inf"), float("nan")]
+)
+def test_validator_rejects_invalid_cost_single_category(cost):
+    food_items = [
+        item for item in make_valid_items()
+        if item["type"] == "food"
+    ]
+
+    food_items[0]["estimated_cost_sgd"] = cost
+
+    with pytest.raises(RuntimeError, match="invalid estimated_cost_sgd"):
+        AIResponseValidator().validate_response_schema(
+            food_items, category="food"
+        )
+
+
+@pytest.mark.parametrize("cost", [0, 20.50])
+def test_validator_accepts_valid_cost_single_category(cost):
+    food_items = [
+        item for item in make_valid_items()
+        if item["type"] == "food"
+    ]
+
+    food_items[0]["estimated_cost_sgd"] = cost
+
+    result = AIResponseValidator().validate_response_schema(
+        food_items, category="food"
+    )
+
+    assert len(result) == 15
+
+
+def test_validator_rejects_missing_cost_single_category():
+    food_items = [
+        item for item in make_valid_items()
+        if item["type"] == "food"
+    ]
+
+    del food_items[0]["estimated_cost_sgd"]
+
+    with pytest.raises(RuntimeError, match="complete food recommendations"):
+        AIResponseValidator().validate_response_schema(
+            food_items, category="food"
+        )

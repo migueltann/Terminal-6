@@ -13,14 +13,38 @@ class ItineraryManager:
     def __init__(self, repository: ItineraryRepository) -> None:
         # Keep the repository private
         self.__repository = repository
-
+    
     @staticmethod
-    def build(recommendation_set: RecommendationSet, source_id: str,
-              daily_budget: float, selection: list[list[int]],
-              title: str = "", start_date: str = "") -> Itinerary:
-        """Makes an Itinerary from what the user picked in the builder."""
-        return Itinerary.from_selection(recommendation_set, source_id,
-                                        daily_budget, selection, title, start_date)
+    def build(
+        recommendation_set: RecommendationSet,
+        source_id: str,
+        daily_budget: float,
+        selection: list[list[int]],
+        title: str = "",
+        start_date: str = "",
+    ) -> Itinerary:
+        """Build an itinerary and validate every day's schedule."""
+
+        itinerary = Itinerary.from_selection(
+            recommendation_set,
+            source_id,
+            daily_budget,
+            selection,
+            title,
+            start_date,
+        )
+
+        # Validate schedules before the itinerary can be saved.
+        for day_index in range(len(itinerary.days)):
+            try:
+                itinerary.schedule(day_index)
+            except ValueError as exc:
+                raise ValueError(
+                    f"Day {day_index + 1}: {exc}"
+                ) from exc
+
+        return itinerary
+
 
     def save(self, itinerary: Itinerary) -> str:
         """Create. File errors are passed on so the web app can show a message."""

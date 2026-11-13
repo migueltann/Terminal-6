@@ -1,4 +1,4 @@
-
+import math
 import json
 from typing import Any, Optional
 
@@ -66,6 +66,14 @@ class AIResponseValidator:
             "environment",
             "description",
         }
+        
+        def valid_cost(item: dict) -> bool:
+            """Check that the recommendation has a valid, non-negative cost."""
+            try:
+                cost = float(item["estimated_cost_sgd"])
+                return math.isfinite(cost) and cost >= 0
+            except (KeyError, TypeError, ValueError):
+                return False
 
         # 1. Check whether the response is a list
         if not isinstance(items, list):
@@ -94,7 +102,15 @@ class AIResponseValidator:
                     f"recommendations instead of {expected_total}."
                 )
 
-            return usable[:expected_total]
+            selected = usable[:expected_total]
+
+            for index, item in enumerate(selected, start=1):
+                if not valid_cost(item):
+                    raise RuntimeError(
+                        f"Recommendation {index} has an invalid estimated_cost_sgd."
+                    )
+
+            return selected
 
         # 3. Check whether there are the expected number of recommendations
         if len(items) != expected_total:
@@ -132,7 +148,14 @@ class AIResponseValidator:
                     f"{', '.join(sorted(missing_fields))}"
                 )
 
-        # 7. Return the validated recommendations
+        # 7. Check that every recommendation has a valid cost
+        for index, item in enumerate(items, start=1):
+            if not valid_cost(item):
+                raise RuntimeError(
+                    f"Recommendation {index} has an invalid estimated_cost_sgd."
+                )
+
+        # 8. Return the validated recommendations
         return items
 
 

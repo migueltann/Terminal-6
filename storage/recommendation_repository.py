@@ -1,4 +1,4 @@
-""""defines the operations required for recommendation storage"""
+"""Defines the operations required for recommendation storage."""
 
 from abc import ABC, abstractmethod
 from models import RecommendationSet
