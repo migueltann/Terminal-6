@@ -22,7 +22,7 @@ class RecommendationFilter:
         # use the rules given, or if none were given, use all 5 rules by default
         self.rules = rules if rules is not None else [
             BudgetRule(), EnvironmentRule(), AvoidListRule(), DietaryRule(), TransportRule(),
-        ]
+        ]   
         
     # checks 1 recommendation against every rule
     def evaluate(self, item: Recommendation) -> Recommendation:
