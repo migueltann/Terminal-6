@@ -1,6 +1,5 @@
 """Stores recommendation sets using JSON and CSV files."""
 
-from abc import abstractmethod
 import csv
 import json
 import os
