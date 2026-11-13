@@ -1,6 +1,5 @@
 """Works out the schedule (times) for one day."""
 
-import re
 from dataclasses import dataclass
 from typing import Optional
 
@@ -25,29 +24,20 @@ class DayPlanner:
     Everything else gets slotted into the free gaps automatically, with
     lunch from 12:00 and dinner from 18:30. Hotels always go last.
 
-    Auto times also respect when a place makes sense: evening places
-    (night safari, night market, sunset cruise...) go after dinner, and
-    daytime places that usually close around 6pm (zoo, museum, garden...)
-    are planned first so they are not pushed into the evening.
+    Auto times also follow each place's best_time, which the AI gives
+    with every recommendation: "morning" places go before lunch,
+    "afternoon" places after lunch, "evening" places after dinner, and
+    "any" places fill the gaps. A place the user puts at an odd time keeps
+    that time but gets a warning note.
     """
 
     DAY_START = 9 * 60          # auto plan starts at 9am
     LUNCH = 12 * 60
     DINNER = 18 * 60 + 30
     NIGHT_START = 19 * 60       # evening places start from 7pm
-    DAY_CLOSE = 18 * 60         # daytime places usually close around 6pm
+    DAY_CLOSE = 18 * 60         # morning / afternoon places should be done by 6pm
     TRAVEL = 30                 # travel time between places (mins)
     DURATION = {"activity": 120, "shopping": 90, "food": 60}   # normal length of each type
-
-    # Words that show when a place is best visited (whole words, any case).
-    NIGHT_WORDS = re.compile(
-        r"\b(night\w*|nocturnal|evening\w*|sunset|after dark|"
-        r"(?:light|laser) show|bars?|pubs?)\b")
-    ANY_TIME_WORDS = re.compile(r"\b(day|daytime|all day|24 ?h\w*)\b")
-    DAY_WORDS = re.compile(
-        r"\b(zoo|museums?|gallery|galleries|gardens?|botanic\w*|parks?|"
-        r"aquariums?|temples?|shrines?|wildlife|bird\w*|river wonders|"
-        r"hik\w*|trails?|beach\w*|nature reserve)\b")
 
     @staticmethod
     def _clock(minutes: int) -> str:
@@ -64,33 +54,13 @@ class DayPlanner:
         return "Evening"
 
     @classmethod
-    def best_time(cls, item: ItineraryItem) -> str:
-        """'night', 'day' or 'any': when this place makes sense to visit.
-
-        The name is checked first, then the category, then the description,
-        so "Night Safari" (description: "nighttime zoo") counts as night.
-        Food and hotels are always 'any' (meals have their own rules).
-        """
-        if item.item_type not in ("activity", "shopping"):
-            return "any"
-
-        for text in (item.name, item.category, item.description):
-            text = (text or "").lower()
-            # "views by day and night" means any time, not only at night
-            if cls.NIGHT_WORDS.search(text) and not cls.ANY_TIME_WORDS.search(text):
-                return "night"      # "Night Safari" is night even though it is a zoo
-            if cls.DAY_WORDS.search(text):
-                return "day"
-        return "any"
-
     def _note(self, item: ItineraryItem, start: int) -> str:
-        """A warning when a place is planned at an unusual time."""
-        when = self.best_time(item)
+        """A warning when a place is planned at an unusual time for it."""
         end = start + self._duration(item)
-        if when == "night" and start < 17 * 60:
-            return "Usually an evening place. Check it is open at this time."
-        if when == "day" and end > self.DAY_CLOSE:
-            return "Places like this often close around 6pm. Check the opening hours."
+        if item.best_time == "evening" and start < 17 * 60:
+            return "Best visited in the evening. Check it is open at this time."
+        if item.best_time in ("morning", "afternoon") and end > self.DAY_CLOSE:
+            return f"Best visited in the {item.best_time}. It may close before you finish."
         return ""
 
     def _duration(self, item: ItineraryItem) -> int:
@@ -198,18 +168,24 @@ class DayPlanner:
         lunch, dinner, extras = self._pick_meals(
             meals, "Lunch" in labels, "Dinner" in labels)
 
-        # Evening places wait until after dinner. Daytime places that close
-        # around 6pm go first (sorted() keeps the user's order otherwise).
-        evening = [item for item in visits if self.best_time(item) == "night"]
-        daytime = sorted((item for item in visits if self.best_time(item) != "night"),
-                         key=lambda item: self.best_time(item) != "day")
+        # Use the AI's best_time: morning places before lunch, afternoon
+        # places after lunch, evening places after dinner. "any" places
+        # fill up the morning first, then the afternoon (user's order kept).
+        morning = [item for item in visits if item.best_time == "morning"]
+        afternoon = [item for item in visits if item.best_time == "afternoon"]
+        evening = [item for item in visits if item.best_time == "evening"]
+        anytime = [item for item in visits if item.best_time == "any"]
 
-        # half the daytime visits before lunch, the rest after, then dinner
-        half = (len(daytime) + 1) // 2
-        sequence = [(item, "") for item in daytime[:half]]
+        half = (len(morning) + len(afternoon) + len(anytime) + 1) // 2
+        fill = max(0, min(len(anytime), half - len(morning)))
+        before_lunch = morning + anytime[:fill]
+        after_lunch = anytime[fill:] + afternoon
+
+        sequence = [(item, "") for item in before_lunch]
         if lunch:
             sequence.append((lunch, "Lunch"))
-        sequence += [(item, "") for item in daytime[half:]]
+        sequence += [(item, "") for item in after_lunch]
+
         if dinner:
             sequence.append((dinner, "Dinner"))
         sequence += [(item, "Evening") for item in evening]
