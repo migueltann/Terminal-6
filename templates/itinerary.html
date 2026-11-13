@@ -72,13 +72,6 @@
             <section class="builder-pool">
                 <div class="builder-pool-head">
                     <h2>Saved recommendations · {{ destination }}</h2>
-
-                    <div class="type-legend">
-                        <span class="chip-tag type-activity">Activity</span>
-                        <span class="chip-tag type-food">Food</span>
-                        <span class="chip-tag type-shopping">Shopping</span>
-                        <span class="chip-tag type-accommodation">Stay</span>
-                    </div>
                 </div>
 
                 <div class="chip-pool" id="pool"></div>
@@ -319,18 +312,44 @@
 
         // ---------- drawing ----------
 
-        // the recommendation buttons at the top
+        // the recommendation buttons at the top, one row per type
+        var GROUPS = [["activity", "Activities"], ["food", "Food"],
+                      ["shopping", "Shopping"], ["accommodation", "Stays"]];
+
+        function poolChip(item) {
+            var chip = el("button", "chip type-" + item.type,
+                          "+ " + item.name + " · " + money(item.cost));
+            chip.type = "button";
+            chip.title = item.location ? item.location : item.name;
+            // Add the place to the day when clicked
+            chip.addEventListener("click", function () { addItem(item); });
+            return chip;
+        }
+
         function renderPool() {
             // Clear the old buttons first
             poolEl.textContent = "";
-            data.catalog.forEach(function (item) {
-                var chip = el("button", "chip type-" + item.type,
-                              "+ " + item.name + " · " + money(item.cost));
-                chip.type = "button";
-                chip.title = item.location ? item.location : item.name;
-                // Add the place to the day when clicked
-                chip.addEventListener("click", function () { addItem(item); });
-                poolEl.appendChild(chip);
+            var known = GROUPS.map(function (group) { return group[0]; });
+            // any type we don't know about still gets shown, under "Other"
+            var groups = GROUPS.concat([["", "Other"]]);
+
+            groups.forEach(function (group) {
+                var items = data.catalog.filter(function (item) {
+                    return group[0] ? item.type === group[0]
+                                    : known.indexOf(item.type) === -1;
+                });
+                if (!items.length) { return; }
+
+                var section = el("div", "pool-group");
+                var title = el("p", "pool-group-title type-" + (group[0] || "other"));
+                title.appendChild(el("span", "", group[1]));
+                title.appendChild(el("span", "pool-count", String(items.length)));
+                section.appendChild(title);
+
+                var list = el("div", "pool-chips");
+                items.forEach(function (item) { list.appendChild(poolChip(item)); });
+                section.appendChild(list);
+                poolEl.appendChild(section);
             });
         }
 

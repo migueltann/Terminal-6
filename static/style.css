@@ -1291,6 +1291,63 @@ footer span:first-child {
     gap: 8px;
 }
 
+/* Saved recommendations grouped by type: a label, then that type's chips */
+.pool-group {
+    flex: 1 1 100%;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 12px 0;
+    border-top: 1px dashed var(--line);
+}
+
+.pool-group:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+/* ".pool-group" in front so it beats the .type-* colours' background */
+.pool-group .pool-group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0 0;
+    font-size: 13px;
+    font-weight: 700;
+    background: none;
+    border: 0;
+}
+
+.pool-group-title::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid;
+    background: currentColor;
+    opacity: 0.55;
+}
+
+.pool-count {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+.pool-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+@media (max-width: 640px) {
+    .pool-group {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+}
+
 .chip,
 .chip-tag {
     display: inline-flex;
