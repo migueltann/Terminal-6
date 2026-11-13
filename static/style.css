@@ -1341,6 +1341,16 @@ footer span:first-child {
     gap: 8px;
 }
 
+/* "Day 1" tag on a recommendation that is already planned */
+.chip-days {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: #ffffffcc;
+    border: 1px solid currentColor;
+}
+
 @media (max-width: 640px) {
     .pool-group {
         grid-template-columns: 1fr;

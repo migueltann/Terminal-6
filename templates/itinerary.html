@@ -268,6 +268,25 @@
 
         // ---------- changing the plan ----------
 
+        // day numbers (1, 2, ...) that already have this recommendation
+        function plannedOn(item) {
+            var found = [];
+            days.forEach(function (day, dayIndex) {
+                if (day.some(function (other) { return other.index === item.index; })) {
+                    found.push(dayIndex + 1);
+                }
+            });
+            return found;
+        }
+
+        function dayNames(numbers) {
+            return numbers.map(function (number) {
+                return number === active + 1 ? "this day" : "Day " + number;
+            }).join(" and ");
+        }
+
+        var okDuplicates = {};    // places the user already said can repeat
+
         // adds a recommendation to the current day (goes into Your picks first)
         function addItem(item) {
             // Stop if the day is already full
@@ -275,6 +294,17 @@
                 alert("A day can hold at most " + data.maxItems + " items.");
                 return;
             }
+            // Same place twice is usually a mistake, so check first.
+            // (A stay on several nights is normal, so hotels are not checked.)
+            var already = plannedOn(item);
+            if (already.length && item.type !== "accommodation") {
+                if (!confirm(item.name + " is already on " + dayNames(already) +
+                             ". Add it to Day " + (active + 1) + " as well?")) {
+                    return;
+                }
+                okDuplicates[item.index] = true;
+            }
+
             // copy it so the same place on different days can have different times
             days[active].push(Object.assign({}, item, { meal: "", time: "", duration: 0 }));
             render();
@@ -321,6 +351,11 @@
                           "+ " + item.name + " · " + money(item.cost));
             chip.type = "button";
             chip.title = item.location ? item.location : item.name;
+            // small "Day 1" tag so it is easy to see what is already planned
+            var on = plannedOn(item);
+            if (on.length) {
+                chip.appendChild(el("span", "chip-days", "Day " + on.join(", ")));
+            }
             // Add the place to the day when clicked
             chip.addEventListener("click", function () { addItem(item); });
             return chip;
@@ -733,7 +768,24 @@
 
         // before submitting, put the plan into the hidden field
         // (only the index and the user's choices are sent, the server gets the prices itself)
-        document.getElementById("itinerary-form").addEventListener("submit", function () {
+        document.getElementById("itinerary-form").addEventListener("submit", function (event) {
+            // Last check for repeated places the user has not confirmed yet
+            // (for example in an itinerary saved before this check existed).
+            var repeats = data.catalog.filter(function (item) {
+                return item.type !== "accommodation" && !okDuplicates[item.index] &&
+                       plannedOn(item).length > 1;
+            });
+            if (repeats.length) {
+                var list = repeats.map(function (item) {
+                    return "• " + item.name + " (Day " + plannedOn(item).join(", Day ") + ")";
+                }).join("\n");
+                if (!confirm("These places are planned more than once:\n" + list +
+                             "\n\nSave anyway?")) {
+                    event.preventDefault();
+                    return;
+                }
+            }
+
             document.getElementById("plan-field").value = JSON.stringify(
                 days.map(function (day) {
                     return day.map(function (item) {
