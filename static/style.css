@@ -920,21 +920,102 @@ textarea.invalid-field:focus {
     color: var(--muted);
 }
 
-.loading-progress {
-    height: 4px;
-    background: #edf0e9;
-    border-radius: 9px;
-    overflow: hidden;
-    margin: 25px 0;
+/* Flight route on the loading screen */
+.flight-track {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 26px 0 22px;
 }
 
-.loading-progress span {
-    display: block;
-    width: 35%;
-    height: 100%;
+.flight-stop {
+    flex: 0 0 auto;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.flight-stop::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
     background: var(--green);
-    border-radius: 9px;
-    animation: progress 4s ease-in-out infinite;
+    vertical-align: middle;
+}
+
+.flight-stop-end::before {
+    background: #c98a3a;
+}
+
+.flight-route {
+    position: relative;
+    flex: 1;
+    height: 24px;
+}
+
+.flight-route::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    border-top: 2px dashed #d5dcd4;
+    transform: translateY(-50%);
+}
+
+.flight-flown {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--green);
+    transform: translateY(-50%);
+    transition: width 1s linear;
+}
+
+.flight-plane {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: flex;
+    color: var(--green);
+    transform: translate(-50%, -50%) rotate(90deg);
+    transition: left 1s linear, color 0.4s;
+}
+
+.flight-plane svg {
+    animation: plane-bob 1.6s ease-in-out infinite;
+}
+
+.flight-track.landed .flight-plane {
+    color: #c98a3a;
+}
+
+.flight-track.landed .flight-plane svg {
+    animation: none;
+}
+
+.flight-track.landed .flight-plane,
+.flight-track.landed .flight-flown {
+    transition-duration: 0.6s;
+}
+
+.loading-elapsed {
+    margin: 18px 0 0 !important;
+    font-size: 12px !important;
+    font-variant-numeric: tabular-nums;
+}
+
+.loading-cancel {
+    margin-top: 18px;
 }
 
 .loading-steps {
@@ -976,17 +1057,25 @@ textarea.invalid-field:focus {
     }
 }
 
-@keyframes progress {
-    0% {
-        width: 12%;
+/* Gentle up-and-down float for the plane (it is rotated, so X moves it vertically) */
+@keyframes plane-bob {
+    0%, 100% {
+        transform: translateX(0);
     }
 
-    55% {
-        width: 68%;
+    50% {
+        transform: translateX(-3px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flight-plane svg {
+        animation: none;
     }
 
-    100% {
-        width: 92%;
+    .flight-plane,
+    .flight-flown {
+        transition: none;
     }
 }
 

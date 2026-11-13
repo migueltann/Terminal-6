@@ -705,20 +705,41 @@
             Checking your travel requirements…
         </p>
 
-        <div class="loading-progress">
-            <span></span>
+        <!-- Flight route: the plane only moves forward and lands when the AI is done -->
+        <div class="flight-track" aria-hidden="true">
+            <span class="flight-stop">Home</span>
+
+            <div class="flight-route">
+                <div id="flight-flown" class="flight-flown"></div>
+                <span id="flight-plane" class="flight-plane">
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                        <path fill="currentColor"
+                              d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/>
+                    </svg>
+                </span>
+            </div>
+
+            <span id="flight-destination" class="flight-stop flight-stop-end">
+                Destination
+            </span>
         </div>
 
         <div class="loading-steps">
-            <span class="active">01 <small>Validate</small></span>
-            <span>02 <small>Discover</small></span>
-            <span>03 <small>Check rules</small></span>
+            <span class="active">01 Check-in <small>Checking your inputs</small></span>
+            <span>02 In flight <small>AI is exploring</small></span>
+            <span>03 Landing <small>Checking your rules</small></span>
         </div>
+
+        <p id="loading-elapsed" class="loading-elapsed">0s elapsed</p>
 
         <p class="loading-note">
             This can take a little while while the AI responds.
             Please keep this page open.
         </p>
+
+        <button id="cancel-button" class="secondary loading-cancel" type="button">
+            Cancel
+        </button>
     </div>
 </div>
 
@@ -750,6 +771,191 @@
     const summary = document.getElementById('validation-summary');
 
     let submitting = false;
+    
+    // ---------- loading screen (flight) ----------
+    const elapsedLabel = document.getElementById('loading-elapsed');
+    const cancelButton = document.getElementById('cancel-button');
+    const flightTrack = document.querySelector('.flight-track');
+    const flightFlown = document.getElementById('flight-flown');
+    const flightPlane = document.getElementById('flight-plane');
+    const flightDestination = document.getElementById('flight-destination');
+    const progressUrl = "{{ url_for('generation_progress', progress_id='PROGRESS_ID') }}";
+    const hero = document.querySelector('.hero');
+
+    let controller = null;     // AbortController for the running request
+    let pollTimer = null;      // asks the server for progress every second
+    let clockTimer = null;     // updates "Ns elapsed" every second
+    let startedAt = 0;
+    let planePercent = 0;
+
+    // Move the plane to a percentage of the route. It never moves backwards.
+    function setFlight(percent) {
+        planePercent = Math.max(planePercent, Math.min(percent, 100));
+        flightFlown.style.width = planePercent + '%';
+        flightPlane.style.left = planePercent + '%';
+    }
+
+    // Time alone moves the plane slowly (about 60% after 30s) and it never
+    // passes 92% until the result is really back. Each finished AI category
+    // (activity, food, stay, shopping) also pushes it forward.
+    function flightProgress(seconds, categoriesDone) {
+        const byTime = 8 + 84 * (1 - Math.exp(-seconds / 30));
+        const byCategories = 10 + categoriesDone * 20;
+        return Math.min(92, Math.max(byTime, byCategories));
+    }
+
+    function formatElapsed(seconds) {
+        const whole = Math.floor(seconds);
+        if (whole < 60) return whole + 's elapsed';
+        const rest = whole % 60;
+        return Math.floor(whole / 60) + 'm ' + (rest < 10 ? '0' : '') + rest + 's elapsed';
+    }
+
+    function newProgressId() {
+        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+        return 'p-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+    }
+
+    // Turn a status line from the AI into something friendly.
+    function friendlyMessage(status) {
+        const text = status.message || '';
+        if (/switching to/i.test(text)) return 'Gemini is busy, switching to the backup AI…';
+        if (/busy|unavailable|did not respond|trying again/i.test(text)) {
+            return 'The AI is busy, retrying…';
+        }
+        if (status.categories_done >= status.categories_total) {
+            return 'Python is checking budgets, dietary needs, transport and avoid-list rules…';
+        }
+        if (status.model) {
+            return 'Requesting recommendations from ' + status.model + '… (' +
+                status.categories_done + ' of ' + status.categories_total + ' categories ready)';
+        }
+        return 'Asking AI to discover activities, food, accommodation and shopping…';
+    }
+
+    async function pollProgress(progressId) {
+        try {
+            const response = await fetch(progressUrl.replace('PROGRESS_ID', progressId),
+                                         { headers: { 'Accept': 'application/json' } });
+            if (!response.ok) return;          // not started yet, try again next second
+            const status = await response.json();
+            if (!submitting) return;           // cancelled meanwhile
+
+            steps[1].classList.add('active');
+            if (status.categories_done >= status.categories_total) {
+                steps[2].classList.add('active');
+            }
+            message.textContent = friendlyMessage(status);
+            setFlight(flightProgress(status.elapsed, status.categories_done));
+        } catch (error) {
+            // A missed poll does not matter, the next one will catch up.
+        }
+    }
+
+    function stopTimers() {
+        clearInterval(pollTimer);
+        clearInterval(clockTimer);
+        pollTimer = null;
+        clockTimer = null;
+    }
+
+    function showLoading(destination) {
+        form.style.display = 'none';
+        if (hero) hero.style.display = 'none';
+
+        planePercent = 0;
+        flightTrack.classList.remove('landed');
+        steps.forEach((step, index) => step.classList.toggle('active', index === 0));
+        flightDestination.textContent = destination;
+        setFlight(3);                        // boarding
+        cancelButton.disabled = false;
+        cancelButton.textContent = 'Cancel';
+
+        loading.hidden = false;
+        loading.classList.add('visible');
+        loading.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('is-loading');
+
+        startedAt = Date.now();
+        elapsedLabel.textContent = formatElapsed(0);
+        clockTimer = setInterval(() => {
+            elapsedLabel.textContent = formatElapsed((Date.now() - startedAt) / 1000);
+        }, 1000);
+    }
+
+    function hideLoading() {
+        stopTimers();
+        loading.classList.remove('visible');
+        loading.hidden = true;
+        loading.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('is-loading');
+
+        form.style.display = '';
+        if (hero) hero.style.display = '';
+        button.disabled = false;
+        button.innerHTML = 'Generate recommendations <span>↗</span>';
+        submitting = false;
+    }
+
+    // Replace this page with the page Flask sent back (results or an error).
+    function showServerPage(html) {
+        document.open();
+        document.write(html);
+        document.close();
+        window.scrollTo(0, 0);
+    }
+
+    async function startGeneration(destination) {
+        submitting = true;
+        showLoading(destination);
+        message.textContent = 'Preparing recommendations for ' + destination + '…';
+
+        const progressId = newProgressId();
+        const formData = new FormData(form);
+        formData.append('progress_id', progressId);
+
+        controller = new AbortController();
+        pollTimer = setInterval(() => pollProgress(progressId), 1000);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                signal: controller.signal,
+            });
+            const html = await response.text();
+            stopTimers();
+
+            // Landing: finish the route, then show the results.
+            steps.forEach(step => step.classList.add('active'));
+            setFlight(100);
+            flightTrack.classList.add('landed');
+            message.textContent = response.ok
+                ? 'Landed! Loading your recommendations…'
+                : 'Something went wrong, showing the details…';
+            cancelButton.disabled = true;
+
+            setTimeout(() => showServerPage(html), 900);
+        } catch (error) {
+            if (error.name === 'AbortError') return;      // the user pressed Cancel
+            console.error('Generation request failed:', error);
+            hideLoading();
+            summary.textContent =
+                'Could not reach the Python server. Please check that it is ' +
+                'running and try again.';
+            summary.classList.add('shown');
+        }
+    }
+
+    cancelButton.addEventListener('click', () => {
+        if (!controller) return;
+        controller.abort();
+        hideLoading();
+        summary.textContent =
+            'Generation cancelled. Your inputs are still here, so you can ' +
+            'change them and try again.';
+        summary.classList.add('shown');
+    });
 
     function clearErrors() {
         document.querySelectorAll('.field-error').forEach(error => {
@@ -927,41 +1133,9 @@
                 return;
             }
 
-            // Validation passed. Now show the loading screen.
-            submitting = true;
-
-            form.style.display = 'none';
-
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                hero.style.display = 'none';
-            }
-            loading.hidden = false; 
-            loading.classList.add('visible');
-            loading.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('is-loading');
-
-            message.textContent =
-                'Preparing recommendations for ' + destination + '…';
-
-            steps[0].classList.add('active');
-
-            setTimeout(() => {
-                steps[1].classList.add('active');
-                message.textContent =
-                    'Asking AI to discover activities, food, ' +
-                    'accommodation and shopping…';
-            }, 900);
-
-            setTimeout(() => {
-                steps[2].classList.add('active');
-                message.textContent =
-                    'Python is checking budgets, dietary needs, ' +
-                    'transport and avoid-list rules…';
-            }, 3500);
-
-            // Submit to the existing Python generation route.
-            HTMLFormElement.prototype.submit.call(form);
+            // Validation passed. Use Python's cleaned name
+            // (e.g. "sg" -> "Singapore") on the loading screen.
+            startGeneration(result.destination || destination);
 
         } catch (error) {
             console.error('Input validation failed:', error);
