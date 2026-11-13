@@ -14,6 +14,7 @@ class ScheduledStop:
     label: str         # Lunch, Dinner etc, blank for normal places
     item: ItineraryItem
     end: str = ""      # end time, blank for the hotel
+    note: str = ""     # warning when the time looks wrong for this place
 
 
 class DayPlanner:
@@ -22,11 +23,19 @@ class DayPlanner:
     Places the user dragged onto the timeline keep their time and duration.
     Everything else gets slotted into the free gaps automatically, with
     lunch from 12:00 and dinner from 18:30. Hotels always go last.
+
+    Auto times also follow each place's best_time, which the AI gives
+    with every recommendation: "morning" places go before lunch,
+    "afternoon" places after lunch, "evening" places after dinner, and
+    "any" places fill the gaps. A place the user puts at an odd time keeps
+    that time but gets a warning note.
     """
 
     DAY_START = 9 * 60          # auto plan starts at 9am
     LUNCH = 12 * 60
     DINNER = 18 * 60 + 30
+    NIGHT_START = 19 * 60       # evening places start from 7pm
+    DAY_CLOSE = 18 * 60         # morning / afternoon places should be done by 6pm
     TRAVEL = 30                 # travel time between places (mins)
     DURATION = {"activity": 120, "shopping": 90, "food": 60}   # normal length of each type
 
@@ -44,6 +53,15 @@ class DayPlanner:
             return "Afternoon"
         return "Evening"
 
+    def _note(self, item: ItineraryItem, start: int) -> str:
+        """A warning when a place is planned at an unusual time for it."""
+        end = start + self._duration(item)
+        if item.best_time == "evening" and start < 17 * 60:
+            return "Best visited in the evening. Check it is open at this time."
+        if item.best_time in ("morning", "afternoon") and end > self.DAY_CLOSE:
+            return f"Best visited in the {item.best_time}. It may close before you finish."
+        return ""
+
     def _duration(self, item: ItineraryItem) -> int:
         # user's chosen duration, otherwise the normal one
         return item.duration or self.DURATION.get(item.item_type, 90)
@@ -52,7 +70,7 @@ class DayPlanner:
         # Create one stop with its start and end time
         end = start + self._duration(item)
         return ScheduledStop(self._clock(start), self._period(start), label, item,
-                             self._clock(end))
+                             self._clock(end), self._note(item, start))
 
     @staticmethod
     def _timed_label(item: ItineraryItem) -> str:
@@ -149,14 +167,27 @@ class DayPlanner:
         lunch, dinner, extras = self._pick_meals(
             meals, "Lunch" in labels, "Dinner" in labels)
 
-        # half the visits before lunch, the rest after, then dinner
-        half = (len(visits) + 1) // 2
-        sequence = [(item, "") for item in visits[:half]]
+        # Use the AI's best_time: morning places before lunch, afternoon
+        # places after lunch, evening places after dinner. "any" places
+        # fill up the morning first, then the afternoon (user's order kept).
+        morning = [item for item in visits if item.best_time == "morning"]
+        afternoon = [item for item in visits if item.best_time == "afternoon"]
+        evening = [item for item in visits if item.best_time == "evening"]
+        anytime = [item for item in visits if item.best_time == "any"]
+
+        half = (len(morning) + len(afternoon) + len(anytime) + 1) // 2
+        fill = max(0, min(len(anytime), half - len(morning)))
+        before_lunch = morning + anytime[:fill]
+        after_lunch = anytime[fill:] + afternoon
+
+        sequence = [(item, "") for item in before_lunch]
         if lunch:
             sequence.append((lunch, "Lunch"))
-        sequence += [(item, "") for item in visits[half:]]
+        sequence += [(item, "") for item in after_lunch]
+
         if dinner:
             sequence.append((dinner, "Dinner"))
+        sequence += [(item, "Evening") for item in evening]
         sequence += [(item, "Extra meal") for item in extras]
 
         # Start the day at 9am and go through each place in order
@@ -167,11 +198,15 @@ class DayPlanner:
                 clock = max(clock, self.LUNCH)
             elif label == "Dinner":
                 clock = max(clock, self.DINNER)
+            elif label == "Evening":
+                clock = max(clock, self.NIGHT_START)
 
             # Find a free time for this place and add it to the timeline
             length = self._duration(item) + self.TRAVEL
             clock = self._next_free(clock, length, busy)
-            timeline.append((clock, self._stop(clock, label, item)))
+            # "Evening" is only used for ordering, so the stop gets no label
+            shown = "" if label == "Evening" else label
+            timeline.append((clock, self._stop(clock, shown, item)))
 
             # Move the clock forward to after this place
             clock += length

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, ClassVar
 from .rule_result import RuleResult
 
 @dataclass
@@ -21,7 +21,20 @@ class Recommendation:
     top_pick: bool = False
     top_pick_reason: str = ""
     extra: dict[str, Any] = field(default_factory=dict)
+    best_time: str = "any"      # morning, afternoon, evening or any (from the AI)
 
+    # Times of day the AI may give. Anything else becomes "any".
+    BEST_TIMES: ClassVar[tuple[str, ...]] = ("morning", "afternoon", "evening", "any")
+
+    def __post_init__(self) -> None:
+        self.best_time = self.clean_best_time(self.best_time)
+
+    @classmethod
+    def clean_best_time(cls, value: Any) -> str:
+        """Lower-case the AI's answer, and use "any" if it is missing or unknown."""
+        text = str(value or "").strip().lower()
+        return text if text in cls.BEST_TIMES else "any"
+    
     @classmethod
     def from_dict(cls, data: dict) -> "Recommendation":
         if not isinstance(data, dict):
@@ -30,7 +43,7 @@ class Recommendation:
                     "environment", "description", "tags", "transport_options",
                     "dietary_tags", "shopping_types", "shopping_interests",
                     "checks", "eligible", "top_pick", "top_pick_reason",
-                    "passed_rules", "failed_rules"}
+                    "passed_rules", "failed_rules", "best_time"}
         return cls(
             name=str(data["name"]), item_type=str(data["type"]),
             category=str(data["category"]), cost_sgd=float(data["estimated_cost_sgd"]),
@@ -45,6 +58,7 @@ class Recommendation:
             top_pick=bool(data.get("top_pick", False)),
             top_pick_reason=str(data.get("top_pick_reason") or ""),
             extra={k: v for k, v in data.items() if k not in standard},
+            best_time=data.get("best_time"),     # older saved sets have none -> "any"
         )
 
     def is_eligible(self) -> bool:
@@ -61,7 +75,8 @@ class Recommendation:
         result = {**self.extra, "name": self.name, "type": self.item_type,
                   "category": self.category, "estimated_cost_sgd": self.cost_sgd,
                   "location": self.location, "environment": self.environment,
-                  "description": self.description, "tags": list(self.tags),
+                  "description": self.description, "best_time": self.best_time,
+                  "tags": list(self.tags),
                   "transport_options": list(self.transport_options),
                   "dietary_tags": list(self.dietary_tags), "eligible": self.is_eligible(),
                   "top_pick": self.top_pick, "checks": [r.to_dict() for r in self.results],

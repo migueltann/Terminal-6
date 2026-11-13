@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 from typing import ClassVar
-
+from .recommendation import Recommendation
 
 @dataclass
 class ItineraryItem:
@@ -18,6 +18,7 @@ class ItineraryItem:
     meal: str = ""              # only for food, lunch or dinner (blank means auto)
     time: str = ""              # start time on the timeline, blank if not placed yet
     duration: int = 0           # in minutes, 0 means use the normal length
+    best_time: str = "any"      # morning, afternoon, evening or any
 
     # Allowed meal choices and the longest something can last
     MEALS: ClassVar[tuple[str, ...]] = ("", "lunch", "dinner")
@@ -25,6 +26,9 @@ class ItineraryItem:
 
     def __post_init__(self) -> None:
         # validate the values when the item is created
+
+        # Same allowed values as Recommendation; unknown becomes "any"
+        self.best_time = Recommendation.clean_best_time(self.best_time)
 
         # Check the meal is one of the allowed choices
         if self.meal not in self.MEALS:
@@ -72,7 +76,7 @@ class ItineraryItem:
                 "cost_sgd": self.cost_sgd, "location": self.location,
                 "category": self.category, "description": self.description,
                 "top_pick": self.top_pick, "meal": self.meal, "time": self.time,
-                "duration": self.duration}
+                "duration": self.duration, "best_time": self.best_time}
         
     @classmethod
     def from_dict(cls, data: dict) -> "ItineraryItem":
@@ -86,4 +90,5 @@ class ItineraryItem:
                    top_pick=bool(data.get("top_pick", False)),
                    meal=str(data.get("meal") or ""),
                    time=str(data.get("time") or ""),
-                   duration=int(data.get("duration") or 0))
+                   duration=int(data.get("duration") or 0),
+                   best_time=str(data.get("best_time") or "any"))

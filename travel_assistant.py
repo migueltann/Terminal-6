@@ -53,10 +53,23 @@ class TravelAssistant:
             return
 
         try:
-            result = self.generate_trip(
-                requirements,
-                notify=self._io_manager.show_status,
+            # Spinner + timer while the AI works. Every status message is
+            # still printed: wrap() just clears the spinner line first.
+            spinner = self._io_manager.start_spinner(
+                "Generating recommendations"
             )
+
+            try:
+                result = self.generate_trip(
+                    requirements,
+                    notify=spinner.wrap(self._io_manager.show_status),
+                )
+            except BaseException:
+                # Error or Ctrl+C: stop the spinner, then let it carry on.
+                spinner.stop("Stopped")
+                raise
+
+            spinner.stop("Done")
 
             self._io_manager.show_recommendations(result)
 

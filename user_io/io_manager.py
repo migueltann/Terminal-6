@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 from models import Recommendation, RecommendationSet, UserRequirements
 from user_io.destination_validator import DestinationValidator
-
+from user_io.progress_spinner import ProgressSpinner
 
 class IOManager:
     """Collects and validates user input, and displays results in the terminal."""
@@ -108,6 +108,13 @@ class IOManager:
     def show_status(self, level: str, message: str) -> None:
         """Show an INFO or WARNING line sent by another manager (used as the AI notifier)."""
         print(f"\n[{str(level).upper()}] {message}")
+
+    def start_spinner(self, message: str) -> ProgressSpinner:
+        """Start a spinner with a running timer, e.g. while the AI works.
+
+        Call stop() on the returned spinner when the work is finished.
+        """
+        return ProgressSpinner(message).start()
 
     @classmethod
     def _is_exit(cls, value: str) -> bool:

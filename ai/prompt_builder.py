@@ -37,6 +37,16 @@ RECOMMENDATION_FIELDS = """
 
     "description": short, factual description of the recommendation.
 
+    "best_time": one of "morning", "afternoon", "evening" or "any".
+    - The time of day this place is best visited, based on its real
+      opening hours and what the visit is like.
+    - Use "evening" for places that only open, or are best, after dark,
+      such as night safaris, night markets, light shows and bars.
+    - Use "morning" or "afternoon" for places that close in the early
+      evening or are best earlier in the day.
+    - Use "any" when the time of day does not matter.
+    - For food and accommodation, use "any" (meals are planned separately).
+
     "tags": array of accurate, descriptive lowercase keywords.
     - Apply these tagging rules to EVERY recommendation across
       activities, food, accommodation and shopping.
@@ -250,7 +260,7 @@ class PromptBuilder:
     6. Include different shopping categories where available.
     7. Every recommendation must include "environment".
     8. Do not invent venues or claim uncertain facts as verified.
-    9. Do not include timing-related fields.
+    9. Do not include timing-related fields other than "best_time".
     10. Do not add preference scores, rankings or eligibility decisions.
     11. Every recommendation must contain all required fields.
     12. Do not include explanations outside the JSON array.
@@ -352,7 +362,7 @@ class PromptBuilder:
     5. Include different {category} categories where available.
     6. Every recommendation must include "environment".
     7. Do not invent venues or claim uncertain facts as verified.
-    8. Do not include timing-related fields.
+    8. Do not include timing-related fields other than "best_time".
     9. Do not add preference scores, rankings or eligibility decisions.
     10. Every recommendation must contain all required fields.
     11. Do not include explanations outside the JSON array.

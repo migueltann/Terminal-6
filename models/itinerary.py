@@ -153,7 +153,7 @@ class Itinerary:
                     cost_sgd=chosen.cost_sgd, location=chosen.location,
                     category=chosen.category, description=chosen.description,
                     top_pick=chosen.is_top_pick(), meal=meal, time=time,
-                    duration=duration,
+                    duration=duration, best_time=chosen.best_time,
                 ))
             days.append(items)
 
