@@ -181,6 +181,21 @@ def _error_message(err):
             "then restart Flask."
         )
 
+    # Gemini failed and the Groq backup failed (or is not set up).
+    if "all ai providers failed" in low:
+        if "groq_api_key" in low:
+            return (
+                "Gemini is temporarily unavailable and no Groq backup "
+                "is set up. Try again in a little while, or add "
+                "GROQ_API_KEY=your_key to the project .env file "
+                "and restart Flask."
+            )
+
+        return (
+            "Gemini and the Groq backup are both unavailable right now. "
+            "Please try again in a little while."
+        )
+
     if (
         "http 401" in low
         or "http 403" in low

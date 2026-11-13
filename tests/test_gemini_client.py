@@ -166,5 +166,76 @@ class TestGeminiClient(unittest.TestCase):
     
 
 
+    @patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"})
+    @patch("ai.gemini_client.requests.post")
+    def test_generate_single_category(self, mock_post):
+        """Accept 15 items when a category is requested."""
+
+        import json
+
+        food_items = [
+            item for item in make_valid_items()
+            if item["type"] == "food"
+        ]
+
+        success_response = Mock()
+        success_response.status_code = 200
+        success_response.json.return_value = {
+            "candidates": [
+                {"content": {"parts": [{"text": json.dumps(food_items)}]}}
+            ]
+        }
+        mock_post.return_value = success_response
+
+        client = GeminiClient(models=["test-model"])
+        result = client.generate("Test prompt", category="food")
+
+        self.assertEqual(len(result), 15)
+        self.assertEqual(mock_post.call_count, 1)
+
+
+    @patch.dict(os.environ, {"GEMINI_API_KEY": "test-key"})
+    @patch("ai.gemini_client.requests.post")
+    def test_timeout_moves_to_next_model(self, mock_post):
+        """A stalled request is reported and the next model is tried."""
+
+        import json
+
+        import requests
+
+        success_response = Mock()
+        success_response.status_code = 200
+        success_response.json.return_value = {
+            "candidates": [
+                {"content": {"parts": [{"text": json.dumps(make_valid_items())}]}}
+            ]
+        }
+        mock_post.side_effect = [
+            requests.Timeout("read timed out"),
+            success_response,
+        ]
+        messages = []
+
+        client = GeminiClient(
+            models=["slow-model", "fast-model"],
+            request_timeout=30,
+        )
+        result = client.generate(
+            "Test prompt",
+            notify=lambda level, message: messages.append(message),
+        )
+
+        self.assertEqual(len(result), 60)
+        self.assertEqual(mock_post.call_args_list[0].kwargs["timeout"], 30)
+        self.assertIn("fast-model", mock_post.call_args_list[1].args[0])
+        self.assertIn(
+            "slow-model did not respond within 30 seconds.", messages
+        )
+
+    def test_invalid_request_timeout_is_rejected(self):
+        with self.assertRaises(ValueError):
+            GeminiClient(request_timeout=0)
+
+
 if __name__ == "__main__":
     unittest.main()
