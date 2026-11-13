@@ -22,6 +22,7 @@ class JsonCsvRepository(RecommendationRepository):
         """Create the storage directory if needed."""
         os.makedirs(self.__data_dir, exist_ok=True)
 
+    
     def _read_index(self) -> list[dict]:
         """Read saved-set metadata from the index."""
         try:
@@ -29,8 +30,14 @@ class JsonCsvRepository(RecommendationRepository):
                 self.__index_file, "r", encoding="utf-8"
             ) as file:
                 entries = json.load(file)
+
         except FileNotFoundError:
             return []
+
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "The storage index contains invalid JSON."
+            ) from exc
 
         if not isinstance(entries, list) or not all(
             isinstance(entry, dict) for entry in entries
@@ -40,6 +47,7 @@ class JsonCsvRepository(RecommendationRepository):
             )
 
         return entries
+
 
     def _write_index(self, entries: list[dict]) -> None:
         """Write saved-set metadata to the index."""
@@ -72,6 +80,7 @@ class JsonCsvRepository(RecommendationRepository):
             for entry in self._read_index()
         ]
 
+    
     def load(self, identifier: str) -> RecommendationSet:
         """Load a recommendation set using its JSON filename."""
         entry = next(
@@ -88,10 +97,16 @@ class JsonCsvRepository(RecommendationRepository):
                 f"Saved recommendation set not found: {identifier}"
             )
 
-        with open(
-            entry["json_path"], "r", encoding="utf-8"
-        ) as file:
-            data = json.load(file)
+        try:
+            with open(
+                entry["json_path"], "r", encoding="utf-8"
+            ) as file:
+                data = json.load(file)
+
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "The saved recommendation file contains invalid JSON."
+            ) from exc
 
         try:
             return RecommendationSet.from_dict(data)
