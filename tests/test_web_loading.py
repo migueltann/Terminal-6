@@ -117,7 +117,8 @@ def test_itinerary_page_shows_time_warning(monkeypatch, tmp_path):
     trip.add_item(Recommendation(name="Night Safari", item_type="activity",
                                  category="Wildlife", cost_sgd=49.0,
                                  location="Mandai", environment="Outdoor",
-                                 description="Nocturnal animals"))
+                                 description="Nocturnal animals",
+                                 best_time="evening"))
     sets = JsonCsvRepository(str(tmp_path))
     plans = JsonItineraryRepository(str(tmp_path))
     monkeypatch.setattr(web_app, "JsonCsvRepository", lambda: sets)
@@ -133,4 +134,4 @@ def test_itinerary_page_shows_time_warning(monkeypatch, tmp_path):
     itinerary_id = ItineraryManager(plans).find()[0]["id"]
     page = client.get(f"/itineraries/{itinerary_id}/view").get_data(as_text=True)
 
-    assert "Usually an evening place" in page
+    assert "Best visited in the evening" in page

@@ -53,7 +53,6 @@ class DayPlanner:
             return "Afternoon"
         return "Evening"
 
-    @classmethod
     def _note(self, item: ItineraryItem, start: int) -> str:
         """A warning when a place is planned at an unusual time for it."""
         end = start + self._duration(item)
