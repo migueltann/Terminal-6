@@ -38,11 +38,51 @@ class TravelAssistant:
         )
 
 
+    def _generate_menu(self) -> None:
+        """Handle generating and optionally saving recommendations."""
+        requirements = self._io_manager.collect_requirements()
+
+        if requirements is None:
+            return
+
+        requirements = self._io_manager.confirm_or_edit(
+            requirements
+        )
+
+        if requirements is None:
+            return
+
+        try:
+            result = self.generate_trip(
+                requirements,
+                notify=self._io_manager.show_status,
+            )
+
+            self._io_manager.show_recommendations(result)
+
+            save_choice = self._io_manager.ask_yes_no(
+                "\nWould you like to save these recommendations? (y/n): "
+            )
+
+            if save_choice:
+                filename = self._data_manager.save(result)
+                self._io_manager.show_message(
+                    f"Recommendations saved successfully: {filename}"
+                )
+
+        except Exception as error:
+            self._io_manager.show_error(str(error))
+
+    
     
     def run(self) -> None:
         """Run the terminal travel recommendation workflow."""
-
         self._io_manager.show_welcome()
+
+        menu_actions = {
+            "1": self._generate_menu,
+            "2": self.show_saved_menu,
+        }
 
         while True:
             choice = self._io_manager.show_menu()
@@ -51,45 +91,15 @@ class TravelAssistant:
                 self._io_manager.show_message("Goodbye!")
                 return
 
-            if choice == "2":
-                self.show_saved_menu()
-                continue
+            action = menu_actions.get(choice)
 
-            requirements = self._io_manager.collect_requirements()
-
-            if requirements is None:
-                continue
-
-            requirements = self._io_manager.confirm_or_edit(
-                requirements
-            )
-
-            if requirements is None:
-                continue
-
-            try:
-                result = self.generate_trip(
-                    requirements,
-                    notify=self._io_manager.show_status,
+            if action is not None:
+                action()
+            else:
+                self._io_manager.show_message(
+                    "Invalid menu option. Please try again."
                 )
 
-                # Display the generated recommendations.
-                self._io_manager.show_recommendations(result)
-
-                # Ask whether the user wants to save the results.
-                save_choice = self._io_manager.ask_yes_no(
-                    "\nWould you like to save these recommendations? (y/n): "
-                )
-
-                if save_choice:
-                    filename = self._data_manager.save(result)
-                    self._io_manager.show_message(
-                        f"Recommendations saved successfully: {filename}"
-                    )
-
-
-            except Exception as error:
-                self._io_manager.show_error(str(error))
 
 
     def generate_trip(
