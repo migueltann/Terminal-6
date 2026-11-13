@@ -361,12 +361,34 @@ def _collect_inputs(form):
 @app.post("/validate-inputs")
 def validate_inputs():
     """Validate the submitted form before starting AI generation."""
-    _data, errors, field_errors = _collect_inputs(request.form)
+    data, errors, field_errors = _collect_inputs(request.form)
 
     return jsonify({
         "valid": not errors,
         "errors": field_errors,
         "message": " ".join(errors),
+        # Cleaned name, e.g. "sg" -> "Singapore", for the loading screen.
+        "destination": data["destination"],
+    })
+
+
+@app.get("/check-destination")
+def check_destination():
+    """Check one destination as soon as the user leaves the field.
+
+    Lets the form say "Taken as Singapore" when the user types "sg".
+    """
+    typed = (request.args.get("destination") or "").strip()
+
+    if not typed:
+        return jsonify({"valid": False, "destination": "", "error": ""})
+
+    destination, error = DestinationValidator().validate(typed)
+
+    return jsonify({
+        "valid": error is None,
+        "destination": destination or "",
+        "error": error or "",
     })
 
 @app.get("/")
