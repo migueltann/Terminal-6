@@ -824,7 +824,14 @@ textarea.invalid-field:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     gap: 20px;
+}
+
+.saved-card > div:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .saved-card h3 {
@@ -839,7 +846,10 @@ textarea.invalid-field:focus {
     display: flex;
     gap: 8px;
     align-items: center;
-    flex-shrink: 0;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .saved-actions form {
@@ -849,11 +859,14 @@ textarea.invalid-field:focus {
 .saved-actions .rename-form {
     display: flex;
     gap: 6px;
+    flex-wrap: wrap;
+    max-width: 100%;
 }
 
 .saved-actions .rename-form input {
     width: 160px;
     min-width: 0;
+    max-width: 100%;
 }
 
 .saved-actions .primary,

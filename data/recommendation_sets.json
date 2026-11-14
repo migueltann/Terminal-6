@@ -1,1 +1,51 @@
-[]
+[
+    {
+        "destination": "singapore",
+        "approved_count": 35,
+        "json_path": "data/singapore_20261113_093012_850153.json",
+        "csv_path": "data/singapore_20261113_093012_850153.csv",
+        "saved_at": "20261113_093012_850153"
+    },
+    {
+        "destination": "Singapore",
+        "approved_count": 35,
+        "json_path": "data/singapore_20261114_102922_067372.json",
+        "csv_path": "data/singapore_20261114_102922_067372.csv",
+        "saved_at": "20261114_102922_067372"
+    },
+    {
+        "destination": "Singapore",
+        "approved_count": 35,
+        "json_path": "data/singapore_20261114_104255_373232.json",
+        "csv_path": "data/singapore_20261114_104255_373232.csv",
+        "saved_at": "20261114_104255_373232"
+    },
+    {
+        "destination": "Singapore",
+        "approved_count": 34,
+        "json_path": "data/singapore_20261114_104508_808881.json",
+        "csv_path": "data/singapore_20261114_104508_808881.csv",
+        "saved_at": "20261114_104508_808881"
+    },
+    {
+        "destination": "Singapore",
+        "approved_count": 35,
+        "json_path": "data/singapore_20261114_105442_752737.json",
+        "csv_path": "data/singapore_20261114_105442_752737.csv",
+        "saved_at": "20261114_105442_752737"
+    },
+    {
+        "destination": "Singapore",
+        "approved_count": 37,
+        "json_path": "data/singapore_20261114_111449_863304.json",
+        "csv_path": "data/singapore_20261114_111449_863304.csv",
+        "saved_at": "20261114_111449_863304"
+    },
+    {
+        "destination": "Singapore",
+        "approved_count": 40,
+        "json_path": "data/singapore_20261114_114347_930811.json",
+        "csv_path": "data/singapore_20261114_114347_930811.csv",
+        "saved_at": "20261114_114347_930811"
+    }
+]

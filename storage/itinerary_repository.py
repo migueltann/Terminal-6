@@ -67,15 +67,23 @@ class JsonItineraryRepository(ItineraryRepository):
         self.__path = os.path.join(data_dir, "itineraries.json")
 
     def _read(self) -> list[dict]:
-        # Read all the itineraries from the file
+        """Read saved itineraries and reject invalid storage structures."""
         try:
             with open(self.__path, "r", encoding="utf-8") as file:
                 entries = json.load(file)
         except FileNotFoundError:
-            return []           # nothing saved yet
+            return []
         except json.JSONDecodeError as exc:
             raise ValueError("The itineraries file is damaged.") from exc
-        return entries if isinstance(entries, list) else []
+
+        if not isinstance(entries, list) or not all(
+            isinstance(entry, dict) for entry in entries
+        ):
+            raise ValueError(
+                "The itineraries file must contain a list of dictionaries."
+            )
+
+        return entries
 
     def _write(self, entries: list[dict]) -> None:
         # Create the folder if it doesn't exist

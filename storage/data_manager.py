@@ -38,7 +38,7 @@ class DataManager:
         """Replace a saved set; False if it does not exist or cannot be written."""
         try:
             return self.__repository.update(identifier, result)
-        except OSError:
+        except (OSError, ValueError):
             return False
 
     def rename(self, identifier: str, new_name: str) -> bool:
@@ -57,4 +57,8 @@ class DataManager:
         return self.update(identifier, result)
 
     def delete(self, identifier: str) -> bool:
-        return self.__repository.delete(identifier)
+        """Return False if the saved set cannot be deleted."""
+        try:
+            return self.__repository.delete(identifier)
+        except (OSError, ValueError):
+            return False

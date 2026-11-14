@@ -347,3 +347,30 @@ def test_no_pork_tag_formats_match(dietary_tag):
 
     assert result is not None
     assert result.passed is True
+
+# Checks if an item’s old top-pick status is cleared when it is filtered again
+def test_refiltering_clears_old_top_pick():
+    item = make_item(
+        name="Garden Walk",
+        estimated_cost_sgd=10,
+    )
+
+    first_requirements = make_requirements(
+        max_activity_spend=100,
+    )
+
+    RecommendationFilter(first_requirements).filter([item])
+
+    assert item.is_top_pick() is True
+
+    second_requirements = make_requirements(
+        max_activity_spend=5,
+    )
+
+    result = RecommendationFilter(
+        second_requirements
+    ).filter([item])
+
+    assert item in result.rejected_items()
+    assert item.is_top_pick() is False
+    assert item.top_pick_reason == ""

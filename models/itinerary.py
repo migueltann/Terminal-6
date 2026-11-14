@@ -131,6 +131,37 @@ class Itinerary:
         for day in selection:
             items = []
             for entry in day:
+                if isinstance(entry, dict) and entry.get("is_custom") is True:
+                    name = entry.get("name")
+                    item_type = entry.get("type")
+
+                    if not isinstance(name, str) or not 1 <= len(name.strip()) <= 100:
+                        raise ValueError(
+                            "Personal entry names must be 1 to 100 characters."
+                        )
+
+                    if not isinstance(item_type, str) or item_type not in {
+                        "activity", "food", "shopping", "accommodation"
+                    }:
+                        raise ValueError(
+                            "Choose a valid category for the personal entry."
+                        )
+
+                    items.append(ItineraryItem(
+                        name=name.strip(),
+                        item_type=item_type,
+                        cost_sgd=0,
+                        category="Personal entry",
+                        description=(
+                            "Added by you; cost is not included in budget totals."
+                        ),
+                        meal=entry.get("meal", ""),
+                        time=entry.get("time", ""),
+                        duration=entry.get("duration", 0),
+                        is_custom=True,
+                    ))
+                    continue
+        
                 # Get the position and the user's choices
                 if isinstance(entry, dict):
                     position = entry.get("index")
@@ -138,7 +169,7 @@ class Itinerary:
                     duration = entry.get("duration", 0)
                 else:
                     position, meal, time, duration = entry, "", "", 0
-
+                
                 # True/False would pass as int so block them too
                 if isinstance(position, bool) or not isinstance(position, int) \
                         or not 0 <= position < len(approved):
@@ -169,12 +200,38 @@ class Itinerary:
         positions = {(item.name, item.item_type): index
                      for index, item in enumerate(recommendation_set.approved())}
 
-        # Get the position and the user's choices for every place on every day
-        return [[{"index": positions[(item.name, item.item_type)],
-                  "meal": item.meal, "time": item.time, "duration": item.duration}
-                 for item in day
-                 if (item.name, item.item_type) in positions]
-                for day in self.days]
+        # Restore AI recommendations and personal entries for editing
+        selection = []
+
+        for day in self.days:
+            entries = []
+
+            for item in day:
+                entry = {
+                    "meal": item.meal,
+                    "time": item.time,
+                    "duration": item.duration,
+                }
+
+                if item.is_custom:
+                    entry.update(
+                        is_custom=True,
+                        name=item.name,
+                        type=item.item_type,
+                    )
+                else:
+                    key = (item.name, item.item_type)
+
+                    if key not in positions:
+                        continue
+
+                    entry["index"] = positions[key]
+
+                entries.append(entry)
+
+            selection.append(entries)
+
+        return selection
 
     # ---------- saving / loading ----------
 
