@@ -328,3 +328,22 @@ def test_preferences_override_cheapest_fallback():
     ]
 
     assert picks == ["City Museum"]
+
+#test fixing of dietary rules
+@pytest.mark.parametrize(
+    "dietary_tag",
+    ["no-pork", "no pork", "No Pork", "no_pork"],
+)
+def test_no_pork_tag_formats_match(dietary_tag):
+    item = make_item(
+        "food",
+        name="Vegetable Dumplings",
+        description="Steamed vegetable dumplings.",
+        dietary_tags=[dietary_tag],
+    )
+    requirements = make_requirements(dietary="No pork")
+
+    result = DietaryRule().check(item, requirements)
+
+    assert result is not None
+    assert result.passed is True
