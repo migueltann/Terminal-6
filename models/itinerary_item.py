@@ -19,6 +19,7 @@ class ItineraryItem:
     time: str = ""              # start time on the timeline, blank if not placed yet
     duration: int = 0           # in minutes, 0 means use the normal length
     best_time: str = "any"      # morning, afternoon, evening or any
+    is_custom: bool = False
 
     # Allowed meal choices and the longest something can last
     MEALS: ClassVar[tuple[str, ...]] = ("", "lunch", "dinner")
@@ -76,7 +77,9 @@ class ItineraryItem:
                 "cost_sgd": self.cost_sgd, "location": self.location,
                 "category": self.category, "description": self.description,
                 "top_pick": self.top_pick, "meal": self.meal, "time": self.time,
-                "duration": self.duration, "best_time": self.best_time}
+                "duration": self.duration, "best_time": self.best_time, 
+                "is_custom": self.is_custom
+                }
         
     @classmethod
     def from_dict(cls, data: dict) -> "ItineraryItem":
@@ -91,4 +94,6 @@ class ItineraryItem:
                    meal=str(data.get("meal") or ""),
                    time=str(data.get("time") or ""),
                    duration=int(data.get("duration") or 0),
-                   best_time=str(data.get("best_time") or "any"))
+                   best_time=str(data.get("best_time") or "any"),
+                   is_custom=data.get("is_custom") is True,
+                   )
