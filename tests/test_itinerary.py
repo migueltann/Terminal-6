@@ -611,3 +611,16 @@ def test_overlapping_activities_are_rejected_by_flask(web):
         "Day 1" in message
         for category, message in messages
     )
+
+@pytest.mark.parametrize("contents", ["{}", "null", '["invalid"]'])
+def test_invalid_storage_is_not_overwritten(tmp_path, contents):
+    path = tmp_path / "itineraries.json"
+    path.write_text(contents, encoding="utf-8")
+
+    repository = JsonItineraryRepository(str(tmp_path))
+    itinerary = Itinerary("Trip", "Singapore", "set-1", 100)
+
+    with pytest.raises(ValueError, match="list of dictionaries"):
+        repository.save(itinerary)
+
+    assert path.read_text(encoding="utf-8") == contents
