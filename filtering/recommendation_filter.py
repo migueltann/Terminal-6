@@ -28,6 +28,8 @@ class RecommendationFilter:
     def evaluate(self, item: Recommendation) -> Recommendation:
         """Run every applicable rule and record the results on the item."""
         item.results = []  # clear any old results first
+        item.top_pick = False
+        item.top_pick_reason = ""
         for rule in self.rules:  # go through each rule one by one
             result = rule.check(item, self.requirements)  # run the rule
             if result is not None:  # None means the rule did not apply, so skip it
