@@ -824,12 +824,66 @@
             document.getElementById("plan-field").value = JSON.stringify(
                 days.map(function (day) {
                     return day.map(function (item) {
-                        return { index: item.index, meal: item.meal || "",
-                                 time: item.time || "", duration: item.duration || 0 };
+                                             var entry = {
+                         meal: item.meal || "", time: item.time || "", duration: item.duration || 0
+                        };
+
+                     if (item.is_custom) {entry.is_custom = true; entry.name = item.name; entry.type = item.type;
+                        } 
+                     else {
+                         entry.index = item.index;
+                        }
+
+                     return entry;
                     });
                 })
             );
         });
+
+        document.getElementById("add-custom-activity")
+            .addEventListener("click", function () {
+                var input = document.getElementById("custom-activity");
+                var name = input.value.trim();
+                var type = document.getElementById(
+                    "custom-activity-type"
+                ).value;
+
+                if (!name || name.length > 100) {
+                    alert("Enter a name between 1 and 100 characters.");
+                    return;
+                }
+
+                if (days[active].length >= data.maxItems) {
+                    alert("This day has reached its item limit.");
+                    return;
+                }
+
+                var duplicate = days[active].some(function (item) {
+                    return item.type === type &&
+                        item.name.trim().toLowerCase() === name.toLowerCase();
+                });
+
+                if (duplicate) {
+                    alert("This place is already on the selected day.");
+                    return;
+                }
+
+                days[active].push({
+                    index: "custom-" + Date.now() + "-" +
+                        Math.random().toString(36).slice(2),
+                    is_custom: true,
+                    name: name,
+                    type: type,
+                    cost: 0,
+                    location: "",
+                    meal: "",
+                    time: "",
+                    duration: 0
+                });
+
+                input.value = "";
+                render();
+            });
 
         // Draw the page for the first time
         render();
