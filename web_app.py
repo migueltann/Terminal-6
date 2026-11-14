@@ -627,14 +627,35 @@ def _render_builder(set_id, recommendation_set,
     if itinerary is None:
         days = [[] for _ in range(DEFAULT_DAYS)]
     else:
-        # Map saved items back onto the catalog so they can still be edited.
-        # Each placed item is its own copy, so its meal choice stays with that day.
-        days = [
-            [dict(catalog[entry["index"]], meal=entry["meal"], time=entry["time"],
-                  duration=entry["duration"])
-             for entry in day]
-            for day in itinerary.selection_for(recommendation_set)
-        ]
+        # Restore AI recommendations and personal entries in the builder
+        days = []
+
+        for day_index, entries in enumerate(
+            itinerary.selection_for(recommendation_set)
+        ):
+            restored = []
+
+            for position, entry in enumerate(entries):
+                if entry.get("is_custom") is True:
+                    item = {
+                        "index": f"custom-{day_index}-{position}",
+                        "is_custom": True,
+                        "name": entry["name"],
+                        "type": entry["type"],
+                        "cost": 0,
+                        "location": "",
+                    }
+                else:
+                    item = dict(catalog[entry["index"]])
+
+                item.update(
+                    meal=entry["meal"],
+                    time=entry["time"],
+                    duration=entry["duration"],
+                )
+                restored.append(item)
+
+            days.append(restored)
 
     return render_template(
         "itinerary.html",
