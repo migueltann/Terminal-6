@@ -15,6 +15,9 @@ class IOManager:
     DIVIDER = "-" * 70
 
     # Returned by the ask methods when the user types 'back'
+    # A plain object() is a unique "marker" value: it can never be equal to
+    # a real answer, so checking "value is self._BACK" is always safe.
+    # (The ask methods return None for 'exit' in the same way.)
     _BACK = object()
 
     # Order the questions are asked in.
@@ -63,6 +66,7 @@ class IOManager:
         "shopping_environment": ("Shopping environment (Indoor/Outdoor/Any) [Any]: ", []),
     }
 
+    # Questions whose answer is a list, and the word shown when it is empty
     _LIST_DEFAULTS = {
         "preferred_activities": "Any", "food_preferences": "Any",
         "accommodation_preferences": "Any", "shopping_preferences": "Any",
@@ -143,10 +147,12 @@ class IOManager:
                 return self._BACK
             try:
                 number = float(value)
+                # float() also accepts "inf", so block infinity too
                 if number > 0 and number != float("inf"):
                     return number
-            except ValueError:
+            except ValueError:  # not a number at all, e.g. "abc"
                 pass
+            # Reaching here means the input was invalid, so loop and ask again
             print("Please enter a valid positive amount.")
 
     def _ask_choice(self, prompt: str, choices: list[str], default: str, allow_back: bool = False) -> Any:
@@ -160,6 +166,8 @@ class IOManager:
                 return self._BACK
             if not value:
                 return default
+            # Compare in lowercase so "indoor" works, but return the
+            # properly capitalised choice ("Indoor").
             if value.lower() in lowered:
                 return choices[lowered.index(value.lower())]
             print("Invalid choice. Options: " + ", ".join(choices))
@@ -171,6 +179,7 @@ class IOManager:
         value = self._ask_text(prompt, allow_back=allow_back)
         if value is None or value is self._BACK:
             return value
+        # "museums, , hiking" -> ["museums", "hiking"] (blank parts dropped)
         return [part.strip() for part in value.split(",") if part.strip()]
 
     def ask_yes_no(self, prompt: str) -> Optional[bool]:
@@ -198,8 +207,11 @@ class IOManager:
             if not value:
                 print("This field cannot be empty.")
                 continue
+            # validate() returns (clean name, None) if valid,
+            # or (None, error message) if not.
             destination, error = self.__validator.validate(value)
             if destination:
+                # Tell the user if their input was corrected, e.g. "SG" -> "Singapore"
                 if destination.lower() != value.lower():
                     print(f"Understood as: {destination}")
                 return destination
@@ -207,6 +219,7 @@ class IOManager:
 
     def _ask_step(self, key: str, allow_back: bool = False) -> Any:
         """Ask the question for one data key, using the right kind of input."""
+        # Look up this key's question kind (3rd value) in _STEPS.
         kind = next(step[2] for step in self._STEPS if step[0] == key)
         print()
 
@@ -227,8 +240,10 @@ class IOManager:
         value = self._ask_text("Dietary requirement [None]: ", "None", allow_back)
         if value is None or value is self._BACK:
             return value
+        # Different ways of saying "no requirement" all become "None"
         if value.lower() in {"none", "no", "nil", "na", "n/a", "-"}:
             return "None"
+        # Capitalise the common diets ("halal" -> "Halal"); keep others as typed
         if value.lower() in {"halal", "vegetarian", "vegan"}:
             return value.title()
         return value
@@ -277,12 +292,15 @@ class IOManager:
 
     def _clean_inputs(self, data: dict) -> dict:
         """Turn 'Any' / 'None' / blank answers into the default values."""
-        cleaned = dict(data)
+        cleaned = dict(data)    # work on a copy so the original is unchanged
+        # List answers: drop blanks, and if "Any"/"None" appears anywhere,
+        # treat the whole list as "no preference" (an empty list).
         for key in self._LIST_DEFAULTS:
             values = [str(v).strip() for v in cleaned.get(key) or [] if str(v).strip()]
             if any(v.lower() in {"any", "none"} for v in values):
                 values = []
             cleaned[key] = values
+        # Single-choice answers: blank/"any"/"none" become the default.
         for key, default in (("dietary", "None"), ("preferred_transport", "Any"),
                              ("activity_environment", "Any"), ("food_environment", "Any"),
                              ("shopping_environment", "Any")):
@@ -297,9 +315,11 @@ class IOManager:
         print(self.LINE)
         print("Type 'back' to return to the previous input, or 'exit' to return to the main menu.")
 
-        data: dict[str, Any] = {}
-        index = 0
+        data: dict[str, Any] = {}   # answers so far, keyed by data key
+        index = 0                   # which question we are on
 
+        # A while loop (not a for loop) so index can go backwards when
+        # the user types 'back'.
         while index < len(self._STEPS):
             key, _, _, heading = self._STEPS[index]
             if heading:
@@ -311,7 +331,7 @@ class IOManager:
             if value is None:  # user typed exit
                 return None
 
-            if value is self._BACK:
+            if value is self._BACK:     # user typed back: ask the previous question again
                 index -= 1
                 previous_key = self._STEPS[index][0]
                 print("\nGoing back. Previous answer: "
@@ -325,8 +345,9 @@ class IOManager:
 
     def _edit_one(self, data: dict) -> Optional[dict]:
         """Edit only the input the user picks. Returns the updated data, or None on exit."""
+        # Number every question for the menu: {"1": destination step, "2": ...}
         fields = {str(number): step for number, step in enumerate(self._STEPS, start=1)}
-        back_choice = str(len(fields) + 1)
+        back_choice = str(len(fields) + 1)     # the last number means "Back"
 
         while True:
             print("\n" + self.LINE)
@@ -346,13 +367,14 @@ class IOManager:
                 print(f"\nCurrent {label}: {self._format_value(key, data[key])}")
                 print("Enter the new value below (type 'exit' to cancel this edit).")
                 value = self._ask_step(key)
-                if value is not None:
+                if value is not None:   # None = user cancelled, keep the old value
                     data[key] = value
                 return self._clean_inputs(data)
             print("Invalid choice.")
 
     def confirm_or_edit(self, reqs: UserRequirements) -> Optional[UserRequirements]:
         """Let the user confirm, edit one input, or start again. None means exit."""
+        # Work with the flat dict version, which is easier to edit key by key.
         data = reqs.to_dict()
 
         while True:
@@ -396,6 +418,7 @@ class IOManager:
             print(f"   Description: {item.description}")
         print()
 
+        # One line per rule, e.g. "[FAIL] Meal budget: $40.00 > $30.00"
         for check in item.results:
             status = "PASS" if check.passed else "FAIL"
             print(f"   [{status}] {check.label}: {check.detail}")
@@ -422,6 +445,7 @@ class IOManager:
         print(f"Shopping Preferences: {', '.join(reqs.preferences_for('shopping')) or 'Any'}")
 
         grouped = result.by_category()
+        # category key in grouped -> heading printed for it
         titles = {"activities": "ACTIVITIES", "food": "FOOD",
                   "accommodation": "ACCOMMODATION", "shopping": "SHOPPING"}
 

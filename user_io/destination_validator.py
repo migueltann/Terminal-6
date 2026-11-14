@@ -26,8 +26,12 @@ class DestinationValidator:
     @staticmethod
     def _normalise(text: str) -> str:
         """Lowercase and remove accents and punctuation from names."""
+        # NFKD splits an accented letter into the letter plus a separate
+        # accent mark ("é" -> "e" + "´"), then the accent marks are dropped.
+        # So "Zürich" and "Zurich" are treated as the same name.
         text = unicodedata.normalize("NFKD", str(text))
         text = "".join(char for char in text if not unicodedata.combining(char))
+        # Replace every run of non-letters/digits with one space.
         return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
 
     def __load_geo_data(self) -> None:
@@ -37,6 +41,8 @@ class DestinationValidator:
 
         gc = geonamescache.GeonamesCache()
 
+        # Each country can be found by its name, 2-letter code ("JP") or
+        # 3-letter code ("JPN").
         for code, country in gc.get_countries().items():
             self.__country_names[code] = country["name"]
             for key in (country["name"], country["iso"], country["iso3"]):
@@ -46,14 +52,21 @@ class DestinationValidator:
             key = self._normalise(city["name"])
             if not key:
                 continue
+            # setdefault returns the existing dict for this city name, or
+            # adds an empty one first. Many countries can share a city
+            # name (e.g. Paris, France and Paris, USA).
             by_country = self.__city_lookup.setdefault(key, {})
             code = city["countrycode"]
+            # If one country has several cities with this name, keep the
+            # one with the most people.
             if code not in by_country or city["population"] > by_country[code][0]:
                 by_country[code] = (city["population"], city["name"])
 
     @staticmethod
     def __suggest(key: str, pool: list[str]) -> Optional[str]:
         """Return the closest known name to a mistyped one, or None."""
+        # n=1: only the best match. cutoff=0.75: it must be at least 75%
+        # similar, so wildly different names are not suggested.
         matches = difflib.get_close_matches(key, pool, n=1, cutoff=0.75)
         return matches[0] if matches else None
 
@@ -68,10 +81,14 @@ class DestinationValidator:
         if key in cities:
             # If several countries have this city, use the most populous one.
             code, (_, city) = max(cities[key].items(), key=lambda item: item[1][0])
+            # City-states like Singapore are both a city and a country,
+            # so return "Singapore" rather than "Singapore, Singapore".
             if self._normalise(city) == self._normalise(names[code]):
                 return city, None
             return f"{city}, {names[code]}", None
 
+        # Not found: build an error, and add a "Did you mean ...?" hint if
+        # a known country or city name is close to what was typed.
         message = f"'{text}' is not a valid country or city. Please enter a valid country or city."
         guess = self.__suggest(key, list(countries) + list(cities))
         if guess:
@@ -101,6 +118,7 @@ class DestinationValidator:
         if city_key in cities and code in cities[city_key]:
             return f"{cities[city_key][code][1]}, {country}", None
 
+        # Only suggest cities that are in the country the user typed.
         message = f"Could not find '{city_text}' in {country}."
         in_country = [key for key, value in cities.items() if code in value]
         guess = self.__suggest(city_key, in_country)
@@ -124,4 +142,6 @@ class DestinationValidator:
 
         if len(parts) == 1:
             return self.__validate_single(parts[0])
+        # Several parts: the last is the country, the rest is the city
+        # (e.g. "Kyoto, Japan" or "St. John's, Newfoundland, Canada").
         return self.__validate_city_country(", ".join(parts[:-1]), parts[-1])

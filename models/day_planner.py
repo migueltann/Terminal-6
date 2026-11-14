@@ -41,7 +41,9 @@ class DayPlanner:
 
     @staticmethod
     def _clock(minutes: int) -> str:
-        # convert minutes back to HH:MM
+        # convert minutes back to HH:MM, e.g. 570 -> "09:30"
+        # "% 24" wraps times past midnight, so 25:00 shows as 01:00
+        # ":02d" pads with a zero, so 9 becomes "09"
         return f"{(minutes // 60) % 24:02d}:{minutes % 60:02d}"
 
     @staticmethod
@@ -116,6 +118,8 @@ class DayPlanner:
         while moved:
             moved = False
             for start, end in busy:
+                # Two time ranges overlap when each one starts before the
+                # other one ends.
                 if clock < end and clock + length > start:   # overlaps
                     # Move to after the busy time and check again
                     clock = end
@@ -123,6 +127,10 @@ class DayPlanner:
         return clock
 
     def plan(self, items: list[ItineraryItem]) -> list[ScheduledStop]:
+        """Return the day's stops in time order, with the hotel at the end.
+
+        Raises ValueError if two places the user timed themselves overlap.
+        """
         # Separate the hotels from everything else
         stays = [item for item in items if item.item_type == "accommodation"]
         others = [item for item in items if item.item_type != "accommodation"]
@@ -135,6 +143,8 @@ class DayPlanner:
         # Check manually timed items for scheduling conflicts.
         timed.sort(key=lambda item: item.minutes())
 
+        # zip(timed, timed[1:]) pairs each item with the one after it,
+        # so we can check each item ends before the next one starts.
         for previous, current in zip(timed, timed[1:]):
             previous_end = previous.minutes() + self._duration(previous)
 
@@ -155,6 +165,7 @@ class DayPlanner:
 
 
         # Keep track of which times are already taken
+        # (each busy range includes travel time to the next place)
         busy = [(item.minutes(), item.minutes() + self._duration(item) + self.TRAVEL)
                 for item in timed]
 
@@ -175,11 +186,18 @@ class DayPlanner:
         evening = [item for item in visits if item.best_time == "evening"]
         anytime = [item for item in visits if item.best_time == "any"]
 
+        # Split the daytime places roughly in half around lunch.
+        # half = how many places should go before lunch (rounded up).
+        # fill = how many "any" places are needed to top up the morning,
+        #        kept between 0 and the number of "any" places.
+        # e.g. 1 morning, 1 afternoon, 4 any -> half = 3, fill = 2,
+        #      so 3 places go before lunch and 3 after.
         half = (len(morning) + len(afternoon) + len(anytime) + 1) // 2
         fill = max(0, min(len(anytime), half - len(morning)))
         before_lunch = morning + anytime[:fill]
         after_lunch = anytime[fill:] + afternoon
 
+        # Build the order of the day as (item, label) pairs.
         sequence = [(item, "") for item in before_lunch]
         if lunch:
             sequence.append((lunch, "Lunch"))

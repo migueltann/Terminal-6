@@ -1,4 +1,12 @@
+"""TravelAssistant: runs the terminal app by connecting the four managers.
 
+    IOManager     -> asks the user questions and prints results
+    AIManager     -> asks the AI for 60 recommendations
+    LogicManager  -> checks each one against the user's rules
+    DataManager   -> saves, loads, renames and deletes trips
+
+The flow for a new trip is: questions -> AI -> filter -> show -> save.
+"""
 from typing import Optional
 
 from user_io.io_manager import IOManager
@@ -19,7 +27,8 @@ class TravelAssistant:
         logic_manager: Optional[LogicManager] = None,
         data_manager: Optional[DataManager] = None,
     ):
-        
+        # Each manager can be passed in (tests pass fakes so no real AI
+        # or files are used). If one is not given, the real one is made.
         self._io_manager = (
         io_manager if io_manager is not None else IOManager()
         )
@@ -42,6 +51,7 @@ class TravelAssistant:
         """Handle generating and optionally saving recommendations."""
         requirements = self._io_manager.collect_requirements()
 
+        # None means the user typed 'exit', so go back to the main menu.
         if requirements is None:
             return
 
@@ -64,6 +74,8 @@ class TravelAssistant:
                     requirements,
                     notify=spinner.wrap(self._io_manager.show_status),
                 )
+            # BaseException also catches Ctrl+C (KeyboardInterrupt), which
+            # a plain "except Exception" would miss.
             except BaseException:
                 # Error or Ctrl+C: stop the spinner, then let it carry on.
                 spinner.stop("Stopped")
@@ -77,12 +89,15 @@ class TravelAssistant:
                 "\nWould you like to save these recommendations? (y/n): "
             )
 
+            # ask_yes_no returns True, False, or None (exit); only True saves.
             if save_choice:
                 filename = self._data_manager.save(result)
                 self._io_manager.show_message(
                     f"Recommendations saved successfully: {filename}"
                 )
 
+        # Show any error (e.g. every AI provider failed) as a message,
+        # instead of crashing the whole program.
         except Exception as error:
             self._io_manager.show_error(str(error))
 
@@ -92,6 +107,8 @@ class TravelAssistant:
         """Run the terminal travel recommendation workflow."""
         self._io_manager.show_welcome()
 
+        # Menu choice -> the method to run. The methods are stored without
+        # () so they are only called when chosen, below.
         menu_actions = {
             "1": self._generate_menu,
             "2": self.show_saved_menu,
@@ -121,7 +138,11 @@ class TravelAssistant:
         notify=None,
         save: bool = False,
     ) -> RecommendationSet:
-        """Generate, filter and optionally save recommendations."""
+        """Generate, filter and optionally save recommendations.
+
+        Used by both the terminal (above) and the web app. notify, if
+        given, is called with (level, message) to report AI progress.
+        """
 
         if not isinstance(requirements, UserRequirements):
             raise TypeError(
@@ -129,6 +150,7 @@ class TravelAssistant:
             )
 
         # Step 1: Generate recommendations.
+        # The AI returns plain dicts (parsed from its JSON reply).
         raw_items = self._ai_manager.generate_recommendations(
             destination=requirements.destination,
             user_inputs=requirements.to_dict(),
@@ -142,6 +164,7 @@ class TravelAssistant:
         ]
 
         # Step 3: Filter recommendations.
+        # Splits them into approved and rejected, and marks top picks.
         result = self._logic_manager.process(
             requirements,
             recommendations,
@@ -157,8 +180,9 @@ class TravelAssistant:
     def show_saved_menu(self) -> None:
         """Allow users to view, search, rename and delete saved trips."""
 
-        keyword = ""
+        keyword = ""    # current search filter; blank shows every saved set
 
+        # Keep showing the list until the user chooses to go back.
         while True:
             # Retrieve saved recommendation sets.
             saved = self._data_manager.find(keyword)
@@ -190,6 +214,7 @@ class TravelAssistant:
                 )
                 continue
 
+            # The list shown starts at 1, but Python lists start at 0.
             index = int(value) - 1
 
             if index < 0 or index >= len(saved):
@@ -232,7 +257,7 @@ class TravelAssistant:
                     "Delete this recommendation set? (y/n): "
                 )
 
-                if confirm is None:
+                if confirm is None:     # user typed exit
                     return
 
                 if confirm:

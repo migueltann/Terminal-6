@@ -1,3 +1,17 @@
+"""The Flask web version of the app: run "python web_app.py" and open the page.
+
+It reuses the same classes as the terminal version (TravelAssistant,
+DataManager, ItineraryManager...), so the web pages and the terminal give
+the same results.
+
+Flask basics used in this file:
+- @app.get("/path") / @app.post("/path") connect a URL to the function
+  below it (a "route"). GET loads a page; POST sends a form.
+- render_template("x.html", ...) fills in an HTML file from templates/.
+- redirect(url_for("name")) sends the browser to another route.
+- flash(message, "error"/"success") shows a one-time message on the next page.
+- session is a small, signed cookie that remembers data for one user.
+"""
 import io
 import json
 import math
@@ -31,19 +45,26 @@ from models import RecommendationSet
 from user_io.destination_validator import DestinationValidator
 from user_io.generation_progress import GenerationProgress
 
+# Load API keys and settings from the .env file.
 load_dotenv()
 
 
 app = Flask(__name__)
 
+# The secret key signs the session cookie so users cannot edit it.
+# The fallback is only for running locally; set FLASK_SECRET_KEY in .env
+# for anything public.
 app.secret_key = os.getenv(
     "FLASK_SECRET_KEY",
     "terminal-6-local-development-key",
 )
 
+# Reject any request bigger than 1 MB (Flask returns error 413, handled
+# by too_large() at the bottom of this file).
 app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024
 
 #form field configuration
+# Form fields typed as comma-separated lists
 LIST_FIELDS = (
     "preferred_activities",
     "food_preferences",
@@ -52,6 +73,7 @@ LIST_FIELDS = (
     "avoid_list",
 )
 
+# (form field name, label used in error messages)
 BUDGET_FIELDS = (
     ("max_activity_spend", "Max spend per activity"),
     ("max_meal_spend", "Max spend per meal"),
@@ -70,10 +92,15 @@ progress_tracker = GenerationProgress()
 
 #server-side storage
 #store generated results as files rather than large cookies.
+# (60 recommendations are too big for a cookie, which is limited to about
+# 4 KB, so the cookie only holds a random key pointing to a file.)
 def _result_file_path(result_key):
+    """Return the file path for a result key, or None if the key is unsafe."""
     if not isinstance(result_key, str):
         return None
 
+    # Only allow hex characters (0-9, a-f). This blocks keys like
+    # "../../secret", so a key can never point outside the instance folder.
     if not result_key or any(
         character not in "0123456789abcdef"
         for character in result_key.lower()
@@ -88,10 +115,14 @@ def _result_file_path(result_key):
 
 def _store_latest_result(result):
     """Save the latest generated result on the server."""
+    # instance_path is Flask's folder for files that are not code
+    # (the "instance/" folder, which git ignores).
     os.makedirs(app.instance_path, exist_ok=True)
 
     result_key = session.get("latest_result_key")
 
+    # First result for this user (or a broken key): give them a new
+    # random key. Later results reuse the key and overwrite the file.
     if not result_key or not _result_file_path(result_key):
         result_key = uuid.uuid4().hex
         session["latest_result_key"] = result_key
@@ -127,6 +158,8 @@ def _get_latest_result():
 
 
 def _clear_latest_result():
+    """Forget the current user's latest result and delete its file."""
+    # pop() removes the key from the session and returns it (or None).
     result_key = session.pop("latest_result_key", None)
     path = _result_file_path(result_key)
 
@@ -169,6 +202,9 @@ def _split_list(value):
 
 def _error_message(err):
     """Convert common AI/API errors into helpful messages."""
+    # The AI clients raise errors with technical text. Look for known
+    # words in that text (in lowercase) and replace it with a friendly
+    # message. The checks run in order, so the more specific ones go first.
     raw = str(err or "Unknown error")
     low = raw.lower()
 
@@ -257,12 +293,19 @@ def _error_message(err):
             "Please try again in a little while."
         )
 
+    # Unknown error: show the original text.
     return f"Recommendation generation failed: {raw}"
 
 
 # validate and normalise form inputs
 def _collect_inputs(form):
-    """Validate and normalise the same requirements as the terminal."""
+    """Validate and normalise the same requirements as the terminal.
+
+    Returns (data, errors, field_errors):
+    - data: the cleaned inputs, ready for UserRequirements.from_dict()
+    - errors: a list of every error message (empty if all is valid)
+    - field_errors: field name -> its error, so the page can highlight it
+    """
 
     destination_raw = (form.get("destination") or "").strip()
 
@@ -292,6 +335,8 @@ def _collect_inputs(form):
         try:
             number = float(raw)
 
+            # Reject inf/nan and zero or negative amounts by jumping to
+            # the same except block as text that is not a number.
             if not math.isfinite(number) or number <= 0:
                 raise ValueError
 
@@ -312,8 +357,11 @@ def _collect_inputs(form):
     )
 
     for key, label in environment_fields:
+        # .title() turns "indoor" into "Indoor" to match ENVIRONMENTS.
         value = (form.get(key) or "Any").strip().title()
 
+        # The page only offers valid choices, but a request can be
+        # edited by hand, so the server checks again.
         if value not in ENVIRONMENTS:
             message = (
                 f"{label} must be Indoor, Outdoor, or Any."
@@ -345,6 +393,8 @@ def _collect_inputs(form):
         or "None"
     )
 
+    # "Other" in the dropdown means the user typed their own diet in a
+    # separate text box.
     if dietary == "Other":
         dietary = (
             _normalise_optional_text(
@@ -363,6 +413,7 @@ def validate_inputs():
     """Validate the submitted form before starting AI generation."""
     data, errors, field_errors = _collect_inputs(request.form)
 
+    # Called by the page's JavaScript, so reply with JSON instead of HTML.
     return jsonify({
         "valid": not errors,
         "errors": field_errors,
@@ -393,6 +444,7 @@ def check_destination():
 
 @app.get("/")
 def index():
+    """Home page: an empty requirements form."""
     return render_template(
         "index.html",
         form_data={},
@@ -403,6 +455,8 @@ def index():
 
 @app.post("/generate")
 def generate():
+    """Check the form, ask the AI, filter the results and show them."""
+    # Keep what the user typed so the form can be refilled on the page.
     form_data = request.form.to_dict()
 
     form_data.pop("progress_id", None)   # only used by the loading screen
@@ -421,7 +475,7 @@ def generate():
                 "Please correct the highlighted fields and try again."
             ),
             field_errors=field_errors,
-        ), 400  
+        ), 400  # HTTP 400 = the request had invalid input
 
     # The loading screen sends a random id so it can ask how the AI is doing.
     progress_id = request.form.get("progress_id", "")
@@ -462,6 +516,8 @@ def generate():
         )
 
     except Exception as exc:
+        # Write the full error to the log for the developers, and show a
+        # friendly version on the page.
         app.logger.exception(
             "Recommendation generation failed"
         )
@@ -475,8 +531,10 @@ def generate():
             error=message,
             technical_error=str(exc),
             field_errors={},
-        ), 502
+        ), 502  # HTTP 502 = an outside service (the AI) failed
 
+    # Runs whether generation worked or failed, so the loading screen
+    # always learns that the request has ended.
     finally:
         progress_tracker.finish(progress_id)
 
@@ -519,11 +577,14 @@ def saved_sets():
     )
 
 
+# <path:filename> takes that part of the URL and passes it in as filename.
 @app.get("/saved/view/<path:filename>")
 def view_saved(filename):
     """Display a saved recommendation set using OOP."""
     manager = DataManager(JsonCsvRepository())
 
+    # basename() keeps only the file name, dropping any folder part
+    # such as "../", so the URL cannot reach files outside data/.
     recommendation_set = manager.load(
         os.path.basename(filename)
     )
@@ -537,6 +598,8 @@ def view_saved(filename):
 
     result = recommendation_set.to_dict()
 
+    # Make it the "latest result", so the download and plan buttons on
+    # the page work with this saved set.
     _store_latest_result(result)
 
     return render_template(
@@ -593,10 +656,11 @@ def rename_saved(filename):
 # ITINERARY BUILDER
 # ========================================
 
-DEFAULT_DAYS = 3
-DEFAULT_DAILY_BUDGET = 200
+DEFAULT_DAYS = 3               # days shown when a new itinerary is opened
+DEFAULT_DAILY_BUDGET = 200     # SGD per day, the user can change it
 
 
+# Small helpers so each route does not repeat the set-up code.
 def _data_manager():
     return DataManager(JsonCsvRepository())
 
@@ -607,6 +671,9 @@ def _itinerary_manager():
 
 def _catalog(recommendation_set):
     """The approved recommendations the builder can place on days."""
+    # "index" is the item's position in the approved list. The page sends
+    # these positions back when saving, and the server looks the real
+    # details up again (see Itinerary.from_selection).
     return [
         {
             "index": index,
@@ -625,6 +692,7 @@ def _render_builder(set_id, recommendation_set,
     catalog = _catalog(recommendation_set)
 
     if itinerary is None:
+        # New itinerary: start with DEFAULT_DAYS empty days.
         days = [[] for _ in range(DEFAULT_DAYS)]
     else:
         # Restore AI recommendations and personal entries in the builder
@@ -637,6 +705,8 @@ def _render_builder(set_id, recommendation_set,
 
             for position, entry in enumerate(entries):
                 if entry.get("is_custom") is True:
+                    # Personal entries are not in the catalog, so give
+                    # each one a unique made-up index for the page.
                     item = {
                         "index": f"custom-{day_index}-{position}",
                         "is_custom": True,
@@ -646,8 +716,11 @@ def _render_builder(set_id, recommendation_set,
                         "location": "",
                     }
                 else:
+                    # dict(...) makes a copy, so the catalog is not changed
+                    # when the same place is used on more than one day.
                     item = dict(catalog[entry["index"]])
 
+                # Add the user's own choices for this stop.
                 item.update(
                     meal=entry["meal"],
                     time=entry["time"],
@@ -674,6 +747,7 @@ def _render_builder(set_id, recommendation_set,
     )
 
 
+# Short label shown on each stop in the itinerary view
 TYPE_LABELS = {
     "activity": "Activity",
     "food": "Food",
@@ -687,6 +761,7 @@ def _maps_link(item, destination):
     query = ", ".join(
         part for part in (item.name, item.location, destination) if part
     )
+    # quote_plus makes the text safe for a URL (spaces -> "+", "&" -> "%26")
     return "https://www.google.com/maps/search/?api=1&query=" + quote_plus(query)
 
 
@@ -695,7 +770,8 @@ def _itinerary_view_days(itinerary):
     view_days = []
 
     for index in range(len(itinerary.days)):
-        day_date = itinerary.date_for(index)
+        day_date = itinerary.date_for(index)    # None if no start date was set
+        # Turn each scheduled stop into a plain dict for the template.
         stops = [
             {
                 "time": stop.time,
@@ -718,8 +794,10 @@ def _itinerary_view_days(itinerary):
 
         view_days.append({
             "number": index + 1,
+            # e.g. "Monday, 16 November 2026"
             "date": day_date.strftime("%A, %d %B %Y") if day_date else "",
             "stops": stops,
+            # Daytime stops and hotel stays are shown in separate sections.
             "visits": [stop for stop in stops if stop["period"] != "Overnight"],
             "stays": [stop for stop in stops if stop["period"] == "Overnight"],
             "total": itinerary.day_total(index),
@@ -774,6 +852,8 @@ def edit_itinerary(itinerary_id):
         flash("That itinerary could not be found.", "error")
         return redirect(url_for("itineraries"))
 
+    # The builder needs the original recommendation set to show the
+    # places to choose from.
     recommendation_set = _data_manager().load(itinerary.source_id)
 
     if recommendation_set is None:
@@ -806,9 +886,11 @@ def view_itinerary(itinerary_id):
         itinerary=itinerary,
         itinerary_id=itinerary_id,
         days=_itinerary_view_days(itinerary),
+        # e.g. "16 Nov – 18 Nov 2026"; blank if there is no start date
         date_range=(
             f"{first_date:%d %b} – {last_date:%d %b %Y}" if first_date else ""
         ),
+        # Editing needs the original recommendation set to still exist.
         can_edit=_data_manager().load(itinerary.source_id) is not None,
     )
 
@@ -817,8 +899,10 @@ def view_itinerary(itinerary_id):
 def save_itinerary():
     """Create a new itinerary or update an existing one."""
     set_id = os.path.basename(request.form.get("set_id", ""))
+    # A blank itinerary_id means this is a new itinerary, not an edit.
     itinerary_id = request.form.get("itinerary_id", "").strip()
 
+    # Where to send the user if something goes wrong: back to the builder.
     back = (
         url_for("edit_itinerary", itinerary_id=itinerary_id)
         if itinerary_id
@@ -826,6 +910,8 @@ def save_itinerary():
     )
 
     try:
+        # The builder page's JavaScript sends the days as JSON text in a
+        # hidden form field called "plan".
         selection = json.loads(request.form.get("plan", ""))
         daily_budget = float(request.form.get("daily_budget", ""))
     except (TypeError, ValueError):
@@ -840,6 +926,8 @@ def save_itinerary():
 
     manager = _itinerary_manager()
 
+    # build() checks everything (days, budget, times, overlaps) and raises
+    # ValueError with a message the user can understand.
     try:
         itinerary = manager.build(
             recommendation_set,
@@ -869,6 +957,7 @@ def save_itinerary():
 
     flash(message, "success")
 
+    # Going over budget is allowed, but the user is warned.
     over = itinerary.over_budget_days()
     if over:
         flash(
@@ -902,6 +991,7 @@ def plan_latest():
         flash("Generate recommendations first.", "error")
         return redirect(url_for("index"))
 
+    # An itinerary must point to a saved set, so save the results first.
     try:
         set_id = _data_manager().save(RecommendationSet.from_dict(result))
     except Exception as exc:
@@ -958,11 +1048,14 @@ def download_json():
         )
 
         # Create an in-memory file for the download response.
+        # (No file is written to disk; BytesIO acts like a file in memory.)
         json_file = io.BytesIO(
             json_content.encode("utf-8")
         )
-        json_file.seek(0)
+        json_file.seek(0)   # go back to the start so the whole file is sent
 
+        # as_attachment=True makes the browser download the file instead
+        # of opening it.
         return send_file(
             json_file,
             mimetype="application/json",
@@ -1023,6 +1116,7 @@ def save():
 
 @app.get("/reset")
 def reset():
+    """Clear the current results and form, and go back to an empty page."""
     _clear_latest_result()
 
     session.pop("latest_form", None)
@@ -1030,6 +1124,7 @@ def reset():
     return redirect(url_for("index"))
 
 
+# Runs when a request is bigger than MAX_CONTENT_LENGTH (set near the top).
 @app.errorhandler(413)
 def too_large(_error):
     return render_template(
@@ -1041,6 +1136,9 @@ def too_large(_error):
     ), 413
 
 
+# Start the web server when this file is run directly.
+# Debug mode (auto-reload and detailed error pages) is only switched on
+# when FLASK_DEBUG=true is set, because it is unsafe on a public server.
 if __name__ == "__main__":
         app.run(
             debug=os.getenv(

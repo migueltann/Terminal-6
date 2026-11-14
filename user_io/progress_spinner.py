@@ -20,6 +20,8 @@ class ProgressSpinner:
     half-lines. Only the final "Done in ..." line is printed.
     """
 
+    # Shown one after another, these look like a spinning line.
+    # ("\\" is one backslash; a single "\" would start an escape code.)
     FRAMES = ("|", "/", "-", "\\")
     INTERVAL = 0.1          # seconds between frames
 
@@ -28,10 +30,14 @@ class ProgressSpinner:
         self._message = message
         self._stream = stream if stream is not None else sys.stdout
         # Only animate on a real terminal unless told otherwise.
+        # isatty() is True for a real terminal. getattr(..., lambda: False)
+        # is a fallback for streams that do not have isatty() at all.
         if animate is None:
             animate = bool(getattr(self._stream, "isatty", lambda: False)())
         self._animate = animate
         self._lock = threading.Lock()       # one writer at a time
+        # An Event is a thread-safe on/off flag: stop() turns it on, and
+        # the spinner thread checks it to know when to finish.
         self._stop_event = threading.Event()
         self._thread: Optional[threading.Thread] = None
         self._start_time = 0.0
@@ -53,9 +59,9 @@ class ProgressSpinner:
     def stop(self, final_message: str = "Done") -> float:
         """Stop the animation and print how long it took. Returns seconds."""
         elapsed = self.elapsed()
-        self._stop_event.set()
+        self._stop_event.set()          # tell the spinner thread to stop
         if self._thread is not None:
-            self._thread.join()
+            self._thread.join()         # wait until it has actually stopped
             self._thread = None
         with self._lock:
             self._clear_line()
@@ -91,9 +97,12 @@ class ProgressSpinner:
         return f"{whole // 60}m {whole % 60:02d}s"
 
     # context manager: with ProgressSpinner("...") as spinner:
+    # __enter__ runs at the start of the "with" block and __exit__ at the
+    # end, even if an error happens inside it.
     def __enter__(self) -> "ProgressSpinner":
         return self.start()
 
+    # exc_type is the error's type if the block failed, otherwise None.
     def __exit__(self, exc_type, exc, traceback) -> None:
         self.stop("Stopped" if exc_type else "Done")
 
@@ -104,12 +113,17 @@ class ProgressSpinner:
         frame = 0
         while not self._stop_event.is_set():
             with self._lock:
+                # "% len" loops the frame number back to 0 after the last frame
                 self._draw(self.FRAMES[frame % len(self.FRAMES)])
             frame += 1
+            # Sleep for INTERVAL, but wake up straight away if stop() is called
             self._stop_event.wait(self.INTERVAL)
 
     def _draw(self, symbol: str) -> None:
-        line = f"{symbol} {self._message}... {self.format_elapsed(self.elapsed())} elapsed"
+        """Redraw the spinner line in place."""
+        # "\r" (carriage return) moves the cursor back to the start of the
+        # line without a new line, so the next write overwrites it.
+        line =f"{symbol} {self._message}... {self.format_elapsed(self.elapsed())} elapsed"
         # pad with spaces so a shorter line fully covers the longer one
         padding = " " * max(0, self._line_length - len(line))
         self._stream.write("\r" + line + padding)
@@ -117,6 +131,7 @@ class ProgressSpinner:
         self._line_length = len(line)
 
     def _clear_line(self) -> None:
+        """Wipe the spinner line by overwriting it with spaces."""
         if self._line_length:
             self._stream.write("\r" + " " * self._line_length + "\r")
             self._line_length = 0

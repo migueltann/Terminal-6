@@ -1,4 +1,7 @@
 """public import"""
+# The data classes used across the app. Importing them here lets other
+# files write "from models import Recommendation" instead of
+# "from models.recommendation import Recommendation".
 from .user_requirements import UserRequirements
 from .recommendation import Recommendation
 from .recommendation_set import RecommendationSet

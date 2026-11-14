@@ -51,6 +51,9 @@ class RecommendationFilter:
         return any(_contains_term(item_data, pref) for pref in self._preferences(item.item_type))
     
     # selects the best recommendations from each category
+    # - user gave preferences: every affordable item matching one is a top pick
+    # - no preferences: the 3 cheapest affordable items are top picks
+    # ("affordable" = costs half the budget or less)
     def _mark_top_picks(self, approved: list[Recommendation]) -> None:
 
         # goes through each recommendation category

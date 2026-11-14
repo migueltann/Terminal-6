@@ -35,6 +35,8 @@ class ItineraryManager:
         )
 
         # Validate schedules before the itinerary can be saved.
+        # schedule() raises ValueError if two timed places overlap; the
+        # day number is added to the message so the user knows where.
         for day_index in range(len(itinerary.days)):
             try:
                 itinerary.schedule(day_index)

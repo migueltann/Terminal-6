@@ -7,14 +7,21 @@ from models import Recommendation, RuleResult, UserRequirements  # the shared da
 NO_REQUIREMENT = {"", "any", "none"}
 
 class Rule(ABC):
-    """A parent class for all recommendation rules."""
-    label = "Rule"  
+    """A parent class for all recommendation rules.
+
+    ABC (abstract base class) means Rule itself cannot be created; only
+    child classes such as BudgetRule can. Every child class must write
+    its own evaluate() method, and can override applies_to() and label.
+    """
+    label = "Rule"  # name shown to the user; each child class sets its own
     
     # Checks whether this rule applies to the recommendation.
     def applies_to(self, item: Recommendation, requirements: UserRequirements) -> bool:
         """Checks whether this rule should be used."""
         return True
 
+    # @abstractmethod: child classes MUST write this method, otherwise
+    # Python refuses to create them.
     @abstractmethod
     def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
         """Checks the recommendation and explains whether it passes or fails."""

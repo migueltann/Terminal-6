@@ -3,17 +3,30 @@ from storage.recommendation_repository import RecommendationRepository
 
 
 class DataManager:
-    """Coordinates recommendation storage and searching."""
+    """Coordinates recommendation storage and searching.
+
+    The rest of the app talks to DataManager instead of the files directly.
+    It passes the work on to a repository (e.g. JsonCsvRepository) and
+    turns storage errors into simple results like None or False.
+    """
 
     def __init__(
         self, repository: RecommendationRepository
     ) -> None:
+        # The repository is passed in rather than created here, so tests
+        # can give DataManager a fake one (dependency injection).
         self.__repository = repository
 
     def save(self, result: RecommendationSet) -> str:
+        """Save a set and return its identifier (the JSON filename)."""
         return self.__repository.save(result)
 
     def find(self, keyword: str = "") -> list[dict]:
+        """Return saved sets whose destination contains the keyword.
+
+        An empty keyword matches everything, so find() lists every set.
+        The search ignores upper/lower case.
+        """
         keyword = keyword.strip().lower()
 
         return [
@@ -27,6 +40,9 @@ class DataManager:
     def load(
         self, identifier: str
     ) -> RecommendationSet | None:
+        """Load a saved set, or return None if it is missing or broken."""
+        # OSError covers file problems (e.g. not found); ValueError covers
+        # files with bad contents.
         try:
             return self.__repository.load(identifier)
         except (OSError, ValueError):
@@ -48,6 +64,7 @@ class DataManager:
         if not new_name:
             raise ValueError("The new name cannot be empty.")
 
+        # Load the set, change its name, then save it back.
         result = self.load(identifier)
 
         if result is None:

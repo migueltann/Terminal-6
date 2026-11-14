@@ -22,6 +22,8 @@ class LogicManager:
     def __init__(self) -> None:
         # Composition: the LogicManager creates and owns its filter.
         # It is made in process(), because the filter needs that request's requirements.
+        # The double underscore makes it private (encapsulation), so code
+        # outside this class cannot reach it as manager.__filter.
         self.__filter: Optional[RecommendationFilter] = None
 
     @staticmethod

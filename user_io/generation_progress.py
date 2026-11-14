@@ -19,12 +19,20 @@ class GenerationProgress:
 
     CATEGORY_COUNT = 4                   # activity, food, accommodation, shopping
     MAX_AGE = 30 * 60                    # forget a request after 30 minutes
+    # Regular expressions (text patterns):
+    # an id is 8-64 letters, digits or dashes (blocks odd or huge ids)
     _ID_PATTERN = re.compile(r"^[A-Za-z0-9-]{8,64}$")
+    # picks the model name out of "Trying Gemini model: gemini-2.5-flash"
     _MODEL_PATTERN = re.compile(r"Trying (?:Gemini|Groq) model: (\S+)")
+    # picks the category out of "[food] Groq succeeded using ..."
     _DONE_PATTERN = re.compile(r"^\[(\w+)\] .*succeeded using")
 
     def __init__(self) -> None:
+        # progress id -> that request's progress details
         self._jobs: dict[str, dict] = {}
+        # A lock lets only one thread change _jobs at a time, so two
+        # threads updating together cannot mix up the data.
+        # "with self._lock:" below waits for the lock, then releases it.
         self._lock = threading.Lock()    # the four AI threads write at once
 
     @classmethod
@@ -33,9 +41,12 @@ class GenerationProgress:
         return bool(cls._ID_PATTERN.match(progress_id or ""))
 
     def start(self, progress_id: str) -> None:
+        """Begin tracking a new request."""
         with self._lock:
             self._forget_old()
             self._jobs[progress_id] = {
+                # monotonic() is a clock that never jumps backwards
+                # (unlike the wall clock), good for measuring time taken
                 "started": time.monotonic(),
                 "message": "Sending your requirements to the AI…",
                 "model": "",
@@ -47,6 +58,9 @@ class GenerationProgress:
                  also: Optional[Callable[[str, str], None]] = None
                  ) -> Callable[[str, str], None]:
         """A notify(level, message) that records progress, then calls `also`."""
+        # A function made inside a function (a closure). It remembers
+        # progress_id and also, so the AI code can just call
+        # notify(level, message) without knowing about progress ids.
         def notify(level: str, message: str) -> None:
             self.update(progress_id, message)
             if also is not None:
@@ -54,10 +68,13 @@ class GenerationProgress:
         return notify
 
     def update(self, progress_id: str, message: str) -> None:
+        """Record the latest AI status message for a request."""
         with self._lock:
             job = self._jobs.get(progress_id)
             if job is None:
                 return
+            # Pull the model name and finished category out of the
+            # message text, when the message contains them.
             model = self._MODEL_PATTERN.search(message)
             if model:
                 job["model"] = model.group(1)
@@ -67,6 +84,7 @@ class GenerationProgress:
             job["message"] = message
 
     def finish(self, progress_id: str) -> None:
+        """Mark a request as done, so the loading screen can stop."""
         with self._lock:
             if progress_id in self._jobs:
                 self._jobs[progress_id]["finished"] = True
@@ -87,7 +105,10 @@ class GenerationProgress:
             }
 
     def _forget_old(self) -> None:
+        """Delete requests older than MAX_AGE. Called with the lock held."""
         now = time.monotonic()
+        # The keys are collected into a list first, because deleting from
+        # a dict while looping over it directly raises an error.
         for key in [key for key, job in self._jobs.items()
                     if now - job["started"] > self.MAX_AGE]:
             del self._jobs[key]

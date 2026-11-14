@@ -1,9 +1,21 @@
+"""Builds the text prompts sent to the AI.
 
+The AI's job is only to DISCOVER real places. It is told not to apply the
+user's budget, diet, environment, transport or avoid-list limits; the
+Python rules in the filtering folder check those afterwards. Keeping the
+hard limits in Python makes them reliable and easy to test.
+
+Note: everything inside the triple-quoted strings below is sent to the AI
+word for word, so instructions for the AI go there and comments for the
+team go outside them.
+"""
 import json
 from typing import Any, Optional
 
 
 # Field rules shared by the full prompt and the per-category prompts.
+# These field names must match what AIResponseValidator and
+# Recommendation.from_dict() expect.
 RECOMMENDATION_FIELDS = """
     Return ONLY valid JSON as one array containing recommendation objects.
 
@@ -101,6 +113,7 @@ CATEGORY_DETAILS = {
     "shopping": ("shopping choices", "shopping_preferences"),
 }
 
+# How many recommendations one category prompt asks for.
 CATEGORY_COUNT = 15
 
 
@@ -133,9 +146,13 @@ class PromptBuilder:
 
         user_inputs = user_inputs or {}
 
+        # AIManager always passes a category (four smaller prompts run in
+        # parallel). The full 60-item prompt below is kept for when no
+        # category is given.
         if category is not None:
             return self._build_category(destination, user_inputs, category)
 
+        # Drop blank / "Any" / "None" answers so the AI only sees real ones.
         preferred_activities = self._active_preferences(
             user_inputs.get("preferred_activities", [])
         )
@@ -152,6 +169,10 @@ class PromptBuilder:
             user_inputs.get("shopping_preferences", [])
         )
 
+        # An f-string fills in the {...} parts. json.dumps() writes each
+        # list as JSON, e.g. ["museums", "hiking"], which the AI reads
+        # reliably. .strip() at the end removes the leading/trailing blank
+        # lines.
         return f"""
 
     You are a travel discovery engine.
@@ -280,12 +301,15 @@ class PromptBuilder:
                 f"Expected one of: {', '.join(CATEGORY_DETAILS)}"
             )
 
+        # e.g. "food" -> ("food choices", "food_preferences")
         plural, input_key = CATEGORY_DETAILS[category]
 
+        # Only this category's preferences are sent to the AI.
         preferences = self._active_preferences(
             user_inputs.get(input_key, [])
         )
 
+        # Same structure as the full prompt, but for one category only.
         return f"""
 
     You are a travel discovery engine.

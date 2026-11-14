@@ -1,3 +1,9 @@
+"""Turns the AI's reply text into a list of recommendations, and rejects bad replies.
+
+Every check raises RuntimeError with a clear message. The AI clients catch
+it and ask the model again, so a broken reply never reaches the rest of
+the app.
+"""
 import math
 import json
 from typing import Any, Optional
@@ -18,9 +24,15 @@ class AIResponseValidator:
     def clean_json_response(self, content: str) -> str:
         """Remove Markdown JSON fences if Gemini includes them."""
 
+        # Models sometimes wrap JSON like this:
+        #   ```json
+        #   [ ... ]
+        #   ```
+        # which json.loads() cannot read, so the ``` lines are removed.
         content = content.strip()
 
         if content.startswith("```"):
+            # [1:] drops the first line ("```json")
             lines = content.splitlines()[1:]
 
             if lines and lines[-1].strip() == "```":
@@ -46,6 +58,8 @@ class AIResponseValidator:
         are kept instead of rejecting the whole answer and asking again.
         """
 
+        # Work out how many of each type we need: all four types, or
+        # just the one category that was asked for.
         if category is None:
             required_categories = dict(FULL_DISTRIBUTION)
         elif category in FULL_DISTRIBUTION:
@@ -55,8 +69,9 @@ class AIResponseValidator:
                 f"Unknown recommendation category: {category}"
             )
 
-        expected_total = sum(required_categories.values())
+        expected_total = sum(required_categories.values())   # 60 or 15
 
+        # Every recommendation must have all of these keys.
         required_fields = {
             "name",
             "type",
@@ -71,6 +86,7 @@ class AIResponseValidator:
             """Check that the recommendation has a valid, non-negative cost."""
             try:
                 cost = float(item["estimated_cost_sgd"])
+                # isfinite rejects "inf" and "nan", which float() accepts
                 return math.isfinite(cost) and cost >= 0
             except (KeyError, TypeError, ValueError):
                 return False
@@ -93,6 +109,8 @@ class AIResponseValidator:
                 item for item in items
                 if isinstance(item, dict)
                 and item.get("type") == category
+                # "<=" on sets means "is a subset of": the item has
+                # every required field (extra fields are fine)
                 and required_fields <= item.keys()
             ]
 
@@ -140,6 +158,7 @@ class AIResponseValidator:
 
         # 6. Check that every recommendation has the required fields
         for index, item in enumerate(items, start=1):
+            # Set difference: required fields this item does not have
             missing_fields = required_fields - item.keys()
 
             if missing_fields:
@@ -180,6 +199,8 @@ class AIResponseValidator:
                 "Gemini response format was unexpected."
             )
 
+        # Gemini nests its answer text deep inside the reply:
+        # {"candidates": [{"content": {"parts": [{"text": "..."}]}}]}
         candidates = response_data.get("candidates", [])
 
         if not candidates:
@@ -215,9 +236,12 @@ class AIResponseValidator:
                 f"AI returned invalid JSON: {err}"
             ) from err
 
+        # Gemini replies with a bare list: [ {...}, {...} ]
         if isinstance(parsed, list):
             return self.validate_response_schema(parsed, category)
 
+        # Groq must reply with an object, so the list is wrapped:
+        # {"recommendations": [ {...}, {...} ]}
         if isinstance(parsed, dict):
             for key in ("recommendations", "items"):
                 if isinstance(parsed.get(key), list):
