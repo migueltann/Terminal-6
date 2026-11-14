@@ -48,6 +48,41 @@
             </p>
         </section>
 
+        <!-- Add Your Own Place -->
+<section class="recommendation-card">
+    <label for="custom-activity">
+        <strong>Add your own place or activity</strong>
+    </label>
+
+    <input
+        id="custom-activity"
+        type="text"
+        maxlength="100"
+        placeholder="e.g. Universal Studios Singapore"
+    >
+
+    <label for="custom-activity-type">Category</label>
+
+    <select id="custom-activity-type">
+        <option value="activity">Activities</option>
+        <option value="food">Food</option>
+        <option value="shopping">Shopping</option>
+        <option value="accommodation">Accommodation</option>
+    </select>
+
+    <button
+        id="add-custom-activity"
+        class="secondary"
+        type="button"
+    >
+        Add to selected day
+    </button>
+
+    <p class="muted">
+        Personal entries do not include a cost estimate.
+    </p>
+</section>
+
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% for category, message in messages %}
