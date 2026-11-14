@@ -47,5 +47,5 @@ class LogicManager:
         (aggregation), and top picks are marked inside the filter.
         """
         self._check_inputs(reqs, items)
-        self.__filter = RecommendationFilter(reqs)
+        self.__filter = RecommendationFilter(reqs, self._default_rules())
         return self.__filter.filter(items, reqs.destination)
