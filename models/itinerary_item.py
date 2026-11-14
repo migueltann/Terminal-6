@@ -19,7 +19,7 @@ class ItineraryItem:
     time: str = ""              # start time on the timeline, blank if not placed yet
     duration: int = 0           # in minutes, 0 means use the normal length
     best_time: str = "any"      # morning, afternoon, evening or any
-    is_custom: bool = False
+    is_custom: bool = False     # True for a personal entry the user typed in
 
     # Allowed meal choices and the longest something can last
     MEALS: ClassVar[tuple[str, ...]] = ("", "lunch", "dinner")
@@ -59,6 +59,7 @@ class ItineraryItem:
             return True
 
         # Split the time into hours and minutes
+        # partition gives (before, ":", after); "_" ignores the ":"
         hours, _, minutes = text.partition(":")
 
         # Both parts must be 2 digits and be a real time
@@ -95,5 +96,6 @@ class ItineraryItem:
                    time=str(data.get("time") or ""),
                    duration=int(data.get("duration") or 0),
                    best_time=str(data.get("best_time") or "any"),
+                   # "is True" so only a real true value counts, not "yes" or 1
                    is_custom=data.get("is_custom") is True,
                    )

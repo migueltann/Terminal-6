@@ -4,7 +4,13 @@ from abc import ABC, abstractmethod
 from models import RecommendationSet
 
 class RecommendationRepository(ABC):
-    """Interface for recommendation storage."""
+    """Interface for recommendation storage.
+
+    It only lists the methods every storage class must have; it does not
+    say how they work. JsonCsvRepository is the real version that uses
+    files. Because DataManager only relies on these methods, the storage
+    could be swapped (e.g. for a database) without changing DataManager.
+    """
 
     @abstractmethod
     def save(self, result: RecommendationSet) -> str:

@@ -17,6 +17,8 @@ class Itinerary:
     destination: str
     source_id: str              # id of the saved recommendation set it came from
     daily_budget: float
+    # Default is one empty day. A lambda is used so every itinerary
+    # gets its own new list instead of sharing one.
     days: list[list[ItineraryItem]] = field(default_factory=lambda: [[]])
     start_date: str = ""        # optional, YYYY-MM-DD
 
@@ -131,6 +133,9 @@ class Itinerary:
         for day in selection:
             items = []
             for entry in day:
+                # Personal entry: something the user typed in themselves,
+                # not one of the AI recommendations. It has no price, so
+                # it is saved with a cost of 0.
                 if isinstance(entry, dict) and entry.get("is_custom") is True:
                     name = entry.get("name")
                     item_type = entry.get("type")
@@ -160,7 +165,7 @@ class Itinerary:
                         duration=entry.get("duration", 0),
                         is_custom=True,
                     ))
-                    continue
+                    continue    # skip the recommendation handling below
         
                 # Get the position and the user's choices
                 if isinstance(entry, dict):
@@ -197,6 +202,7 @@ class Itinerary:
         """Opposite of from_selection, used to reopen a saved itinerary in the
         builder. Items that aren't in the set anymore are skipped."""
         # map each recommendation to its position in the list
+        # e.g. {("Night Market", "food"): 12, ...}
         positions = {(item.name, item.item_type): index
                      for index, item in enumerate(recommendation_set.approved())}
 
@@ -222,6 +228,7 @@ class Itinerary:
                 else:
                     key = (item.name, item.item_type)
 
+                    # The recommendation was removed from the saved set
                     if key not in positions:
                         continue
 

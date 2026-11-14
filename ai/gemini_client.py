@@ -1,4 +1,4 @@
-
+"""Sends prompts to Google's Gemini API and returns checked recommendations."""
 import os
 import time
 from typing import Callable, Optional
@@ -19,10 +19,14 @@ class GeminiClient:
         max_attempts: int = 3,
         request_timeout: float = 45,
     ):
+        # Load GEMINI_API_KEY from the .env file into the environment.
         load_dotenv()
 
+        # Checks that Gemini's answer has the right shape and fields.
+        # "or" means: use the one passed in, otherwise create a new one.
         self._validator = validator or AIResponseValidator()
 
+        # Models to try, in order. If one fails, the next is tried.
         self._models = models if models is not None else [
             "gemini-3.8-flash",
             "gemini-3.6-flash",
@@ -32,6 +36,7 @@ class GeminiClient:
         if max_attempts < 1:
             raise ValueError("max_attempts must be at least 1.")
 
+        # Tries per model before moving to the next model.
         self._max_attempts = max_attempts
 
         if request_timeout <= 0:
@@ -68,13 +73,17 @@ class GeminiClient:
 
         api_key = os.getenv("GEMINI_API_KEY")
 
+        # ValueError (not RuntimeError) tells FallbackClient that Gemini is
+        # not set up, so it can move straight on to Groq.
         if not api_key:
             raise ValueError(
                 "GEMINI_API_KEY environment variable is missing."
             )
 
+        # Remembered so the final error says what went wrong last.
         last_error = None
 
+        # Outer loop: each model in turn.
         for model_name in self._models:
             self._notify(
                 notify,
@@ -82,6 +91,8 @@ class GeminiClient:
                 f"Trying Gemini model: {model_name}",
             )
 
+            # Inner loop: retries on the same model.
+            # "continue" = try this model again, "break" = next model.
             for attempt in range(self._max_attempts):
                 url = (
                     "https://generativelanguage.googleapis.com/"
@@ -89,6 +100,8 @@ class GeminiClient:
                 )
 
                 try:
+                    # Send the prompt to Gemini. The API key goes in a
+                    # header, not the URL, so it does not appear in logs.
                     response = requests.post(
                         url,
                         headers={
@@ -99,6 +112,7 @@ class GeminiClient:
                             "contents": [
                                 {"parts": [{"text": prompt}]}
                             ],
+                            # Ask Gemini to reply with JSON only.
                             "generationConfig": {
                                 "response_mime_type": "application/json"
                             },
@@ -106,6 +120,7 @@ class GeminiClient:
                         timeout=self._request_timeout,
                     )
 
+                # No reply within request_timeout: move to the next model.
                 except requests.Timeout as err:
                     last_error = err
                     self._notify(
@@ -116,6 +131,7 @@ class GeminiClient:
                     )
                     break
 
+                # Any other network problem (no internet, DNS, etc.).
                 except requests.RequestException as err:
                     last_error = err
                     self._notify(
@@ -125,6 +141,7 @@ class GeminiClient:
                     )
                     break
 
+                # 200 = success: check the answer is usable.
                 if response.status_code == 200:
                     try:
                         recommendations = (
@@ -141,6 +158,8 @@ class GeminiClient:
                                 "Gemini returned no usable recommendations."
                             )
 
+                    # The answer was broken (bad JSON, wrong item count...).
+                    # Asking the same model again usually fixes it.
                     except RuntimeError as err:
                         last_error = err
 
@@ -168,6 +187,9 @@ class GeminiClient:
 
                     return recommendations
 
+                # Temporary problems worth waiting for:
+                # 429 = too many requests, 5xx = Gemini's servers are busy.
+                # [:300] keeps only the start of a long error message.
                 if response.status_code in {429, 500, 502, 503, 504}:
                     last_error = RuntimeError(
                         f"HTTP {response.status_code}: "
@@ -175,6 +197,8 @@ class GeminiClient:
                     )
 
                     if attempt < self._max_attempts - 1:
+                        # Exponential backoff: wait 2s, then 4s, then 8s...
+                        # giving the server more time after each failure.
                         wait_time = 2 ** (attempt + 1)
 
                         self._notify(
@@ -194,6 +218,8 @@ class GeminiClient:
                     )
                     break
 
+                # 404 = this model does not exist (e.g. Google retired it).
+                # Retrying will not help, so go to the next model.
                 if response.status_code == 404:
                     last_error = RuntimeError(
                         f"HTTP 404: {response.text[:300]}"
@@ -206,12 +232,15 @@ class GeminiClient:
                     )
                     break
 
+                # Anything else (e.g. 401/403 = bad API key): record it
+                # and try the next model.
                 last_error = RuntimeError(
                     f"Gemini API returned HTTP {response.status_code}: "
                     f"{response.text[:300]}"
                 )
                 break
 
+        # Every model failed. FallbackClient catches this and tries Groq.
         raise RuntimeError(
             "All Gemini models failed. "
             f"Last error: {last_error}"

@@ -133,6 +133,7 @@ class JsonItineraryRepository(ItineraryRepository):
         saved_at = entry.get("saved_at", "")     # keep the original saved date
 
         # Replace the old itinerary with the new one
+        # (changing entry in place also changes it inside the entries list)
         entry.clear()
         entry.update({"id": identifier, **itinerary.to_dict(),
                       "saved_at": saved_at, "updated_at": _now()})
