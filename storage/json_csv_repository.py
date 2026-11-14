@@ -3,6 +3,7 @@
 import csv
 import json
 import os
+import tempfile
 
 from .recommendation_repository import RecommendationRepository
 from models import RecommendationSet
@@ -50,13 +51,36 @@ class JsonCsvRepository(RecommendationRepository):
 
 
     def _write_index(self, entries: list[dict]) -> None:
-        """Write saved-set metadata to the index."""
+        """Replace the index only after writing its new contents successfully."""
         self._ensure_storage_directory()
+        temporary_path = None
 
-        with open(
-            self.__index_file, "w", encoding="utf-8"
-        ) as file:
-            json.dump(entries, file, indent=4)
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="w",
+                encoding="utf-8",
+                dir=self.__data_dir,
+                prefix=".recommendation_sets_",
+                suffix=".tmp",
+                delete=False,
+            ) as file:
+                temporary_path = file.name
+                json.dump(
+                    entries,
+                    file,
+                    indent=4,
+                    ensure_ascii=False,
+                    allow_nan=False,
+                )
+
+            os.replace(temporary_path, self.__index_file)
+
+        finally:
+            if temporary_path is not None:
+                try:
+                    os.remove(temporary_path)
+                except FileNotFoundError:
+                    pass
 
     @staticmethod
     def _safe_name(value: str) -> str:
