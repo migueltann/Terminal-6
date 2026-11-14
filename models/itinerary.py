@@ -200,12 +200,38 @@ class Itinerary:
         positions = {(item.name, item.item_type): index
                      for index, item in enumerate(recommendation_set.approved())}
 
-        # Get the position and the user's choices for every place on every day
-        return [[{"index": positions[(item.name, item.item_type)],
-                  "meal": item.meal, "time": item.time, "duration": item.duration}
-                 for item in day
-                 if (item.name, item.item_type) in positions]
-                for day in self.days]
+        # Restore AI recommendations and personal entries for editing
+        selection = []
+
+        for day in self.days:
+            entries = []
+
+            for item in day:
+                entry = {
+                    "meal": item.meal,
+                    "time": item.time,
+                    "duration": item.duration,
+                }
+
+                if item.is_custom:
+                    entry.update(
+                        is_custom=True,
+                        name=item.name,
+                        type=item.item_type,
+                    )
+                else:
+                    key = (item.name, item.item_type)
+
+                    if key not in positions:
+                        continue
+
+                    entry["index"] = positions[key]
+
+                entries.append(entry)
+
+            selection.append(entries)
+
+        return selection
 
     # ---------- saving / loading ----------
 
