@@ -16,10 +16,13 @@ class DietaryRule(Rule):
     def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
         # Cleans the user's dietary requirement.
         dietary = _normalise(requirements.dietary)
+
+        dietary_tags = {_normalise(tag) for tag in item.dietary_tags}
+        #creates a set of cleaned dietary tags from the recommendation
         
         # pass if the diet is in the item's dietary tags
         return self.result(
-            dietary in item.dietary_tags,
-                f"{dietary} supported", # pass messages
-                f"{dietary} not listed" # fail messages
+            dietary in dietary_tags,
+            f"{dietary} supported", # pass messages
+            f"{dietary} not listed" # fail messages
         )  
