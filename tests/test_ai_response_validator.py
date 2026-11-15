@@ -171,10 +171,28 @@ def test_validator_rejects_invalid_cost_single_category(cost):
 
     food_items[0]["estimated_cost_sgd"] = cost
 
-    with pytest.raises(RuntimeError, match="invalid estimated_cost_sgd"):
+    # The bad item is skipped, which leaves only 14 usable items.
+    with pytest.raises(RuntimeError, match="14 complete food recommendations"):
         AIResponseValidator().validate_response_schema(
             food_items, category="food"
         )
+
+
+def test_validator_skips_invalid_cost_and_keeps_15_good_items():
+    food_items = [
+        item for item in make_valid_items()
+        if item["type"] == "food"
+    ]
+    extra = dict(food_items[0], name="Extra Food Place")
+    food_items[0]["estimated_cost_sgd"] = "unknown"    # bad item first
+    food_items.append(extra)                            # 16 items in total
+
+    result = AIResponseValidator().validate_response_schema(
+        food_items, category="food"
+    )
+
+    assert len(result) == 15
+    assert all(item["estimated_cost_sgd"] != "unknown" for item in result)
 
 
 @pytest.mark.parametrize("cost", [0, 20.50])
