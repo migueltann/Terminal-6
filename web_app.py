@@ -14,11 +14,7 @@ Flask basics used in this file:
 """
 import io
 import json
-import math
 import os
-import traceback
-import uuid
-from urllib.parse import quote_plus
 
 from flask import (
     Flask, 
@@ -42,8 +38,13 @@ from storage.json_itinerary_repository import JsonItineraryRepository
 from storage.itinerary_manager import ItineraryManager
 from models import Itinerary
 from models import RecommendationSet
-from user_io.destination_validator import DestinationValidator
 from user_io.generation_progress import GenerationProgress
+from web import (
+    AIErrorTranslator,
+    ItineraryPresenter,
+    LatestResultStore,
+    WebInputValidator,
+)
 
 # Load API keys and settings from the .env file.
 load_dotenv()
@@ -63,114 +64,16 @@ app.secret_key = os.getenv(
 # by too_large() at the bottom of this file).
 app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024
 
-#form field configuration
-# Form fields typed as comma-separated lists
-LIST_FIELDS = (
-    "preferred_activities",
-    "food_preferences",
-    "accommodation_preferences",
-    "shopping_preferences",
-    "avoid_list",
-)
-
-# (form field name, label used in error messages)
-BUDGET_FIELDS = (
-    ("max_activity_spend", "Max spend per activity"),
-    ("max_meal_spend", "Max spend per meal"),
-    (
-        "max_accommodation_spend",
-        "Max spend per night for accommodation",
-    ),
-    ("max_shopping_spend", "Max shopping spend"),
-)
-
-ENVIRONMENTS = ("Indoor", "Outdoor", "Any")
-TRANSPORTS = ("Walk", "Transit", "Taxi", "Any")
-
-# Live progress of each /generate request, polled by the loading screen.
+# Objects shared by every request (created once when the app starts):
+# - progress_tracker: live AI progress, polled by the loading screen
+# - result_store: each browser's latest result, kept in a server file
+# - input_validator: checks the form like IOManager checks the terminal
+# - presenter: turns itineraries into data for the itinerary pages
 progress_tracker = GenerationProgress()
+result_store = LatestResultStore(app.instance_path)
+input_validator = WebInputValidator()
+presenter = ItineraryPresenter()
 
-#server-side storage
-#store generated results as files rather than large cookies.
-# (60 recommendations are too big for a cookie, which is limited to about
-# 4 KB, so the cookie only holds a random key pointing to a file.)
-def _result_file_path(result_key):
-    """Return the file path for a result key, or None if the key is unsafe."""
-    if not isinstance(result_key, str):
-        return None
-
-    # Only allow hex characters (0-9, a-f). This blocks keys like
-    # "../../secret", so a key can never point outside the instance folder.
-    if not result_key or any(
-        character not in "0123456789abcdef"
-        for character in result_key.lower()
-    ):
-        return None
-
-    return os.path.join(
-        app.instance_path,
-        f"latest_result_{result_key}.json",
-    )
-
-
-def _store_latest_result(result):
-    """Save the latest generated result on the server."""
-    # instance_path is Flask's folder for files that are not code
-    # (the "instance/" folder, which git ignores).
-    os.makedirs(app.instance_path, exist_ok=True)
-
-    result_key = session.get("latest_result_key")
-
-    # First result for this user (or a broken key): give them a new
-    # random key. Later results reuse the key and overwrite the file.
-    if not result_key or not _result_file_path(result_key):
-        result_key = uuid.uuid4().hex
-        session["latest_result_key"] = result_key
-
-    path = _result_file_path(result_key)
-
-    with open(path, "w", encoding="utf-8") as file:
-        json.dump(
-            result,
-            file,
-            indent=4,
-            ensure_ascii=False,
-            allow_nan=False,
-        )
-
-def _get_latest_result():
-    """Retrieve the latest generated result for the current session."""
-    result_key = session.get("latest_result_key")
-    path = _result_file_path(result_key)
-
-    if not path or not os.path.isfile(path):
-        return None
-
-    try:
-        with open(path, "r", encoding="utf-8") as file:
-            return json.load(file)
-
-    except (OSError, json.JSONDecodeError):
-        app.logger.exception(
-            "Could not read the latest generated recommendation result."
-        )
-        return None
-
-
-def _clear_latest_result():
-    """Forget the current user's latest result and delete its file."""
-    # pop() removes the key from the session and returns it (or None).
-    result_key = session.pop("latest_result_key", None)
-    path = _result_file_path(result_key)
-
-    if not path:
-        return
-
-    try:
-        if os.path.isfile(path):
-            os.remove(path)
-    except OSError:
-        app.logger.exception("Could not remove temporary result.")
 
 # status messages from ai_manager go to the Flask log, not the terminal
 def _log_ai_status(level, message):
@@ -180,238 +83,10 @@ def _log_ai_status(level, message):
     else:
         app.logger.info(message)
 
-def _normalise_optional_text(value):
-    """Clean optional text input."""
-    text = str(value or "").strip()
-    return None if text.lower() in {"", "any", "none"} else text
-
-# input helpers
-def _split_list(value):
-    """Convert comma-separated form input into a clean list."""
-    values = [
-        part.strip()
-        for part in (value or "").split(",")
-        if part.strip()
-    ]
-
-    if any(part.lower() in {"any", "none"} for part in values):
-        return []
-
-    return values
-
-
-def _error_message(err):
-    """Convert common AI/API errors into helpful messages."""
-    # The AI clients raise errors with technical text. Look for known
-    # words in that text (in lowercase) and replace it with a friendly
-    # message. The checks run in order, so the more specific ones go first.
-    raw = str(err or "Unknown error")
-    low = raw.lower()
-
-    if (
-        "gemini_api_key" in low
-        or (
-            "api key" in low
-            and ("missing" in low or "invalid" in low)
-        )
-    ):
-        return (
-            "Gemini API key is missing or invalid. "
-            "Add GEMINI_API_KEY=your_key to the project .env file, "
-            "then restart Flask."
-        )
-
-    # Gemini failed and the Groq backup failed (or is not set up).
-    if "all ai providers failed" in low:
-        if "groq_api_key" in low:
-            return (
-                "Gemini is temporarily unavailable and no Groq backup "
-                "is set up. Try again in a little while, or add "
-                "GROQ_API_KEY=your_key to the project .env file "
-                "and restart Flask."
-            )
-
-        return (
-            "Gemini and the Groq backup are both unavailable right now. "
-            "Please try again in a little while."
-        )
-
-    if (
-        "http 401" in low
-        or "http 403" in low
-        or "unauthorized" in low
-        or "permission" in low
-    ):
-        return (
-            "Gemini rejected the API key or its permissions. "
-            "Check GEMINI_API_KEY and ensure the key can use the Gemini API."
-        )
-
-    if (
-        "http 429" in low
-        or "quota" in low
-        or "resource_exhausted" in low
-    ):
-        return (
-            "Gemini rate limit or quota reached. "
-            "Wait and try again, or check your API quota."
-        )
-
-    if "timed out" in low or "timeout" in low:
-        return "The AI request timed out. Please try again."
-
-    if "connection" in low or "network" in low:
-        return (
-            "Could not connect to Gemini. "
-            "Check your internet connection and try again."
-        )
-
-    if (
-        "no usable recommendations" in low
-        or "malformed" in low
-        or "invalid json" in low
-    ):
-        return (
-            "Gemini returned an answer the app could not use. "
-            "Please try again."
-        )
-
-    if (
-        "all gemini models failed" in low
-        or any(
-            code in low
-            for code in (
-                "http 500",
-                "http 502",
-                "http 503",
-                "http 504",
-            )
-        )
-    ):
-        return (
-            "Gemini is temporarily unavailable. "
-            "Please try again in a little while."
-        )
-
-    # Unknown error: show the original text.
-    return f"Recommendation generation failed: {raw}"
-
-
-# validate and normalise form inputs
-def _collect_inputs(form):
-    """Validate and normalise the same requirements as the terminal.
-
-    Returns (data, errors, field_errors):
-    - data: the cleaned inputs, ready for UserRequirements.from_dict()
-    - errors: a list of every error message (empty if all is valid)
-    - field_errors: field name -> its error, so the page can highlight it
-    """
-
-    destination_raw = (form.get("destination") or "").strip()
-
-    destination, destination_error = (
-        DestinationValidator().validate(destination_raw)
-    )
-
-    errors = []
-    field_errors = {}
-
-    if destination_error:
-        errors.append(destination_error)
-        field_errors["destination"] = destination_error
-
-    data = {
-        "destination": destination or destination_raw,
-    }
-
-    # Preferred activities, food, accommodation, shopping and exclusions.
-    for key in LIST_FIELDS:
-        data[key] = _split_list(form.get(key, ""))
-
-    # Validate all budgets.
-    for key, label in BUDGET_FIELDS:
-        raw = (form.get(key) or "").strip()
-
-        try:
-            number = float(raw)
-
-            # Reject inf/nan and zero or negative amounts by jumping to
-            # the same except block as text that is not a number.
-            if not math.isfinite(number) or number <= 0:
-                raise ValueError
-
-            data[key] = number
-
-        except (ValueError, TypeError):
-            message = "Please enter a valid positive amount."
-
-            errors.append(f"{label}: {message}")
-            field_errors[key] = message
-            data[key] = None
-
-    # Validate environment selections.
-    environment_fields = (
-        ("activity_environment", "Activity environment"),
-        ("food_environment", "Food environment"),
-        ("shopping_environment", "Shopping environment"),
-    )
-
-    for key, label in environment_fields:
-        # .title() turns "indoor" into "Indoor" to match ENVIRONMENTS.
-        value = (form.get(key) or "Any").strip().title()
-
-        # The page only offers valid choices, but a request can be
-        # edited by hand, so the server checks again.
-        if value not in ENVIRONMENTS:
-            message = (
-                f"{label} must be Indoor, Outdoor, or Any."
-            )
-            errors.append(message)
-            field_errors[key] = message
-            value = "Any"
-
-        data[key] = value
-
-    # Validate transport.
-    transport = (
-        form.get("preferred_transport") or "Any"
-    ).strip().title()
-
-    if transport not in TRANSPORTS:
-        message = "Transport must be Walk, Transit, Taxi, or Any."
-        errors.append(message)
-        field_errors["preferred_transport"] = message
-        transport = "Any"
-
-    data["preferred_transport"] = transport
-
-    # Normalise dietary preferences.
-    dietary = (
-        _normalise_optional_text(
-            form.get("dietary")
-        )
-        or "None"
-    )
-
-    # "Other" in the dropdown means the user typed their own diet in a
-    # separate text box.
-    if dietary == "Other":
-        dietary = (
-            _normalise_optional_text(
-                form.get("dietary_custom")
-            )
-            or "None"
-        )
-
-    data["dietary"] = dietary
-
-    return data, errors, field_errors
-
-
 @app.post("/validate-inputs")
 def validate_inputs():
     """Validate the submitted form before starting AI generation."""
-    data, errors, field_errors = _collect_inputs(request.form)
+    data, errors, field_errors = input_validator.collect(request.form)
 
     # Called by the page's JavaScript, so reply with JSON instead of HTML.
     return jsonify({
@@ -434,7 +109,7 @@ def check_destination():
     if not typed:
         return jsonify({"valid": False, "destination": "", "error": ""})
 
-    destination, error = DestinationValidator().validate(typed)
+    destination, error = input_validator.check_destination(typed)
 
     return jsonify({
         "valid": error is None,
@@ -461,7 +136,7 @@ def generate():
 
     form_data.pop("progress_id", None)   # only used by the loading screen
 
-    user_inputs, errors, field_errors = _collect_inputs(
+    user_inputs, errors, field_errors = input_validator.collect(
         request.form
     )
 
@@ -502,7 +177,7 @@ def generate():
         result = recommendation_set.to_dict()
 
         # Store the full result on the server, not in the cookie.
-        _store_latest_result(result)
+        result_store.save(result)
 
         # The form data is small enough to retain in the session.
         session["latest_form"] = form_data
@@ -522,7 +197,7 @@ def generate():
             "Recommendation generation failed"
         )
 
-        message = _error_message(exc)
+        message = AIErrorTranslator.friendly(exc)
 
         return render_template(
             "index.html",
@@ -600,7 +275,7 @@ def view_saved(filename):
 
     # Make it the "latest result", so the download and plan buttons on
     # the page work with this saved set.
-    _store_latest_result(result)
+    result_store.save(result)
 
     return render_template(
         "index.html",
@@ -669,66 +344,17 @@ def _itinerary_manager():
     return ItineraryManager(JsonItineraryRepository())
 
 
-def _catalog(recommendation_set):
-    """The approved recommendations the builder can place on days."""
-    # "index" is the item's position in the approved list. The page sends
-    # these positions back when saving, and the server looks the real
-    # details up again (see Itinerary.from_selection).
-    return [
-        {
-            "index": index,
-            "name": item.name,
-            "type": item.item_type,
-            "cost": item.cost_sgd,
-            "location": item.location,
-        }
-        for index, item in enumerate(recommendation_set.approved())
-    ]
-
-
 def _render_builder(set_id, recommendation_set,
                     itinerary=None, itinerary_id=""):
     """Show the builder for a new itinerary, or reopen a saved one."""
-    catalog = _catalog(recommendation_set)
+    catalog = presenter.catalog(recommendation_set)
 
     if itinerary is None:
         # New itinerary: start with DEFAULT_DAYS empty days.
         days = [[] for _ in range(DEFAULT_DAYS)]
     else:
-        # Restore AI recommendations and personal entries in the builder
-        days = []
-
-        for day_index, entries in enumerate(
-            itinerary.selection_for(recommendation_set)
-        ):
-            restored = []
-
-            for position, entry in enumerate(entries):
-                if entry.get("is_custom") is True:
-                    # Personal entries are not in the catalog, so give
-                    # each one a unique made-up index for the page.
-                    item = {
-                        "index": f"custom-{day_index}-{position}",
-                        "is_custom": True,
-                        "name": entry["name"],
-                        "type": entry["type"],
-                        "cost": 0,
-                        "location": "",
-                    }
-                else:
-                    # dict(...) makes a copy, so the catalog is not changed
-                    # when the same place is used on more than one day.
-                    item = dict(catalog[entry["index"]])
-
-                # Add the user's own choices for this stop.
-                item.update(
-                    meal=entry["meal"],
-                    time=entry["time"],
-                    duration=entry["duration"],
-                )
-                restored.append(item)
-
-            days.append(restored)
+        # Restore AI recommendations and personal entries in the builder.
+        days = presenter.builder_days(itinerary, recommendation_set)
 
     return render_template(
         "itinerary.html",
@@ -745,66 +371,6 @@ def _render_builder(set_id, recommendation_set,
         max_days=Itinerary.MAX_DAYS,
         max_items=Itinerary.MAX_ITEMS_PER_DAY,
     )
-
-
-# Short label shown on each stop in the itinerary view
-TYPE_LABELS = {
-    "activity": "Activity",
-    "food": "Food",
-    "shopping": "Shopping",
-    "accommodation": "Stay",
-}
-
-
-def _maps_link(item, destination):
-    """A Google Maps search link for a stop (name + address + city)."""
-    query = ", ".join(
-        part for part in (item.name, item.location, destination) if part
-    )
-    # quote_plus makes the text safe for a URL (spaces -> "+", "&" -> "%26")
-    return "https://www.google.com/maps/search/?api=1&query=" + quote_plus(query)
-
-
-def _itinerary_view_days(itinerary):
-    """Everything the itinerary page needs for each day."""
-    view_days = []
-
-    for index in range(len(itinerary.days)):
-        day_date = itinerary.date_for(index)    # None if no start date was set
-        # Turn each scheduled stop into a plain dict for the template.
-        stops = [
-            {
-                "time": stop.time,
-                "end": stop.end,
-                "period": stop.period,
-                "label": stop.label,
-                "type": stop.item.item_type,
-                "type_label": TYPE_LABELS.get(stop.item.item_type, "Stop"),
-                "name": stop.item.name,
-                "category": stop.item.category,
-                "location": stop.item.location,
-                "description": stop.item.description,
-                "cost": stop.item.cost_sgd,
-                "top_pick": stop.item.top_pick,
-                "maps": _maps_link(stop.item, itinerary.destination),
-                "note": stop.note,
-            }
-            for stop in itinerary.schedule(index)
-        ]
-
-        view_days.append({
-            "number": index + 1,
-            # e.g. "Monday, 16 November 2026"
-            "date": day_date.strftime("%A, %d %B %Y") if day_date else "",
-            "stops": stops,
-            # Daytime stops and hotel stays are shown in separate sections.
-            "visits": [stop for stop in stops if stop["period"] != "Overnight"],
-            "stays": [stop for stop in stops if stop["period"] == "Overnight"],
-            "total": itinerary.day_total(index),
-            "over": itinerary.is_over_budget(index),
-        })
-
-    return view_days
 
 
 @app.get("/itineraries")
@@ -885,7 +451,7 @@ def view_itinerary(itinerary_id):
         "itinerary_view.html",
         itinerary=itinerary,
         itinerary_id=itinerary_id,
-        days=_itinerary_view_days(itinerary),
+        days=presenter.view_days(itinerary),
         # e.g. "16 Nov – 18 Nov 2026"; blank if there is no start date
         date_range=(
             f"{first_date:%d %b} – {last_date:%d %b %Y}" if first_date else ""
@@ -985,7 +551,7 @@ def delete_itinerary(itinerary_id):
 @app.post("/itineraries/plan-latest")
 def plan_latest():
     """Save the results just generated, then open the builder for them."""
-    result = _get_latest_result()
+    result = result_store.load()
 
     if not result:
         flash("Generate recommendations first.", "error")
@@ -1006,7 +572,7 @@ def plan_latest():
 @app.post("/download/json")
 def download_json():
     """Send the current recommendation result to the browser."""
-    result = _get_latest_result()
+    result = result_store.load()
 
     if not result:
         flash(
@@ -1079,7 +645,7 @@ def download_json():
 @app.post("/save")
 def save():
     """Save the current recommendation result using the OOP DataManager."""
-    result = _get_latest_result()
+    result = result_store.load()
 
     if not result:
         flash(
@@ -1117,7 +683,7 @@ def save():
 @app.get("/reset")
 def reset():
     """Clear the current results and form, and go back to an empty page."""
-    _clear_latest_result()
+    result_store.clear()
 
     session.pop("latest_form", None)
 
