@@ -6,7 +6,7 @@ import pytest
 import web_app
 from models import Recommendation, RecommendationSet, UserRequirements
 from storage.itinerary_manager import ItineraryManager
-from storage.itinerary_repository import JsonItineraryRepository
+from storage.json_itinerary_repository import JsonItineraryRepository
 from storage.json_csv_repository import JsonCsvRepository
 from user_io.generation_progress import GenerationProgress
 

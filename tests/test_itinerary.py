@@ -8,7 +8,7 @@ import web_app
 from models import DayPlanner, Itinerary, ItineraryItem, RecommendationSet
 from storage.data_manager import DataManager
 from storage.itinerary_manager import ItineraryManager
-from storage.itinerary_repository import JsonItineraryRepository
+from storage.json_itinerary_repository import JsonItineraryRepository
 from storage.json_csv_repository import JsonCsvRepository
 
 

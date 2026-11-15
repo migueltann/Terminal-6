@@ -38,7 +38,7 @@ from travel_assistant import TravelAssistant
 from models import UserRequirements
 from storage.data_manager import DataManager
 from storage.json_csv_repository import JsonCsvRepository
-from storage.itinerary_repository import JsonItineraryRepository
+from storage.json_itinerary_repository import JsonItineraryRepository
 from storage.itinerary_manager import ItineraryManager
 from models import Itinerary
 from models import RecommendationSet

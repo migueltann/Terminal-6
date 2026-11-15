@@ -4,8 +4,8 @@ import math
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import ClassVar, Optional
-
-from .day_planner import DayPlanner, ScheduledStop
+from .day_planner import DayPlanner
+from .scheduled_stop import ScheduledStop
 from .itinerary_item import ItineraryItem
 from .recommendation_set import RecommendationSet
 
