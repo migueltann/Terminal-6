@@ -384,3 +384,13 @@ def test_text_matcher_handles_typos_and_whole_words():
     assert TextMatcher.matches("food street", "street food market")
     assert not TextMatcher.matches("art", "party venue")       # not inside a word
     assert TextMatcher.normalise("Street_Market!") == "street market"
+
+
+def test_filter_and_logic_manager_share_one_default_rule_list():
+    from filtering import LogicManager
+
+    names = [type(rule).__name__ for rule in RecommendationFilter.default_rules()]
+    assert names == ["BudgetRule", "EnvironmentRule", "AvoidListRule",
+                     "DietaryRule", "TransportRule"]
+    # LogicManager gets fresh rule objects from the same list
+    assert [type(rule).__name__ for rule in LogicManager._default_rules()] == names

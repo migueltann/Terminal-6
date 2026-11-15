@@ -20,13 +20,20 @@ class RecommendationFilter:
     # cheapest affordable items in it are marked as top picks.
     CHEAPEST_TOP_PICK_COUNT = 3
 
+    @staticmethod
+    def default_rules() -> list[Rule]:
+        """The five filtering rules, in the order they are checked.
+
+        This is the only place the default rule list is written, so a new
+        rule is added here once (LogicManager uses this list too).
+        """
+        return [BudgetRule(), EnvironmentRule(), AvoidListRule(), DietaryRule(), TransportRule()]
+    
      # Runs when a RecommendationFilter object is created
     def __init__(self, requirements: UserRequirements, rules: Optional[list[Rule]] = None):
         self.requirements = requirements  # save the user's requirements
         # use the rules given, or if none were given, use all 5 rules by default
-        self.rules = rules if rules is not None else [
-            BudgetRule(), EnvironmentRule(), AvoidListRule(), DietaryRule(), TransportRule(),
-        ]
+        self.rules = rules if rules is not None else self.default_rules()
         
     # checks 1 recommendation against every rule
     def evaluate(self, item: Recommendation) -> Recommendation:

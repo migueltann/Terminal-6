@@ -4,11 +4,6 @@ from typing import Optional
 
 from models import Recommendation, RecommendationSet, UserRequirements
 from .rule import Rule
-from .budget_rule import BudgetRule
-from .environment_rule import EnvironmentRule
-from .avoid_list_rule import AvoidListRule
-from .dietary_rule import DietaryRule
-from .transport_rule import TransportRule
 from .recommendation_filter import RecommendationFilter
 
 
@@ -28,8 +23,8 @@ class LogicManager:
 
     @staticmethod
     def _default_rules() -> list[Rule]:
-        """Create the five filtering rules, in the order they are checked."""
-        return [BudgetRule(), EnvironmentRule(), AvoidListRule(), DietaryRule(), TransportRule()]
+        """Fresh copies of the five filtering rules (defined once in RecommendationFilter)."""
+        return RecommendationFilter.default_rules()
 
     def _check_inputs(self, reqs: UserRequirements, items: list[Recommendation]) -> None:
         """Stop early with a clear error if the inputs are the wrong type."""
