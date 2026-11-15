@@ -529,3 +529,31 @@ class TestTravelAssistant(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestSavedMenuWithDamagedStorage(unittest.TestCase):
+    """A damaged index file must not crash the terminal app."""
+
+    def test_corrupt_index_shows_error_and_returns_to_menu(self):
+        import tempfile
+        from pathlib import Path
+        from storage.data_manager import DataManager
+        from storage.json_csv_repository import JsonCsvRepository
+
+        with tempfile.TemporaryDirectory() as folder:
+            Path(folder, "recommendation_sets.json").write_text(
+                "{not valid json", encoding="utf-8"
+            )
+            mock_io = Mock()
+            assistant = TravelAssistant(
+                io_manager=mock_io,
+                ai_manager=Mock(),
+                logic_manager=Mock(),
+                data_manager=DataManager(JsonCsvRepository(folder)),
+            )
+
+            assistant.show_saved_menu()     # must not raise
+
+        mock_io.show_error.assert_called_once()
+        self.assertIn("could not be read", mock_io.show_error.call_args[0][0])
+        mock_io.ask_saved_action.assert_not_called()
