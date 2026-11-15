@@ -394,3 +394,9 @@ def test_filter_and_logic_manager_share_one_default_rule_list():
                      "DietaryRule", "TransportRule"]
     # LogicManager gets fresh rule objects from the same list
     assert [type(rule).__name__ for rule in LogicManager._default_rules()] == names
+
+
+def test_transport_matches_when_ai_uses_capital_letters():
+    item = make_item(transport_options=["Transit", "Walk"])  # AI wrote capitals
+    result = TransportRule().check(item, make_requirements())
+    assert result.passed

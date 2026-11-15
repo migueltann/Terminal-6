@@ -17,8 +17,12 @@ class TransportRule(Rule):
         transport = TextMatcher.normalise(requirements.transport)
         
         # Checks whether the preferred transport is available.   
+        # Clean the item's options the same way, so "Transit" from the AI
+        # still matches "transit" from the user.
+        options = {TextMatcher.normalise(option) for option in item.transport_options}
+
         return self.result(
-            transport in item.transport_options,
+            transport in options,
             f"{transport} available",
             f"{transport} not listed"
         )
