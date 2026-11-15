@@ -6,7 +6,7 @@ import pytest
 import web_app
 from models import Recommendation, RecommendationSet, UserRequirements
 from storage.itinerary_manager import ItineraryManager
-from storage.itinerary_repository import JsonItineraryRepository
+from storage.json_itinerary_repository import JsonItineraryRepository
 from storage.json_csv_repository import JsonCsvRepository
 from user_io.generation_progress import GenerationProgress
 
@@ -75,7 +75,7 @@ def test_generate_reports_progress_while_the_ai_works(client, monkeypatch):
             return RecommendationSet(requirements.destination, requirements)
 
     monkeypatch.setattr(web_app, "TravelAssistant", FakeAssistant)
-    monkeypatch.setattr(web_app, "_store_latest_result", lambda result: None)
+    monkeypatch.setattr(web_app.result_store, "save", lambda result: None)
 
     response = client.post("/generate", data=dict(FORM, progress_id="test-progress-1"))
 

@@ -1,4 +1,4 @@
-from filtering.filtering_utils import _normalise  # cleans text: lowercase, removes symbols and extra spaces
+from .text_matcher import TextMatcher  # cleans text: lowercase, removes symbols and extra spaces
 from models import Recommendation, RuleResult, UserRequirements  # the shared data classes
 from .rule import Rule  # the parent class this rule is based on
 
@@ -14,11 +14,15 @@ class TransportRule(Rule):
     # the actual transport check
     def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
          # Gets the user's preferred transport
-        transport = _normalise(requirements.transport)
+        transport = TextMatcher.normalise(requirements.transport)
         
         # Checks whether the preferred transport is available.   
+        # Clean the item's options the same way, so "Transit" from the AI
+        # still matches "transit" from the user.
+        options = {TextMatcher.normalise(option) for option in item.transport_options}
+
         return self.result(
-            transport in item.transport_options,
+            transport in options,
             f"{transport} available",
             f"{transport} not listed"
         )

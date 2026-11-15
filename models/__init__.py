@@ -7,7 +7,8 @@ from .recommendation import Recommendation
 from .recommendation_set import RecommendationSet
 from .rule_result import RuleResult
 from .itinerary_item import ItineraryItem
-from .day_planner import DayPlanner, ScheduledStop
+from .scheduled_stop import ScheduledStop
+from .day_planner import DayPlanner
 from .itinerary import Itinerary
 
 __all__ = ["UserRequirements", "Recommendation", "RecommendationSet", "RuleResult",

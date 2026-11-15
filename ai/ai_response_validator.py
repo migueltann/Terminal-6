@@ -54,7 +54,8 @@ class AIResponseValidator:
         Without a category, expect exactly 60 recommendations (15 per type).
 
         With a category, expect at least 15 complete recommendations of
-        that type. Models often write one or two extra, so the first 15
+        that type (all required fields and a valid cost). Incomplete items
+        are skipped. Models often write one or two extra, so the first 15
         are kept instead of rejecting the whole answer and asking again.
         """
 
@@ -112,6 +113,8 @@ class AIResponseValidator:
                 # "<=" on sets means "is a subset of": the item has
                 # every required field (extra fields are fine)
                 and required_fields <= item.keys()
+                # a missing, negative or non-number cost makes it unusable
+                and valid_cost(item)
             ]
 
             if len(usable) < expected_total:
@@ -120,15 +123,7 @@ class AIResponseValidator:
                     f"recommendations instead of {expected_total}."
                 )
 
-            selected = usable[:expected_total]
-
-            for index, item in enumerate(selected, start=1):
-                if not valid_cost(item):
-                    raise RuntimeError(
-                        f"Recommendation {index} has an invalid estimated_cost_sgd."
-                    )
-
-            return selected
+            return usable[:expected_total]
 
         # 3. Check whether there are the expected number of recommendations
         if len(items) != expected_total:

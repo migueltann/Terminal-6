@@ -1,3 +1,4 @@
+"""Sends prompts to Groq (backup AI provider) and returns checked recommendations."""
 import os
 import time
 from typing import Callable, Optional
@@ -5,6 +6,7 @@ from typing import Callable, Optional
 import requests
 from dotenv import load_dotenv
 
+from ai.ai_client import AIClient
 from ai.ai_response_validator import AIResponseValidator
 
 
@@ -36,7 +38,7 @@ JSON_OBJECT_INSTRUCTION = """
 CATEGORY_ORDER = ("activity", "food", "accommodation", "shopping")
 
 
-class GroqClient:
+class GroqClient(AIClient):
     """Communicate with Groq, used as a backup when Gemini fails.
 
     It has the same generate() method as GeminiClient, so FallbackClient

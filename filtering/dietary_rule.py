@@ -1,4 +1,4 @@
-from filtering.filtering_utils import _normalise  # Cleans text for comparison
+from .text_matcher import TextMatcher  # Cleans text for comparison
 from models import Recommendation, RuleResult, UserRequirements  # Shared data classes
 from .rule import Rule  # Imports the parent class
 
@@ -15,9 +15,9 @@ class DietaryRule(Rule):
     # Checks whether the food meets the user's diet.
     def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
         # Cleans the user's dietary requirement.
-        dietary = _normalise(requirements.dietary)
+        dietary = TextMatcher.normalise(requirements.dietary)
 
-        dietary_tags = {_normalise(tag) for tag in item.dietary_tags}
+        dietary_tags = {TextMatcher.normalise(tag) for tag in item.dietary_tags}
         #creates a set of cleaned dietary tags from the recommendation
         
         # pass if the diet is in the item's dietary tags

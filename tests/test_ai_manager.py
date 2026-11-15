@@ -190,3 +190,24 @@ def test_category_that_keeps_failing_stops_after_attempts():
 def test_invalid_category_attempts_is_rejected():
     with pytest.raises(ValueError):
         make_manager(FakeAIClient(), category_attempts=0)
+
+
+# ---------- AIClient interface ----------
+
+def test_ai_client_interface_cannot_be_created():
+    from ai.ai_client import AIClient
+
+    with pytest.raises(TypeError):
+        AIClient()
+
+
+def test_every_provider_implements_the_ai_client_interface():
+    from ai.ai_client import AIClient
+    from ai.fallback_client import FallbackClient
+    from ai.gemini_client import GeminiClient
+    from ai.groq_client import GroqClient
+
+    providers = [GeminiClient(), GroqClient(),
+                 FallbackClient([("Gemini", GeminiClient())])]
+
+    assert all(isinstance(provider, AIClient) for provider in providers)

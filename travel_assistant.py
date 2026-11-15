@@ -30,9 +30,9 @@ class TravelAssistant:
         # Each manager can be passed in (tests pass fakes so no real AI
         # or files are used). If one is not given, the real one is made.
         self._io_manager = (
-        io_manager if io_manager is not None else IOManager()
+            io_manager if io_manager is not None else IOManager()
         )
-            
+
         self._ai_manager = (
             ai_manager if ai_manager is not None else AIManager()
         )
@@ -184,8 +184,17 @@ class TravelAssistant:
 
         # Keep showing the list until the user chooses to go back.
         while True:
-            # Retrieve saved recommendation sets.
-            saved = self._data_manager.find(keyword)
+            # Retrieve saved recommendation sets. A damaged index file
+            # (ValueError) or a file system problem (OSError) is shown as
+            # a message and the user goes back to the main menu, instead
+            # of the whole program crashing.
+            try:
+                saved = self._data_manager.find(keyword)
+            except (OSError, ValueError) as error:
+                self._io_manager.show_error(
+                    f"Saved recommendations could not be read: {error}"
+                )
+                return
 
             if not saved:
                 self._io_manager.show_message(

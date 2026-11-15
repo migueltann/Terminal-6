@@ -1,25 +1,14 @@
-from typing import Callable, Optional, Protocol
+"""FallbackClient: tries several AI providers in order until one works."""
+from typing import Callable, Optional
+
+from ai.ai_client import AIClient
 
 
-# A Protocol describes the methods a class must have, without making it
-# inherit from anything ("duck typing"). GeminiClient, GroqClient and
-# FallbackClient all have this generate() method, so AIManager can use
-# any of them interchangeably.
-class AIClient(Protocol):
-    """Anything with this generate() method can be used as a provider."""
-
-    def generate(
-        self,
-        prompt: str,
-        notify: Optional[Callable[[str, str], None]] = None,
-        validator: Optional[Callable[[list[dict]], bool]] = None,
-        category: Optional[str] = None,
-    ) -> list[dict]:
-        ...
-
-
-class FallbackClient:
+class FallbackClient(AIClient):
     """Try AI providers in order until one of them succeeds.
+
+    It is itself an AIClient, so AIManager cannot tell it apart from a
+    single provider (Liskov Substitution).
 
     Used as Gemini first, then Groq as a backup when every Gemini model
     is busy or the Gemini key is missing.

@@ -17,6 +17,7 @@ COPY filtering/ filtering/
 COPY models/ models/
 COPY storage/ storage/
 COPY user_io/ user_io/
+COPY web/ web/
 COPY tests/ tests/
 COPY templates/ templates/
 COPY static/ static/

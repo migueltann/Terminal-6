@@ -374,3 +374,29 @@ def test_refiltering_clears_old_top_pick():
     assert item in result.rejected_items()
     assert item.is_top_pick() is False
     assert item.top_pick_reason == ""
+
+# ---------- fixes from the final review ----------
+
+def test_text_matcher_handles_typos_and_whole_words():
+    from filtering import TextMatcher
+
+    assert TextMatcher.matches("museums", "national museum")  # plural still matches
+    assert TextMatcher.matches("food street", "street food market")
+    assert not TextMatcher.matches("art", "party venue")       # not inside a word
+    assert TextMatcher.normalise("Street_Market!") == "street market"
+
+
+def test_filter_and_logic_manager_share_one_default_rule_list():
+    from filtering import LogicManager
+
+    names = [type(rule).__name__ for rule in RecommendationFilter.default_rules()]
+    assert names == ["BudgetRule", "EnvironmentRule", "AvoidListRule",
+                     "DietaryRule", "TransportRule"]
+    # LogicManager gets fresh rule objects from the same list
+    assert [type(rule).__name__ for rule in LogicManager._default_rules()] == names
+
+
+def test_transport_matches_when_ai_uses_capital_letters():
+    item = make_item(transport_options=["Transit", "Walk"])  # AI wrote capitals
+    result = TransportRule().check(item, make_requirements())
+    assert result.passed
