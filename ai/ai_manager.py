@@ -1,3 +1,4 @@
+"""AIManager: builds the four category prompts and runs them in parallel threads."""
 # ThreadPoolExecutor runs functions in a pool of background threads and
 # gives back a "future" for each one: a placeholder for its result.
 from concurrent.futures import ThreadPoolExecutor
@@ -5,7 +6,8 @@ import time
 from typing import Any, Callable, Optional
 
 from ai.prompt_builder import PromptBuilder
-from ai.fallback_client import AIClient, FallbackClient
+from ai.ai_client import AIClient
+from ai.fallback_client import FallbackClient
 from ai.gemini_client import GeminiClient
 from ai.groq_client import GroqClient
 

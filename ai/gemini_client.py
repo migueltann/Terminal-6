@@ -6,10 +6,11 @@ from typing import Callable, Optional
 import requests
 from dotenv import load_dotenv
 
+from ai.ai_client import AIClient
 from ai.ai_response_validator import AIResponseValidator
 
 
-class GeminiClient:
+class GeminiClient(AIClient):
     """Communicate with Gemini and retry failed requests."""
 
     def __init__(
