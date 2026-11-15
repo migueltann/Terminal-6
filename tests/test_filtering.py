@@ -374,3 +374,13 @@ def test_refiltering_clears_old_top_pick():
     assert item in result.rejected_items()
     assert item.is_top_pick() is False
     assert item.top_pick_reason == ""
+
+# ---------- fixes from the final review ----------
+
+def test_text_matcher_handles_typos_and_whole_words():
+    from filtering import TextMatcher
+
+    assert TextMatcher.matches("museums", "national museum")  # plural still matches
+    assert TextMatcher.matches("food street", "street food market")
+    assert not TextMatcher.matches("art", "party venue")       # not inside a word
+    assert TextMatcher.normalise("Street_Market!") == "street market"

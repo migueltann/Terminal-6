@@ -1,5 +1,5 @@
 from typing import Optional  
-from filtering.filtering_utils import CHEAPEST_TOP_PICK_COUNT, _active_preferences, _contains_term  # shared settings and helpers
+from .text_matcher import TextMatcher  # shared text helpers
 from models import Recommendation, RecommendationSet, UserRequirements  # the shared data classes
 from .rule import Rule  # the parent class of all rules
 from .budget_rule import BudgetRule  # each of the 5 rules
@@ -15,14 +15,18 @@ CHEAPEST_REASON = "one of the cheapest options and within half of your budget"
 # this class runs all the rules on every recommendation
 class RecommendationFilter:
     """Applies every rule to each recommendation and builds a RecommendationSet."""
-    
+
+    # When the user gave no preferences for a category, this many of the
+    # cheapest affordable items in it are marked as top picks.
+    CHEAPEST_TOP_PICK_COUNT = 3
+
      # Runs when a RecommendationFilter object is created
     def __init__(self, requirements: UserRequirements, rules: Optional[list[Rule]] = None):
         self.requirements = requirements  # save the user's requirements
         # use the rules given, or if none were given, use all 5 rules by default
         self.rules = rules if rules is not None else [
             BudgetRule(), EnvironmentRule(), AvoidListRule(), DietaryRule(), TransportRule(),
-        ]   
+        ]
         
     # checks 1 recommendation against every rule
     def evaluate(self, item: Recommendation) -> Recommendation:
@@ -38,7 +42,7 @@ class RecommendationFilter:
     
     # Gets the user's preferences for a recommendation category
     def _preferences(self, item_type: str) -> list[str]:
-        return _active_preferences(self.requirements.preferences_for(item_type))
+        return TextMatcher.active_preferences(self.requirements.preferences_for(item_type))
 
     # checks if the item costs half the budget or less
     def _within_half_budget(self, item: Recommendation) -> bool:
@@ -48,7 +52,7 @@ class RecommendationFilter:
     def _matches_preference(self, item: Recommendation) -> bool:
         item_data = item.to_dict()  # turn the item into a dict so we can search its text
         # any() is True if at least one preference is found in the item
-        return any(_contains_term(item_data, pref) for pref in self._preferences(item.item_type))
+        return any(TextMatcher.contains_term(item_data, pref) for pref in self._preferences(item.item_type))
     
     # selects the best recommendations from each category
     # - user gave preferences: every affordable item matching one is a top pick
@@ -78,7 +82,7 @@ class RecommendationFilter:
                     (item for item in in_category if self._within_half_budget(item)),
                     key=lambda item: item.cost_sgd
                 )
-                for item in affordable[:CHEAPEST_TOP_PICK_COUNT]:  # take only the cheapest few (3)
+                for item in affordable[:self.CHEAPEST_TOP_PICK_COUNT]:  # take only the cheapest few (3)
                     item.mark_top_pick(CHEAPEST_REASON)  # mark it as a top pick and save the reason
 
     # filters all recommendations and returns the final results

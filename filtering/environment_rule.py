@@ -1,4 +1,4 @@
-from filtering.filtering_utils import _normalise  # lowercase, removes symbols and extra spaces
+from .text_matcher import TextMatcher  # lowercase, removes symbols and extra spaces
 from models import Recommendation, RuleResult, UserRequirements  # the shared data classes
 from .rule import Rule  # the parent class this rule is based on
 
@@ -14,8 +14,8 @@ class EnvironmentRule(Rule):
     # the actual environment check
     def evaluate(self, item: Recommendation, requirements: UserRequirements) -> RuleResult:
         # Gets the user's preferred environment and the item's actual environment
-        required = _normalise(requirements.environment_for(item.item_type))  
-        actual = _normalise(item.environment) 
+        required = TextMatcher.normalise(requirements.environment_for(item.item_type))  
+        actual = TextMatcher.normalise(item.environment) 
         
         return self.result(
             actual == required,  # pass only if they are the same

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod  # create  abstract  class
 from typing import Optional 
-from filtering.filtering_utils import _normalise  # lowercase, removes symbols and extra spaces
+from .text_matcher import TextMatcher  # lowercase, removes symbols and extra spaces
 from models import Recommendation, RuleResult, UserRequirements  # the shared data classes
 
 # answers if user did not pick anything
@@ -46,4 +46,4 @@ class Rule(ABC):
         """Checks whether the user entered a requirement."""
 
         # Removes extra spaces and checks that the value is not empty, Any or None.
-        return _normalise(value) not in NO_REQUIREMENT
+        return TextMatcher.normalise(value) not in NO_REQUIREMENT

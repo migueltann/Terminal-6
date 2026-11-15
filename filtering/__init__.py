@@ -1,5 +1,6 @@
 """public import"""
 
+from .text_matcher import TextMatcher  # shared text-matching helpers
 from .rule import Rule  # the parent class that every rule is based on
 from .budget_rule import BudgetRule  # checks if the item is within budget
 from .environment_rule import EnvironmentRule  # checks indoor / outdoor
@@ -10,5 +11,5 @@ from .recommendation_filter import RecommendationFilter  # runs all the rules to
 from .logic_manager import LogicManager  # the Logic Manager that uses the filter
 
 # list of names that are shared when someone writes "from filtering import *"
-__all__ = ["Rule", "BudgetRule", "EnvironmentRule", "AvoidListRule",
+__all__ = ["TextMatcher", "Rule", "BudgetRule", "EnvironmentRule", "AvoidListRule",
            "DietaryRule", "TransportRule", "RecommendationFilter", "LogicManager"]
